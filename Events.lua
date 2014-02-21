@@ -105,14 +105,14 @@ function BagBrother:GUILDBANKBAGSLOTS_CHANGED()
 		local id = GetGuildInfo('player') .. '*'
 		local tab = GetCurrentGuildBankTab()
 		local tabs = self.Realm[id] or {}
-		local items = {}
 
 		for i=1, GetNumGuildBankTabs() do
 			tabs[i] = tabs[i] or {}
-			tabs[i].name, tabs[i].icon = GetGuildBankTabInfo(i)
+			tabs[i].info = {GetGuildBankTabInfo(i)}
 		end
 
-		for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
+		local items = tabs[tab]
+		for i = 1, 98 do
 			local link = GetGuildBankItemLink(tab, i)
 			local _, count = GetGuildBankItemInfo(tab, i)
 
@@ -120,6 +120,5 @@ function BagBrother:GUILDBANKBAGSLOTS_CHANGED()
 		end
 
 		self.Realm[id] = tabs
-		self.Realm[id][tab] = items
 	end
 end
