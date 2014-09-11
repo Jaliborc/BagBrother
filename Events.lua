@@ -24,6 +24,7 @@ local FirstBankSlot = 1 + BagSlots
 local LastBankSlot = BankSlots + BagSlots
 local Backpack = BACKPACK_CONTAINER
 local Bank = BANK_CONTAINER
+local Reagents = REAGENTBANK_CONTAINER
 
 
 --[[ Continuous Events ]]--
@@ -62,6 +63,7 @@ function BagBrother:BANKFRAME_CLOSED()
 		end
 
 		self:SaveBag(Bank, true)
+		self:SaveBag(Reagents, true)
 		self.atBank = nil
 	end
 end
