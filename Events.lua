@@ -113,7 +113,8 @@ function BagBrother:GUILDBANKBAGSLOTS_CHANGED()
 
 		for i=1, GetNumGuildBankTabs() do
 			tabs[i] = tabs[i] or {}
-			tabs[i].info = {GetGuildBankTabInfo(i)}
+			tabs[i].name, tabs[i].icon, tabs[i].view, tabs[i].deposit, tabs[i].withdraw = GetGuildBankTabInfo(i)
+			tabs[i].info = nil
 		end
 
 		local items = tabs[tab]

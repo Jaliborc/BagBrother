@@ -1,3 +1,7 @@
+if not WoWUnit then
+	return
+end
+
 local Tests = WoWUnit('BagBrother')
 local AreEqual, Replace = WoWUnit.AreEqual, WoWUnit.Replace
 
