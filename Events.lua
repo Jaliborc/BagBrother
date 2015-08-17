@@ -111,18 +111,20 @@ function BagBrother:GUILDBANKBAGSLOTS_CHANGED()
 		local tab = GetCurrentGuildBankTab()
 		local tabs = self.Realm[id] or {}
 
-		for i=1, GetNumGuildBankTabs() do
+		for i = 1, GetNumGuildBankTabs() do
 			tabs[i] = tabs[i] or {}
 			tabs[i].name, tabs[i].icon, tabs[i].view, tabs[i].deposit, tabs[i].withdraw = GetGuildBankTabInfo(i)
 			tabs[i].info = nil
 		end
 
 		local items = tabs[tab]
-		for i = 1, 98 do
-			local link = GetGuildBankItemLink(tab, i)
-			local _, count = GetGuildBankItemInfo(tab, i)
+		if items then
+			for i = 1, 98 do
+				local link = GetGuildBankItemLink(tab, i)
+				local _, count = GetGuildBankItemInfo(tab, i)
 
-			items[i] = self:ParseItem(link, count)
+				items[i] = self:ParseItem(link, count)
+			end
 		end
 
 		self.Realm[id] = tabs
