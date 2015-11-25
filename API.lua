@@ -53,7 +53,7 @@ function BagBrother:ParseItem(link, count)
 			else
 				local i = focus:match('TradeSkillReagent(%d+)')
 				if i then
-					link = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, i)
+					link = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i))
 				end
 			end
 		end
