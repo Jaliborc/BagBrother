@@ -19,6 +19,39 @@ local Interface = LibStub:NewLibrary('BagBrotherInterface', 0)
 Interface.IsItemCache = true
 
 
+--[[ Realms ]]--
+
+function Interface:GetPlayers(realm)
+  local realm = BrotherBags[realm] or {}
+  local owner
+
+  return function()
+    while true do
+      owner = next(realm, owner)
+
+      if not owner or not owner:find('*$') then
+        return owner
+      end
+    end
+  end
+end
+
+function Interface:GetGuilds(realm)
+  local realm = BrotherBags[realm] or {}
+  local owner
+
+  return function()
+    while true do
+      owner = next(realm, owner)
+
+      if not owner or owner:find('*$') then
+        return owner and owner:sub(1,-2)
+      end
+    end
+  end
+end
+
+
 --[[ Owners ]]--
 
 function Interface:GetPlayer(realm, owner)
@@ -44,9 +77,7 @@ end
 function Interface:GetBag(realm, player, bag)
   local slot = tonumber(bag) and bag > 0 and bag < 12 and ContainerIDToInventoryID(bag)
   if slot then
-    bag = Interface:GetItem(realm, player, 'equip', slot)
-    bag.size = bag.count
-    return bag
+    return Interface:GetItem(realm, player, 'equip', slot)
   end
 end
 
