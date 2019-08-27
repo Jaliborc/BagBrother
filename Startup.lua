@@ -47,18 +47,19 @@ function Brother:StartupCache()
 end
 
 function Brother:SetupEvents()
-	self:RegisterEvent('UNIT_INVENTORY_CHANGED')
-	self:RegisterEvent('GUILD_ROSTER_UPDATE')
-	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('BAG_UPDATE')
-
+	self:RegisterEvent('PLAYER_MONEY')
+	self:RegisterEvent('GUILD_ROSTER_UPDATE')
+	self:RegisterEvent('UNIT_INVENTORY_CHANGED')
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('BANKFRAME_CLOSED')
 
-	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+	if CanUseVoidStorage then
 		self:RegisterEvent('VOID_STORAGE_OPEN')
 		self:RegisterEvent('VOID_STORAGE_CLOSE')
+	end
 
+	if CanGuildBankRepair then
 		self:RegisterEvent('GUILDBANKFRAME_OPENED')
 		self:RegisterEvent('GUILDBANKFRAME_CLOSED')
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
