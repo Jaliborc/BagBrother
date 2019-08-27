@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 80200
 ## Title: |cff20ff20BagBrother|r
 ## Notes: Stores data about your characters inventory, bank, vault and guild bank, so that you may view them from anywhere.
 ## Author: Jaliborc (João Cardoso)

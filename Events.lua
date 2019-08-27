@@ -1,5 +1,5 @@
 --[[
-Copyright 2011-2017 João Cardoso
+Copyright 2011-2019 João Cardoso
 BagBrother is distributed under the terms of the GNU General Public License (Version 3).
 As a special exception, the copyright holders of this addon do not give permission to
 redistribute and/or modify it.
@@ -62,7 +62,7 @@ function BagBrother:BANKFRAME_CLOSED()
 			self:SaveBag(i)
 		end
 
-		if IsReagentBankUnlocked() then
+		if Reagents and IsReagentBankUnlocked() then
 			self:SaveBag(Reagents, true)
 		end
 
@@ -113,13 +113,14 @@ function BagBrother:GUILDBANKBAGSLOTS_CHANGED()
 
 		for i = 1, GetNumGuildBankTabs() do
 			guild[i] = guild[i] or {}
-			guild[i].name, guild[i].icon, guild[i].view, guild[i].deposit, guild[i].withdraw = GetGuildBankTabInfo(i)
-			guild[i].info = nil
+			guild[i].name, guild[i].icon, guild[i].view = GetGuildBankTabInfo(i)
 		end
 
 		local tab = GetCurrentGuildBankTab()
 		local items = guild[tab]
 		if items then
+			items.deposit, items.withdraw, items.remaining = select(4, GetGuildBankTabInfo(tab))
+
 			for i = 1, 98 do
 				local link = GetGuildBankItemLink(tab, i)
 				local _, count = GetGuildBankItemInfo(tab, i)
