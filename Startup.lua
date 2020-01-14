@@ -1,5 +1,5 @@
 --[[
-Copyright 2011-2019 João Cardoso
+Copyright 2011-2020 João Cardoso
 BagBrother is distributed under the terms of the GNU General Public License (Version 3).
 As a special exception, the copyright holders of this addon do not give permission to
 redistribute and/or modify it.
@@ -75,7 +75,7 @@ function Brother:UpdateData()
 		self:PLAYER_EQUIPMENT_CHANGED(i)
 	end
 
-	if HasKey() then
+	if HasKey and HasKey() then
 		self:BAG_UPDATE(KEYRING_CONTAINER)
 	end
 

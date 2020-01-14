@@ -1,5 +1,5 @@
 --[[
-Copyright 2011-2019 João Cardoso
+Copyright 2011-2020 João Cardoso
 BagBrother is distributed under the terms of the GNU General Public License (Version 3).
 As a special exception, the copyright holders of this addon do not give permission to
 redistribute and/or modify it.
@@ -24,7 +24,7 @@ local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS
 
 function BagBrother:BAG_UPDATE(bag)
 	if bag <= NUM_BAG_SLOTS then
-  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == KEYRING_CONTAINER and HasKey())
+  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == KEYRING_CONTAINER and HasKey and HasKey())
 	end
 end
 
