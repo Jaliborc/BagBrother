@@ -15,6 +15,8 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local addonName, addon = ...
+
 local Interface = LibStub:NewLibrary('BagBrotherInterface', 1)
 Interface.IsItemCache = true
 
@@ -131,6 +133,14 @@ function Interface:GetItem(realm, owner, bag, slot)
   end
 end
 
+function Interface:GetItemCount(realm, owner, bag, itemId)
+  return addon:GetItemCount(realm, owner, bag, itemId)
+end
+
 function Interface:GetGuildItem(realm, name, tab, slot)
   return Interface:GetItem(realm, name .. '*', tab, slot)
+end
+
+function Interface:GetGuildItemCount(realm, owner, bag, itemId)
+  return addon:GetItemCount(realm, owner .. '*', bag, itemId)
 end
