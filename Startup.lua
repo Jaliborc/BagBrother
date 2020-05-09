@@ -46,8 +46,6 @@ function Brother:StartupCache()
 	player.class = select(2, UnitClass('player'))
 	player.race = select(2, UnitRace('player'))
 	player.sex = UnitSex('player')
-
-	addon:InitItemCounts()
 end
 
 function Brother:SetupEvents()
