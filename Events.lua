@@ -15,6 +15,9 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local _, addon = ...
+local BagBrother = addon.BagBrother
+
 local NUM_VAULT_SLOTS = 80 * 2
 local FIRST_BANK_SLOT = 1 + NUM_BAG_SLOTS
 local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS

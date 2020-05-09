@@ -15,11 +15,13 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local _, addon = ...
 
 local Brother = CreateFrame('Frame', 'BagBrother')
 Brother:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 Brother:RegisterEvent('PLAYER_LOGIN')
 
+addon.BagBrother = Brother
 
 --[[ Server Ready ]]--
 
