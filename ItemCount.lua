@@ -92,11 +92,7 @@ local function initItemCountCache(realm, owner)
           count = count or 1
           count = tonumber(count)
 
-          if (bagCounts[id] == nil) then
-            bagCounts[id] = count
-          else
-            bagCounts[id] = bagCounts[id] + count
-          end
+          bagCounts[id] = (bagCounts[id] or 0) + count
         end
       end
     end
@@ -115,6 +111,7 @@ function addon:GetItemCount (realm, owner, bag, itemId)
     return 0
   end
 
+  bag = getBagType(bag)
   data = itemCountCache[realm][owner][bag]
 
   if (data == nil) then

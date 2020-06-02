@@ -28,7 +28,7 @@ function BagBrother:SaveBag(bag, onlyItems, saveSize)
 		end
 
 		if not onlyItems then
-			self:SaveEquip(ContainerIDToInventoryID(bag), size)
+			self:SaveEquip(ContainerIDToInventoryID(bag), 1)
 		elseif saveSize then
 			items.size = size
 		end
@@ -41,7 +41,8 @@ end
 
 function BagBrother:SaveEquip(i, count)
 	local link = GetInventoryItemLink('player', i)
-	local count = count or GetInventoryItemCount('player', i)
+
+	count = count or GetInventoryItemCount('player', i)
 
 	self.Player.equip[i] = self:ParseItem(link, count)
 end
