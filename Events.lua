@@ -45,6 +45,10 @@ function BagBrother:PLAYER_EQUIPMENT_CHANGED(slot)
 	self:SaveEquip(slot)
 end
 
+function BagBrother:BAG_CLOSED(slot)
+	self:SaveEquip(ContainerIDToInventoryID(slot))
+end
+
 function BagBrother:PLAYER_MONEY()
 	self.Player.money = GetMoney()
 end
