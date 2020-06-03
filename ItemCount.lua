@@ -16,7 +16,6 @@ This file is part of BagBrother.
 --]]
 
 local _, addon = ...
-local BagBrother = addon.BagBrother
 
 local FIRST_BAG_SLOT = BACKPACK_CONTAINER
 local LAST_BAG_SLOT = FIRST_BAG_SLOT + NUM_BAG_SLOTS
@@ -27,6 +26,8 @@ local BAG_TYPE_BAG = 'bags'
 local BAG_TYPE_EQUIP = 'equip'
 
 local itemCountCache = {}
+local currentRealmCache
+local playerCache
 
 local function getBagType (bag)
   if (type(bag) ~= 'number') then
@@ -65,6 +66,14 @@ local function initItemCountCache(realm, owner)
   local realmCache = itemCountCache[realm] or {}
   local ownerCache = realmCache[owner] or {}
 
+  if (realmData == addon.BagBrother.Realm) then
+    currentRealmCache = realmCache
+  end
+
+  if (ownerData == addon.BagBrother.Player) then
+    playerCache = ownerCache
+  end
+
   for bag, bagData in pairs(ownerData) do
     if (type(bagData) == 'table') then
       local bagCounts
@@ -94,12 +103,25 @@ local function initItemCountCache(realm, owner)
   return true
 end
 
+function addon:UnCachePlayerBag (bag)
+  if (not playerCache) then return end
+
+  playerCache[getBagType(bag)] = false
+end
+
+function addon:UnCacheRealmOwner (owner)
+  if (not realmCache) then return end
+
+  realmCache[owner] = false
+end
+
 function addon:GetItemCount (realm, owner, bag, itemId)
   local data = itemCountCache[realm]
 
+  data = data and data[owner]
   bag = getBagType(bag)
 
-  if (not (data and data[owner]) and not initItemCountCache(realm, owner)) then
+  if ((not data or data[bag] == false) and not initItemCountCache(realm, owner)) then
     return 0
   end
 
