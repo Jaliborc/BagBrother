@@ -22,10 +22,20 @@ local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS
 
 --[[ Continuous Events ]]--
 
+BagBrother.flaggedBags = {}
+
 function BagBrother:BAG_UPDATE(bag)
-	if bag <= NUM_BAG_SLOTS then
-  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == KEYRING_CONTAINER and HasKey and HasKey())
+	self.flaggedBags[bag] = true
+end
+
+function BagBrother:BAG_UPDATE_DELAYED()
+	for bag in pairs(self.flaggedBags) do
+		if bag <= NUM_BAG_SLOTS then
+	  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == KEYRING_CONTAINER and HasKey and HasKey())
+		end
 	end
+
+	self.flaggedBags = {}
 end
 
 function BagBrother:PLAYER_EQUIPMENT_CHANGED(slot)

@@ -48,6 +48,7 @@ end
 
 function Brother:SetupEvents()
 	self:RegisterEvent('BAG_UPDATE')
+	self:RegisterEvent('BAG_UPDATE_DELAYED')
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
@@ -70,6 +71,8 @@ function Brother:UpdateData()
 	for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
 		self:BAG_UPDATE(i)
 	end
+
+	self:BAG_UPDATE_DELAYED()
 
 	for i = 1, INVSLOT_LAST_EQUIPPED do
 		self:PLAYER_EQUIPMENT_CHANGED(i)
