@@ -22,8 +22,10 @@ local FIRST_BAG_SLOT = BACKPACK_CONTAINER
 local LAST_BAG_SLOT = FIRST_BAG_SLOT + NUM_BAG_SLOTS
 local LAST_BANK_SLOT = NUM_BAG_SLOTS + NUM_BANKBAGSLOTS
 local FIRST_BANK_SLOT = NUM_BAG_SLOTS + 1
+local LAST_INVENTORY_SLOT = ContainerIDToInventoryID(NUM_BAG_SLOTS);
 local BAG_TYPE_BANK = 'bank'
 local BAG_TYPE_BAG = 'bags'
+local BAG_TYPE_EQUIP = 'equip'
 
 local itemCountCache = {}
 
@@ -54,64 +56,61 @@ end
 
 local function initItemCountCache(realm, owner)
   local BrotherBags = _G.BrotherBags or {}
-  local realmCache = itemCountCache[realm] or {}
   local realmData = BrotherBags[realm]
 
   if (realmData == nil) then
-    itemCountCache[realm] = false
     return false
   end
 
   local ownerData = realmData[owner]
 
-  itemCountCache[realm] = realmCache
-
   if (ownerData == nil) then
-    realmCache[owner] = false
     return false
   end
 
-  local ownerCache = {}
+  local realmCache = itemCountCache[realm] or {}
+  local ownerCache = realmCache[owner] or {}
 
-  realmCache[owner] = ownerCache;
-
-  for bag, bagData in pairs (ownerData) do
+  for bag, bagData in pairs(ownerData) do
     if (type(bagData) == 'table') then
       local bagCounts
 
       bag = getBagType(bag)
-      ownerCache[bag] = ownerCache[bag] or {}
-      bagCounts = ownerCache[bag]
+      bagCounts = ownerCache[bag] or {}
 
       for slot, item in pairs(bagData) do
-        if (type(slot) == 'number' and type(item) == 'string') then
+        if (type(slot) == 'number' and type(item) == 'string' and
+            (bag ~= BAG_TYPE_EQUIP or slot <= LAST_INVENTORY_SLOT)) then
           local link, count = strsplit(';', item)
           local id = strsplit(':', link)
 
           id = tonumber(id)
-          count = count or 1
-          count = tonumber(count)
+          count = tonumber(count or 1)
 
           bagCounts[id] = (bagCounts[id] or 0) + count
         end
       end
+
+      ownerCache[bag] = bagCounts
     end
   end
+
+  itemCountCache[realm] = realmCache
+  realmCache[owner] = ownerCache
+
+  return true
 end
 
 function addon:GetItemCount (realm, owner, bag, itemId)
   local data = itemCountCache[realm]
 
-  if (data == false) then
-    return 0
-  end
-
-  if ((data == nil or data[owner] == nil) and not
-      initItemCountCache(realm, owner)) then
-    return 0
-  end
-
   bag = getBagType(bag)
+
+  if ((data == nil or data[owner] == nil) and
+      not initItemCountCache(realm, owner)) then
+    return 0
+  end
+
   data = itemCountCache[realm][owner][bag]
 
   if (data == nil) then
