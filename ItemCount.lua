@@ -57,12 +57,7 @@ end
 local function initItemCountCache(realm, owner)
   local BrotherBags = _G.BrotherBags or {}
   local realmData = BrotherBags[realm]
-
-  if (realmData == nil) then
-    return false
-  end
-
-  local ownerData = realmData[owner]
+  local ownerData = realmData and realmData[owner]
 
   if (ownerData == nil) then
     return false
@@ -106,16 +101,11 @@ function addon:GetItemCount (realm, owner, bag, itemId)
 
   bag = getBagType(bag)
 
-  if ((data == nil or data[owner] == nil) and
-      not initItemCountCache(realm, owner)) then
+  if (not (data and data[owner]) and not initItemCountCache(realm, owner)) then
     return 0
   end
 
   data = itemCountCache[realm][owner][bag]
 
-  if (data == nil) then
-    return 0
-  end
-
-  return data[itemId] or 0
+  return (data and data[itemId]) or 0
 end
