@@ -34,7 +34,7 @@ end
 function BagBrother:BAG_UPDATE_DELAYED()
 	for bag in pairs(self.flaggedBags) do
 		if bag <= NUM_BAG_SLOTS then
-	  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == KEYRING_CONTAINER and HasKey and HasKey())
+	  	self:SaveBag(bag, bag <= BACKPACK_CONTAINER)
 		end
 	end
 

@@ -18,10 +18,11 @@ This file is part of BagBrother.
 local _, addon = ...
 local BagBrother = addon.BagBrother
 
-function BagBrother:SaveBag(bag, onlyItems, saveSize)
+function BagBrother:SaveBag(bag, onlyItems)
 	local size = GetContainerNumSlots(bag)
 	if size > 0 then
 		local items = {}
+
 		for slot = 1, size do
 			local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
 			items[slot] = self:ParseItem(link, count)
@@ -29,10 +30,9 @@ function BagBrother:SaveBag(bag, onlyItems, saveSize)
 
 		if not onlyItems then
 			self:SaveEquip(ContainerIDToInventoryID(bag), 1)
-		elseif saveSize then
-			items.size = size
 		end
 
+		items.size = size
 		self.Player[bag] = items
 	else
 		self.Player[bag] = nil

@@ -88,20 +88,27 @@ end
 --[[ Bags ]]--
 
 function Interface:GetBag(realm, player, bag)
-  if tonumber(bag) then
-    local slot = bag > 0 and ContainerIDToInventoryID(bag)
-    if slot then
-      return Interface:GetItem(realm, player, 'equip', slot)
-    else
-      realm = BrotherBags[realm]
-      player = realm and realm[player]
-      bag = player and player[bag]
+  bag = tonumber(bag)
 
-      return bag and {
-        owned = true,
-        count = bag.size }
-    end
+  if not bag then return end
+
+  local item
+
+  if (bag > 0) then
+    item = Interface:GetItem(realm, player, 'equip', ContainerIDToInventoryID(bag))
+  else
+    item = {}
   end
+
+  realm = BrotherBags[realm]
+  player = realm and realm[player]
+  bag = player and player[bag]
+
+  return bag and item and {
+    owned = true,
+    count = bag.size,
+    link = item.link,
+  }
 end
 
 function Interface:GetGuildTab(realm, guild, tab)
