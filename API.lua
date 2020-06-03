@@ -20,23 +20,20 @@ local BagBrother = addon.BagBrother
 
 function BagBrother:SaveBag(bag, onlyItems)
 	local size = GetContainerNumSlots(bag)
-	if size > 0 then
-		local items = {}
 
-		for slot = 1, size do
-			local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
-			items[slot] = self:ParseItem(link, count)
-		end
+	local items = {}
 
-		if not onlyItems then
-			self:SaveEquip(ContainerIDToInventoryID(bag), 1)
-		end
-
-		items.size = size
-		self.Player[bag] = items
-	else
-		self.Player[bag] = nil
+	for slot = 1, size do
+		local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
+		items[slot] = self:ParseItem(link, count)
 	end
+
+	if not onlyItems then
+		self:SaveEquip(ContainerIDToInventoryID(bag), 1)
+	end
+
+	items.size = size
+	self.Player[bag] = items
 end
 
 function BagBrother:SaveEquip(i, count)

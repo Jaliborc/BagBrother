@@ -22,7 +22,6 @@ local FIRST_BAG_SLOT = BACKPACK_CONTAINER
 local LAST_BAG_SLOT = FIRST_BAG_SLOT + NUM_BAG_SLOTS
 local LAST_BANK_SLOT = NUM_BAG_SLOTS + NUM_BANKBAGSLOTS
 local FIRST_BANK_SLOT = NUM_BAG_SLOTS + 1
-local LAST_INVENTORY_SLOT = ContainerIDToInventoryID(NUM_BAG_SLOTS);
 local BAG_TYPE_BANK = 'bank'
 local BAG_TYPE_BAG = 'bags'
 local BAG_TYPE_EQUIP = 'equip'
@@ -74,8 +73,7 @@ local function initItemCountCache(realm, owner)
       bagCounts = ownerCache[bag] or {}
 
       for slot, item in pairs(bagData) do
-        if (type(slot) == 'number' and type(item) == 'string' and
-            (bag ~= BAG_TYPE_EQUIP or slot <= LAST_INVENTORY_SLOT)) then
+        if (type(slot) == 'number' and type(item) == 'string') then
           local link, count = strsplit(';', item)
           local id = strsplit(':', link)
 
