@@ -22,6 +22,10 @@ local NUM_VAULT_SLOTS = 80 * 2
 local FIRST_BANK_SLOT = 1 + NUM_BAG_SLOTS
 local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS
 
+local function isBankBag (bag)
+  return (bag == BANK_CONTAINER or
+          (bag >= FIRST_BANK_SLOT and bag <= LAST_BANK_SLOT));
+end
 
 --[[ Continuous Events ]]--
 
@@ -33,7 +37,7 @@ end
 
 function BagBrother:BAG_UPDATE_DELAYED()
   for bag in pairs(self.flaggedBags) do
-    if bag <= NUM_BAG_SLOTS then
+    if (self.atBank or not isBankBag(bag)) then
       self:SaveBag(bag, bag <= BACKPACK_CONTAINER)
     end
   end
@@ -58,23 +62,21 @@ end
 
 function BagBrother:BANKFRAME_OPENED()
   self.atBank = true
+
+  for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
+    self:SaveBag(i)
+  end
+
+  if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
+    self:SaveBag(REAGENTBANK_CONTAINER, true)
+  end
+
+  self:SaveBag(BANK_CONTAINER, true)
 end
 
 function BagBrother:BANKFRAME_CLOSED()
-  if self.atBank then
-    for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-      self:SaveBag(i)
-    end
-
-    if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-      self:SaveBag(REAGENTBANK_CONTAINER, true)
-    end
-
-    self:SaveBag(BANK_CONTAINER, true)
-    self.atBank = nil
-  end
+  self.atBank = nil
 end
-
 
 --[[ Void Storage Events ]]--
 
