@@ -29,10 +29,10 @@ end
 
 --[[ Continuous Events ]]--
 
-BagBrother.flaggedBags = {}
+BagBrother.queue = {}
 
 function BagBrother:BAG_UPDATE(bag)
-  self.flaggedBags[bag] = true
+  self.queue[bag] = true
 end
 
 function BagBrother:PLAYERBANKSLOTS_CHANGED()
@@ -40,7 +40,7 @@ function BagBrother:PLAYERBANKSLOTS_CHANGED()
 end
 
 function BagBrother:BAG_UPDATE_DELAYED()
-  for bag in pairs(self.flaggedBags) do
+  for bag in pairs(self.queue) do
     -- BAG_UPDATE gets called when teleporting on all bags including bank bags,
     -- so they have to be checked
     if (self.atBank or not isBankBag(bag)) then
@@ -48,7 +48,7 @@ function BagBrother:BAG_UPDATE_DELAYED()
     end
   end
 
-  self.flaggedBags = {}
+  self.queue = {}
 end
 
 function BagBrother:PLAYER_EQUIPMENT_CHANGED(slot)
