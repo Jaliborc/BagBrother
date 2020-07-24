@@ -57,6 +57,7 @@ function Brother:SetupEvents()
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('BANKFRAME_CLOSED')
+	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 
 	if CanUseVoidStorage then
 		self:RegisterEvent('VOID_STORAGE_OPEN')

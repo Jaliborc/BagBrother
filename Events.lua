@@ -35,8 +35,14 @@ function BagBrother:BAG_UPDATE(bag)
   self.flaggedBags[bag] = true
 end
 
+function BagBrother:PLAYERBANKSLOTS_CHANGED()
+  self:SaveBag(BANK_CONTAINER, true)
+end
+
 function BagBrother:BAG_UPDATE_DELAYED()
   for bag in pairs(self.flaggedBags) do
+    -- BAG_UPDATE gets called when teleporting on all bags including bank bags,
+    -- so they have to be checked
     if (self.atBank or not isBankBag(bag)) then
       self:SaveBag(bag, bag <= BACKPACK_CONTAINER)
     end
