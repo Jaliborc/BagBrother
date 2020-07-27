@@ -43,11 +43,7 @@ function BagBrother:SaveBagContent (bag)
 	items.size = size
 	self.Player[bag] = items
 
-	if (self:IsBankBag(bag)) then
-		addon:UnCachePlayerBag('bank');
-	else
-		addon:UnCachePlayerBag('bags');
-	end
+	addon:UnCachePlayerBag(bag);
 end
 
 function BagBrother:SaveEquip(i, count)
