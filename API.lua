@@ -47,12 +47,16 @@ function BagBrother:SaveBagContent (bag)
 end
 
 function BagBrother:SaveEquip(i, count)
+	local oldLink = self.Player.equip[i]
 	local link = GetInventoryItemLink('player', i)
 
 	count = count or GetInventoryItemCount('player', i)
+	link = self:ParseItem(link, count)
 
-	self.Player.equip[i] = self:ParseItem(link, count)
-	addon:UnCachePlayerBag('equip')
+	if (link ~= oldLink) then
+		self.Player.equip[i] = link
+		addon:UnCachePlayerBag('equip')
+	end
 end
 
 function BagBrother:ParseItem(link, count)
