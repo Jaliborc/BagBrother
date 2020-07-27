@@ -18,9 +18,21 @@ This file is part of BagBrother.
 local _, addon = ...
 local BagBrother = addon.BagBrother
 
-function BagBrother:SaveBag(bag, onlyItems)
-	local size = GetContainerNumSlots(bag)
+local FIRST_BANK_SLOT = 1 + NUM_BAG_SLOTS
+local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS
 
+function BagBrother:IsBankBag(bag)
+  return (bag == BANK_CONTAINER or
+          (bag >= FIRST_BANK_SLOT and bag <= LAST_BANK_SLOT));
+end
+
+function BagBrother:SaveBag(bag)
+	self:SaveBagContent(bag)
+	self:SaveEquip(ContainerIDToInventoryID(bag), 1)
+end
+
+function BagBrother:SaveBagContent (bag)
+	local size = GetContainerNumSlots(bag)
 	local items = {}
 
 	for slot = 1, size do
@@ -28,13 +40,14 @@ function BagBrother:SaveBag(bag, onlyItems)
 		items[slot] = self:ParseItem(link, count)
 	end
 
-	if not onlyItems then
-		self:SaveEquip(ContainerIDToInventoryID(bag), 1)
-	end
-
 	items.size = size
 	self.Player[bag] = items
-	addon:UnCachePlayerBag('bags')
+
+	if (self:IsBankBag(bag)) then
+		addon:UnCachePlayerBag('bank');
+	else
+		addon:UnCachePlayerBag('bags');
+	end
 end
 
 function BagBrother:SaveEquip(i, count)
