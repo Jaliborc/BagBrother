@@ -36,7 +36,9 @@ function BagBrother:BAG_UPDATE(bag)
 end
 
 function BagBrother:PLAYERBANKSLOTS_CHANGED()
-  self:SaveBag(BANK_CONTAINER, true)
+  if (self.atBank) then
+    self:SaveBag(BANK_CONTAINER, true)
+  end
 end
 
 function BagBrother:BAG_UPDATE_DELAYED()
