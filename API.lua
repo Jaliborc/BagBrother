@@ -34,7 +34,7 @@ function BagBrother:SaveBag(bag, onlyItems)
 
 	items.size = size
 	self.Player[bag] = items
-	addon:UnCachePlayerBag('bags')
+	addon:UnCachePlayerBag(bag)
 end
 
 function BagBrother:SaveEquip(i, count)
