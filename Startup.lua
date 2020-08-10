@@ -69,14 +69,17 @@ function Brother:SetupEvents()
 		self:RegisterEvent('GUILDBANKFRAME_CLOSED')
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
 	end
+
+	if REAGENTBANK_CONTAINER then
+		self:RegisterEvent('REAGENTBANK_PURCHASED')
+		self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+	end
 end
 
 function Brother:UpdateData()
 	for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
 		self:BAG_UPDATE(i)
 	end
-
-	self:BAG_UPDATE_DELAYED()
 
 	for i = 1, INVSLOT_LAST_EQUIPPED do
 		self:PLAYER_EQUIPMENT_CHANGED(i)
@@ -86,6 +89,15 @@ function Brother:UpdateData()
 		self:BAG_UPDATE(KEYRING_CONTAINER)
 	end
 
+	if REAGENTBANK_CONTAINER then
+		if IsReagentBankUnlocked() then
+			self:BAG_UPDATE(REAGENTBANK_CONTAINER)
+		else
+			self.Player[REAGENTBANK_CONTAINER] = nil
+		end
+	end
+
+	self:BAG_UPDATE_DELAYED()
 	self:GUILD_ROSTER_UPDATE()
 	self:PLAYER_MONEY()
 end

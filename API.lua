@@ -33,6 +33,13 @@ end
 
 function BagBrother:SaveBagContent (bag)
 	local size = GetContainerNumSlots(bag)
+
+	if size == 0 then
+		self.Player[bag] = nil
+		addon:UnCachePlayerBag(bag)
+		return
+	end
+
 	local items = {}
 
 	for slot = 1, size do
@@ -42,8 +49,15 @@ function BagBrother:SaveBagContent (bag)
 
 	items.size = size
 	self.Player[bag] = items
+	addon:UnCachePlayerBag(bag)
+end
 
-	addon:UnCachePlayerBag(bag);
+function BagBrother:UpdateBagSlot (bag, slot)
+	local items = self.Player[bag]
+	local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
+
+	items[slot] = self:ParseItem(link, count)
+	addon:UnCachePlayerBag(bag)
 end
 
 function BagBrother:SaveEquip(i, count)

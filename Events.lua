@@ -36,6 +36,15 @@ function BagBrother:PLAYERBANKSLOTS_CHANGED()
   end
 end
 
+function BagBrother:REAGENTBANK_PURCHASED ()
+  self:SaveBagContent(REAGENTBANK_CONTAINER)
+end
+
+function BagBrother:PLAYERREAGENTBANKSLOTS_CHANGED (slot)
+  -- reagent bank can always be read, so no atBank check is required
+  self:UpdateBagSlot(REAGENTBANK_CONTAINER, slot)
+end
+
 function BagBrother:BAG_UPDATE_DELAYED()
   for bag in pairs(self.queue) do
     -- BAG_UPDATE gets called when teleporting on all bags including bank bags,
@@ -72,10 +81,6 @@ function BagBrother:BANKFRAME_OPENED()
 
   for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
     self:SaveBag(i)
-  end
-
-  if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-    self:SaveBagContent(REAGENTBANK_CONTAINER)
   end
 
   self:SaveBagContent(BANK_CONTAINER)
