@@ -15,33 +15,62 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local _, addon = ...
+local BagBrother = addon.BagBrother
 
-function BagBrother:SaveBag(bag, onlyItems, saveSize)
+local FIRST_BANK_SLOT = 1 + NUM_BAG_SLOTS
+local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + NUM_BAG_SLOTS
+
+function BagBrother:IsBankBag(bag)
+  return (bag == BANK_CONTAINER or
+          (bag >= FIRST_BANK_SLOT and bag <= LAST_BANK_SLOT));
+end
+
+function BagBrother:SaveBag(bag)
+	self:SaveBagContent(bag)
+	self:SaveEquip(ContainerIDToInventoryID(bag), 1)
+end
+
+function BagBrother:SaveBagContent (bag)
 	local size = GetContainerNumSlots(bag)
-	if size > 0 then
-		local items = {}
-		for slot = 1, size do
-			local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
-			items[slot] = self:ParseItem(link, count)
-		end
 
-		if not onlyItems then
-			self:SaveEquip(ContainerIDToInventoryID(bag), size)
-		elseif saveSize then
-			items.size = size
-		end
-
-		self.Player[bag] = items
-	else
+	if size == 0 then
 		self.Player[bag] = nil
+		addon:UnCachePlayerBag(bag)
+		return
 	end
+
+	local items = {}
+
+	for slot = 1, size do
+		local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
+		items[slot] = self:ParseItem(link, count)
+	end
+
+	items.size = size
+	self.Player[bag] = items
+	addon:UnCachePlayerBag(bag)
+end
+
+function BagBrother:UpdateBagSlot (bag, slot)
+	local items = self.Player[bag]
+	local _, count, _,_,_,_, link = GetContainerItemInfo(bag, slot)
+
+	items[slot] = self:ParseItem(link, count)
+	addon:UnCachePlayerBag(bag)
 end
 
 function BagBrother:SaveEquip(i, count)
+	local oldLink = self.Player.equip[i]
 	local link = GetInventoryItemLink('player', i)
-	local count = count or GetInventoryItemCount('player', i)
 
-	self.Player.equip[i] = self:ParseItem(link, count)
+	count = count or GetInventoryItemCount('player', i)
+	link = self:ParseItem(link, count)
+
+	if (link ~= oldLink) then
+		self.Player.equip[i] = link
+		addon:UnCachePlayerBag('equip')
+	end
 end
 
 function BagBrother:ParseItem(link, count)

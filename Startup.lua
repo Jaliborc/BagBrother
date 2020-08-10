@@ -15,11 +15,13 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local _, addon = ...
 
 local Brother = CreateFrame('Frame', 'BagBrother')
 Brother:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 Brother:RegisterEvent('PLAYER_LOGIN')
 
+addon.BagBrother = Brother
 
 --[[ Server Ready ]]--
 
@@ -48,11 +50,14 @@ end
 
 function Brother:SetupEvents()
 	self:RegisterEvent('BAG_UPDATE')
+	self:RegisterEvent('BAG_UPDATE_DELAYED')
+	self:RegisterEvent('BAG_CLOSED')
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('BANKFRAME_CLOSED')
+	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 
 	if CanUseVoidStorage then
 		self:RegisterEvent('VOID_STORAGE_OPEN')
@@ -63,6 +68,11 @@ function Brother:SetupEvents()
 		self:RegisterEvent('GUILDBANKFRAME_OPENED')
 		self:RegisterEvent('GUILDBANKFRAME_CLOSED')
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
+	end
+
+	if REAGENTBANK_CONTAINER then
+		self:RegisterEvent('REAGENTBANK_PURCHASED')
+		self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
 	end
 end
 
@@ -79,6 +89,15 @@ function Brother:UpdateData()
 		self:BAG_UPDATE(KEYRING_CONTAINER)
 	end
 
+	if REAGENTBANK_CONTAINER then
+		if IsReagentBankUnlocked() then
+			self:BAG_UPDATE(REAGENTBANK_CONTAINER)
+		else
+			self.Player[REAGENTBANK_CONTAINER] = nil
+		end
+	end
+
+	self:BAG_UPDATE_DELAYED()
 	self:GUILD_ROSTER_UPDATE()
 	self:PLAYER_MONEY()
 end

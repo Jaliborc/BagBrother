@@ -6,6 +6,7 @@
 ## OptionalDeps: LibStub, WoWUnit
 
 LibStub.lua
+ItemCount.lua
 Startup.lua
 Events.lua
 API.lua
