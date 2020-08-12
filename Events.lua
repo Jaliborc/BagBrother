@@ -58,6 +58,48 @@ function BagBrother:BANKFRAME_CLOSED()
 	end
 end
 
+--[[ Mailbox ]]--
+function BagBrother:MAIL_SHOW()
+	if self.atMailbox then return end
+
+	CheckInbox()
+
+	self.atMailbox = true
+end
+
+function BagBrother:MAIL_CLOSED()
+	self.atMailbox = false
+
+end
+
+function BagBrother:MAIL_INBOX_UPDATE()
+	if self.Player.mailbox == nil then
+		self.Player.mailbox = {}
+	end
+	wipe(self.Player.mailbox)
+	local items = GetInboxNumItems()
+	for i = 1, items do
+		local packageIcon, stationeryIcon, sender, subject, money, CODAmount, daysLeft, hasItem, wasRead, wasReturned, textCreated, canReply, isGM = GetInboxHeaderInfo(i)
+		if hasItem ~= nil then
+			for j = 1, ATTACHMENTS_MAX_SEND do
+				local _, _, _, count, _, _ = GetInboxItem(i, j)
+				local itemLink = GetInboxItemLink(i, j)
+				if itemLink ~= nil then
+					table.insert(self.Player.mailbox, self:ParseItem(itemLink, count))
+				end
+			end
+		end
+
+	end
+
+end
+
+
+
+
+function BagBrother:MAIL_SHOW()
+	self.atMailbox = false
+end
 
 --[[ Void Storage Events ]]--
 

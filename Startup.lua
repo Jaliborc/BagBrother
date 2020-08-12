@@ -54,6 +54,11 @@ function Brother:SetupEvents()
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('BANKFRAME_CLOSED')
 
+	-- mail support
+	self:RegisterEvent('MAIL_SHOW')
+	self:RegisterEvent('MAIL_CLOSED')
+	self:RegisterEvent('MAIL_INBOX_UPDATE')
+
 	if CanUseVoidStorage then
 		self:RegisterEvent('VOID_STORAGE_OPEN')
 		self:RegisterEvent('VOID_STORAGE_CLOSE')
