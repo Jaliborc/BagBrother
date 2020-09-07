@@ -23,10 +23,10 @@ local LAST_BANK_SLOT = NUM_BAG_SLOTS + NUM_BANKBAGSLOTS
 local FIRST_BANK_SLOT = NUM_BAG_SLOTS + 1
 local BAG_TYPE_BANK = 'bank'
 local BAG_TYPE_BAG = 'bags'
-local BAG_TYPE_EQUIP = 'equip'
+local BAG_TYPE_EQUIP = 'equip' -- not used
 
 local itemCountCache = {}
-local currentRealmCache
+local playerRealmCache
 local playerCache
 
 local function getBagType (bag)
@@ -54,6 +54,37 @@ local function getBagType (bag)
   return BAG_TYPE_BAG
 end
 
+local function initSlotItemCountCache (bagCounts, slot, item)
+  if (type(slot) ~= 'number' or type(item) ~= 'string') then
+    return
+  end
+
+  local link, count = strsplit(';', item)
+  local id = strsplit(':', link)
+
+  id = tonumber(id)
+  count = tonumber(count or 1)
+
+  bagCounts[id] = (bagCounts[id] or 0) + count
+end
+
+local function initBagItemCountCache (ownerCache, bag, bagData)
+  if (type(bagData) ~= 'table') then
+    return
+  end
+
+  local bagCounts
+
+  bag = getBagType(bag)
+  bagCounts = ownerCache[bag] or {}
+
+  for slot, item in pairs(bagData) do
+    initSlotItemCountCache(bagCounts, slot, item)
+  end
+
+  ownerCache[bag] = bagCounts
+end
+
 local function initItemCountCache(realm, owner)
   local BrotherBags = _G.BrotherBags or {}
   local realmData = BrotherBags[realm]
@@ -67,7 +98,7 @@ local function initItemCountCache(realm, owner)
   local ownerCache = realmCache[owner] or {}
 
   if (realmData == addon.BagBrother.Realm) then
-    currentRealmCache = realmCache
+    playerRealmCache = realmCache
   end
 
   if (ownerData == addon.BagBrother.Player) then
@@ -75,26 +106,7 @@ local function initItemCountCache(realm, owner)
   end
 
   for bag, bagData in pairs(ownerData) do
-    if (type(bagData) == 'table') then
-      local bagCounts
-
-      bag = getBagType(bag)
-      bagCounts = ownerCache[bag] or {}
-
-      for slot, item in pairs(bagData) do
-        if (type(slot) == 'number' and type(item) == 'string') then
-          local link, count = strsplit(';', item)
-          local id = strsplit(':', link)
-
-          id = tonumber(id)
-          count = tonumber(count or 1)
-
-          bagCounts[id] = (bagCounts[id] or 0) + count
-        end
-      end
-
-      ownerCache[bag] = bagCounts
-    end
+    initBagItemCountCache(ownerCache, bag, bagData);
   end
 
   itemCountCache[realm] = realmCache
@@ -110,9 +122,9 @@ function addon:UnCachePlayerBag (bag)
 end
 
 function addon:UnCacheRealmOwner (owner)
-  if (not realmCache) then return end
+  if (not playerRealmCache) then return end
 
-  realmCache[owner] = false
+  playerRealmCache[owner] = false
 end
 
 function addon:GetItemCount (realm, owner, bag, itemId)
