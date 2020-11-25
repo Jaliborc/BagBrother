@@ -15,11 +15,13 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local _, addon = ...
 
 local Brother = CreateFrame('Frame', 'BagBrother')
 Brother:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 Brother:RegisterEvent('PLAYER_LOGIN')
 
+addon.BagBrother = Brother
 
 --[[ Server Ready ]]--
 
@@ -48,6 +50,8 @@ end
 
 function Brother:SetupEvents()
 	self:RegisterEvent('BAG_UPDATE')
+	self:RegisterEvent('BAG_UPDATE_DELAYED')
+	self:RegisterEvent('BAG_CLOSED')
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
@@ -70,6 +74,8 @@ function Brother:UpdateData()
 	for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
 		self:BAG_UPDATE(i)
 	end
+
+	self:BAG_UPDATE_DELAYED()
 
 	for i = 1, INVSLOT_LAST_EQUIPPED do
 		self:PLAYER_EQUIPMENT_CHANGED(i)
