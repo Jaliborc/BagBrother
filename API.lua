@@ -1,5 +1,5 @@
 --[[
-Copyright 2011-2020 João Cardoso
+Copyright 2011-2022 João Cardoso
 BagBrother is distributed under the terms of the GNU General Public License (Version 3).
 As a special exception, the copyright holders of this addon do not give permission to
 redistribute and/or modify it.
@@ -17,7 +17,7 @@ This file is part of BagBrother.
 
 
 function BagBrother:SaveBag(bag, onlyItems, saveSize)
-	local size = GetContainerNumSlots(bag)
+	local size = ContainerFrame_GetContainerNumSlots(bag)
 	if size > 0 then
 		local items = {}
 		for slot = 1, size do
