@@ -54,7 +54,10 @@ function Brother:SetupEvents()
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('BANKFRAME_CLOSED')
 
-	if CanUseVoidStorage then
+	if C_PlayerInteractionManager then
+		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
+	elseif CanUseVoidStorage then
 		self:RegisterEvent('VOID_STORAGE_OPEN')
 		self:RegisterEvent('VOID_STORAGE_CLOSE')
 	end

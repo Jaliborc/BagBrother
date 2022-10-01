@@ -36,6 +36,18 @@ function BagBrother:PLAYER_MONEY()
 	self.Player.money = GetMoney()
 end
 
+function BagBrother:PLAYER_INTERACTION_MANAGER_FRAME_SHOW(frame)
+	if frame == Enum.PlayerInteractionType.VoidStorageBanker then
+		self:VOID_STORAGE_OPEN()
+	end
+end
+
+function BagBrother:PLAYER_INTERACTION_MANAGER_FRAME_HIDE(frame)
+	if frame == Enum.PlayerInteractionType.VoidStorageBanker then
+		self:VOID_STORAGE_CLOSE()
+	end
+end
+
 
 --[[ Bank Events ]]--
 
