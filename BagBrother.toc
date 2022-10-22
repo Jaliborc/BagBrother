@@ -3,7 +3,7 @@
 ## Notes: Bagnon and Bagnonium's shared data storage to view inventories,|nbanks, vaults and guild banks from anywhere.|n|cffbbbbbbBy João Cardoso|r|n|n|TInterface/Addons/BagBrother/Art/Paypal:12:12|t |cff82c5ffpaypal.me/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Patreon:12:12:0:-4|t |cff82c5ffpatreon.com/jaliborc|r
 ## Author: Jaliborc (João Cardoso)
 ## SavedVariables: BrotherBags
-## OptionalDeps: LibStub, WoWUnit
+## OptionalDeps: WoWUnit
 
 Code\LibStub.lua
 Code\Startup.lua
