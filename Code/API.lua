@@ -15,6 +15,9 @@ along with the addon. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of BagBrother.
 --]]
 
+local GetContainerNumSlots = C_Container.GetContainerNumSlots
+local GetContainerItemInfo = C_Container.GetContainerItemInfo
+local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID
 
 function BagBrother:SaveBag(bag, onlyItems, saveSize)
 	local size = GetContainerNumSlots(bag)

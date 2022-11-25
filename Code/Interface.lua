@@ -17,6 +17,7 @@ This file is part of BagBrother.
 
 local Interface = LibStub:NewLibrary('BagBrotherInterface', 1)
 Interface.IsItemCache = true
+local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID
 
 
 --[[ Realms ]]--
