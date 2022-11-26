@@ -5,8 +5,4 @@
 ## SavedVariables: BrotherBags
 ## OptionalDeps: WoWUnit
 
-Code\LibStub.lua
-Code\Startup.lua
-Code\Events.lua
-Code\API.lua
-Code\Interface.lua
+BagBrother.xml
