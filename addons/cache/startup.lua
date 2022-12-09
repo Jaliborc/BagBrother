@@ -16,7 +16,7 @@ This file is part of BagBrother.
 --]]
 
 
-local Brother = LibStub('WildAddon-1.0'):NewAddon(...)
+local Brother = LibStub('WildAddon-1.0'):NewAddon('BagBrother')
 
 function Brother:OnEnable()
 	local player, realm = UnitFullName('player')
