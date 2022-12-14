@@ -80,11 +80,8 @@ end
 
 --[[ Proprieties ]]--
 
-function Item:IsCached()
-	-- delicious hack: behave as cached (disable interaction) while vault has not been purchased
-	return not CanUseVoidStorage() or self:Super(Item):IsCached()
-end
-
+function Item:IsCached() return not CanUseVoidStorage() or self:Super(Item):IsCached() end
+function Item:GetQuery() return self.info.link end
 function Item:GetQuestInfo() end
 function Item:IsNew() end
 function Item:IsPaid() end

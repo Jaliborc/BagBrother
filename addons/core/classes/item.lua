@@ -8,7 +8,7 @@ local Item = Addon.Tipped:NewClass('Item', Addon.IsRetail and 'ItemButton' or 'B
 local C = LibStub('C_Everywhere').Container
 local Search = LibStub('ItemSearch-1.3')
 
-Item.SlotTypes = {
+Item.BagFamilies = {
 	[-3] = 'reagent',
 	[0x00001] = 'quiver',
 	[0x00002] = 'quiver',
@@ -28,13 +28,18 @@ Item.SlotTypes = {
  	[0x10000] = 'fridge'
 }
 
+Item.Backgrounds = {
+	LAYOUT_STYLE_MODERN and 'item/weapon/1_null',
+	'interface/paperdoll/ui-backpack-emptyslot'
+}
+
 
 --[[ Construct ]]--
 
 function Item:New(parent, bag, slot)
 	local b = self:Super(Item):New(parent)
-	b.bagID, b.slotIndex = bag, slot
 	b:SetID(slot)
+	b.bag = bag
 
 	if b:IsVisible() then
 		b:Update()
@@ -133,7 +138,7 @@ function Item:OnHide()
 		StackSplitFrame:Hide()
 	end
 
-	self:UnmarkNew()
+	self:MarkSeen()
 	self:UnregisterAll()
 end
 
@@ -178,7 +183,7 @@ function Item:OnEnter()
 		self:AttachDummy()
 	elseif self.hasItem then
 		self:ShowTooltip()
-		self:UnmarkNew()
+		self:MarkSeen()
 	end
 end
 
@@ -196,9 +201,10 @@ function Item:Update()
 	self.readable = self.info.readable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
 	self:UpdateSlotColor()
+	self:UpdateCooldown()
 	self:UpdateBorder()
 
-	SetItemButtonTexture(self, self.info.icon or self:GetEmptyItemIcon())
+	SetItemButtonTexture(self, self.info.icon or self.Backgrounds[Addon.sets.slotBackground])
 	SetItemButtonCount(self, self.info.count)
 end
 
@@ -206,8 +212,8 @@ function Item:UpdateSecondary()
 	if self:GetFrame() then
 		self:UpdateFocus()
 		self:UpdateSearch()
-		self:UpdateCooldown()
 		self:UpdateUpgradeIcon()
+		self:UpdateNewItemAnimation()
 
 		if self.hasItem and GameTooltip:IsOwned(self) then
 			self:ShowTooltip()
@@ -221,11 +227,10 @@ function Item:UpdateLocked()
 end
 
 
---[[ Appearance ]]--
+--[[ Basic Appearance ]]--
 
 function Item:UpdateBorder()
 	local quality, id = self.info.quality, self.info.id
-	local new = Addon.sets.glowNew and self:IsNew()
 	local quest, bang = self:GetQuestInfo()
 	local r,g,b
 
@@ -248,23 +253,15 @@ function Item:UpdateBorder()
 		end
 	end
 
-	if new and not self.flashAnim:IsPlaying() then
-		self.flashAnim:Play()
-		self.newitemglowAnim:Play()
-		self.NewItemTexture:SetAtlas(quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] or 'bags-glow-white')
-	end
-
 	self.IconGlow:SetShown(r)
 	self.IconBorder:SetShown(r)
 	self.QuestBorder:SetShown(bang)
-	self.NewItemTexture:SetShown(new)
-	self.BattlepayItemTexture:SetShown(new and self:IsPaid())
 	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.worthless)
 end
 
 function Item:UpdateSlotColor()
 	if not self.hasItem then
-		local color = Addon.sets.colorSlots and Addon.sets[self:GetSlotType() .. 'Color'] or {}
+		local color = Addon.sets.colorSlots and Addon.sets[self:GetBagFamily() .. 'Color'] or {}
 		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 
 		SetItemButtonTextureVertexColor(self, r,g,b)
@@ -272,19 +269,6 @@ function Item:UpdateSlotColor()
 	else
 		self:GetNormalTexture():SetVertexColor(1,1,1)
 	end
-end
-
-function Item:UpdateUpgradeIcon()
-	local isUpgrade = self:IsUpgrade()
-	if isUpgrade == nil then
-		self:Delay(0.5, 'UpdateUpgradeIcon')
-	else
-		self.UpgradeIcon:SetShown(isUpgrade)
-	end
-end
-
-function Item:SetLocked(locked)
-	SetItemButtonDesaturated(self, locked)
 end
 
 function Item:UpdateCooldown()
@@ -300,12 +284,16 @@ function Item:UpdateCooldown()
 	end
 end
 
+function Item:SetLocked(locked)
+	SetItemButtonDesaturated(self, locked)
+end
 
---[[ Searches ]]--
+
+--[[ Secondary Highlights ]]--
 
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search or ''
-	local matches = search == '' or self.hasItem and Search:Matches(self, search)
+	local matches = search == '' or self.hasItem and Search:Matches(self:GetQuery(), search)
 
 	self:SetAlpha(matches and 1 or 0.3)
 	self:SetLocked(not matches or self.info.locked)
@@ -316,6 +304,35 @@ function Item:UpdateFocus()
 		self:LockHighlight()
 	else
 		self:UnlockHighlight()
+	end
+end
+
+function Item:UpdateUpgradeIcon()
+	local isUpgrade = self:IsUpgrade()
+	if isUpgrade == nil then
+		self:Delay(0.5, 'UpdateUpgradeIcon')
+	else
+		self.UpgradeIcon:SetShown(isUpgrade)
+	end
+end
+
+function Item:UpdateNewItemAnimation()
+	local new = Addon.sets.glowNew and self:IsNew()
+
+	self.BattlepayItemTexture:SetShown(new and self:IsPaid())
+	self.NewItemTexture:SetShown(new)
+
+	if new then
+		self.NewItemTexture:SetAtlas(quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] or 'bags-glow-white')
+		self.newitemglowAnim:Play()
+		self.flashAnim:Play()
+	end
+end
+
+function Item:MarkSeen()
+	if self.NewItemTexture:IsShown() then
+		C_NewItems.RemoveNewItem(self:GetBag(), self:GetID())
+		self:UpdateNewItemAnimation()
 	end
 end
 
@@ -330,12 +347,6 @@ function Item:OnItemFlashed(_, itemID)
 	self.Flash:Stop()
 	if self.info.id == itemID then
 		self.Flash:Play()
-	end
-end
-
-function Item:UnmarkNew()
-	if self:IsNew() then
-		C_NewItems.RemoveNewItem(self:GetBag(), self:GetID())
 	end
 end
 
@@ -395,23 +406,15 @@ function Item:AttachDummy()
 end
 
 
---[[ Data ]]--
-
-function Item:GetInfo()
-	return self:GetFrame():GetItemInfo(self:GetBag(), self:GetID())
-end
-
-function Item:GetItem() -- for legacy purposes
-	return self.info.link
-end
+--[[ Proprieties ]]--
 
 function Item:GetBag()
-	return self.bagID
+	return self.bag
 end
 
-function Item:GetSlotType()
+function Item:GetBagFamily()
 	local bag = self:GetFrame():GetBagInfo(self:GetBag())
-	return self.SlotTypes[bag.family] or 'normal'
+	return self.BagFamilies[bag.family] or 'normal'
 end
 
 function Item:GetInventorySlot()
@@ -422,8 +425,12 @@ function Item:GetInventorySlot()
 	return api and api(self:GetID())
 end
 
-function Item:GetEmptyItemIcon()
-	return Addon.sets.emptySlots and 'Interface/PaperDoll/UI-Backpack-EmptySlot'
+function Item:GetQuery()
+	return {bagID = self:GetBag(), slotIndex = self:GetID()}
+end
+
+function Item:GetInfo()
+	return self:GetFrame():GetItemInfo(self:GetBag(), self:GetID())
 end
 
 function Item:GetQuestInfo()

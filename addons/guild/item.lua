@@ -84,16 +84,11 @@ function Item:UpdateFocus() end
 function Item:UpdateCooldown() end
 
 
---[[ Accessors ]]--
+--[[ Proprieties ]]--
 
-function Item:GetSlot()
-	return self:GetBag(), self:GetID()
-end
-
-function Item:GetBag()
-	return GetCurrentGuildBankTab()
-end
-
+function Item:GetSlot() return self:GetBag(), self:GetID() end
+function Item:GetBag() return GetCurrentGuildBankTab() end
+function Item:GetQuery() return self.info.link end
 function Item:GetQuestInfo() end
 function Item:IsNew() end
 function Item:IsPaid() end
