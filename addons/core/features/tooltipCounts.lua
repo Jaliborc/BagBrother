@@ -83,7 +83,7 @@ end
 --[[ API ]]--
 
 function TipCounts:AddOwners(tip, link)
-	if not Addon.sets.tipCount or tip.__hasCounters then
+	if not Addon.sets.tipCount or tip.__hasCounters or tip:GetOwner() == 'ANCHOR_NONE' then
 		return
 	end
 
