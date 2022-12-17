@@ -28,6 +28,9 @@ function TipCounts:OnEnable()
 						self:Hook(frame)
 					end
 				end
+				if LinkWrangler then
+					LinkWrangler.RegisterCallback("BagBrother", function(tip) TipCounts:Hook(tip) end, "allocate", "allocatecomp")
+				end
 			end
 		end
 	end
