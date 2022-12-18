@@ -1,0 +1,5 @@
+<Ui>
+	<Script file="item.lua"/>
+	<Script file="frame.lua"/>
+	<Script file="bank.lua"/>
+</Ui>

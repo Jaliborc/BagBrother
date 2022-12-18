@@ -5,34 +5,35 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
-local Inventory = Addon.Frame:NewClass('InventoryFrame')
-Inventory.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
-Inventory.Bags = {}
-Inventory.MainMenuButtons = {
+local Frame = Addon.Frame:NewClass('InventoryFrame')
+Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
+Frame.Item = Addon.InventoryItem
+Frame.Bags = {}
+Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
 }
 
-for slot = BACKPACK_CONTAINER, (NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS) do
-	tinsert(Inventory.Bags, slot)
+for slot = BACKPACK_CONTAINER, Addon.NumBags do
+	tinsert(Frame.Bags, slot)
 end
 
 if HasKey then
-	tinsert(Inventory.Bags, KEYRING_CONTAINER)
-	tinsert(Inventory.MainMenuButtons, KeyRingButton)
+	tinsert(Frame.Bags, KEYRING_CONTAINER)
+	tinsert(Frame.MainMenuButtons, KeyRingButton)
 end
 
-function Inventory:OnShow()
-	self:Super(Inventory):OnShow()
+function Frame:OnShow()
+	self:Super(Frame):OnShow()
 	self:Delay(0, 'HighlightMainMenu', true)
 end
 
-function Inventory:OnHide()
-	self:Super(Inventory):OnHide()
+function Frame:OnHide()
+	self:Super(Frame):OnHide()
 	self:Delay(0, 'HighlightMainMenu', false)
 end
 
-function Inventory:HighlightMainMenu(checked)
+function Frame:HighlightMainMenu(checked)
 	for _, button in pairs(self.MainMenuButtons) do
 		if button.SlotHighlightTexture then
 			button.SlotHighlightTexture:SetShown(checked)
@@ -46,10 +47,10 @@ function Inventory:HighlightMainMenu(checked)
 	end
 end
 
-function Inventory:SortItems()
+function Frame:SortItems()
 	if C.SortBags and Addon.sets.serverSort then
 		C.SortBags()
 	else
-		self:Super(Inventory):SortItems(self)
+		self:Super(Frame):SortItems(self)
 	end
 end
