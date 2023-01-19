@@ -455,7 +455,7 @@ function Item:IsNew()
 end
 
 function Item:IsPaid()
-	return C.IsBattlePayItem(self:GetBag(), self:GetID())
+	return C_Container.IsBattlePayItem(self:GetBag(), self:GetID())
 end
 
 function Item:IsUpgrade()
