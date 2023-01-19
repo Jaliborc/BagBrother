@@ -6,52 +6,102 @@
 local ADDON, Addon = ...
 local Owners = Addon:NewModule('Owners')
 
+local DEFAULT_COORDS = {0, 1, 0, 1}
+local CLASS_COLOR = '|cff%02x%02x%02x'
+local ALLIANCE_BANNER = 'Interface/Icons/Inv_BannerPvP_02'
+local HORDE_BANNER = 'Interface/Icons/Inv_BannerPvP_01'
+local RACE_TEXTURE, RACE_TABLE
+local REALMS = {}
+
+if Addon.IsClassic then
+	RACE_TEXTURE = 'Interface/Glues/CharacterCreate/UI-CharacterCreate-Races'
+	RACE_TABLE = {
+		HUMAN_MALE		= {0, 0.25, 0, 0.25},
+		DWARF_MALE		= {0.25, 0.5, 0, 0.25},
+		GNOME_MALE		= {0.5, 0.75, 0, 0.25},
+		NIGHTELF_MALE	= {0.75, 1.0, 0, 0.25},
+		TAUREN_MALE		= {0, 0.25, 0.25, 0.5},
+		SCOURGE_MALE	= {0.25, 0.5, 0.25, 0.5},
+		TROLL_MALE		= {0.5, 0.75, 0.25, 0.5},
+		ORC_MALE		= {0.75, 1.0, 0.25, 0.5},
+		HUMAN_FEMALE	= {0, 0.25, 0.5, 0.75},
+		DWARF_FEMALE	= {0.25, 0.5, 0.5, 0.75},
+		GNOME_FEMALE	= {0.5, 0.75, 0.5, 0.75},
+		NIGHTELF_FEMALE	= {0.75, 1.0, 0.5, 0.75},
+		TAUREN_FEMALE	= {0, 0.25, 0.75, 1.0},
+		SCOURGE_FEMALE	= {0.25, 0.5, 0.75, 1.0},
+		TROLL_FEMALE	= {0.5, 0.75, 0.75, 1.0},
+		ORC_FEMALE		= {0.75, 1.0, 0.75, 1.0},
+	}
+else
+	RACE_TABLE = {
+		highmountaintauren = 'highmountain',
+		lightforgeddraenei = 'lightforged',
+		scourge = 'undead',
+		zandalaritroll = 'zandalari',
+	}
+end
+
 
 --[[ Events ]]--
 
 function Owners:OnEnable()
-	self:RegisterEvent('REALMS_READY')
-	self:RegisterEvent('GUILD_CHANGED', 'REALMS_READY')
+	self:RegisterEvent('REALMS_READY', 'UpdateList')
+	self:RegisterEvent('GUILD_CHANGED', 'UpdateList')
 
-	self.__index = function(t, k) return t.data[k] or self[k] end
-	self.player = self:New(UnitFullName('player'))
-	self.available = {player}
+	self.__index = function(t, k) return t.cache[k] or self[k] end 
+	self.available = {self:New(GetNormalizedRealmName(), UnitName('player'))}
+	self.player = self.available[1]
 end
 
-function Owners:REALMS_READY()
+function Owners:UpdateList()
 	self.available = {}
 
-	for i, realm in ipairs(GetAutoCompleteRealms()) do
-		for name, data in pairs(BrotherBags[realm]) do
-			tinsert(self.available, self:New(name, realm, data))
+	for i, realm in ipairs(GetAutoCompleteRealms(REALMS)) do
+		for id in pairs(BrotherBags[realm] or {}) do
+			tinsert(self.available, self:New(realm, id))
 		end
 	end
 
 	sort(self.available, function(a, b)
-		return not b.cached or a.isguild
+		return not b.offline or a.isguild and not b.isguild
 	end)
+
+	self.player = self.available[1]
+end
+
+function Owners:Iterate()
+	return ipairs(self.available)
 end
 
 
 --[[ Object API ]]--
 
-function Owners:New(name, realm, data)
+function Owners:New(realm, id)
+	local isguild = id:find('*$')
+	local address = id .. ' - ' .. realm
+	local name = isguild and id:sub(1,-2) or id
 	local player, server = UnitFullName('player')
-	local isguild = name:find('*$')
-	if isguild then
-		name = name:sub(1,-2)
-	end
 
 	return setmetatable({
-		cached = realm ~= server or name ~= (isguild and GetGuildInfo('player') or player),
-		name = name, realm = realm,
+		id = id, name = name, realm = realm, address = address, 
+		offline = realm ~= server or name ~= (isguild and GetGuildInfo('player') or player),
+		profile = Addon.sets.profiles[address] or Addon.sets.global,
+		cache = BrotherBags[realm][id],
 		isguild = isguild,
-		data = data or {},
 	}, self)
 end
 
 function Owners:Delete()
-	BrotherBags[self.realm][self.name] = nil
+	Addon.sets.profiles[self.address] = nil
+	BrotherBags[self.realm][self.id] = nil
+	Owners:SendSignal('OWNER_DELETED')
+	Owners:UpdateList()
+end
+
+function Owners:SetProfile(profile)
+	Addon.sets.profiles[self.address] = profile and Addon.SetDefaults(profile, ProfileDefaults)
+	Owners:UpdateList()
 end
 
 function Owners:GetIconMarkup(size, x, y)
@@ -90,7 +140,7 @@ function Owners:GetColor()
 end
 
 function Owners:GetMoney()
-	if self.cached then
+	if self.offline then
 		return self.money
 	elseif self.isguild then
 		return GetGuildBankMoney() or 0

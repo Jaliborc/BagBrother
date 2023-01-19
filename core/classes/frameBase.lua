@@ -34,7 +34,7 @@ end
 function Frame:UpdateAppearance()
 	self:ClearAllPoints()
 	self:SetFrameStrata(self.profile.strata)
-  self:SetAlpha(self.profile.alpha)
+	self:SetAlpha(self.profile.alpha)
 	self:SetScale(self.profile.scale)
 	self:SetPoint(self:GetPosition())
 end
@@ -126,20 +126,20 @@ function Frame:GetItemInfo(bag, slot)
 end
 
 function Frame:GetProfile()
-	return Addon:GetProfile(self:GetOwner())[self.frameID]
+	return self:GetOwner().profile[self.frameID]
 end
 
 function Frame:GetBaseProfile()
-	return Addon.profile[self.frameID]
+	return Addon.Owners:GetPlayer().profile[self.frameID]
 end
 
 function Frame:SetOwner(owner)
 	self.owner = owner
-  self:SendFrameSignal('OWNER_CHANGED', owner)
+	self:SendFrameSignal('OWNER_CHANGED', owner)
 end
 
 function Frame:GetOwner()
-	return self.owner or UnitName('player')
+	return self.owner or Addon.Owners.player
 end
 
 function Frame:GetFrameID()

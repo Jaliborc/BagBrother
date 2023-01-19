@@ -1,15 +1,10 @@
 --[[
 	Wildpants.lua
-		Starts the addon and its settings
+		Starts the addon, its settings and constants
 --]]
 
 local ADDON, Addon = ...
 local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'LibItemCache-2.0')
-Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
-Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-Addon.Version = GetAddOnMetadata(ADDON, 'Version')
-
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local SETS = ADDON .. '_Sets'
 
@@ -100,9 +95,9 @@ local ProfileDefaults = {
 --[[ Startup ]]--
 
 function Addon:OnEnable()
-  CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
-    LoadAddOn(Addon.Name .. '_Config')
-  end)
+	CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
+		LoadAddOn(Addon.Name .. '_Config')
+	end)
 
 	_G[SETS] = SetDefaults(_G[SETS] or {}, {
 		version = Addon.Version,
@@ -133,32 +128,24 @@ function Addon:OnEnable()
 	})
 
 	self.sets = _G[SETS]
-  self.sets.version = Addon.Version
+  	self.sets.version = Addon.Version
 
 	for owner, profile in pairs(self.sets.profiles) do
 		SetDefaults(profile, ProfileDefaults)
 	end
-
-	self.profile = self:GetProfile()
 end
-
-
---[[ Profiles ]]--
-
-function Addon:SetCurrentProfile(profile)
-	self.sets.profiles[self:GetOwnerID()] = profile and SetDefaults(profile, ProfileDefaults)
-	self.profile = self:GetProfile()
-end
-
-function Addon:GetProfile(owner)
-	return self.sets.profiles[self:GetOwnerID(owner)] or self.sets.global
-end
-
-
---[[ Options ]]--
 
 function Addon:ShowOptions()
 	if LoadAddOn(ADDON .. '_Config') then
 		Addon.GeneralOptions:Open()
 	end
 end
+
+
+--[[ Constants ]]--
+
+Addon.SetDefaults, Addon.AsArray = SetDefaults, AsArray
+Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
+Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+Addon.Version = GetAddOnMetadata(ADDON, 'Version')

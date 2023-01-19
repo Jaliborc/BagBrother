@@ -1,37 +1,38 @@
 --[[
 	cache.lua
-		The old BagBrother, now implemented as a feature within the Wildpants core, where it can take advantage of its API.
+		The old BagBrother, now implemented as a feature within the Wildpants core,
+		where it can take advantage of Wildpants API and dependencies.
 --]]
 
 
 local ADDON, Addon = ...
-local Cache = Addon:NewModule('Cache')
+local Cacher = Addon:NewModule('Cacher')
 local C = LibStub('C_Everywhere').Container
 
 local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + Addon.NumBags
 local FIRST_BANK_SLOT = 1 + Addon.NumBags
 local NUM_VAULT_ITEMS = 80 * 2
 
+local function Init(tb, k, df)
+	tb[k] = tb[k] or df or {}
+	return tb[k]
+end
+
 
 --[[ Startup ]]--
 
-function Cache:OnEnable()
+function Cacher:OnEnable()
 	local player, realm = UnitFullName('player')
-	BrotherBags = BrotherBags or {}
-	BrotherBags[realm] = BrotherBags[realm] or {}
 
-	self.realm = BrotherBags[realm]
-	self.realm[player] = self.realm[player] or {equip = {}}
-	self.player = self.realm[player]
+	self.player = Init(Init(Init(_G, 'BrotherBags'), realm), player, {equip = {}})
 	self.player.faction = UnitFactionGroup('player') == 'Alliance'
 	self.player.race = select(2, UnitRace('player'))
 	self.player.class = UnitClassBase('player')
 	self.player.sex = UnitSex('player')
 
 	self:RegisterSignal('BAG_UPDATE')
-	self:RegisterSignal('BAG_UPDATE')
-	self:RegisterSignal('VAULT_CLOSE')
 	self:RegisterSignal('BANK_CLOSE')
+	self:RegisterSignal('VAULT_CLOSE')
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
@@ -59,21 +60,21 @@ end
 
 --[[ Events ]]--
 
-function Cache:BAG_UPDATE(_,bag)
+function Cacher:BAG_UPDATE(_,bag)
 	if bag <= Addon.NumBags then
   		self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == BACKPACK_CONTAINER or bag == KEYRING_CONTAINER and HasKey and HasKey())
 	end
 end
 
-function Cache:PLAYER_EQUIPMENT_CHANGED(_,slot)
+function Cacher:PLAYER_EQUIPMENT_CHANGED(_,slot)
 	self:SaveEquip(slot)
 end
 
-function Cache:PLAYER_MONEY()
+function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
-function Cache:BANK_CLOSE()
+function Cacher:BANK_CLOSE()
 	if Addon.Events.AtBank then
 		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
 			self:SaveBag(i)
@@ -87,7 +88,7 @@ function Cache:BANK_CLOSE()
 	end
 end
 
-function Cache:VAULT_CLOSE()
+function Cacher:VAULT_CLOSE()
 	if Addon.Events.AtVault then
 		self.player.vault = {}
 
@@ -98,14 +99,14 @@ function Cache:VAULT_CLOSE()
   	end
 end
 
-function Cache:GUILD_ROSTER_UPDATE()
+function Cacher:GUILD_ROSTER_UPDATE()
 	self.player.guild = GetGuildInfo('player')
 end
 
-function Cache:GUILDBANKBAGSLOTS_CHANGED()
+function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 	if Addon.Events.AtGuild then
-		local id = GetGuildInfo('player') .. '*'
-		local guild = self.realm[id] or {}
+		local name, _,_, realm =  GetGuildInfo('player')
+		local guild = Init(Init(BrotherBags, realm), name .. '*')
 		guild.faction = UnitFactionGroup('player') == 'Alliance'
 
 		for i = 1, GetNumGuildBankTabs() do
@@ -125,15 +126,13 @@ function Cache:GUILDBANKBAGSLOTS_CHANGED()
 				items[i] = self:ParseItem(link, count)
 			end
 		end
-
-		self.realm[id] = guild
 	end
 end
 
 
 --[[ API ]]--
 
-function Cache:SaveBag(bag, onlyItems, saveSize)
+function Cacher:SaveBag(bag, onlyItems, saveSize)
 	local size = C.GetContainerNumSlots(bag)
 	if size > 0 then
 		local items = {}
@@ -156,14 +155,14 @@ function Cache:SaveBag(bag, onlyItems, saveSize)
 	end
 end
 
-function Cache:SaveEquip(i, count)
+function Cacher:SaveEquip(i, count)
 	local link = GetInventoryItemLink('player', i)
 	local count = count or GetInventoryItemCount('player', i)
 
 	self.player.equip[i] = self:ParseItem(link, count)
 end
 
-function Cache:ParseItem(link, count)
+function Cacher:ParseItem(link, count)
 	if link then
 		local id = tonumber(link:match('item:(%d+):')) -- check for profession window bug
 		if id == 0 and TradeSkillFrame then

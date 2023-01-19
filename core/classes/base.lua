@@ -28,7 +28,3 @@ function Base:UnregisterAll()
 	self:UnregisterAllMessages()
 	self:UnregisterAllEvents()
 end
-
-function Base:GetOwnerInfo()
-  return Addon:GetOwnerInfo(self:GetOwner())
-end

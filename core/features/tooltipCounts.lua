@@ -57,12 +57,6 @@ function TipCounts.OnQuest(tip, type, quest)
 	TipCounts:AddOwners(tip, GetQuestItemLink(type, quest))
 end
 
-function TipCounts.OnTradeSkill(api)
-	return function(tip, recipeID, ...)
-		TipCounts:AddOwners(tip, tonumber(recipeID) and C_TradeSkillUI[api](recipeID, ...))
-	end
-end
-
 function TipCounts.OnSetTradeSkillItem(tip, skill, index)
 	if index then
 		TipCounts:AddOwners(tip, GetTradeSkillReagentItemLink(skill, index))
@@ -95,10 +89,9 @@ function TipCounts:AddOwners(tip, link)
 	local players = 0
 	local total = 0
 
-	for owner in Addon:IterateOwners() do
-		local info = Addon:GetOwnerInfo(owner)
-		local color = Addon.Owners:GetColorString(info)
+	for i, owner in Addon.Owners:Iterate() do
 		local count, text = self.Counts[owner] and self.Counts[owner][itemID]
+		local color = owner:GetColorMarkup()
 
 		if count then
 			text = self.Text[owner][itemID]
@@ -142,7 +135,7 @@ function TipCounts:AddOwners(tip, link)
 				count = 0
 			end
 
-			if info.cached then
+			if owner.offline then
 				self.Text[owner] = self.Text[owner] or {}
 				self.Text[owner][itemID] = text
 				self.Counts[owner] = self.Counts[owner] or {}
@@ -151,7 +144,7 @@ function TipCounts:AddOwners(tip, link)
 		end
 
 		if count > 0 then
-			tip:AddDoubleLine(Addon.Owners:GetIconString(info, 12,0,0) .. ' ' .. color:format(info.name), text)
+			tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) .. ' ' .. color:format(info.name), text)
 			total = total + count
 			players = players + 1
 		end

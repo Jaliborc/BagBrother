@@ -75,11 +75,8 @@ end
 function MoneyFrame:OnEnter()
 	-- Total
 	local total = 0
-	for name in Addon:IterateOwners() do
-		local owner = Addon:GetOwnerInfo(name)
-		if not owner.isguild and owner.money then
-			total = total + owner.money
-		end
+	for i, owner in Addon.Owners:Iterate() do
+		total = total + ((not owner.isguild and owner:GetMoney()) or 0)
 	end
 
 	GameTooltip:SetOwner(self:GetTipAnchor())
@@ -87,12 +84,12 @@ function MoneyFrame:OnEnter()
 	GameTooltip:AddLine(' ')
 
 	-- Each owner
-	for name in Addon:IterateOwners() do
-		local owner = Addon:GetOwnerInfo(name)
-		if not owner.isguild and owner.money then
-			local icon = Addon.Owners:GetIconString(owner, 12,0,0)
-			local coins = GetMoneyString(owner.money, true)
-			local color = Addon.Owners:GetColor(owner)
+	for i, owner in Addon.Owners:Iterate() do
+		local money = not owner.isguild and owner:GetMoney()
+		if money then
+			local coins = GetMoneyString(money, true)
+			local icon = owner:GetIconMarkup(12,0,0)
+			local color = owner:GetColor(owner)
 
 			GameTooltip:AddDoubleLine(icon .. ' ' .. owner.name, coins, color.r, color.g, color.b, 1,1,1)
 		end
@@ -105,7 +102,7 @@ end
 --[[ API ]]--
 
 function MoneyFrame:GetMoney()
-	return self:GetOwnerInfo().money or 0
+	return self:GetOwner():GetMoney() or 0
 end
 
 function MoneyFrame:GetCoins(money)

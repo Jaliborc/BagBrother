@@ -23,8 +23,8 @@ function Events:OnEnable()
 	self.sizes, self.types, self.queue = {}, {}, {}
 
 	if C_PlayerInteractionManager then
-			self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
-			self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
+		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
+		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
 	elseif CanGuildBankRepair then
 		self:RegisterEvent('GUILDBANKFRAME_OPENED', 'UpdateLocation', {'Guild', true})
 		self:RegisterEvent('GUILDBANKFRAME_CLOSED', 'UpdateLocation', {'Guild', false})
@@ -68,8 +68,8 @@ function Events:BANKFRAME_OPENED()
 end
 
 function Events:PLAYERBANKSLOTS_CHANGED()
-	self:UpdateBankBags()
 	self:UpdateContent(BANK_CONTAINER)
+	self:UpdateBankBags()
 end
 
 function Events:PLAYERREAGENTBANKSLOTS_CHANGED()

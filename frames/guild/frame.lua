@@ -84,5 +84,5 @@ function Frame:IsBagGroupShown()
 end
 
 function Frame:GetOwner()
-	return self.owner or Addon:GetOwnerInfo().guild
+	return self.owner or Addon.Owners.playerGuild
 end

@@ -63,7 +63,7 @@ end
 
 function BagToggle:ToggleDropdown()
 	local menu = {{text = L.TitleFrames:format(ADDON), isTitle = true}}
-	local owners = {guild = self:GetOwnerInfo().guild or false}
+	local owners = {guild = self:GetOwner().guild or false}
 
 	for i, frame in Addon.Frames:Iterate() do
 		if frame.id ~= self:GetFrameID() and owners[frame.id] ~= false and Addon.Frames:IsEnabled(frame.id) then
