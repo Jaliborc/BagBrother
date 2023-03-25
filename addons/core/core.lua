@@ -100,9 +100,10 @@ local ProfileDefaults = {
 --[[ Startup ]]--
 
 function Addon:OnEnable()
-  CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
-    LoadAddOn(Addon.Name .. '_Config')
-  end)
+	C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
+	CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
+		LoadAddOn(Addon.Name .. '_Config')
+	end)
 
 	_G[SETS] = SetDefaults(_G[SETS] or {}, {
 		version = Addon.Version,
@@ -133,7 +134,7 @@ function Addon:OnEnable()
 	})
 
 	self.sets = _G[SETS]
-  self.sets.version = Addon.Version
+	self.sets.version = Addon.Version
 
 	for owner, profile in pairs(self.sets.profiles) do
 		SetDefaults(profile, ProfileDefaults)
