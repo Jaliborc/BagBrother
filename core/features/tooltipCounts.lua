@@ -160,11 +160,11 @@ end
 
 function TipCounts:GetCount(owner, bag, id)
 	local count = 0
-	local info = Addon:GetBagInfo(owner, bag)
+	local info = Addon:GetBagInfo(owner.address, bag)
 
 	for slot = 1, (info.count or 0) do
 		if Addon:GetItemID(owner, bag, slot) == id then
-			count = count + (Addon:GetItemInfo(owner, bag, slot).count or 1)
+			count = count + (Addon:GetItemInfo(owner.address, bag, slot).count or 1)
 		end
 	end
 

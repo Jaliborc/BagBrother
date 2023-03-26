@@ -20,6 +20,4 @@
 	<Script file="money.lua"/>
 
 	<Script file="frameBase.lua"/>
-	<Script file="inventory.lua"/>
-	<Script file="bank.lua"/>
 </Ui>

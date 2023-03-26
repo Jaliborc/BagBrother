@@ -118,11 +118,11 @@ function Frame:IsCached()
 end
 
 function Frame:GetBagInfo(bag)
-	return Addon:GetBagInfo(self:GetOwner(), bag)
+	return Addon:GetBagInfo(self:GetOwner().address, bag)
 end
 
 function Frame:GetItemInfo(bag, slot)
-	return Addon:GetItemInfo(self:GetOwner(), bag, slot)
+	return Addon:GetItemInfo(self:GetOwner().address, bag, slot)
 end
 
 function Frame:GetProfile()
@@ -130,7 +130,7 @@ function Frame:GetProfile()
 end
 
 function Frame:GetBaseProfile()
-	return Addon.Owners:GetPlayer().profile[self.frameID]
+	return Addon.profile[self.frameID]
 end
 
 function Frame:SetOwner(owner)
@@ -139,7 +139,7 @@ function Frame:SetOwner(owner)
 end
 
 function Frame:GetOwner()
-	return self.owner or Addon.Owners.player
+	return self.owner or Addon.player
 end
 
 function Frame:GetFrameID()

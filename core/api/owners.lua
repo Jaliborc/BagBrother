@@ -43,35 +43,46 @@ else
 end
 
 
---[[ Events ]]--
+--[[ Static ]]--
 
 function Owners:OnEnable()
-	self:RegisterEvent('REALMS_READY', 'UpdateList')
-	self:RegisterEvent('GUILD_CHANGED', 'UpdateList')
-
 	self.__index = function(t, k) return t.cache[k] or self[k] end 
-	self.available = {self:New(GetNormalizedRealmName(), UnitName('player'))}
-	self.player = self.available[1]
+	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'UpdateList')
+	self:UpdateList()
 end
 
 function Owners:UpdateList()
-	self.available = {}
+	local guild = GetGuildInfo('player')
+	if self.guild ~= guild then
+		self.available = {}
+		self.guild = guild
 
-	for i, realm in ipairs(GetAutoCompleteRealms(REALMS)) do
-		for id in pairs(BrotherBags[realm] or {}) do
-			tinsert(self.available, self:New(realm, id))
+		for i, realm in ipairs(GetAutoCompleteRealms(REALMS)) do
+			for id in pairs(BrotherBags[realm] or {}) do
+				tinsert(self.available, self:New(realm, id))
+			end
 		end
+
+		sort(self.available, function(a, b)
+			if a.isguild ~= b.isguild then
+				return b.isguild
+			elseif a.offline ~= b.offline then
+				return b.offline
+			end
+			return a.name < b.name
+		end)
+
+		Addon.player = self.available[1]
+		Addon.profile = Addon.player.profile
 	end
-
-	sort(self.available, function(a, b)
-		return not b.offline or a.isguild and not b.isguild
-	end)
-
-	self.player = self.available[1]
 end
 
 function Owners:Iterate()
 	return ipairs(self.available)
+end
+
+function Owners:Count()
+	return #self.available
 end
 
 
@@ -85,7 +96,7 @@ function Owners:New(realm, id)
 
 	return setmetatable({
 		id = id, name = name, realm = realm, address = address, 
-		offline = realm ~= server or name ~= (isguild and GetGuildInfo('player') or player),
+		offline = realm ~= server or name ~= (isguild and self.guild or player),
 		profile = Addon.sets.profiles[address] or Addon.sets.global,
 		cache = BrotherBags[realm][id],
 		isguild = isguild,
@@ -115,7 +126,7 @@ function Owners:GetIconMarkup(size, x, y)
 end
 
 function Owners:GetIcon()
-	if sself.race then
+	if self.race then
 		if RACE_TEXTURE then
 			return RACE_TEXTURE, RACE_TABLE[self.race:upper() .. '_' .. (self.gender == 3 and 'FEMALE' or 'MALE')]
 		end

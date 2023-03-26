@@ -110,9 +110,9 @@ function Sort:GetSpaces()
   local spaces = {}
 
   for _, bag in pairs(self.bags) do
-    local container = Addon:GetBagInfo(self.owner, bag)
+    local container = Addon:GetBagInfo(self.owner.address, bag)
     for slot = 1, (container.count or 0) do
-      local item = Addon:GetItemInfo(self.owner, bag, slot)
+      local item = Addon:GetItemInfo(self.owner.address, bag, slot)
       tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
 
       item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class

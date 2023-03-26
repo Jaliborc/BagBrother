@@ -43,6 +43,6 @@ function General:ToggleGlobals()
 end
 
 function General:SetProfile(profile)
-	Addon.Owners.player:SetProfile(profile)
+	Addon.player:SetProfile(profile)
 	Addon.Frames:Update()
 end
