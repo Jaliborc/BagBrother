@@ -7,7 +7,7 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
 local Bank = Addon.Frame:NewClass('BankFrame')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
-Bank.Item = Addon.InventoryItem
+Bank.ItemGroup = Addon.ContainerItemGroup
 Bank.Bags = Addon.BankBags
 
 function Bank:OnHide()

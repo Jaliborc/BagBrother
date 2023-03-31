@@ -7,7 +7,7 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
 local Frame = Addon.Frame:NewClass('InventoryFrame')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
-Frame.ItemButton = Addon.ContainerItem
+Frame.ItemGroup = Addon.ContainerItemGroup
 Frame.Bags = Addon.InventoryBags
 Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,

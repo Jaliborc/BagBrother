@@ -1,21 +1,21 @@
 --[[
 	itemGroup.lua
-		A void storage item frame. Three kinds:
-			nil -> deposited items
+		A grid of void storage items. Three kinds, defined by the `bag` input (sweet hack):
 			DEPOSIT -> items to deposit
 			WITHDRAW -> items to withdraw
+			nil -> deposited items
 --]]
 
 local MODULE =  ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Group = Addon.ItemGroup:NewClass('VaultItemGroup')
-Group.Button = Addon.VaultItem
+local Items = Addon.ItemGroup:NewClass('VaultItemGroup')
+Items.Button = Addon.VaultItem
 
 
 --[[ Overrides ]]--
 
-function Group:New(parent, bags, title)
-	local f = self:Super(Group):New(parent, bags)
+function Items:New(parent, bag, title)
+	local f = self:Super(Items):New(parent, bag)
 	f.Title = f:CreateFontString(nil, nil, 'GameFontHighlight')
 	f.Title:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 5)
 	f.Title:SetText(title)
@@ -23,13 +23,11 @@ function Group:New(parent, bags, title)
 	return f
 end
 
-function Group:RegisterEvents()
-	self:UnregisterAll()
-	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
-	self:RegisterSignal('UPDATE_ALL', 'RequestLayout')
+function Items:RegisterEvents()
+	self:Super(Items):RegisterEvents()
 
 	if self:IsCached() then
-		self:RegisterEvent(C_PlayerInteractionManager and 'PLAYER_INTERACTION_MANAGER_FRAME_SHOW' or 'VOID_STORAGE_OPEN', 'RegisterEvents')
+		self:RegisterSignal('VAULT_OPEN', 'RegisterEvents')
 	else
 		local type = self:GetType()
 		if type == DEPOSIT then
@@ -44,8 +42,8 @@ function Group:RegisterEvents()
 	end
 end
 
-function Group:Layout()
-	self:Super(Group):Layout()
+function Items:Layout()
+	self:Super(Items):Layout()
 
 	if self.Title:GetText() then
 		local anyItems = self:NumButtons() > 0
@@ -57,7 +55,7 @@ end
 
 --[[ Properties ]]--
 
-function Group:NumSlots()
+function Items:NumSlots()
 	if self:GetType() == DEPOSIT then
 		return GetNumVoidTransferDeposit()
 	elseif self:GetType() == WITHDRAW then
@@ -67,6 +65,6 @@ function Group:NumSlots()
 	end
 end
 
-function Group:GetType()
+function Items:GetType()
 	return self.bags[1].id
 end

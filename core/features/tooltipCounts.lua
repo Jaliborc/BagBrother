@@ -120,17 +120,16 @@ function TipCounts:AddOwners(tip, link)
 
 				if not owner.isguild then
 					local equip, bags, bank, vault
-					
-					if owner.offline then
-						equip, bags = owner.counts.equip[id], owner.counts.bags[id]
-						bank, vault = owner.counts.bank[id], owner.counts.vault[id]
-					else
+					if not owner.offline then
 						local carrying = GetItemCount(id)
 
 						equip = find(owner.equip, id)
 						vault = find(owner.vault, id)
 						bank = GetItemCount(id, true) - carrying
 						bags = carrying - equip
+					else
+						equip, bags = owner.counts.equip[id], owner.counts.bags[id]
+						bank, vault = owner.counts.bank[id], owner.counts.vault[id]
 					end
 
 					count, text = self:Format(color,
@@ -138,15 +137,15 @@ function TipCounts:AddOwners(tip, link)
 						L.TipCountBank, bank, L.TipCountVault, vault)
 
 				elseif Addon.sets.countGuild then
-					if owner.offline then
-						count, text = self:Format(color, L.TipCountGuild, owner.counts[id])
-					else
+					if not owner.offline then
 						local guild = 0
 						for tab = 1, Addon.NumGuildTabs do
 							guild = guild + find(owner[tab], id)
 						end
 
 						count, text = self:Format(color, L.TipCountGuild, guild)
+					else
+						count, text = self:Format(color, L.TipCountGuild, owner.counts[id])
 					end
 				end
 
