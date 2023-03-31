@@ -46,34 +46,45 @@ end
 
 function Owners:OnEnable()
 	self.__index = function(t, k) return t.cache[k] or self[k] end 
-	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'UpdateList')
+	self.available = {}
+
+	for i, realm in ipairs(GetAutoCompleteRealms()) do
+		for id in pairs(BrotherBags[realm] or {}) do
+			tinsert(self.available, self:New(realm, id))
+		end
+	end
+
+	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'OnRoster')
 	self:UpdateList()
 end
 
-function Owners:UpdateList()
-	local guild = GetGuildInfo('player')
-	if self.guild ~= guild then
-		self.available = {}
-		self.guild = guild
-
-		for i, realm in ipairs(GetAutoCompleteRealms()) do
-			for id in pairs(BrotherBags[realm] or {}) do
-				tinsert(self.available, self:New(realm, id))
-			end
-		end
-
-		sort(self.available, function(a, b)
-			if a.isguild ~= b.isguild then
-				return b.isguild
-			elseif a.offline ~= b.offline then
-				return b.offline
-			end
-			return a.name < b.name
-		end)
-
-		Addon.player = self.available[1]
-		Addon.profile = Addon.player.profile
+function Owners:OnRoster()
+	if (Addon.guild and Addon.guild.name) ~= GetGuildInfo('player') then
+		self:UpdateList()
 	end
+end
+
+function Owners:UpdateList()
+	local name, realm = UnitFullName('player')
+	local guild = GetGuildInfo('player')
+
+	for i, owner in pairs(self.available) do
+		owner.offline = owner.realm ~= realm or owner.name ~= (owner.isguild and guild or name)
+		owner.profile = Addon.sets.profiles[owner.address] or Addon.sets.global
+	end
+
+	sort(self.available, function(a, b)
+		if a.isguild ~= b.isguild then
+			return b.isguild
+		elseif a.offline ~= b.offline then
+			return b.offline
+		end
+		return a.name < b.name
+	end)
+
+	Addon.player = self.available[1]
+	Addon.profile = Addon.player.profile
+	Addon.guild = select(2, FindInTableIf(self.available, function(x) return x.isguild end))
 end
 
 function Owners:Iterate()
@@ -91,22 +102,19 @@ function Owners:New(realm, id)
 	local isguild = id:find('*$')
 	local address = id .. ' - ' .. realm
 	local name = isguild and id:sub(1,-2) or id
-	local player, server = UnitFullName('player')
 
 	return setmetatable({
-		id = id, name = name, realm = realm, address = address, 
-		offline = realm ~= server or name ~= (isguild and self.guild or player),
-		profile = Addon.sets.profiles[address] or Addon.sets.global,
+		id = id, name = name, realm = realm,
+		isguild = isguild, address = address, 
 		cache = BrotherBags[realm][id],
-		isguild = isguild,
 	}, self)
 end
 
 function Owners:Delete()
 	Addon.sets.profiles[self.address] = nil
 	BrotherBags[self.realm][self.id] = nil
+	tDeleteItem(Owners.available, self)
 	Owners:SendSignal('OWNER_DELETED')
-	Owners:UpdateList()
 end
 
 function Owners:SetProfile(profile)
