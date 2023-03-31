@@ -50,32 +50,7 @@ function TipCounts:OnEnable()
 			else
 				for _,frame in pairs {UIParent:GetChildren()} do
 					if not frame:IsForbidden() and frame:GetObjectType() == 'GameTooltip' then
-						self:Hook(frame)
-					end
-				end
-			end
-
-			for i, owner in Addon.Owners:Iterate() do
-				if owner.offline then
-					if owner.isguild then
-						owner.counts = {}
-			
-						for tab = 1, Addon.NumGuildTabs do
-							aggregate(owner.counts, owner[tab])
-						end
-					else
-						owner.counts = {bags={}, bank={}, equip={}, vault={}}
-			
-						for _, bag in ipairs(Addon.InventoryBags) do
-							aggregate(owner.counts.bags, owner[bag])
-						end
-			
-						for _, bag in ipairs(Addon.BankBags) do
-							aggregate(owner.counts.bank, owner[bag])
-						end
-			
-						aggregate(owner.counts.equip, owner.equip)
-						aggregate(owner.counts.vault, owner.vault)
+						self:HookFrame(frame)
 					end
 				end
 			end
@@ -85,7 +60,7 @@ function TipCounts:OnEnable()
 	end
 end
 
-function TipCounts:Hook(tip)
+function TipCounts:HookFrame(tip)
 	hooksecurefunc(tip, 'SetQuestItem', self.OnQuest)
 	hooksecurefunc(tip, 'SetQuestLogItem', self.OnQuest)
 	hooksecurefunc(tip, 'SetCraftItem', self.OnSetCraftItem)
@@ -139,6 +114,10 @@ function TipCounts:AddOwners(tip, link)
 				local color = owner:GetColorMarkup()
 				local count, text = 0
 
+				if owner.offline and not owner.counts then
+					self:CountItems(owner)
+				end
+
 				if not owner.isguild then
 					local equip, bags, bank, vault
 					
@@ -146,12 +125,11 @@ function TipCounts:AddOwners(tip, link)
 						equip, bags = owner.counts.equip[id], owner.counts.bags[id]
 						bank, vault = owner.counts.bank[id], owner.counts.vault[id]
 					else
-						local containered = GetItemCount(id, true)
 						local carrying = GetItemCount(id)
 
 						equip = find(owner.equip, id)
 						vault = find(owner.vault, id)
-						bank = containered - carrying
+						bank = GetItemCount(id, true) - carrying
 						bags = carrying - equip
 					end
 
@@ -160,22 +138,20 @@ function TipCounts:AddOwners(tip, link)
 						L.TipCountBank, bank, L.TipCountVault, vault)
 
 				elseif Addon.sets.countGuild then
-					local guild
-					
 					if owner.offline then
-						guild = owner.counts[id]
+						count, text = self:Format(color, L.TipCountGuild, owner.counts[id])
 					else
-						guild = 0
+						local guild = 0
 						for tab = 1, Addon.NumGuildTabs do
 							guild = guild + find(owner[tab], id)
 						end
-					end
 
-					count, text = self:Format(color, L.TipCountGuild, guild)
+						count, text = self:Format(color, L.TipCountGuild, guild)
+					end
 				end
 
 				if count > 0 then
-					tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) .. ' ' .. color:format(owner.name), text)
+					tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) ..' '.. color:format(owner.name), text)
 					total = total + count
 					players = players + 1
 				end
@@ -191,17 +167,27 @@ function TipCounts:AddOwners(tip, link)
 	end
 end
 
-function TipCounts:GetCount(owner, bag, id)
-	local count = 0
-	local info = Addon:GetBagInfo(owner.address, bag)
+function TipCounts:CountItems(owner)
+	if owner.isguild then
+		owner.counts = {}
 
-	for slot = 1, (info.count or 0) do
-		if Addon:GetItemID(owner, bag, slot) == id then
-			count = count + (Addon:GetItemInfo(owner.address, bag, slot).count or 1)
+		for tab = 1, Addon.NumGuildTabs do
+			aggregate(owner.counts, owner[tab])
 		end
-	end
+	else
+		owner.counts = {bags={}, bank={}, equip={}, vault={}}
 
-	return count
+		for _, bag in ipairs(Addon.InventoryBags) do
+			aggregate(owner.counts.bags, owner[bag])
+		end
+
+		for _, bag in ipairs(Addon.BankBags) do
+			aggregate(owner.counts.bank, owner[bag])
+		end
+
+		aggregate(owner.counts.equip, owner.equip)
+		aggregate(owner.counts.vault, owner.vault)
+	end
 end
 
 function TipCounts:Format(color, ...)
