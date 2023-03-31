@@ -1,7 +1,7 @@
 --[[
 	rules.lua
 		Methods for creating and browsing item rulesets.
-		See https://github.com/tullamods/Wildpants/wiki/Ruleset-API for details.
+		See https://github.com/jaliborc/BagBrother/wiki/Ruleset-API for details.
 --]]
 
 

@@ -7,19 +7,14 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
 local Frame = Addon.Frame:NewClass('InventoryFrame')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
-Frame.Item = Addon.InventoryItem
-Frame.Bags = {}
+Frame.ItemButton = Addon.ContainerItem
+Frame.Bags = Addon.InventoryBags
 Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
 }
 
-for slot = BACKPACK_CONTAINER, Addon.NumBags do
-	tinsert(Frame.Bags, slot)
-end
-
 if HasKey then
-	tinsert(Frame.Bags, KEYRING_CONTAINER)
 	tinsert(Frame.MainMenuButtons, KeyRingButton)
 end
 

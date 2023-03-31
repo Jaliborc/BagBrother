@@ -107,7 +107,7 @@ end
 --[[ Management ]]--
 
 function Items:RequestLayout()
-	self:Delay(0.01, 'Layout')
+	self:Delay(0.008, 'Layout')
 end
 
 function Items:Layout()
@@ -121,7 +121,7 @@ function Items:Layout()
 			local numSlots = self:NumSlots(bag)
 			for slot = 1, numSlots do
 				if self:IsShowingItem(bag, slot) then
-					local button = self.Button(frame, bag, slot)
+					local button = self.frame.ItemButton(frame, bag, slot)
 					self.buttons[bag] = self.buttons[bag] or {}
 					self.buttons[bag][slot] = button
 					tinsert(self.order, button)

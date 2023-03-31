@@ -13,7 +13,7 @@ Addon:NewModule('LDB', LDB:NewDataObject(ADDON .. 'Launcher', {
 	icon = 'Interface/Addons/BagBrother/Art/' .. ADDON .. '-Big',
 
 	OnEnable = function(self)
-		self:RegisterEvent('BAG_UPDATE_DELAYED', 'OnUpdate')
+		self:RegisterSignal('BAGS_UPDATED', 'OnUpdate')
 	end,
 
 	OnClick = function(self, button)

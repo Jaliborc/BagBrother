@@ -4,22 +4,47 @@
 ]]--
 
 local ADDON, Addon = ...
-local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local TipCounts = Addon:NewModule('TooltipCounts')
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
+local NONE = {}
 local SILVER = '|cffc7c7cf%s|r'
-local LAST_BANK_SLOT = Addon.NumBags + NUM_BANKBAGSLOTS
-local FIRST_BANK_SLOT = Addon.NumBags + 1
 local TOTAL = SILVER:format(L.Total)
+
+local function aggregate(counts, bag)
+	for slot, data in pairs(bag or NONE) do
+		if tonumber(slot) then
+			local singleton = tonumber(data)
+			local count = not singleton and tonumber(data:match(';(%d+)$')) or 1
+			local id = singleton or tonumber(data:match('^(%d+)'))
+
+			counts[id] = (counts[id] or 0) + count
+		end
+	end
+end
+
+local function find(bag, item)
+	local count = 0
+	
+	for slot, data in pairs(bag or NONE) do
+		if tonumber(slot) then
+			local singleton = tonumber(data)
+			local id = singleton or tonumber(data:match('^(%d+)'))
+			if id == item then
+				count = count + (not singleton and tonumber(data:match(';(%d+)$')) or 1)
+			end
+		end
+	end
+	
+	return count
+end
 
 
 --[[ Startup ]]--
 
 function TipCounts:OnEnable()
 	if Addon.sets.tipCount then
-		if not self.Text then
-			self.Text, self.Counts = {}, {}
-
+		if not self.initialized then
 			if TooltipDataProcessor then
 				TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)
 			else
@@ -29,18 +54,45 @@ function TipCounts:OnEnable()
 					end
 				end
 			end
+
+			for i, owner in Addon.Owners:Iterate() do
+				if owner.offline then
+					if owner.isguild then
+						owner.counts = {}
+			
+						for tab = 1, Addon.NumGuildTabs do
+							aggregate(owner.counts, owner[tab])
+						end
+					else
+						owner.counts = {bags={}, bank={}, equip={}, vault={}}
+			
+						for _, bag in ipairs(Addon.InventoryBags) do
+							aggregate(owner.counts.bags, owner[bag])
+						end
+			
+						for _, bag in ipairs(Addon.BankBags) do
+							aggregate(owner.counts.bank, owner[bag])
+						end
+			
+						aggregate(owner.counts.equip, owner.equip)
+						aggregate(owner.counts.vault, owner.vault)
+					end
+				end
+			end
+
+			self.initialized = true
 		end
 	end
 end
 
 function TipCounts:Hook(tip)
-	tip:HookScript('OnTooltipCleared', self.OnClear)
-	tip:HookScript('OnTooltipSetItem', self.OnItem)
-
 	hooksecurefunc(tip, 'SetQuestItem', self.OnQuest)
 	hooksecurefunc(tip, 'SetQuestLogItem', self.OnQuest)
-	hooksecurefunc(tip, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
 	hooksecurefunc(tip, 'SetCraftItem', self.OnSetCraftItem)
+	hooksecurefunc(tip, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
+
+	tip:HookScript('OnTooltipCleared', self.OnClear)
+	tip:HookScript('OnTooltipSetItem', self.OnItem)
 end
 
 
@@ -77,85 +129,66 @@ end
 --[[ API ]]--
 
 function TipCounts:AddOwners(tip, link)
-	if not Addon.sets.tipCount or tip.__hasCounters or tip:GetOwner() == 'ANCHOR_NONE' then
-		return
-	end
+	if not tip.__hasCounters and Addon.sets.tipCount and tip:GetOwner() ~= 'ANCHOR_NONE' then
+		local id = tonumber(link and GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
+		if id and id ~= HEARTHSTONE_ITEM_ID then
+			local players = 0
+			local total = 0
 
-	local itemID = tonumber(link and GetItemInfo(link) and link:match('item:(%d+)')) -- Blizzard doing craziness when doing GetItemInfo
-	if not itemID or itemID == HEARTHSTONE_ITEM_ID then
-		return
-	end
+			for i, owner in Addon.Owners:Iterate() do
+				local color = owner:GetColorMarkup()
+				local count, text = 0
 
-	local players = 0
-	local total = 0
+				if not owner.isguild then
+					local equip, bags, bank, vault
+					
+					if owner.offline then
+						equip, bags = owner.counts.equip[id], owner.counts.bags[id]
+						bank, vault = owner.counts.bank[id], owner.counts.vault[id]
+					else
+						local containered = GetItemCount(id, true)
+						local carrying = GetItemCount(id)
 
-	for i, owner in Addon.Owners:Iterate() do
-		local count, text = self.Counts[owner] and self.Counts[owner][itemID]
-		local color = owner:GetColorMarkup()
-
-		if count then
-			text = self.Text[owner][itemID]
-		else
-			if not info.isguild then
-				local equip = self:GetCount(owner, 'equip', itemID)
-				local vault = self:GetCount(owner, 'vault', itemID)
-				local bags, bank = 0,0
-
-				if info.cached then
-					for i = BACKPACK_CONTAINER, Addon.NumBags do
-						bags = bags + self:GetCount(owner, i, itemID)
+						equip = find(owner.equip, id)
+						vault = find(owner.vault, id)
+						bank = containered - carrying
+						bags = carrying - equip
 					end
 
-					for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-						bank = bank + self:GetCount(owner, i, itemID)
+					count, text = self:Format(color,
+						L.TipCountEquip, equip, L.TipCountBags, bags,
+						L.TipCountBank, bank, L.TipCountVault, vault)
+
+				elseif Addon.sets.countGuild then
+					local guild
+					
+					if owner.offline then
+						guild = owner.counts[id]
+					else
+						guild = 0
+						for tab = 1, Addon.NumGuildTabs do
+							guild = guild + find(owner[tab], id)
+						end
 					end
 
-					if REAGENTBANK_CONTAINER then
-						bank = bank + self:GetCount(owner, REAGENTBANK_CONTAINER, itemID)
-					end
-
-					bank = bank + self:GetCount(owner, BANK_CONTAINER, itemID)
-				else
-					local owned = GetItemCount(itemID, true)
-					local carrying = GetItemCount(itemID)
-
-					bags = carrying - equip
-					bank = owned - carrying
+					count, text = self:Format(color, L.TipCountGuild, guild)
 				end
 
-				count, text = self:Format(color, L.TipCountEquip, equip, L.TipCountBags, bags, L.TipCountBank, bank, L.TipCountVault, vault)
-			elseif Addon.sets.countGuild then
-				local guild = 0
-				for i = 1, GetNumGuildBankTabs() do
-					guild = guild + self:GetCount(owner, i, itemID)
+				if count > 0 then
+					tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) .. ' ' .. color:format(owner.name), text)
+					total = total + count
+					players = players + 1
 				end
-
-				count, text = self:Format(color, L.TipCountGuild, guild)
-			else
-				count = 0
 			end
 
-			if owner.offline then
-				self.Text[owner] = self.Text[owner] or {}
-				self.Text[owner][itemID] = text
-				self.Counts[owner] = self.Counts[owner] or {}
-				self.Counts[owner][itemID] = count
+			if players > 1 and total > 0 then
+				tip:AddDoubleLine(TOTAL, SILVER:format(total))
 			end
-		end
 
-		if count > 0 then
-			tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) .. ' ' .. color:format(info.name), text)
-			total = total + count
-			players = players + 1
+			tip.__hasCounters = not TooltipDataProcessor
+			tip:Show()
 		end
 	end
-
-	if players > 1 and total > 0 then
-		tip:AddDoubleLine(TOTAL, SILVER:format(total))
-	end
-
-	tip.__hasCounters = not TooltipDataProcessor
-	tip:Show()
 end
 
 function TipCounts:GetCount(owner, bag, id)
@@ -177,7 +210,7 @@ function TipCounts:Format(color, ...)
 
 	for i = 1, select('#', ...), 2 do
 		local title, count = select(i, ...)
-		if count > 0 then
+		if count and count > 0 then
 			text = text .. L.TipDelimiter .. title:format(count)
 			total = total + count
 			places = places + 1

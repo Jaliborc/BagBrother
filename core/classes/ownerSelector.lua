@@ -61,11 +61,11 @@ function OwnerSelector:OnClick(button)
 
 						drop:Add(Addon.DropButton(drop, {
 							text = name,
-							checked = id == self:GetOwner(),
+							checked = owner == self:GetOwner(),
 							func = function()
-								Addon.Frames:Show(owner.isguild and 'guild' or self:GetFrameID(), id)
+								Addon.Frames:Show(owner.isguild and 'guild' or self:GetFrameID(), owner)
 							end,
-							delFunc = owner.cached and function()
+							delFunc = owner.offline and function()
 									Sushi.Popup {
 										text = L.ConfirmDelete:format(name), button1 = OKAY, button2 = CANCEL,
 										whileDead = 1, exclusive = 1, hideOnEscape = 1,

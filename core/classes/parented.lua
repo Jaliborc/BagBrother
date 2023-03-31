@@ -16,24 +16,24 @@ function Parented:New(parent)
   return f
 end
 
-function Parented:GetFrameID()
-  return self:GetFrame():GetFrameID()
-end
-
 function Parented:GetProfile()
-  return self:GetFrame():GetProfile()
+  return self.frame:GetProfile()
 end
 
 function Parented:GetBaseProfile()
-  return self:GetFrame():GetBaseProfile()
+  return self.frame:GetBaseProfile()
 end
 
 function Parented:GetOwner()
-  return self:GetFrame():GetOwner()
+  return self.frame:GetOwner()
 end
 
 function Parented:IsCached()
-  return self:GetFrame():IsCached()
+  return self.frame:IsCached()
+end
+
+function Parented:GetFrameID()
+  return self.frame.frameID
 end
 
 function Parented:GetFrame()

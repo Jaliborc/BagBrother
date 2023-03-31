@@ -8,11 +8,7 @@ local C = LibStub('C_Everywhere').Container
 local Bank = Addon.Frame:NewClass('BankFrame')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
 Bank.Item = Addon.InventoryItem
-Bank.Bags = {BANK_CONTAINER}
-
-for slot = 1, NUM_BANKBAGSLOTS do
-	tinsert(Bank.Bags, slot + Addon.NumBags)
-end
+Bank.Bags = Addon.BankBags
 
 function Bank:OnHide()
 	self:Super(Bank):OnHide()
@@ -32,8 +28,6 @@ function Bank:SortItems()
 end
 
 if REAGENTBANK_CONTAINER then
-	tinsert(Bank.Bags, REAGENTBANK_CONTAINER)
-
 	function Bank:SortReagents()
 		C.SortReagentBankBags()
 	end

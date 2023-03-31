@@ -11,7 +11,6 @@ local CLASS_COLOR = '|cff%02x%02x%02x'
 local ALLIANCE_BANNER = 'Interface/Icons/Inv_BannerPvP_02'
 local HORDE_BANNER = 'Interface/Icons/Inv_BannerPvP_01'
 local RACE_TEXTURE, RACE_TABLE
-local REALMS = {}
 
 if Addon.IsClassic then
 	RACE_TEXTURE = 'Interface/Glues/CharacterCreate/UI-CharacterCreate-Races'
@@ -57,7 +56,7 @@ function Owners:UpdateList()
 		self.available = {}
 		self.guild = guild
 
-		for i, realm in ipairs(GetAutoCompleteRealms(REALMS)) do
+		for i, realm in ipairs(GetAutoCompleteRealms()) do
 			for id in pairs(BrotherBags[realm] or {}) do
 				tinsert(self.available, self:New(realm, id))
 			end
@@ -78,7 +77,7 @@ function Owners:UpdateList()
 end
 
 function Owners:Iterate()
-	return ipairs(self.available)
+	return ipairs(self.available or {})
 end
 
 function Owners:Count()
@@ -111,7 +110,7 @@ function Owners:Delete()
 end
 
 function Owners:SetProfile(profile)
-	Addon.sets.profiles[self.address] = profile and Addon.SetDefaults(profile, ProfileDefaults)
+	Addon.sets.profiles[self.address] = profile and Addon.Settings:SetDefaults(profile, Addon.Settings.ProfileDefaults)
 	Owners:UpdateList()
 end
 

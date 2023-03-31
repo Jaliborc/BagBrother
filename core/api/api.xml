@@ -1,7 +1,7 @@
 <Ui>
 	<Script file="events.lua"/>
+	<Script file="settings.lua"/>
 	<Script file="owners.lua"/>
-	<!--<Script file="settings.lua"/>-->
 	<Script file="frames.lua"/>
 	<Script file="rules.lua"/>
 	<Script file="sorting.lua"/>

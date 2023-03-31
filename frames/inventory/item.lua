@@ -48,9 +48,9 @@ end
 
 function Item:OnPreClick(button)
 	if not IsModifiedClick() and button == 'RightButton' then
-		if REAGENTBANK_CONTAINER and Addon:InBank() and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
+		if REAGENTBANK_CONTAINER and Addon.Events.AtBank and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
 			if not Addon:IsReagents(self:GetBag()) and select(17, GetItemInfo(self.info.id)) then
-				for _, bag in ipairs {BANK_CONTAINER, 5, 6, 7, 8, 9, 10, 11} do
+				for _, bag in ipairs(Addon.BankBags) do
 					for slot = 1, C.GetContainerNumSlots(bag) do
 						if C.GetContainerItemID(bag, slot) == self.info.id then
 							local free = self.info.stack - C.GetContainerItemInfo(bag, slot).stackCount
@@ -71,8 +71,7 @@ function Item:OnPreClick(button)
 end
 
 function Item:OnPostClick(button)
-	if not self:FlashFind(button) and not IsModifiedClick() and
-    button == 'RightButton' and Addon.Events.AtVault and self.locked then
+	if not self:FlashFind(button) and not IsModifiedClick() and button == 'RightButton' and Addon.Events.AtVault and self.locked then
 		for i = 10, 1, -1 do
 			if GetVoidTransferDepositInfo(i) == self.info.id then
 				ClickVoidTransferDepositSlot(i, true)
@@ -125,12 +124,12 @@ function Item:GetQuery()
 end
 
 function Item:IsUpgrade()
-	if IsAddonLoaded('Pawn') then
-    return self:Super(Item):IsUpgrade()
-  end
+	if IsAddOnLoaded('Pawn') then
+		return self:Super(Item):IsUpgrade()
+	end
 
-  return not self.info.cached and IsContainerItemAnUpgrade and
-         IsContainerItemAnUpgrade(self:GetBag(), self:GetID())
+	return not self.info.cached and IsContainerItemAnUpgrade and
+		IsContainerItemAnUpgrade(self:GetBag(), self:GetID())
 end
 
 function Item:IsNew()

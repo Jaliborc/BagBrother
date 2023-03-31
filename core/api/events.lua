@@ -9,10 +9,16 @@
 	BAG_UPDATE_CONTENT
 	args: bag
 		called when the items of a bag change
+
+	BAGS_UPDATED
+		called after all other bag events in the current render frame have been fired
+
+	BANK_OPEN, BANK_CLOSE, VAULT_OPEN, VAULT_CLOSE, GUILD_OPEN, GUILD_CLOSE
+		called when the player opens or closes the given storage location by interacting with the world
 --]]
 
 local ADDON, Addon = ...
-local Events = Addon:NewModule('Events')
+local Events = Addon:NewModule('Events', 'MutexDelay-1.0')
 local C = LibStub('C_Everywhere').Container
 
 
@@ -41,7 +47,6 @@ function Events:OnEnable()
 	end
 
 	self:RegisterEvent('BAG_UPDATE')
-	self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateBags')
 	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', {'Bank', false})
 	self:RegisterEvent('BANKFRAME_OPENED')
 	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
@@ -51,6 +56,7 @@ end
 
 function Events:BAG_UPDATE(event, bag)
 	self.queue[bag] = true
+	self:Delay(0.008, 'UpdateBags')
 end
 
 function Events:BANKFRAME_OPENED()
@@ -109,6 +115,8 @@ function Events:UpdateBags()
 	for bag in pairs(self.queue) do
 		self:UpdateContent(bag)
 	end
+
+	self:SendSignal('BAGS_UPDATED')
 end
 
 function Events:UpdateBankBags()

@@ -1,6 +1,6 @@
 --[[
 	frames.lua
-		Methods for managing frame creation and display
+		Manages frame creation and display
 --]]
 
 local ADDON, Addon = ...
