@@ -16,17 +16,9 @@ function Items:RegisterEvents()
 		self:RegisterEvent('ITEM_LOCK_CHANGED')
         self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
 
-		self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
 		self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'ForAll', 'UpdateCooldown')
 		self:RegisterEvent('BAG_NEW_ITEMS_UPDATED', 'ForAll', 'UpdateBorder')
 		self:RegisterEvent('QUEST_ACCEPTED', 'ForAll', 'UpdateBorder')
-
-		if C_EquipmentSet then
-			self:RegisterEvent('EQUIPMENT_SETS_CHANGED', 'ForAll', 'UpdateBorder')
-		end
-		if C_SpecializationInfo then
-			self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
-		end
 	else
 		self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
 	end

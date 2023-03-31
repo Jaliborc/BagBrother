@@ -8,8 +8,8 @@ local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local Guild = Addon:NewModule('Guild')
 
 function Guild:OnEnable()
-	self:RegisterMessage('CACHE_GUILD_OPENED', 'OnOpen')
-	self:RegisterMessage('CACHE_GUILD_CLOSED', 'OnClose')
+	self:RegisterSignal('GUILD_OPEN', 'OnOpen')
+	self:RegisterSignal('GUILD_CLOSE', 'OnClose')
 end
 
 function Guild:OnOpen()

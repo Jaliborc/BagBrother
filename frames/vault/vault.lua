@@ -17,8 +17,8 @@ CloseVoidStorageFrame = CloseVoidStorageFrame or function()
 end
 
 function Vault:OnEnable()
-	self:RegisterMessage('CACHE_VAULT_OPENED', 'OnOpen')
-	self:RegisterMessage('CACHE_VAULT_CLOSED', 'OnClose')
+	self:RegisterSignal('VAULT_OPEN', 'OnOpen')
+	self:RegisterSignal('VAULT_CLOSE', 'OnClose')
 end
 
 function Vault:OnOpen()

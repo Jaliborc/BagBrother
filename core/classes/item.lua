@@ -356,8 +356,8 @@ function Item:IsSlot(bag, slot)
 end
 
 function Item:IsUpgrade()
-		return self.hasItem and IsAddonLoaded('Pawn') and
-			PawnShouldItemLinkHaveUpgradeArrow(self.info.link) or false
+	return self.hasItem and IsAddonLoaded('Pawn') and
+		PawnShouldItemLinkHaveUpgradeArrow(self.info.link) or false
 end
 
 

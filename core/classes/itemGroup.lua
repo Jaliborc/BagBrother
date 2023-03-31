@@ -42,6 +42,17 @@ function Items:RegisterEvents()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'RequestLayout')
 	self:RegisterSignal('UPDATE_ALL', 'RequestLayout')
+
+	if not self:IsCached() then
+		self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
+
+		if C_SpecializationInfo then
+			self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
+		end
+		if C_EquipmentSet then
+			self:RegisterEvent('EQUIPMENT_SETS_CHANGED', 'ForAll', 'UpdateBorder')
+		end
+	end
 end
 
 function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
