@@ -20,8 +20,6 @@ function Item:Construct()
 	return b
 end
 
-function Item:GetBlizzard() end
-
 
 --[[ Interaction ]]--
 
@@ -82,9 +80,4 @@ end
 
 function Item:IsCached() return not CanUseVoidStorage() or self:Super(Item):IsCached() end
 function Item:GetQuery() return self.info.link end
-function Item:GetQuestInfo() end
-function Item:IsNew() end
-function Item:IsPaid() end
-function Item:IsUpgrade() end
 function Item:UpdateSlotColor() end
-function Item:UpdateCooldown() end

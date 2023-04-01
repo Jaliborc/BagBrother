@@ -27,6 +27,10 @@ function Bank:SortItems()
 	end
 end
 
+function Bank:IsCached()
+	return not Addon.Events.AtBank or self:GetOwner().offline
+end
+
 if REAGENTBANK_CONTAINER then
 	function Bank:SortReagents()
 		C.SortReagentBankBags()

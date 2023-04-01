@@ -94,6 +94,10 @@ function Frame:GetItemInfo(bag, slot)
 	end
 end
 
+function Frame:IsCached()
+	return not Addon.Events.AtVault or self:GetOwner().offline
+end
+
+function Frame:HasMoney() return true end
 function Frame:IsBagGroupShown() end
 function Frame:HasBagToggle() end
-function Frame:HasMoney() return true end

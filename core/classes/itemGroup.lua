@@ -1,6 +1,6 @@
 --[[
 	itemGroup.lua
-		An item slot container template
+		An item button grid template
 --]]
 
 local ADDON, Addon = ...
@@ -30,7 +30,7 @@ end
 
 function Items:Update()
 	self:RegisterEvents()
-	self:RequestLayout()
+	self:Layout()
 end
 
 
@@ -40,8 +40,8 @@ function Items:RegisterEvents()
 	self:UnregisterAll()
 	self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
-	self:RegisterFrameSignal('FILTERS_CHANGED', 'RequestLayout')
-	self:RegisterSignal('UPDATE_ALL', 'RequestLayout')
+	self:RegisterFrameSignal('FILTERS_CHANGED', 'Layout')
+	self:RegisterSignal('UPDATE_ALL', 'Layout')
 
 	if not self:IsCached() then
 		self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
@@ -56,21 +56,15 @@ function Items:RegisterEvents()
 end
 
 function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
-	if not self:Delaying('Layout') then
-		for i, button in ipairs(self.order) do
-			if button.info.id == itemID then
-				button:Update()
-			end
+	for i, button in ipairs(self.order) do
+		if button.info.id == itemID then
+			button:Update()
 		end
 	end
 end
 
 
 --[[ Management ]]--
-
-function Items:RequestLayout()
-	self:Delay(0.008, 'Layout')
-end
 
 function Items:Layout()
 	self:ForAll('Release')
@@ -140,27 +134,26 @@ function Items:Layout()
 end
 
 function Items:ForAll(method, ...)
-	if not self:Delaying('Layout') then
-		for i, button in ipairs(self.order) do
-			button[method](button, ...)
-		end
+	for i, button in ipairs(self.order) do
+		button[method](button, ...)
 	end
 end
 
 function Items:ForBag(bag, method, ...)
-	if self:CanUpdate(bag) then
+	if self.buttons[bag] then
 		for slot, button in pairs(self.buttons[bag]) do
 			button[method](button, ...)
 		end
 	end
 end
 
-function Items:CanUpdate(bag)
-	return not self:Delaying('Layout') and self.buttons[bag]
-end
-
 
 --[[ Proprieties ]]--
+
+function Items:LayoutTraits()
+	local profile = self:GetProfile()
+	return profile.columns, profile.itemScale
+end
 
 function Items:IsShowingItem(bag, slot)
 	return self:GetFrame():IsShowingItem(bag, slot)

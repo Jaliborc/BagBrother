@@ -1,3 +1,9 @@
+--[[
+	item.lua
+		A container item button.
+--]]
+
+
 local ADDON, Addon = ...
 local Item = Addon.Item:NewClass('ContainerItem')
 local C = LibStub('C_Everywhere').Container
@@ -39,7 +45,6 @@ function Item:Bind(frame)
 
 		class = class:GetSuper()
 	end
-
 	return frame
 end
 
@@ -121,15 +126,6 @@ end
 
 function Item:GetQuery()
 	return {bagID = self:GetBag(), slotIndex = self:GetID()}
-end
-
-function Item:IsUpgrade()
-	if IsAddOnLoaded('Pawn') then
-		return self:Super(Item):IsUpgrade()
-	end
-
-	return not self.info.cached and IsContainerItemAnUpgrade and
-		IsContainerItemAnUpgrade(self:GetBag(), self:GetID())
 end
 
 function Item:IsNew()

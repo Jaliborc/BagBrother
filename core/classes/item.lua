@@ -229,12 +229,7 @@ function Item:UpdateFocus()
 end
 
 function Item:UpdateUpgradeIcon()
-	local isUpgrade = self:IsUpgrade()
-	if isUpgrade == nil then
-		self:Delay(0.5, 'UpdateUpgradeIcon')
-	else
-		self.UpgradeIcon:SetShown(isUpgrade)
-	end
+	self.UpgradeIcon:SetShown(self:IsUpgrade())
 end
 
 function Item:UpdateNewItemAnimation()
@@ -356,8 +351,8 @@ function Item:IsSlot(bag, slot)
 end
 
 function Item:IsUpgrade()
-	return self.hasItem and IsAddonLoaded('Pawn') and
-		PawnShouldItemLinkHaveUpgradeArrow(self.info.link) or false
+	return self.hasItem and IsAddOnLoaded('Pawn') and
+		PawnShouldItemLinkHaveUpgradeArrow(self.info.link)
 end
 
 

@@ -116,16 +116,16 @@ function Frame:IsShowingQuality(quality)
 	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
 end
 
-function Frame:IsCached()
-	return self:GetBagInfo(self.Bags[1]).cached
-end
-
 function Frame:GetBagInfo(bag)
 	return Addon:GetBagInfo(self:GetOwner().address, bag)
 end
 
 function Frame:GetItemInfo(bag, slot)
 	return Addon:GetItemInfo(self:GetOwner().address, bag, slot)
+end
+
+function Frame:IsCached()
+	return self:GetOwner().offline
 end
 
 function Frame:GetProfile()

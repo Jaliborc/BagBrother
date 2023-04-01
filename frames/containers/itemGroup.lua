@@ -27,7 +27,7 @@ end
 function Items:BAG_UPDATE_SIZE(_, bag)
 	for i, frame in ipairs(self.bags) do
 		if frame.id == bag then
-			return self:RequestLayout()
+			return self:Layout()
 		end
 	end
 end

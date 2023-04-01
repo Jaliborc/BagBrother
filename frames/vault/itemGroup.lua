@@ -16,10 +16,13 @@ Items.Button = Addon.VaultItem
 
 function Items:New(parent, bag, title)
 	local f = self:Super(Items):New(parent, bag)
-	f.Title = f:CreateFontString(nil, nil, 'GameFontHighlight')
-	f.Title:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 5)
-	f.Title:SetText(title)
 	f.Transposed = f:GetType() == 'vault'
+
+	if title then
+		f.Title = f:CreateFontString(nil, nil, 'GameFontHighlight')
+		f.Title:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 5)
+		f.Title:SetText(title)
+	end
 	return f
 end
 
@@ -31,9 +34,9 @@ function Items:RegisterEvents()
 	else
 		local type = self:GetType()
 		if type == DEPOSIT then
-			self:RegisterEvent('VOID_STORAGE_DEPOSIT_UPDATE', 'RequestLayout')
+			self:RegisterEvent('VOID_STORAGE_DEPOSIT_UPDATE', 'Layout')
 		elseif type == WITHDRAW then
-			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'RequestLayout')
+			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Layout')
 		else
 			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'ForAll', 'Update')
 			self:RegisterEvent('VOID_STORAGE_UPDATE', 'ForAll', 'Update')
@@ -45,7 +48,7 @@ end
 function Items:Layout()
 	self:Super(Items):Layout()
 
-	if self.Title:GetText() then
+	if self.Title then
 		local anyItems = self:NumButtons() > 0
 		self:SetHeight(self:GetHeight() + (anyItems and 20 or 0))
 		self.Title:SetShown(anyItems)
