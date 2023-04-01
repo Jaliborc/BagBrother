@@ -1,6 +1,6 @@
 --[[
 	itemGroup.lua
-		A grid of void storage items. Three kinds, defined by the `bag` input (sweet hack):
+		A grid of void storage items. Three kinds, defined by a singleton bag (sweet hack):
 			DEPOSIT -> items to deposit
 			WITHDRAW -> items to withdraw
 			nil -> deposited items
@@ -16,7 +16,7 @@ Items.Button = Addon.VaultItem
 
 function Items:New(parent, bag, title)
 	local f = self:Super(Items):New(parent, bag)
-	f.Transposed = f:GetType() == 'vault'
+	f.Transposed = f:GetBag() == 'vault'
 
 	if title then
 		f.Title = f:CreateFontString(nil, nil, 'GameFontHighlight')
@@ -32,10 +32,10 @@ function Items:RegisterEvents()
 	if self:IsCached() then
 		self:RegisterSignal('VAULT_OPEN', 'RegisterEvents')
 	else
-		local type = self:GetType()
-		if type == DEPOSIT then
+		local bag = self:GetBag()
+		if bag == DEPOSIT then
 			self:RegisterEvent('VOID_STORAGE_DEPOSIT_UPDATE', 'Layout')
-		elseif type == WITHDRAW then
+		elseif bag == WITHDRAW then
 			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Layout')
 		else
 			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'ForAll', 'Update')
@@ -59,15 +59,15 @@ end
 --[[ Properties ]]--
 
 function Items:NumSlots()
-	if self:GetType() == DEPOSIT then
+	if self:GetBag() == DEPOSIT then
 		return GetNumVoidTransferDeposit()
-	elseif self:GetType() == WITHDRAW then
+	elseif self:GetBag() == WITHDRAW then
 		return GetNumVoidTransferWithdrawal()
-	elseif self:GetType() == 'vault' then
+	elseif self:GetBag() == 'vault' then
 		return 160
 	end
 end
 
-function Items:GetType()
+function Items:GetBag()
 	return self.bags[1].id
 end

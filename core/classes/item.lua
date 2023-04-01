@@ -113,7 +113,7 @@ function Item:OnPostClick(button)
 end
 
 function Item:OnEnter()
-	if self.info.cached then
+	if self:IsCached() then
 		self:AttachDummy()
 	elseif self.hasItem then
 		self:ShowTooltip()

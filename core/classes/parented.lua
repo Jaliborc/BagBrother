@@ -33,7 +33,7 @@ function Parented:IsCached()
 end
 
 function Parented:GetFrameID()
-  return self.frame.frameID
+  return self.frame.id
 end
 
 function Parented:GetFrame()

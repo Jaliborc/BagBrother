@@ -129,11 +129,11 @@ function Frame:IsCached()
 end
 
 function Frame:GetProfile()
-	return self:GetOwner().profile[self.frameID]
+	return self:GetOwner().profile[self.id]
 end
 
 function Frame:GetBaseProfile()
-	return Addon.profile[self.frameID]
+	return Addon.profile[self.id]
 end
 
 function Frame:SetOwner(owner)
@@ -146,5 +146,5 @@ function Frame:GetOwner()
 end
 
 function Frame:GetFrameID()
-	return self.frameID
+	return self.id
 end
