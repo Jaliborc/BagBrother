@@ -45,35 +45,34 @@ end
 --[[ Static ]]--
 
 function Owners:OnEnable()
-	self.__index = function(t, k) return t.cache[k] or self[k] end 
-	self.available = {}
+	self.registry, self.ordered = {}, {}
+	self.__index = function(t, k) return t.cache[k] or self[k] end
+	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'OnRoster')
 
 	for i, realm in ipairs(GetAutoCompleteRealms()) do
-		for id in pairs(BrotherBags[realm] or {}) do
-			tinsert(self.available, self:New(realm, id))
+		for id, cache in pairs(BrotherBags[realm] or {}) do
+			if not self.registry[cache] then
+				self:New(id, realm)
+			end
 		end
 	end
 
-	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'OnRoster')
-	self:UpdateList()
+	Addon.player = self:New(UnitFullName('player')); self:Sort()
 end
 
 function Owners:OnRoster()
-	if (Addon.guild and Addon.guild.name) ~= GetGuildInfo('player') then
-		self:UpdateList()
+	local name, _,_, realm = GetGuildInfo('player')
+	if (Addon.guild and Addon.guild.name) ~= name or (Addon.guild and Addon.guild.realm) ~= realm then
+		Addon.guild = self:New(name..'*', realm); self:Sort()
 	end
 end
 
-function Owners:UpdateList()
-	local name, realm = UnitFullName('player')
-	local guild = GetGuildInfo('player')
-
-	for i, owner in pairs(self.available) do
-		owner.offline = owner.realm ~= realm or owner.name ~= (owner.isguild and guild or name)
-		owner.profile = Addon.sets.profiles[owner.address] or Addon.sets.global
+function Owners:Sort()
+	for i, owner in ipairs(self.ordered) do
+		owner.offline = owner ~= Addon.player and owner ~= Addon.guild
 	end
 
-	sort(self.available, function(a, b)
+	sort(self.ordered, function(a, b)
 		if a.isguild ~= b.isguild then
 			return b.isguild
 		elseif a.offline ~= b.offline then
@@ -81,45 +80,47 @@ function Owners:UpdateList()
 		end
 		return a.name < b.name
 	end)
-
-	Addon.player = self.available[1]
-	Addon.profile = Addon.player.profile
-	Addon.guild = select(2, FindInTableIf(self.available, function(x) return x.isguild end))
 end
 
 function Owners:Iterate()
-	return ipairs(self.available or {})
+	return ipairs(self.ordered or {})
 end
 
 function Owners:Count()
-	return #self.available
+	return #self.ordered
 end
 
 
 --[[ Object API ]]--
 
-function Owners:New(realm, id)
-	local isguild = id:find('*$')
-	local address = id .. ' - ' .. realm
-	local name = isguild and id:sub(1,-2) or id
+function Owners:New(id, realm)
+	local cache = GetOrCreateTableEntry(GetOrCreateTableEntry(BrotherBags, realm), id)
+	if not self.registry[cache] then
+		local isguild = id:find('*$')
+		local name = isguild and id:sub(1,-2) or id
+		local owner = setmetatable({
+			id = id, realm = realm, name = name,
+			address = (isguild and '®' or '')..name..'-'..realm, -- needed for backwards support
+			profile = Addon.Settings:GetProfile(realm, id),
+			cache = cache,
+		}, self)
 
-	return setmetatable({
-		id = id, name = name, realm = realm,
-		isguild = isguild, address = address, 
-		cache = BrotherBags[realm][id],
-	}, self)
+		self.registry[cache] = owner
+		tinsert(self.ordered, owner)
+	end
+	return self.registry[cache]
 end
 
 function Owners:Delete()
-	Addon.sets.profiles[self.address] = nil
+	Addon.Settings:SetProfile(self.realm, self.id, nil)
 	BrotherBags[self.realm][self.id] = nil
-	tDeleteItem(Owners.available, self)
-	Owners:SendSignal('OWNER_DELETED')
+	Owners.registry[owner.cache] = nil
+	tDeleteItem(Owners.ordered, self)
 end
 
 function Owners:SetProfile(profile)
-	Addon.sets.profiles[self.address] = profile and Addon.Settings:SetDefaults(profile, Addon.Settings.ProfileDefaults)
-	Owners:UpdateList()
+	Addon.Settings:SetProfile(self.realm, self.id, profile)
+	self.profile = Addon.Settings:GetProfile(owner.realm, owner.id)
 end
 
 function Owners:GetIconMarkup(size, x, y)

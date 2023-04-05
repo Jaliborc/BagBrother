@@ -13,6 +13,7 @@ function Items:RegisterEvents()
 	self:Super(Items):RegisterEvents()
 
 	if self:IsCached() then
+		self:RegisterSignal('GUILD_OPEN', 'RegisterEvents')
 		self:RegisterSignal('GUILD_TAB_CHANGED', 'ForAll', 'Update')
   	else
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED', 'ForAll', 'Update')

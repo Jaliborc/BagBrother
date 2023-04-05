@@ -133,7 +133,7 @@ function Frame:GetProfile()
 end
 
 function Frame:GetBaseProfile()
-	return Addon.profile[self.id]
+	return Addon.player.profile[self.id]
 end
 
 function Frame:SetOwner(owner)

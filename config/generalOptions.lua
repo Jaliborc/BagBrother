@@ -22,12 +22,12 @@ function General:Populate()
 	self:AddCheck('displayBlizzard')
 
 	local global = self:Add('Check', L.CharacterSpecific)
-	global:SetChecked(Addon.profile ~= Addon.sets.global)
+	global:SetChecked(Addon.player.profile ~= Addon.sets.global)
 	global:SetCall('OnInput', function() self:ToggleGlobals() end)
 end
 
 function General:ToggleGlobals()
-	if Addon.profile == Addon.sets.global then
+	if Addon.player.profile == Addon.sets.global then
 		self:SetProfile(CopyTable(Addon.sets.global))
 	else
 		LibStub('Sushi-3.1').Popup {

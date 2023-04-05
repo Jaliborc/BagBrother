@@ -13,18 +13,12 @@ local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + Addon.NumBags
 local FIRST_BANK_SLOT = 1 + Addon.NumBags
 local NUM_VAULT_ITEMS = 80 * 2
 
-local function Init(tb, k, df)
-	tb[k] = tb[k] or df or {}
-	return tb[k]
-end
-
 
 --[[ Startup ]]--
 
 function Cacher:OnEnable()
-	local player, realm = UnitFullName('player')
-
-	self.player = Init(Init(Init(_G, 'BrotherBags'), realm), player, {equip = {}})
+	self.player = Addon.player.cache
+	self.player.equip = self.player.equip or {}
 	self.player.faction = UnitFactionGroup('player') == 'Alliance'
 	self.player.race = select(2, UnitRace('player'))
 	self.player.class = UnitClassBase('player')
@@ -100,13 +94,12 @@ function Cacher:VAULT_CLOSE()
 end
 
 function Cacher:GUILD_ROSTER_UPDATE()
-	self.player.guild = GetGuildInfo('player')
+	self.player.guild = {GetGuildInfo('player')}
 end
 
 function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 	if Addon.Events.AtGuild then
-		local name, _,_, realm =  GetGuildInfo('player')
-		local guild = Init(Init(BrotherBags, realm), name .. '*')
+		local guild = Addon.guild.cache
 		guild.faction = UnitFactionGroup('player') == 'Alliance'
 
 		for i = 1, GetNumGuildBankTabs() do

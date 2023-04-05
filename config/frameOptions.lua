@@ -10,7 +10,7 @@ local Frames = Addon.GeneralOptions:New('FrameOptions', CreateAtlasMarkup('Vehic
 
 function Frames:Populate()
   -- Selection
-  self.sets = Addon.profile[self.frame]
+  self.sets = Addon.player.profile[self.frame]
   self:AddFrameChoice()
 
   local enabled = Addon.Frames:IsEnabled(self.frame)

@@ -7,12 +7,95 @@ local ADDON, Addon = ...
 local VAR = ADDON .. '_Sets'
 local Settings = Addon:NewModule('Settings')
 
+local function AsArray(table)
+	return setmetatable(table, {__metatable = 1})
+end
 
---[[ Startup ]]--
+local function SetDefaults(target, defaults)
+	defaults.__index = nil
+
+	for k, v in pairs(defaults) do
+		if type(v) == 'table' then
+			if getmetatable(v) == 1 then
+				target[k] = target[k] or AsArray(CopyTable(v))
+			else
+				target[k] = SetDefaults(target[k] or {}, v)
+			end
+		end
+	end
+
+	defaults.__index = defaults
+	return setmetatable(target, defaults)
+end
+
+local FrameDefaults = {
+	enabled = true,
+	money = true, broker = true,
+	bagToggle = true, sort = true, search = true, options = true,
+
+	strata = 'HIGH', alpha = 1,
+	scale = Addon.FrameScale or 1,
+	color = {0, 0, 0, 0.5},
+	x = 0, y = 0,
+
+	itemScale = Addon.ItemScale or 1,
+	spacing = 2,
+
+	brokerObject = Addon.Name .. 'Launcher',
+	hiddenRules = {contain = true},
+	hiddenBags = {},
+
+	rules = AsArray({
+		'all', 'all/normal', 'all/trade', 'all/reagent', 'all/keys', 'all/quiver',
+		'equip', 'equip/armor', 'equip/weapon', 'equip/trinket',
+		'use', 'use/consume', 'use/enhance',
+		'trade', 'trade/goods', 'trade/gem', 'trade/glyph', 'trade/recipe',
+		'quest', 'misc',
+	}),
+}
+
+local ProfileDefaults = {
+	inventory = SetDefaults({
+		reversedTabs = true,
+		borderColor = {1, 1, 1, 1},
+		currency = true, broker = Addon.IsClassic,
+		point = 'BOTTOMRIGHT',
+		x = -50, y = 100,
+		columns = 10,
+		width = 384,
+		height = 200,
+	}, FrameDefaults),
+
+	bank = SetDefaults({
+		borderColor = {1, 1, 0, 1},
+		currency = true,
+		point = 'LEFT',
+		columns = 14,
+		width = 600,
+		height = 500,
+		x = 95
+	}, FrameDefaults),
+
+	vault = SetDefaults({
+		borderColor = {1, 0, 0.98, 1},
+		point = 'LEFT',
+		columns = 10,
+		x = 95
+	}, FrameDefaults),
+
+	guild = SetDefaults({
+		borderColor = {0, 1, 0, 1},
+		point = 'CENTER',
+		columns = 7,
+	}, FrameDefaults)
+}
+
+
+--[[ Methods ]]--
 
 function Settings:OnEnable()
-	_G[VAR] = self:SetDefaults(_G[VAR] or {}, {
-		global = self:SetDefaults({}, self.ProfileDefaults),
+	_G[VAR] = SetDefaults(_G[VAR] or {}, {
+		global = SetDefaults({}, ProfileDefaults),
         version = Addon.Version,
 		profiles = {},
 
@@ -42,96 +125,29 @@ function Settings:OnEnable()
 	Addon.sets = _G[VAR]
     Addon.sets.version = Addon.Version
 
-	for owner, profile in pairs(Addon.sets.profiles) do
-		self:SetDefaults(profile, self.ProfileDefaults)
-	end
-end
-
-
---[[ API ]]--
-
-function Settings:SetDefaults(target, defaults)
-	defaults.__index = nil
-
-	for k, v in pairs(defaults) do
-		if type(v) == 'table' then
-			if getmetatable(v) == 1 then
-				target[k] = target[k] or self:AsArray(CopyTable(v))
-			else
-				target[k] = self:SetDefaults(target[k] or {}, v)
-			end
+	----- convert old profiles
+	for address, profile in pairs(Addon.sets.profiles) do
+		local realm, name = address:match('(%w+) %- (%w+)')
+		if realm and name then
+			realm = GetOrCreateTableEntry(Addon.sets.profiles, realm)
+			realm[name .. (address:find('^®') and '*' or '')] = profile
 		end
 	end
+	-----
 
-	defaults.__index = defaults
-	return setmetatable(target, defaults)
+	for realm, owners in pairs(Addon.sets.profiles) do
+		for id, profile in pairs(owners) do
+			SetDefaults(profile, ProfileDefaults)
+		end
+	end
 end
 
-function Settings:AsArray(table)
-	return setmetatable(table, {__metatable = 1})
+function Settings:SetProfile(realm, id, profile)
+	realm = GetOrCreateTableEntry(Addon.sets.profiles, realm)
+	realm[id] = profile and SetDefaults(profile, ProfileDefaults)
 end
 
-
---[[ Constants ]]--
-
-Settings.FrameDefaults = {
-	enabled = true,
-	money = true, broker = true,
-	bagToggle = true, sort = true, search = true, options = true,
-
-	strata = 'HIGH', alpha = 1,
-	scale = Addon.FrameScale or 1,
-	color = {0, 0, 0, 0.5},
-	x = 0, y = 0,
-
-	itemScale = Addon.ItemScale or 1,
-	spacing = 2,
-
-	brokerObject = Addon.Name .. 'Launcher',
-	hiddenRules = {contain = true},
-	hiddenBags = {},
-
-	rules = Settings:AsArray({
-		'all', 'all/normal', 'all/trade', 'all/reagent', 'all/keys', 'all/quiver',
-		'equip', 'equip/armor', 'equip/weapon', 'equip/trinket',
-		'use', 'use/consume', 'use/enhance',
-		'trade', 'trade/goods', 'trade/gem', 'trade/glyph', 'trade/recipe',
-		'quest', 'misc',
-	}),
-}
-
-Settings.ProfileDefaults = {
-	inventory = Settings:SetDefaults({
-		reversedTabs = true,
-		borderColor = {1, 1, 1, 1},
-		currency = true, broker = Addon.IsClassic,
-		point = 'BOTTOMRIGHT',
-		x = -50, y = 100,
-		columns = 10,
-		width = 384,
-		height = 200,
-	}, Settings.FrameDefaults),
-
-	bank = Settings:SetDefaults({
-		borderColor = {1, 1, 0, 1},
-		currency = true,
-		point = 'LEFT',
-		columns = 14,
-		width = 600,
-		height = 500,
-		x = 95
-	}, Settings.FrameDefaults),
-
-	vault = Settings:SetDefaults({
-		borderColor = {1, 0, 0.98, 1},
-		point = 'LEFT',
-		columns = 10,
-		x = 95
-	}, Settings.FrameDefaults),
-
-	guild = Settings:SetDefaults({
-		borderColor = {0, 1, 0, 1},
-		point = 'CENTER',
-		columns = 7,
-	}, Settings.FrameDefaults)
-}
+function Settings:GetProfile(realm, id)
+	realm = Addon.sets.profiles[realm]
+	return realm and realm[id] or Addon.sets.global
+end

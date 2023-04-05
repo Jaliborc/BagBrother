@@ -77,12 +77,15 @@ function Frame:SortItems()
 	Addon.Sorting:Start(self:GetOwner(), {GetCurrentGuildBankTab()})
 end
 
-function Frame:HasOwnerSelector() end
-function Frame:HasBagToggle() end
-function Frame:IsBagGroupShown()
-	return true
+function Frame:GetOwner()
+	return self.owner or Addon.guild
 end
 
-function Frame:GetOwner()
-	return self.owner or Addon.Owners.playerGuild
+function Frame:IsCached()
+	return not Addon.Events.AtGuild or self:GetOwner().offline
 end
+
+function Frame:IsBagGroupShown() return true end
+function Frame:HasOwnerSelector() end
+function Frame:HasBagToggle() end
+

@@ -12,7 +12,7 @@ local Rules = Addon.GeneralOptions:New('RuleOptions', CreateAtlasMarkup('None'))
 Rules.Expandable, Rules.Expanded = {}, {}
 
 function Rules:Populate()
-  self.sets = Addon.profile[self.frame]
+  self.sets = Addon.player.profile[self.frame]
   self:AddFrameChoice()
 
   local faux = self:Add('FauxScroll', 12, 26)

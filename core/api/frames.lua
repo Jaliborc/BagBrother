@@ -63,7 +63,7 @@ function Frames:IsEnabled(id)
 	if self:Get(id).addon then
 		return GetAddOnEnableState(UnitName('player'), self:Get(id).addon) == 2
 	end
-	return self:Get(id).addon ~= false and Addon.profile[id].enabled
+	return self:Get(id).addon ~= false and Addon.player.profile[id].enabled
 end
 
 
@@ -123,5 +123,5 @@ function Frames:HideBag(frame, bag)
 end
 
 function Frames:HasBag(frame, bag)
-	return not Addon.sets.displayBlizzard or self:IsEnabled(frame) and not Addon.profile[frame].hiddenBags[bag]
+	return not Addon.sets.displayBlizzard or self:IsEnabled(frame) and not Addon.player.profile[frame].hiddenBags[bag]
 end
