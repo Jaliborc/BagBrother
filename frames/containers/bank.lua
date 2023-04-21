@@ -1,6 +1,6 @@
 --[[
 	bank.lua
-		A specialized version of the wildpants frame for the bank
+		A specialized version of the window frame for the bank
 --]]
 
 local ADDON, Addon = ...

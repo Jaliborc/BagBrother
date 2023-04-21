@@ -1,6 +1,6 @@
 --[[
 	inventory.lua
-		A specialized version of the standard frame for the inventory
+		A specialized version of the window frame for the inventory
 --]]
 
 local ADDON, Addon = ...

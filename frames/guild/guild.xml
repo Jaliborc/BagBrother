@@ -8,5 +8,5 @@
 	<Script file="logFrame.lua"/>
 	<Script file="logToggle.lua"/>
 
-	<Script file="frame.lua"/>
+	<Script file="guild.lua"/>
 </Ui>
