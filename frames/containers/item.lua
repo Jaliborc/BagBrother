@@ -9,34 +9,13 @@ local Item = Addon.Item:NewClass('ContainerItem')
 local C = LibStub('C_Everywhere').Container
 
 
---[[ Startup ]]--
+--[[ Events ]]--
 
 function Item:Construct()
   local b = self:Super(Item):Construct()
   b:SetScript('PreClick', b.OnPreClick)
   return b
 end
-
-function Item:Bind(frame)
-	for k in pairs(frame) do
-		if self[k] then
-			frame[k] = nil
-		end
-	end
-
-	local class = self
-	while class do
-		for k,v in pairs(class) do
-			frame[k] = frame[k] or v
-		end
-
-		class = class:GetSuper()
-	end
-	return frame
-end
-
-
---[[ Events ]]--
 
 function Item:OnPreClick(button)
 	if not IsModifiedClick() and button == 'RightButton' then

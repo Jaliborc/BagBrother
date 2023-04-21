@@ -36,7 +36,7 @@ Item.Backgrounds = {
 --[[ Construct ]]--
 
 function Item:New(parent, bag, slot)
-	local b = self:Super(Item):New(parent)
+	local b = self:GetBlizzard() or self:Super(Item):New(parent)
 	b:SetID(slot)
 	b.bag = bag
 
@@ -51,6 +51,12 @@ end
 function Item:Construct()
 	local b = self:Super(Item):Construct()
 	local name = b:GetName()
+
+	for k in pairs(b) do
+		if self[k] then
+			b[k] = nil -- remove unwanted native variables
+		end
+	end
 
 	b.Flash = b:CreateAnimationGroup()
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
