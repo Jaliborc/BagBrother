@@ -5,34 +5,12 @@
 
 local ADDON, Addon = ...
 local Frames = Addon:NewModule('Frames')
-
-
---[[ Startup ]]--
-
-function Frames:OnEnable()
-	self.registry = {
-		{id = 'inventory', name = INVENTORY_TOOLTIP},
-		{id = 'bank', name = BANK},
-		{id = 'vault', name = VOID_STORAGE, addon = self:NewLoader('VoidStorage', 'VoidStorage_LoadUI')},
-		{id = 'guild', name = GUILD_BANK, addon = self:NewLoader('GuildBank', 'GuildBankFrame_LoadUI')},
-	}
-end
-
-function Frames:NewLoader(addon, method)
-	if _G[method] then
-		local addon = ADDON .. '_' .. addon
-		local original = _G[method]
-
-	  _G[method] = function()
-			if not LoadAddOn(addon) then
-				original()
-			end
-		end
-
-		return addon
-	end
-	return false
-end
+Frames.Registry = {
+	{id = 'inventory', name = INVENTORY_TOOLTIP},
+	{id = 'bank', name = BANK},
+	{id = 'vault', name = VOID_STORAGE, addon = VoidStorage_LoadUI and ADDON .. '_VoidStorage'},
+	{id = 'guild', name = GUILD_BANK, addon = GuildBankFrame_LoadUI and ADDON .. '_GuildBank'},
+}
 
 
 --[[ Control ]]--
@@ -97,10 +75,6 @@ end
 
 --[[ Registry ]]--
 
-function Frames:Iterate()
-	return ipairs(self.registry)
-end
-
 function Frames:New(id)
 	if self:IsEnabled(id) then
 		local info = self:Get(id)
@@ -112,7 +86,11 @@ function Frames:New(id)
 end
 
 function Frames:Get(id)
-	return tFilter(self.registry, function(info) return info.id == id end, true)[1]
+	return tFilter(self.Registry, function(info) return info.id == id end, true)[1]
+end
+
+function Frames:Iterate()
+	return ipairs(self.Registry)
 end
 
 function Frames:AreBasicsEnabled()

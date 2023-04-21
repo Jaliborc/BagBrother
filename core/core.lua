@@ -31,6 +31,7 @@ if REAGENTBANK_CONTAINER then
 end
 
 function Addon:OnEnable()
+	C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 	CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
 		LoadAddOn(ADDON .. '_Config')
 	end)

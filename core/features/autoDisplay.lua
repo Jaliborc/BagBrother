@@ -29,14 +29,15 @@ end
 function AutoDisplay:HookBaseUI()
 	-- bag APIs
 	self:StopIf(_G, 'OpenAllBags', self:Show('inventory'))
-	self:StopIf(_G, 'CloseAllBags', self:Hide('inventory'))
 	self:StopIf(_G, 'ToggleAllBags', self:Toggle('inventory'))
 	self:StopIf(_G, 'OpenBackpack', self:ShowBag('inventory', BACKPACK_CONTAINER))
-	self:StopIf(_G, 'CloseBackpack', self:HideBag('inventory', BACKPACK_CONTAINER))
 	self:StopIf(_G, 'ToggleBackpack', self:ToggleBag('inventory', BACKPACK_CONTAINER))
 	self:StopIf(_G, 'ToggleBag', function(bag) return Addon.Frames:ToggleBag(self:Bag2Frame(bag)) end)
 	self:StopIf(_G, 'OpenBag', function(bag) return Addon.Frames:ShowBag(self:Bag2Frame(bag)) end)
-	self:StopIf(_G, 'CloseBag', function(bag) return Addon.Frames:HideBag(self:Bag2Frame(bag)) end)
+
+	hooksecurefunc('CloseBag', function(bag) Addon.Frames:HideBag(self:Bag2Frame(bag)) end)
+	hooksecurefunc('CloseBackpack', self:HideBag('inventory', BACKPACK_CONTAINER))
+	hooksecurefunc('CloseAllBags', self:Hide('inventory'))
 
 	-- banking frames
 	self:StopIf(_G, 'GuildBankFrame_LoadUI', self:Show('guild'))

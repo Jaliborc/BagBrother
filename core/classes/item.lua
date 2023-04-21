@@ -54,7 +54,7 @@ function Item:Construct()
 
 	for k in pairs(b) do
 		if self[k] then
-			b[k] = nil -- remove unwanted native variables
+			b[k] = nil -- remove unwanted template variables
 		end
 	end
 
@@ -63,7 +63,7 @@ function Item:Construct()
 	b.Cooldown, b.QuestBorder = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
 	b.UpdateTooltip = self.OnEnter
 
-	b.newitemglowAnim:SetLooping('NONE')
+	b.BattlepayItemTexture:Hide()
 	b.IconOverlay:SetAtlas('AzeriteIconFrame')
 	b.QuestBorder:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 	b.IconGlow:SetTexture('Interface/Buttons/UI-ActionButton-Border')
