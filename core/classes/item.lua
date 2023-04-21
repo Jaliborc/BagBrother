@@ -49,7 +49,7 @@ function Item:New(parent, bag, slot)
 end
 
 function Item:Construct()
-	local b = self:GetBlizzard() or self:Super(Item):Construct()
+	local b = self:Super(Item):Construct()
 	local name = b:GetName()
 
 	b.Flash = b:CreateAnimationGroup()

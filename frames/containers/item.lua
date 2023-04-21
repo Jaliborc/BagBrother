@@ -17,19 +17,6 @@ function Item:Construct()
   return b
 end
 
-function Item:GetBlizzard(id)
-    if not Addon.sets.displayBlizzard and Addon.Frames:AreBasicsEnabled() then
-		local id = self:NumFrames() + 1
-		local bag = ceil(id / 36)
-		local slot = (id-1) % 36 + 1
-		local b = _G[format('ContainerFrame%dItem%d', bag, slot)]
-		if b then
-			b:ClearAllPoints()
-			return self:Bind(b)
-		end
-    end
-end
-
 function Item:Bind(frame)
 	for k in pairs(frame) do
 		if self[k] then
