@@ -1,5 +1,5 @@
 <Ui>
-  <Include file="..\..\localization\config\localization.xml"/>
+  <Include file="localization\localization.xml"/>
   <Script file="optionsPanel.lua"/>
 	<Script file="generalOptions.lua"/>
   <Script file="frameOptions.lua"/>

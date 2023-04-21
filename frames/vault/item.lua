@@ -26,7 +26,7 @@ end
 function Item:OnClick(button)
 	if HandleModifiedItemClick(self.info.link) or self:FlashFind(button) or IsModifiedClick() then
 		return
-	elseif not self:IsCached() and self:GetBag() == 'vault' then
+	elseif not self:IsCached() then
 		local isRight = button == 'RightButton'
 		local type, _, link = GetCursorInfo()
 

@@ -35,38 +35,6 @@ function Frames:NewLoader(addon, method)
 end
 
 
---[[ Registry ]]--
-
-function Frames:New(id)
-	if self:IsEnabled(id) then
-		local info = self:Get(id)
-		if not info.addon or LoadAddOn(info.addon) then
-	 		info.object = info.object or Addon[id:gsub('^.', id.upper) .. 'Frame']:New(id)
-	 		return info.object
-		end
- 	end
-end
-
-function Frames:Get(id)
-	return tFilter(self.registry, function(info) return info.id == id end, true)[1]
-end
-
-function Frames:Iterate()
-	return ipairs(self.registry)
-end
-
-function Frames:AreBasicsEnabled()
-    return self:IsEnabled('inventory') and self:IsEnabled('bank')
-end
-
-function Frames:IsEnabled(id)
-	if self:Get(id).addon then
-		return GetAddOnEnableState(UnitName('player'), self:Get(id).addon) == 2
-	end
-	return self:Get(id).addon ~= false and Addon.player.profile[id].enabled
-end
-
-
 --[[ Control ]]--
 
 function Frames:Update()
@@ -124,4 +92,37 @@ end
 
 function Frames:HasBag(frame, bag)
 	return not Addon.sets.displayBlizzard or self:IsEnabled(frame) and not Addon.player.profile[frame].hiddenBags[bag]
+end
+
+
+--[[ Registry ]]--
+
+function Frames:Iterate()
+	return ipairs(self.registry)
+end
+
+function Frames:New(id)
+	if self:IsEnabled(id) then
+		local info = self:Get(id)
+		if not info.addon or LoadAddOn(info.addon) then
+	 		info.object = info.object or Addon[id:gsub('^.', id.upper) .. 'Frame']:New(id)
+	 		return info.object
+		end
+ 	end
+end
+
+function Frames:Get(id)
+	return tFilter(self.registry, function(info) return info.id == id end, true)[1]
+end
+
+function Frames:AreBasicsEnabled()
+    return self:IsEnabled('inventory') and self:IsEnabled('bank')
+end
+
+function Frames:IsEnabled(id)
+	local addon = self:Get(id).addon
+	if addon then
+		return GetAddOnEnableState(UnitName('player'), addon) == 2
+	end
+	return addon ~= false and Addon.player.profile[id].enabled
 end

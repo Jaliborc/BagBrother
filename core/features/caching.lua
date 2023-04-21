@@ -22,6 +22,7 @@ function Cacher:OnEnable()
 	self.player.faction = UnitFactionGroup('player') == 'Alliance'
 	self.player.race = select(2, UnitRace('player'))
 	self.player.class = UnitClassBase('player')
+	self.player.level = UnitLevel('player')
 	self.player.sex = UnitSex('player')
 
 	self:RegisterSignal('BAG_UPDATE')
@@ -30,6 +31,7 @@ function Cacher:OnEnable()
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
+	self:RegisterEvent('PLAYER_LEVEL_UP')
 
 	if CanGuildBankRepair then
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
@@ -68,6 +70,10 @@ function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
+function Cacher:PLAYER_LEVEL_UP(_, level)
+	self.player.level = level
+end
+
 function Cacher:BANK_CLOSE()
 	if Addon.Events.AtBank then
 		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
@@ -100,18 +106,16 @@ end
 function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 	if Addon.Events.AtGuild then
 		local guild = Addon.guild.cache
-		guild.faction = UnitFactionGroup('player') == 'Alliance'
+		guild.faction = self.player.faction
 
 		for i = 1, GetNumGuildBankTabs() do
 			guild[i] = guild[i] or {}
-			guild[i].name, guild[i].icon, guild[i].view = GetGuildBankTabInfo(i)
+			guild[i].name, guild[i].icon = GetGuildBankTabInfo(i)
 		end
 
 		local tab = GetCurrentGuildBankTab()
 		local items = guild[tab]
-		if items then
-			items.deposit, items.withdraw, items.remaining = select(4, GetGuildBankTabInfo(tab))
-
+		if items and select(3, GetGuildBankTabInfo(tab)) then
 			for i = 1, 98 do
 				local link = GetGuildBankItemLink(tab, i)
 				local _, count = GetGuildBankItemInfo(tab, i)

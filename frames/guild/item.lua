@@ -15,7 +15,6 @@ function Item:Construct()
 	b:SetScript('OnReceiveDrag', self.OnReceiveDrag)
 	b:SetScript('OnDragStart', self.OnDragStart)
 	b:SetScript('OnClick', self.OnClick)
-	b:SetScript('PreClick', nil)
 	b:RegisterForDrag('LeftButton')
 	b:RegisterForClicks('anyUp')
 	return b

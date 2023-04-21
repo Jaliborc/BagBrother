@@ -1,6 +1,4 @@
 <Ui>
-	<Script file="guild.lua"/>
-
 	<Script file="tab.lua"/>
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>

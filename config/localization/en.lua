@@ -8,9 +8,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 -- general
 L.GeneralOptionsDesc = 'These are general features that can be toggled depending on your preferences.'
 L.Locked = 'Lock Frames'
-L.TipCount = 'Tooltip Item Count'
+L.TipCount = 'Tooltip Item Counts'
 L.CountGuild = 'Include Guild Banks'
 L.FlashFind = 'Flash Find'
+L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with that same item across frames.'
 L.DisplayBlizzard = 'Fallback Hidden Bags'
 L.DisplayBlizzardTip = 'If enabled, the default Blizzard UI bag panels will be displayed for hidden inventory or bank containers.\n\n|cffff1919Requires UI reload.|r'
 L.ConfirmGlobals = 'Are you sure you want to disable specific settings for this character? All specific settings will be lost.'

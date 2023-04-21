@@ -125,8 +125,6 @@ function Bag:RegisterEvents()
 	self:UnregisterAll()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'RegisterEvents')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateToggle')
-	self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
-	self:RegisterSignal('BAG_UPDATE')
 
 	if self:IsBank() or self:IsBankBag() or self:IsReagents() then
 		self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
@@ -142,6 +140,9 @@ function Bag:RegisterEvents()
 			end
 
 			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
+			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATE')
+			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
+			self:RegisterSignal('BAG_UPDATE')
 		end
 	elseif self:IsCustomSlot() then
 		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
@@ -180,7 +181,7 @@ function Bag:Update()
 		self:SetIcon('Interface/ContainerFrame/KeyRing-Bag-Icon')
 	else
 		self:SetIcon(info.icon or 'Interface/PaperDoll/UI-PaperDoll-Slot-Bag')
-	  self.link = info.link
+	  	self.link = info.link
 
 		if not info.icon then
 			self.Count:SetText('')
@@ -191,11 +192,13 @@ function Bag:Update()
 		local id = self:GetID()
 		for i, atlas in ipairs(self.FILTER_ICONS) do
 			local active = C_Container and (id > 0 and C_Container.GetBagSlotFlag(id, 2^i)) or
-						         GetBagSlotFlag and (self:IsBankBag() and GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) or GetBagSlotFlag(id, i))
+						   GetBagSlotFlag and (self:IsBankBag() and GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) or GetBagSlotFlag(id, i))
 			if active then
 				return self.FilterIcon.Icon:SetAtlas(atlas)
 			end
 		end
+
+		self.FilterIcon.Icon:SetAtlas(nil)
 	end
 end
 

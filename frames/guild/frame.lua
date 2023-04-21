@@ -7,12 +7,13 @@ local MODULE =  ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local Frame = Addon.Frame:NewClass('GuildFrame')
 
-Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
+Frame.NoGuild = setmetatable({name=ERR_GUILD_PLAYER_NOT_IN_GUILD, address=''}, {__index = Addon.player})
 Frame.CloseSound = SOUNDKIT.GUILD_VAULT_CLOSE
 Frame.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
 Frame.MoneyFrame = Addon.GuildMoneyFrame
 Frame.ItemGroup = Addon.GuildItemGroup
 Frame.BagGroup = Addon.GuildTabGroup
+Frame.Title = '%s'
 Frame.Bags = {}
 
 for i = 1, MAX_GUILDBANK_TABS do
@@ -23,7 +24,7 @@ end
 --[[ Construct ]]--
 
 function Frame:New(id)
-	local f = Addon.Frame.New(self, id)
+	local f = self:Super(Frame):New(id)
 	local log = Addon.LogFrame:New(f)
 	log:SetPoint('BOTTOMRIGHT', -10, 35)
 	log:SetPoint('TOPLEFT', 10, -70)
@@ -74,15 +75,15 @@ function Frame:ListMenuButtons()
 end
 
 function Frame:SortItems()
-	Addon.Sorting:Start(self:GetOwner(), {GetCurrentGuildBankTab()})
-end
-
-function Frame:GetOwner()
-	return self.owner or Addon.guild
+	Addon.Sorting:Start(self.id, self:GetOwner(), {GetCurrentGuildBankTab()})
 end
 
 function Frame:IsCached()
 	return not Addon.Events.AtGuild or self:GetOwner().offline
+end
+
+function Frame:GetOwner()
+	return self.owner or Addon.guild or self.NoGuild
 end
 
 function Frame:IsBagGroupShown() return true end

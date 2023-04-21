@@ -47,23 +47,23 @@ end
 function Owners:OnEnable()
 	self.registry, self.ordered = {}, {}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
-	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'OnRoster')
+	Addon.player = self:New(UnitFullName('player'))
 
-	for i, realm in ipairs(GetAutoCompleteRealms()) do
+	for i, realm in ipairs {Addon.player.realm, unpack(GetAutoCompleteRealms())} do
 		for id, cache in pairs(BrotherBags[realm] or {}) do
-			if not self.registry[cache] then
-				self:New(id, realm)
-			end
+			self:New(id, realm)
 		end
 	end
 
-	Addon.player = self:New(UnitFullName('player')); self:Sort()
+	self:RegisterEvent('GUILD_ROSTER_UPDATE', 'OnRoster')
+	self:Sort()
 end
 
 function Owners:OnRoster()
 	local name, _,_, realm = GetGuildInfo('player')
 	if (Addon.guild and Addon.guild.name) ~= name or (Addon.guild and Addon.guild.realm) ~= realm then
-		Addon.guild = self:New(name..'*', realm); self:Sort()
+		Addon.guild = name and self:New(name..'*', realm or Addon.player.realm)
+		self:Sort()
 	end
 end
 
@@ -75,10 +75,10 @@ function Owners:Sort()
 	sort(self.ordered, function(a, b)
 		if a.isguild ~= b.isguild then
 			return b.isguild
-		elseif a.offline ~= b.offline then
-			return b.offline
+		elseif a.level == b.level or not (a.level and b.level) then
+			return a.name < b.name
 		end
-		return a.name < b.name
+		return a.level > b.level
 	end)
 end
 
@@ -102,7 +102,7 @@ function Owners:New(id, realm)
 			id = id, realm = realm, name = name,
 			address = (isguild and '®' or '')..name..'-'..realm, -- needed for backwards support
 			profile = Addon.Settings:GetProfile(realm, id),
-			cache = cache,
+			cache = cache, isguild = isguild,
 		}, self)
 
 		self.registry[cache] = owner
@@ -114,7 +114,7 @@ end
 function Owners:Delete()
 	Addon.Settings:SetProfile(self.realm, self.id, nil)
 	BrotherBags[self.realm][self.id] = nil
-	Owners.registry[owner.cache] = nil
+	Owners.registry[self.cache] = nil
 	tDeleteItem(Owners.ordered, self)
 end
 

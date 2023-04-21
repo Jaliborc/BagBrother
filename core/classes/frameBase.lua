@@ -32,7 +32,7 @@ function Frame:OnHide()
 end
 
 
---[[ Settings ]]--
+--[[ Appearance ]]--
 
 function Frame:UpdateAppearance()
 	self:ClearAllPoints()
@@ -79,6 +79,13 @@ function Frame:GetPosition()
 	return self.profile.point or 'CENTER', self.profile.x, self.profile.y
 end
 
+
+--[[ Filtering ]]--
+
+function Frame:SortItems()
+	Addon.Sorting:Start(self.id, self:GetOwner(), self.Bags)
+end
+
 function Frame:FindRules()
 	for id, rule in Addon.Rules:Iterate() do
 		if not tContains(self.profile.rules, id) and not self.profile.hiddenRules[id] then
@@ -86,13 +93,6 @@ function Frame:FindRules()
 			tinsert(self.profile.rules, id)
 		end
 	end
-end
-
-
---[[ Shared ]]--
-
-function Frame:SortItems()
-	Addon.Sorting:Start(self:GetOwner(), self.Bags)
 end
 
 function Frame:IsShowingBag(bag)
@@ -116,12 +116,15 @@ function Frame:IsShowingQuality(quality)
 	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
 end
 
-function Frame:GetBagInfo(bag)
-	return Addon:GetBagInfo(self:GetOwner().address, bag)
-end
+
+--[[ Proprieties ]]--
 
 function Frame:GetItemInfo(bag, slot)
 	return Addon:GetItemInfo(self:GetOwner().address, bag, slot)
+end
+
+function Frame:GetBagInfo(bag)
+	return Addon:GetBagInfo(self:GetOwner().address, bag)
 end
 
 function Frame:IsCached()

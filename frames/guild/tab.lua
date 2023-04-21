@@ -27,7 +27,7 @@ function Tab:OnClick()
 	local tab = self:GetID()
 	local info = self:GetInfo()
 
-	if info.viewable then
+	if info.viewable or info.cached then
 		SetCurrentGuildBankTab(tab)
 		QueryGuildBankTab(tab)
 		self:SendSignal('GUILD_TAB_CHANGED')
@@ -44,6 +44,7 @@ function Tab:RegisterEvents()
 	self:Update()
 
 	if self:IsCached() then
+		self:RegisterSignal('GUILD_OPEN', 'RegisterEvents')
 		self:RegisterSignal('GUILD_TAB_CHANGED', 'UpdateStatus')
 	else
 		self:RegisterEvent('GUILDBANK_UPDATE_TABS', 'Update')
@@ -54,11 +55,12 @@ end
 function Tab:Update()
 	local info = self:GetInfo()
 	if info.icon then
-		local color = info.viewable and 1 or 0.1
+		local enabled = info.viewable or info.cached
+		local color = enabled and 1 or 0.1
 
 		self.Icon:SetTexture(tonumber(info.icon) or info.icon)
 		self.Icon:SetVertexColor(1, color, color)
-		self.Icon:SetDesaturated(not info.viewable)
+		self.Icon:SetDesaturated(not enabled)
 		self:UpdateStatus()
 	end
 
@@ -71,7 +73,7 @@ function Tab:UpdateStatus()
 	local remaining = info.remaining
 
 	self:SetChecked(self:GetID() == GetCurrentGuildBankTab())
-	self.Count:SetText(info.viewable and remaining and (remaining >= 0 and remaining or '∞') or '')
+	self.Count:SetText(not info.cached and info.viewable and remaining and (remaining >= 0 and remaining or '∞') or '')
 end
 
 function Tab:UpdateTooltip()
@@ -79,19 +81,21 @@ function Tab:UpdateTooltip()
 	if info.name then
 		GameTooltip:SetText(info.name)
 
-		if not info.viewable or not info.deposit and info.withdraw == 0 then
-			GameTooltip:AddLine(GUILDBANK_TAB_LOCKED, RED_FONT_COLOR:GetRGB())
-		elseif not info.deposit and info.withdraw and info.withdraw > 0 then
-			GameTooltip:AddLine(GUILDBANK_TAB_WITHDRAW_ONLY, HIGHLIGHT_FONT_COLOR:GetRGB())
-		elseif info.withdraw == 0 then
-			GameTooltip:AddLine(GUILDBANK_TAB_DEPOSIT_ONLY, HIGHLIGHT_FONT_COLOR:GetRGB())
-		elseif info.withdraw then
-			GameTooltip:AddLine(GUILDBANK_TAB_FULL_ACCESS, GREEN_FONT_COLOR:GetRGB())
-		end
+		if not info.cached then
+			if not info.viewable or not info.deposit and info.withdraw == 0 then
+				GameTooltip:AddLine(GUILDBANK_TAB_LOCKED, RED_FONT_COLOR:GetRGB())
+			elseif not info.deposit and info.withdraw and info.withdraw > 0 then
+				GameTooltip:AddLine(GUILDBANK_TAB_WITHDRAW_ONLY, HIGHLIGHT_FONT_COLOR:GetRGB())
+			elseif info.withdraw == 0 then
+				GameTooltip:AddLine(GUILDBANK_TAB_DEPOSIT_ONLY, HIGHLIGHT_FONT_COLOR:GetRGB())
+			elseif info.withdraw then
+				GameTooltip:AddLine(GUILDBANK_TAB_FULL_ACCESS, GREEN_FONT_COLOR:GetRGB())
+			end
 
-		local remaining = info.remaining
-		if info.viewable and remaining and remaining >= 0 then
-			GameTooltip:AddLine(L.NumRemainingWithdrawals:format(remaining > 0 and remaining or remaining == 0 and NONE or UNLIMITED), 1,1,1)
+			local remaining = info.remaining
+			if info.viewable and remaining and remaining >= 0 then
+				GameTooltip:AddLine(L.NumRemainingWithdrawals:format(remaining > 0 and remaining or remaining == 0 and NONE or UNLIMITED), 1,1,1)
+			end
 		end
 
 		GameTooltip:Show()
