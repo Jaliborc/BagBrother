@@ -45,14 +45,14 @@ function AutoDisplay:HookBaseUI()
 
 	self:StopIf(PlayerInteractionFrameManager, 'ShowFrame', function(manager, type)
 		return type == Interactions.Banker and Addon.Frames:Show('bank') or
-					 type == Interactions.GuildBanker and Addon.Frames:Show('guild') or
-					 type == Interactions.VoidStorageBanker and Addon.Frames:Show('vault')
+				type == Interactions.GuildBanker and Addon.Frames:Show('guild') or
+				type == Interactions.VoidStorageBanker and Addon.Frames:Show('vault')
 	end)
 
 	self:StopIf(PlayerInteractionFrameManager, 'HideFrame', function(manager, type)
 		return type == Interactions.Banker and Addon.Frames:Hide('bank') or
-					 type == Interactions.GuildBanker and Addon.Frames:Hide('guild') or
-					 type == Interactions.VoidStorageBanker and Addon.Frames:Hide('vault')
+				type == Interactions.GuildBanker and Addon.Frames:Hide('guild') or
+				type == Interactions.VoidStorageBanker and Addon.Frames:Hide('vault')
 	end)
 
 	BankFrame:SetScript('OnEvent', function(frame, event, ...) -- only way in classic

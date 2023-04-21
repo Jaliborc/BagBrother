@@ -19,13 +19,13 @@ Sort.Proprieties = {
 
 --[[ Process ]]--
 
-function Sort:Start(owner, bags)
+function Sort:Start(id, owner, bags)
   if not self:CanRun() then
     return
   end
 
   self.owner, self.bags = owner, bags
-  self:SendSignal('SORTING_STATUS', owner, bags)
+  self:SendSignal('SORTING_STATUS', id)
   self:Run()
 end
 
@@ -190,8 +190,8 @@ function Sort:Move(from, to)
     return
   end
 
-  Addon:PickupItem(self.owner, from.bag, from.slot)
-  Addon:PickupItem(self.owner, to.bag, to.slot)
+  Addon:PickupItem(self.owner.address, from.bag, from.slot)
+  Addon:PickupItem(self.owner.address, to.bag, to.slot)
 
   from.locked = true
   to.locked = true

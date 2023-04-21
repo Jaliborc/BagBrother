@@ -20,8 +20,8 @@ function SortButton:New(...)
 	return b
 end
 
-function SortButton:SORTING_STATUS(_,_, bags)
-	self:SetChecked(self:GetParent().Bags == bags)
+function SortButton:SORTING_STATUS(_, id)
+	self:SetChecked(id == self:GetFrameID())
 end
 
 
