@@ -52,12 +52,6 @@ function Item:Construct()
 	local b = self:Super(Item):Construct()
 	local name = b:GetName()
 
-	for k in pairs(b) do
-		if self[k] then
-			b[k] = nil -- remove unwanted template variables
-		end
-	end
-
 	b.Flash = b:CreateAnimationGroup()
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
 	b.Cooldown, b.QuestBorder = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
@@ -92,6 +86,24 @@ function Item:Construct()
 	b:SetScript('OnLeave', b.OnLeave)
 	b:HookScript('OnClick', b.OnPostClick)
 	return b
+end
+
+function Item:Bind(frame) -- required for secure frames
+	for k in pairs(frame) do
+		if self[k] then
+			frame[k] = nil
+		end
+	end
+
+	local class = self
+	while class do
+		for k,v in pairs(class) do
+			frame[k] = frame[k] or v
+		end
+
+		class = class:GetSuper()
+	end
+	return frame
 end
 
 
