@@ -65,7 +65,7 @@ function EditFrame:GUILDBANK_TEXT_CHANGED (tab)
 	end
 end
 
-function EditFrame:PLAYER_LOGOUT ()
+function EditFrame:PLAYER_LOGOUT()
 	self.OnEditFocusLost(self:GetScrollChild()) -- save on logout
 end
 

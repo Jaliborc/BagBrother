@@ -80,11 +80,18 @@ function Frame:GetPosition()
 end
 
 
---[[ Filtering ]]--
+--[[ Sorting ]]--
 
 function Frame:SortItems()
-	Addon.Sorting:Start(self.id, self:GetOwner(), self.Bags)
+	Addon.Sorting:Start(self)
 end
+
+function Frame:PickupItem(bag, slot)
+	Addon:PickupItem(self:GetOwner().address, bag, slot)
+end
+
+
+--[[ Filtering ]]--
 
 function Frame:FindRules()
 	for id, rule in Addon.Rules:Iterate() do

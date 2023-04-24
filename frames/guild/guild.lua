@@ -74,16 +74,16 @@ function Frame:ListMenuButtons()
 	self:Super(Frame):ListMenuButtons()
 end
 
-function Frame:SortItems()
-	Addon.Sorting:Start(self.id, self:GetOwner(), {GetCurrentGuildBankTab()})
-end
-
 function Frame:IsCached()
 	return not Addon.Events.AtGuild or self:GetOwner().offline
 end
 
 function Frame:GetOwner()
 	return self.owner or Addon.guild or self.NoGuild
+end
+
+function Frame:IsShowingBag(bag)
+	return bag == GetCurrentGuildBankTab()
 end
 
 function Frame:IsBagGroupShown() return true end

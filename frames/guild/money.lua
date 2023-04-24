@@ -1,6 +1,6 @@
 --[[
 	moneyFrame.lua
-		A money frame object
+		A guild money display
 --]]
 
 local MODULE = ...

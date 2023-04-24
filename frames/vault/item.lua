@@ -1,5 +1,5 @@
 --[[
-	item.lua
+	vaultItem.lua
 		A void storage item slot button
 --]]
 

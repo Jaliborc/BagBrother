@@ -1,6 +1,17 @@
 --[[
 	sorting.lua
-		Client side bag sorting algorithm
+		Client side bag sorting algorithm.
+
+  Start(job)
+  args: an object that declares id, bags and methods for item pickup and info retrieval
+    Stops any ongoing job and starts this one. The class Addon.Frame implements the requirements of this job interface.
+
+  Stop()
+    Stops any ongoing job
+
+  SORTING_STATUS
+  args: id
+    event called whenever a new job starts or the ongoing job stops, at which point the argument is nil
 --]]
 
 local ADDON, Addon = ...
@@ -19,19 +30,20 @@ Sort.Proprieties = {
 
 --[[ Process ]]--
 
-function Sort:Start(id, owner, bags)
-  if not self:CanRun() then
+function Sort:Start(job)
+  if not self:CanRun(job) then
     return
   end
 
-  self.owner, self.bags = owner, bags
-  self:SendSignal('SORTING_STATUS', id)
+  self.job = job
+  self:SendSignal('SORTING_STATUS', job.id)
   self:Run()
 end
 
 function Sort:Run()
-  if self:CanRun() then
-    ClearCursor()
+  ClearCursor()
+  
+  if self:CanRun(self.job) then
     self:Iterate()
   else
     self:Stop()
@@ -100,6 +112,7 @@ function Sort:Iterate()
 end
 
 function Sort:Stop()
+  self.job = nil
   self:SendSignal('SORTING_STATUS')
 end
 
@@ -109,15 +122,17 @@ end
 function Sort:GetSpaces()
   local spaces = {}
 
-  for _, bag in pairs(self.bags) do
-    local container = Addon:GetBagInfo(self.owner.address, bag)
-    for slot = 1, (container.count or 0) do
-      local item = Addon:GetItemInfo(self.owner.address, bag, slot)
-      tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
+  for i, bag in ipairs(self.job.Bags) do
+    if self.job:IsShowingBag(bag) then
+      local container = self.job:GetBagInfo(bag)
+      for slot = 1, (container.count or 0) do
+        local item = self.job:GetItemInfo(bag, slot)
+        tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
 
-      item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class
-      item.set = item.id and Search:BelongsToSet(item.id) and 0 or 1
-      item.space = spaces[#spaces]
+        item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class
+        item.set = item.id and Search:BelongsToSet(item.id) and 0 or 1
+        item.space = spaces[#spaces]
+      end
     end
   end
 
@@ -160,8 +175,8 @@ end
 
 --[[ API ]]--
 
-function Sort:CanRun()
-  return not InCombatLockdown() and not UnitIsDead('player')
+function Sort:CanRun(job)
+  return job and not job:IsCached() and not InCombatLockdown() and not UnitIsDead('player')
 end
 
 function Sort:FitsIn(id, family)
@@ -190,8 +205,8 @@ function Sort:Move(from, to)
     return
   end
 
-  Addon:PickupItem(self.owner.address, from.bag, from.slot)
-  Addon:PickupItem(self.owner.address, to.bag, to.slot)
+  self.job:PickupItem(from.bag, from.slot)
+  self.job:PickupItem(to.bag, to.slot)
 
   from.locked = true
   to.locked = true

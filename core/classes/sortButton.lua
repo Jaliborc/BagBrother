@@ -28,15 +28,15 @@ end
 --[[ Interaction ]]--
 
 function SortButton:OnClick(button)
-	self:SetChecked(nil)
-
 	if button == 'RightButton' and DepositReagentBank then
+		self:SetChecked(nil)
 		return DepositReagentBank()
 	end
 
-	local frame = self:GetParent()
-	if not frame:IsCached() then
-		frame:SortItems()
+	if not self:GetChecked() then
+		Addon.Sorting:Stop()
+	elseif not self.frame:IsCached() then
+		self.frame:SortItems()
 	end
 end
 

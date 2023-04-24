@@ -1,6 +1,6 @@
 --[[
 	tab.lua
-		A tab button object
+		A guild tab button object
 --]]
 
 local MODULE = ...
