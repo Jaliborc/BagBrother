@@ -7,7 +7,7 @@ local ADDON, Addon = ...
 local TipCounts = Addon:NewModule('TooltipCounts')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
-local NONE = {}
+local NONE = Addon.None
 local SILVER = '|cffc7c7cf%s|r'
 local TOTAL = SILVER:format(L.Total)
 
@@ -50,7 +50,13 @@ function TipCounts:OnEnable()
 			else
 				for _,frame in pairs {UIParent:GetChildren()} do
 					if not frame:IsForbidden() and frame:GetObjectType() == 'GameTooltip' then
-						self:HookFrame(frame)
+						hooksecurefunc(frame, 'SetQuestItem', self.OnQuest)
+						hooksecurefunc(frame, 'SetQuestLogItem', self.OnQuest)
+						hooksecurefunc(frame, 'SetCraftItem', self.OnSetCraftItem)
+						hooksecurefunc(frame, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
+					
+						frame:HookScript('OnTooltipCleared', self.OnClear)
+						frame:HookScript('OnTooltipSetItem', self.OnItem)
 					end
 				end
 			end
@@ -58,16 +64,6 @@ function TipCounts:OnEnable()
 			self.initialized = true
 		end
 	end
-end
-
-function TipCounts:HookFrame(tip)
-	hooksecurefunc(tip, 'SetQuestItem', self.OnQuest)
-	hooksecurefunc(tip, 'SetQuestLogItem', self.OnQuest)
-	hooksecurefunc(tip, 'SetCraftItem', self.OnSetCraftItem)
-	hooksecurefunc(tip, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
-
-	tip:HookScript('OnTooltipCleared', self.OnClear)
-	tip:HookScript('OnTooltipSetItem', self.OnItem)
 end
 
 
@@ -104,7 +100,7 @@ end
 --[[ API ]]--
 
 function TipCounts:AddOwners(tip, link)
-	if not tip.__hasCounters and Addon.sets.tipCount and tip:GetOwner() ~= 'ANCHOR_NONE' then
+	if not tip.__hasCounters and Addon.sets.tipCount then
 		local id = tonumber(link and GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
 		if id and id ~= HEARTHSTONE_ITEM_ID then
 			local players = 0
@@ -139,7 +135,7 @@ function TipCounts:AddOwners(tip, link)
 				elseif Addon.sets.countGuild then
 					if not owner.offline then
 						local guild = 0
-						for tab = 1, Addon.NumGuildTabs do
+						for tab = 1, MAX_GUILDBANK_TABS do
 							guild = guild + find(owner[tab], id)
 						end
 
@@ -170,7 +166,7 @@ function TipCounts:CountItems(owner)
 	if owner.isguild then
 		owner.counts = {}
 
-		for tab = 1, Addon.NumGuildTabs do
+		for tab = 1, MAX_GUILDBANK_TABS do
 			aggregate(owner.counts, owner[tab])
 		end
 	else

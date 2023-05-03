@@ -20,13 +20,14 @@ end
 function Item:OnPreClick(button)
 	if not IsModifiedClick() and button == 'RightButton' then
 		if REAGENTBANK_CONTAINER and Addon.Events.AtBank and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
-			if not Addon:IsReagents(self:GetBag()) and select(17, GetItemInfo(self.info.id)) then
+			if not Addon:IsReagents(self:GetBag()) and select(17, GetItemInfo(self.info.itemID)) then
+				local stackSize = select(8, GetItemInfo(self.info.itemID))
 				for _, bag in ipairs(Addon.BankBags) do
 					for slot = 1, C.GetContainerNumSlots(bag) do
-						if C.GetContainerItemID(bag, slot) == self.info.id then
-							local free = self.info.stack - C.GetContainerItemInfo(bag, slot).stackCount
+						if C.GetContainerItemID(bag, slot) == self.info.itemID then
+							local free = stackSize - C.GetContainerItemInfo(bag, slot).stackCount
 							if free > 0 then
-								C.SplitContainerItem(self:GetBag(), self:GetID(), min(self.info.count, free))
+								C.SplitContainerItem(self:GetBag(), self:GetID(), min(self.info.stackCount, free))
 								C.PickupContainerItem(bag, slot)
 							end
 						end
@@ -38,24 +39,38 @@ function Item:OnPreClick(button)
 		end
 	end
 
-	self.locked = self.info.locked
+	self.locked = self.info.isLocked
 end
 
 function Item:OnPostClick(button)
-	if not self:FlashFind(button) and not IsModifiedClick() and button == 'RightButton' and Addon.Events.AtVault and self.locked then
+	self:Super(Item):OnPostClick(button)
+
+	if Addon.Events.AtVault and self.locked and not IsModifiedClick() and button == 'RightButton' then
 		for i = 10, 1, -1 do
-			if GetVoidTransferDepositInfo(i) == self.info.id then
+			if GetVoidTransferDepositInfo(i) == self.info.itemID then
 				ClickVoidTransferDepositSlot(i, true)
 			end
 		end
 	end
 end
 
+function Item:OnEnter()
+	self:Super(Item):OnEnter()
+	self:MarkSeen()
+end
+
+function Item:OnHide()
+	self:Super(Item):OnHide()
+	self:MarkSeen()
+end
+
 
 --[[ API ]]--
 
-function Item:UpdateCooldown()
-	if self.hasItem and not self.info.cached then
+function Item:Update()
+	self:Super(Item):Update()
+
+	if self.hasItem and not self:IsCached() then
 		local start, duration, enable = C.GetContainerItemCooldown(self:GetBag(), self:GetID())
 		local fade = duration > 0 and 0.4 or 1
 
@@ -94,10 +109,7 @@ function Item:GetQuery()
 	return {bagID = self:GetBag(), slotIndex = self:GetID()}
 end
 
-function Item:IsNew()
-	return self:GetBag() and C_NewItems.IsNewItem(self:GetBag(), self:GetID())
-end
-
-function Item:IsPaid()
-	return C.IsBattlePayItem and C.IsBattlePayItem(self:GetBag(), self:GetID())
+function Item:GetBagFamily()
+	local family = 0
+	return self.BagFamilies[family] or 'normal'
 end

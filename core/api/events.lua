@@ -31,24 +31,16 @@ function Events:OnEnable()
 	if C_PlayerInteractionManager then
 		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
 		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_HIDE')
-	elseif CanGuildBankRepair then
-		self:RegisterEvent('GUILDBANKFRAME_OPENED', 'UpdateLocation', {'Guild', true})
-		self:RegisterEvent('GUILDBANKFRAME_CLOSED', 'UpdateLocation', {'Guild', false})
+	end
 
-		if CanUseVoidStorage then
-			self:RegisterEvent('VOID_STORAGE_OPEN', 'UpdateLocation', {'Vault', true})
-			self:RegisterEvent('VOID_STORAGE_CLOSE', 'UpdateLocation', {'Vault', false})
-		end
-
-		if REAGENTBANK_CONTAINER then
-			self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
-			self:RegisterEvent('REAGENTBANK_PURCHASED')
-		end
+	if REAGENTBANK_CONTAINER then
+		self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
+		self:RegisterEvent('REAGENTBANK_PURCHASED')
 	end
 
 	self:RegisterEvent('BAG_UPDATE')
-	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', {'Bank', false})
 	self:RegisterEvent('BANKFRAME_OPENED')
+	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', {'Bank', false})
 	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 	self:UpdateSize(BACKPACK_CONTAINER)
 	self:UpdateBags()

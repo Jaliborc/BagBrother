@@ -5,7 +5,7 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
-local Frame = Addon.Frame:NewClass('InventoryFrame')
+local Frame = Addon.Frame:NewClass('Inventory')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
 Frame.ItemGroup = Addon.ContainerItemGroup
 Frame.Bags = Addon.InventoryBags
@@ -17,6 +17,9 @@ Frame.MainMenuButtons = {
 if HasKey then
 	tinsert(Frame.MainMenuButtons, KeyRingButton)
 end
+
+
+--[[ Main Menu ]]--
 
 function Frame:OnShow()
 	self:Super(Frame):OnShow()
@@ -42,10 +45,22 @@ function Frame:HighlightMainMenu(checked)
 	end
 end
 
-function Frame:SortItems()
-	if C.SortBags and Addon.sets.serverSort then
-		C.SortBags()
+
+--[[ API ]]--
+
+function Frame:GetItemInfo(bag, slot)
+	if self:IsCached() then
+		return self:Super(Frame):GetItemInfo(bag, slot)
 	else
-		self:Super(Frame):SortItems(self)
+		local item = C.GetContainerItemInfo(bag, slot)
+		if item then
+			item.isNew = C_NewItems.IsNewItem(bag, slot)
+			item.isPaid = C.IsBattlePayItem and C.IsBattlePayItem(bag, slot)
+		end
+		return item or Addon.None
 	end
+end
+
+function Frame:SortItems()
+	return (Addon.sets.serverSort and C.SortBags or self:Super(Frame).SortItems)(self)
 end

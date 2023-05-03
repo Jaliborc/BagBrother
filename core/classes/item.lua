@@ -36,7 +36,7 @@ Item.Backgrounds = {
 --[[ Construct ]]--
 
 function Item:New(parent, bag, slot)
-	local b = self:GetBlizzard() or self:Super(Item):New(parent)
+	local b = self:Super(Item):New(parent)
 	b:SetID(slot)
 	b.bag = bag
 
@@ -80,11 +80,11 @@ function Item:Construct()
 	end
 
 	b:SetScript('OnEvent', nil)
-	b:SetScript('OnShow', b.OnShow)
-	b:SetScript('OnHide', b.OnHide)
+	b:SetScript('OnShow', b.Update)
+	b:HookScript('OnClick', b.OnPostClick)
 	b:SetScript('OnEnter', b.OnEnter)
 	b:SetScript('OnLeave', b.OnLeave)
-	b:HookScript('OnClick', b.OnPostClick)
+	b:SetScript('OnHide', b.OnHide)
 	return b
 end
 
@@ -109,25 +109,10 @@ end
 
 --[[ Interaction ]]--
 
-function Item:OnShow()
-	self:RegisterFrameSignal('FOCUS_BAG', 'UpdateFocus')
-	self:RegisterSignal('SEARCH_CHANGED', 'UpdateSearch')
-	self:RegisterSignal('SEARCH_TOGGLED', 'UpdateSearch')
-	self:RegisterSignal('FLASH_ITEM', 'OnItemFlashed')
-	self:Update()
-end
-
-function Item:OnHide()
-	if self.hasStackSplit == 1 then
-		StackSplitFrame:Hide()
-	end
-
-	self:MarkSeen()
-	self:UnregisterAll()
-end
-
 function Item:OnPostClick(button)
-	self:FlashFind(button)
+	if Addon.sets.flashFind and self.hasItem and IsAltKeyDown() and button == 'LeftButton' then
+		self:SendSignal('FLASH_ITEM', self.info.itemID)
+	end
 end
 
 function Item:OnEnter()
@@ -135,7 +120,6 @@ function Item:OnEnter()
 		self:AttachDummy()
 	elseif self.hasItem then
 		self:ShowTooltip()
-		self:MarkSeen()
 	end
 end
 
@@ -144,49 +128,34 @@ function Item:OnLeave()
 	ResetCursor()
 end
 
+function Item:OnHide()
+	if self.hasStackSplit == 1 then
+		StackSplitFrame:Hide()
+	end
+	self:UnregisterAll()
+end
+
 
 --[[ Update ]]--
 
 function Item:Update()
 	self.info = self:GetInfo()
-	self.hasItem = self.info.id and true -- for blizzard template
-	self.readable = self.info.readable -- for blizzard template
+	self.hasItem = self.info.itemID and true -- for blizzard template
+	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
 	self:UpdateSlotColor()
-	self:UpdateCooldown()
 	self:UpdateBorder()
 
-	SetItemButtonTexture(self, self.info.icon or self.Backgrounds[Addon.sets.slotBackground])
-	SetItemButtonCount(self, self.info.count)
+	SetItemButtonTexture(self, self.info.iconFileID or self.Backgrounds[Addon.sets.slotBackground])
+	SetItemButtonCount(self, self.info.stackCount)
 end
-
-function Item:UpdateSecondary()
-	if self:GetFrame() then
-		self:UpdateFocus()
-		self:UpdateSearch()
-		self:UpdateUpgradeIcon()
-		self:UpdateNewItemAnimation()
-
-		if self.hasItem and GameTooltip:IsOwned(self) then
-			self:ShowTooltip()
-		end
-	end
-end
-
-function Item:UpdateLocked()
-	self.info = self:GetInfo()
-	self:SetLocked(self.info.locked)
-end
-
-
---[[ Basic Appearance ]]--
 
 function Item:UpdateBorder()
-	local quality, id = self.info.quality, self.info.id
+	local id, quality = self.info.itemID, self.info.quality
 	local quest, bang = self:GetQuestInfo()
 	local r,g,b
 
-	SetItemButtonQuality(self, quality, self.info.link, false, self.info.isBound)
+	SetItemButtonQuality(self, quality, self.info.hyperlink, false, self.info.isBound)
 
 	if id then
 		if Addon.sets.glowQuest and quest or bang then
@@ -208,7 +177,7 @@ function Item:UpdateBorder()
 	self.IconGlow:SetShown(r)
 	self.IconBorder:SetShown(r)
 	self.QuestBorder:SetShown(bang)
-	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.worthless)
+	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
 end
 
 function Item:UpdateSlotColor()
@@ -223,27 +192,41 @@ function Item:UpdateSlotColor()
 	end
 end
 
-function Item:SetLocked(locked)
+function Item:UpdateLocked()
+	self.info = self:GetInfo()
+	self:SetDesaturated(self.info.isLocked)
+end
+
+function Item:SetDesaturated(locked)
 	SetItemButtonDesaturated(self, locked)
 end
 
 
 --[[ Secondary Highlights ]]--
 
+function Item:UpdateSecondary()
+	if self:GetFrame() then
+		self:UpdateFocus()
+		self:UpdateSearch()
+		self:UpdateUpgradeIcon()
+		self:UpdateNewItemAnimation()
+
+		if self.hasItem and GameTooltip:IsOwned(self) then
+			self:ShowTooltip()
+		end
+	end
+end
+
+function Item:UpdateFocus()
+	self:SetHighlightLocked(self:GetBag() == self:GetFrame().focusedBag)
+end
+
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search or ''
 	local matches = search == '' or self.hasItem and Search:Matches(self:GetQuery(), search)
 
 	self:SetAlpha(matches and 1 or 0.3)
-	self:SetLocked(not matches or self.info.locked)
-end
-
-function Item:UpdateFocus()
-	if self:GetBag() == self:GetFrame().focusedBag then
-		self:LockHighlight()
-	else
-		self:UnlockHighlight()
-	end
+	self:SetDesaturated(not matches or self.info.isLocked)
 end
 
 function Item:UpdateUpgradeIcon()
@@ -251,29 +234,14 @@ function Item:UpdateUpgradeIcon()
 end
 
 function Item:UpdateNewItemAnimation()
-	local new = Addon.sets.glowNew and self:IsNew()
-
-	self.BattlepayItemTexture:SetShown(new and self:IsPaid())
+	local new = Addon.sets.glowNew and self.info.isNew
+	self.BattlepayItemTexture:SetShown(new and self.info.isPaid)
 	self.NewItemTexture:SetShown(new)
 
 	if new then
 		self.NewItemTexture:SetAtlas(quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] or 'bags-glow-white')
 		self.newitemglowAnim:Play()
 		self.flashAnim:Play()
-	end
-end
-
-function Item:FlashFind(mouse)
-	if IsAltKeyDown() and mouse == 'LeftButton' and Addon.sets.flashFind and self.info.id then
-		self:SendSignal('FLASH_ITEM', self.info.id)
-		return true
-	end
-end
-
-function Item:OnItemFlashed(_, itemID)
-	self.Flash:Stop()
-	if self.info.id == itemID then
-		self.Flash:Play()
 	end
 end
 
@@ -286,98 +254,82 @@ function Item:ShowTooltip()
 end
 
 function Item:AttachDummy()
-	if not Item.Dummy then
-		local function updateTip(slot)
-			local parent = slot:GetParent()
-			local link = parent.info.link
-			if link then
-				GameTooltip:SetOwner(parent:GetTipAnchor())
-				parent:LockHighlight()
-				CursorUpdate(parent)
+	self.Dummy:SetParent(self)
+	self.Dummy:SetAllPoints()
+	self.Dummy:Show()
+end
 
-				if link:find('battlepet:') then
-					local _, specie, level, quality, health, power, speed = strsplit(':', link)
-					local name = link:match('%[(.-)%]')
+do
+	local function cachedTip(dummy)
+		local parent = dummy:GetParent()
+		local link = parent.info.hyperlink
+		if link then
+			GameTooltip:SetOwner(parent:GetTipAnchor())
+			parent:LockHighlight()
+			CursorUpdate(parent)
 
-					BattlePetToolTip_Show(tonumber(specie), level, tonumber(quality), health, power, speed, name)
-				else
-					GameTooltip:SetHyperlink(link)
-					GameTooltip:Show()
-				end
+			if link:find('battlepet:') then
+				local _, specie, level, quality, health, power, speed = strsplit(':', link)
+				local name = link:match('%[(.-)%]')
+
+				BattlePetToolTip_Show(tonumber(specie), level, tonumber(quality), health, power, speed, name)
+			else
+				GameTooltip:SetHyperlink(link)
+				GameTooltip:Show()
 			end
 		end
-
-		Item.Dummy = CreateFrame('Button')
-		Item.Dummy:SetScript('OnEnter', updateTip)
-		Item.Dummy:SetScript('OnShow', updateTip)
-		Item.Dummy:RegisterForClicks('anyUp')
-		Item.Dummy:SetToplevel(true)
-
-		Item.Dummy:SetScript('OnClick', function(dummy, button)
-			local parent = dummy:GetParent()
-			if not HandleModifiedItemClick(parent.info.link) then
-				parent:FlashFind(button)
-			end
-		end)
-
-		Item.Dummy:SetScript('OnLeave', function(dummy)
-			dummy:GetParent():UnlockHighlight()
-			dummy:GetParent():OnLeave()
-			dummy:Hide()
-		end)
 	end
 
-	Item.Dummy:SetParent(self)
-	Item.Dummy:SetAllPoints()
-	Item.Dummy:Show()
+	Item.Dummy = CreateFrame('Button')
+	Item.Dummy:SetScript('OnEnter', cachedTip)
+	Item.Dummy:SetScript('OnShow', cachedTip)
+	Item.Dummy:RegisterForClicks('anyUp')
+	Item.Dummy:SetToplevel(true)
+
+	Item.Dummy:SetScript('OnClick', function(dummy, button)
+		local parent = dummy:GetParent()
+		if not HandleModifiedItemClick(parent.info.hyperlink) then
+			parent:OnPostClick(button)
+		end
+	end)
+	
+	Item.Dummy:SetScript('OnLeave', function(dummy)
+		dummy:GetParent():UnlockHighlight()
+		dummy:GetParent():OnLeave()
+		dummy:Hide()
+	end)
 end
 
 
 --[[ Proprieties ]]--
 
-function Item:GetBag()
-	return self.bag
-end
-
-function Item:GetBagFamily()
-	local bag = self:GetFrame():GetBagInfo(self:GetBag())
-	return self.BagFamilies[bag.family] or 'normal'
-end
-
-function Item:GetInventorySlot()
-	local bag = self:GetBag()
-	local api = Addon:IsBank(bag) and BankButtonIDToInvSlotID or
-							Addon:IsKeyring(bag) and KeyRingButtonIDToInvSlotID or
-							Addon:IsReagents(bag) and ReagentBankButtonIDToInvSlotID
-	return api and api(self:GetID())
-end
-
-function Item:GetQuery()
-	return self.item.link
-end
-
 function Item:GetInfo()
-	return self:GetFrame():GetItemInfo(self:GetBag(), self:GetID())
+	return self.frame:GetItemInfo(self:GetSlot())
 end
 
 function Item:GetQuestInfo()
-	return self.hasItem and Search:IsQuestItem(self.info.id)
+	return self.hasItem and Search:IsQuestItem(self.info.itemID)
 end
 
-function Item:IsSlot(bag, slot)
-	return self:GetBag() == bag and self:GetID() == slot
+function Item:GetQuery()
+	return self.info.hyperlink
 end
 
 function Item:IsUpgrade()
-	return self.hasItem and IsAddOnLoaded('Pawn') and
-		PawnShouldItemLinkHaveUpgradeArrow(self.info.link)
+	return self.hasItem and IsAddOnLoaded('Pawn') and PawnShouldItemLinkHaveUpgradeArrow(self.info.hyperlink)
 end
 
+function Item:GetInventorySlot()
+	local api = Addon:IsBank(self.bag) and BankButtonIDToInvSlotID or
+				Addon:IsKeyring(self.bag) and KeyRingButtonIDToInvSlotID or
+				Addon:IsReagents(self.bag) and ReagentBankButtonIDToInvSlotID
+	return api and api(self:GetID())
+end
 
---[[ Virtual ]]--
+function Item:GetSlot()
+	return self:GetBag(), self:GetID()
+end
 
-function Item:GetBlizzard() end
-function Item:UpdateCooldown() end
-function Item:MarkSeen() end
-function Item:IsPaid() end
-function Item:IsNew() end
+function Item:GetBag()
+	return self.bag
+end

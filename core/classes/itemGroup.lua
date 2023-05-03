@@ -1,11 +1,10 @@
 --[[
 	itemGroup.lua
-		An item button grid template
+		A frame that organizes item buttons in a grid and manages updating them
 --]]
 
 local ADDON, Addon = ...
 local Items = Addon.Parented:NewClass('ItemGroup', 'Frame')
-Items.Button = Addon.Item
 
 
 --[[ Construct ]]--
@@ -38,10 +37,14 @@ end
 
 function Items:RegisterEvents()
 	self:UnregisterAll()
-	self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
+	self:RegisterSignal('UPDATE_ALL', 'Layout')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'Layout')
-	self:RegisterSignal('UPDATE_ALL', 'Layout')
+	self:RegisterFrameSignal('FOCUS_BAG', 'ForAll', 'UpdateFocus')
+	self:RegisterSignal('SEARCH_CHANGED', 'ForAll', 'UpdateSearch')
+	self:RegisterSignal('SEARCH_TOGGLED', 'ForAll', 'UpdateSearch')
+	self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
+	self:RegisterSignal('FLASH_ITEM')
 
 	if not self:IsCached() then
 		self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'ForAll', 'UpdateUpgradeIcon')
@@ -57,8 +60,17 @@ end
 
 function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
 	for i, button in ipairs(self.order) do
-		if button.info.id == itemID then
+		if button.info.itemID == itemID then
 			button:Update()
+		end
+	end
+end
+
+function Items:FLASH_ITEM(_,itemID)
+	for i, button in ipairs(self.order) do
+		self.Flash:Stop()
+		if button.info.itemID == itemID then
+			self.Flash:Play()
 		end
 	end
 end
@@ -68,15 +80,16 @@ end
 
 function Items:Layout()
 	self:ForAll('Release')
-	self.buttons, self.order = {}, {}
+	wipe(self.buttons)
+	wipe(self.order)
 
 	-- Acquire slots
 	for i, frame in ipairs(self.bags) do
 		local bag = frame.id
-		if self:IsShowingBag(bag) then
+		if self.frame:IsShowingBag(bag) then
 			local numSlots = self:NumSlots(bag)
 			for slot = 1, numSlots do
-				if self:IsShowingItem(bag, slot) then
+				if self.frame:IsShowingItem(bag, slot) then
 					local button = self.Button(frame, bag, slot)
 					self.buttons[bag] = self.buttons[bag] or {}
 					self.buttons[bag][slot] = button
@@ -88,8 +101,7 @@ function Items:Layout()
 
 	-- Position slots
 	local profile = self:GetProfile()
-	local columns, scale = self:LayoutTraits()
-	local size = self:GetButtonSize()
+	local columns, scale, size = self:LayoutTraits()
 
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
 	local x, y = 0,0
@@ -116,7 +128,7 @@ function Items:Layout()
 				end
 			end
 
-			if self:BagBreak() and x > 0 then
+			if self:GetProfile().bagBreak and x > 0 then
 				y = y + 1
 				x = 0
 			end
@@ -147,35 +159,7 @@ function Items:ForBag(bag, method, ...)
 	end
 end
 
-
---[[ Proprieties ]]--
-
 function Items:LayoutTraits()
 	local profile = self:GetProfile()
-	return profile.columns, profile.itemScale
-end
-
-function Items:IsShowingItem(bag, slot)
-	return self:GetFrame():IsShowingItem(bag, slot)
-end
-
-function Items:IsShowingBag(bag)
-	return self:GetFrame():IsShowingBag(bag)
-end
-
-function Items:NumSlots(bag)
-	local info = self.frame:GetBagInfo(bag)
-	return info.owned and info.count or 0
-end
-
-function Items:NumButtons()
-	return #self.order
-end
-
-function Items:GetButtonSize()
-	return 37 + self:GetProfile().spacing
-end
-
-function Items:BagBreak()
-	return self:GetProfile().bagBreak
+	return profile.columns, profile.itemScale, 37 + profile.spacing
 end

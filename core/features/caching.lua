@@ -33,16 +33,16 @@ function Cacher:OnEnable()
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
 	self:RegisterEvent('PLAYER_LEVEL_UP')
 
-	if CanGuildBankRepair then
+	if GetNumGuildBankTabs then
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
 	end
 
-	for i = BACKPACK_CONTAINER, NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS do
-		self:BAG_UPDATE(nil, i)
+	for i = BACKPACK_CONTAINER, Addon.NumBags do
+		self:SaveBag(i)
 	end
 
 	if HasKey and HasKey() then
-		self:BAG_UPDATE(nil, KEYRING_CONTAINER)
+		self:SaveBag(KEYRING_CONTAINER)
 	end
 
 	for i = 1, INVSLOT_LAST_EQUIPPED do
@@ -57,8 +57,8 @@ end
 --[[ Events ]]--
 
 function Cacher:BAG_UPDATE(_,bag)
-	if bag <= Addon.NumBags then
-  		self:SaveBag(bag, bag <= BACKPACK_CONTAINER, bag == BACKPACK_CONTAINER or bag == KEYRING_CONTAINER and HasKey and HasKey())
+	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
+  		self:SaveBag(bag)
 	end
 end
 
@@ -75,28 +75,24 @@ function Cacher:PLAYER_LEVEL_UP(_, level)
 end
 
 function Cacher:BANK_CLOSE()
-	if Addon.Events.AtBank then
-		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-			self:SaveBag(i)
-		end
-
-		if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-			self:SaveBag(REAGENTBANK_CONTAINER, true)
-		end
-
-		self:SaveBag(BANK_CONTAINER, true)
+	for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
+		self:SaveBag(i)
 	end
+
+	if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
+		self:SaveBag(REAGENTBANK_CONTAINER)
+	end
+
+	self:SaveBag(BANK_CONTAINER)
 end
 
 function Cacher:VAULT_CLOSE()
-	if Addon.Events.AtVault then
-		self.player.vault = {}
+	self.player.vault = {}
 
-		for i = 1, NUM_VAULT_ITEMS do
-			local id = GetVoidItemInfo(1, i)
-    		self.player.vault[i] = id and tostring(id) or nil
-  		end
-  	end
+	for i = 1, NUM_VAULT_ITEMS do
+		local id = GetVoidItemInfo(1, i)
+		self.player.vault[i] = id and tostring(id) or nil
+	end
 end
 
 function Cacher:GUILD_ROSTER_UPDATE()
@@ -129,7 +125,7 @@ end
 
 --[[ API ]]--
 
-function Cacher:SaveBag(bag, onlyItems, saveSize)
+function Cacher:SaveBag(bag)
 	local size = C.GetContainerNumSlots(bag)
 	if size > 0 then
 		local items = {}
@@ -140,10 +136,12 @@ function Cacher:SaveBag(bag, onlyItems, saveSize)
 			end
 		end
 
-		if not onlyItems then
-			self:SaveEquip(C.ContainerIDToInventoryID(bag), size)
-		elseif saveSize then
+		if bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER then
 			items.size = size
+		end
+
+		if bag > BACKPACK_CONTAINER then
+			items.link = self:ParseItem(GetInventoryItemLink('player', C.ContainerIDToInventoryID(bag)))
 		end
 
 		self.player[bag] = items
@@ -152,11 +150,8 @@ function Cacher:SaveBag(bag, onlyItems, saveSize)
 	end
 end
 
-function Cacher:SaveEquip(i, count)
-	local link = GetInventoryItemLink('player', i)
-	local count = count or GetInventoryItemCount('player', i)
-
-	self.player.equip[i] = self:ParseItem(link, count)
+function Cacher:SaveEquip(i)
+	self.player.equip[i] = self:ParseItem(GetInventoryItemLink('player', i), GetInventoryItemCount('player', i))
 end
 
 function Cacher:ParseItem(link, count)
@@ -174,16 +169,10 @@ function Cacher:ParseItem(link, count)
 			end
 		end
 
-		if link:find('0:0:0:0:0:%d+:%d+:%d+:0:0') then
-			link = link:match('|H%l+:(%d+)')
-		else
-			link = link:match('|H%l+:([%d:]+)')
-		end
-
+		link = link:match('|H%l+:(%d+)::::::::%d+:%d+:::::::::') or link:match('|H%l+:([%d:]+)')
 		if count and count > 1 then
 			link = link .. ';' .. count
 		end
-
 		return link
 	end
 end

@@ -4,105 +4,116 @@
 --]]
 
 local ADDON, Addon = ...
+local Sushi = LibStub('Sushi-3.1')
+local C = LibStub('C_Everywhere').Container
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
 
-Bag.SIZE = 32
-Bag.TEXTURE_SIZE = 64 * (Bag.SIZE/36)
-Bag.FILTER_ICONS = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
+Bag.Size = 32
+Bag.TextureSize = 64 * (Bag.Size/36)
 Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
+Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
+
+Bag.StaticIcons = {
+	[BACKPACK_CONTAINER] = 'interface/buttons/button-backpack-up',
+	[BANK_CONTAINER] = 'interface/buttons/button-backpack-up',
+	[KEYRING_CONTAINER or false] = 'interface/containerframe/keyring-bag-icon',
+	[REAGENTBANK_CONTAINER or false] = 'interface/icons/achievement_guildperk_bountifulbags',
+}
+
+Bag.StaticNames = {
+	[BACKPACK_CONTAINER] = BACKPACK_TOOLTIP,
+	[BANK_CONTAINER] = BANK,
+	[KEYRING_CONTAINER or false] = KEYRING,
+	[REAGENTBANK_CONTAINER or false] = REAGENT_BANK,
+}
 
 
 --[[ Construct ]]--
 
 function Bag:New(parent, id)
-	local bag = self:Super(Bag):New(parent)
-	local icon = bag:CreateTexture(nil, 'BORDER')
-	icon:SetAllPoints(bag)
+	local b = self:Super(Bag):New(parent)
+	local icon = b:CreateTexture(nil, 'BORDER')
+	icon:SetAllPoints(b)
 
-	local count = bag:CreateFontString(nil, 'OVERLAY')
+	local count = b:CreateFontString(nil, 'OVERLAY')
 	count:SetFontObject('NumberFontNormal')
 	count:SetPoint('BOTTOMRIGHT', -4, 3)
 	count:SetJustifyH('RIGHT')
 
-	local filter = CreateFrame('Frame', nil, bag)
+	local filter = CreateFrame('Frame', nil, b)
 	filter:SetPoint('TOPRIGHT', 4, 4)
 	filter:SetSize(20, 20)
 
 	local filterIcon = filter:CreateTexture()
 	filterIcon:SetAllPoints()
 
-	local nt = bag:CreateTexture()
-	nt:SetTexture([[Interface\Buttons\UI-Quickslot2]])
-	nt:SetWidth(self.TEXTURE_SIZE)
-	nt:SetHeight(self.TEXTURE_SIZE)
-	nt:SetPoint('CENTER', 0, -1)
+	local normal = b:CreateTexture()
+	normal:SetTexture('Interface/Buttons/UI-Quickslot2')
+	normal:SetSize(self.TextureSize, self.TextureSize)
+	normal:SetPoint('CENTER', 0, -1)
 
-	local pt = bag:CreateTexture()
-	pt:SetTexture([[Interface\Buttons\UI-Quickslot-Depress]])
-	pt:SetAllPoints()
+	local pushed = b:CreateTexture()
+	pushed:SetTexture('Interface/Buttons/UI-Quickslot-Depress')
+	pushed:SetAllPoints()
 
-	local ht = bag:CreateTexture()
-	ht:SetTexture([[Interface\Buttons\ButtonHilight-Square]])
-	ht:SetAllPoints()
+	local highlight = b:CreateTexture()
+	highlight:SetTexture('Interface/Buttons/ButtonHilight-Square')
+	highlight:SetAllPoints()
 
-	local ct = bag:CreateTexture()
-	ct:SetTexture([[Interface\Buttons\CheckButtonHilight]])
-	ct:SetBlendMode('ADD')
-	ct:SetAllPoints()
+	local checked = b:CreateTexture()
+	checked:SetTexture('Interface/Buttons/CheckButtonHilight')
+	checked:SetBlendMode('ADD')
+	checked:SetAllPoints()
 
-	bag:SetID(id)
-	bag:SetNormalTexture(nt)
-	bag:SetPushedTexture(pt)
-	bag:SetCheckedTexture(ct)
-	bag:SetHighlightTexture(ht)
-	bag:RegisterForClicks('anyUp')
-	bag:RegisterForDrag('LeftButton')
-	bag:SetSize(self.SIZE, self.SIZE)
-	bag.Count, bag.FilterIcon = count, filter
-	bag.FilterIcon.Icon = filterIcon
-	bag.Icon = icon
+	b.slot, b.owned = C.ContainerIDToInventoryID(id), true
+	b.Icon, b.Count, b.FilterIcon = icon, count, filter
+	b.FilterIcon.Icon = filterIcon
 
-	bag:SetScript('OnEnter', bag.OnEnter)
-	bag:SetScript('OnLeave', bag.OnLeave)
-	bag:SetScript('OnClick', bag.OnClick)
-	bag:SetScript('OnDragStart', bag.OnDrag)
-	bag:SetScript('OnReceiveDrag', bag.OnClick)
-	bag:SetScript('OnShow', bag.RegisterEvents)
-	bag:SetScript('OnHide', bag.UnregisterAll)
-	bag:RegisterEvents()
-	return bag
+	b:SetID(id)
+	b:SetNormalTexture(normal)
+	b:SetPushedTexture(pushed)
+	b:SetCheckedTexture(checked)
+	b:SetHighlightTexture(highlight)
+	b:SetScript('OnShow', b.RegisterEvents)
+	b:SetScript('OnHide', b.UnregisterAll)
+	b:SetScript('OnReceiveDrag', b.OnClick)
+	b:SetScript('OnDragStart', b.OnDrag)
+	b:SetScript('OnEnter', b.OnEnter)
+	b:SetScript('OnLeave', b.OnLeave)
+	b:SetScript('OnClick', b.OnClick)
+	b:SetSize(self.Size, self.Size)
+	b:RegisterForDrag('LeftButton')
+	b:RegisterForClicks('anyUp')
+	b:RegisterEvents()
+	return b
 end
 
 
 --[[ Interaction ]]--
 
 function Bag:OnClick(button)
-	if button == 'RightButton' and ContainerFrame1FilterDropDown then
-		if not self:IsReagents() and self.info.owned then
-			ContainerFrame1FilterDropDown:SetParent(self)
-			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-			ToggleDropDownMenu(1, nil, ContainerFrame1FilterDropDown, self, 0, 0)
-		end
-	elseif self:IsPurchasable() then
-		self:Purchase()
-	elseif CursorHasItem() and not self.info.cached then
-		if self:IsBackpack() then
+	if button == 'RightButton' then
+		self:ShowFilters()
+	elseif (self.owned and not CursorHasItem()) or self:IsCached() then
+		self:Toggle()
+	elseif CursorHasItem() then
+		if self:GetID() == BACKPACK_CONTAINER then
 			PutItemInBackpack()
 		else
-			PutItemInBag(self.info.slot)
+			PutItemInBag(self.slot)
 		end
-	elseif self:CanToggle() then
-		self:Toggle()
+	else
+		self:Purchase()
 	end
 
 	self:UpdateToggle()
 end
 
 function Bag:OnDrag()
-	if self:IsCustomSlot() and not self.info.cached then
+	if self:IsCustomSlot() and not self:IsCached() then
 		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
-		PickupBagFromSlot(self.info.slot)
+		PickupBagFromSlot(self.slot)
 	end
 end
 
@@ -114,7 +125,51 @@ end
 
 function Bag:OnLeave()
 	self:Super(Bag):OnLeave()
-	self:SetFocus(false)
+	self:SetFocus(nil)
+end
+
+
+--[[ Actions ]]--
+
+function Bag:SetFocus(focus)
+	local state = focus and self:GetID()
+	self.frame.focusedBag = state
+	self:SendFrameSignal('FOCUS_BAG', state)
+end
+
+function Bag:Toggle()
+	local profile = self:GetProfile()
+	local hidden = profile.hiddenBags
+	local slot = profile.exclusiveReagent and not hidden[REAGENTBANK_CONTAINER] and REAGENTBANK_CONTAINER or self:GetID()
+	hidden[slot] = not hidden[slot]
+
+	self:SendFrameSignal('FILTERS_CHANGED')
+	self:SetFocus(true)
+end
+
+function Bag:ShowFilters()
+	if self:GetID() >= BACKPACK_CONTAINER and not self:IsCached() then
+		ContainerFrame1FilterDropDown:SetParent(self)
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+		ToggleDropDownMenu(1, nil, ContainerFrame1FilterDropDown, self, 0, 0)
+	end
+end
+
+function Bag:Purchase()
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
+
+	if self:GetID() == REAGENTBANK_CONTAINER then
+		Sushi.Popup('CONFIRM_BUY_REAGENTBANK_TAB')
+	else
+		Sushi.Popup {
+			text = CONFIRM_BUY_BANK_SLOT, button1 = YES, button2 = NO,
+			hasMoneyFrame = 1, hideOnEscape = 1, timeout = 0,
+			OnAccept = PurchaseSlot,
+			OnShow = function(popup)
+				MoneyFrame_Update(popup.moneyFrame, GetBankSlotCost(GetNumBankSlots()))
+			end,
+		}
+	end
 end
 
 
@@ -126,13 +181,13 @@ function Bag:RegisterEvents()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'RegisterEvents')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateToggle')
 
-	if self:IsBank() or self:IsBankBag() or self:IsReagents() then
+	if self:GetID() == BANK_CONTAINER or self:IsBankBag() or self:GetID() == REAGENTBANK_CONTAINER then
 		self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
 		self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
 	end
 
-	if not self.info.cached then
-		if self:IsReagents() then
+	if not self:IsCached() then
+		if self:GetID() == REAGENTBANK_CONTAINER then
 			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
 		elseif self:IsCustomSlot() then
 			if self:IsBankBag() then
@@ -156,7 +211,7 @@ function Bag:BAG_UPDATE(_, bag)
 end
 
 function Bag:GET_ITEM_INFO_RECEIVED(_, item)
-	if item == self.info.id then
+	if item == self.itemID then
 		self:Update()
 	end
 end
@@ -165,50 +220,56 @@ end
 --[[ Update ]]--
 
 function Bag:Update()
-	local info = self:GetInfo()
+	local bag, cached = self:GetID(), self:IsCached()
+	local icon = self.StaticIcons[bag]
 
-	self.info = info
-	self.FilterIcon:SetShown(not info.cached)
-	self.Count:SetText(info.free and info.free > 0 and info.free or '')
+	if not icon then
+		if cached then
+			local data = self:GetOwner()[bag]
+			if data and data.link then
+				self.link, self.owned = 'item:' .. data.link, true
+				self.itemID, _,_,_, icon = GetItemInfoInstant(self.link)
+			else
+				self.link, self.itemID, self.owned = nil
+			end
+		else
+			self.owned = bag <= Addon.NumBags or (bag - Addon.NumBags) <= GetNumBankSlots()
+			self.link = GetInventoryItemLink('player', self.slot)
+			icon = GetInventoryItemTexture('player', self.slot)
+		end
+	elseif bag == REAGENTBANK_CONTAINER then
+		self.owned = IsReagentBankUnlocked()
+	end
+
+	local color = self.owned and 1 or 0.1
+	SetItemButtonTexture(self, icon or 'interface/paperdoll/ui-paperdoll-slot-bag')
+	SetItemButtonTextureVertexColor(self, 1, color, color)
+
+	--self.Count:SetText(icon and (info.free or 0) > 0 and info.free or '')
 	self:UpdateToggle()
 	self:UpdateLock()
 
-	if self:IsBackpack() or self:IsBank() then
-		self:SetIcon('Interface/Buttons/Button-Backpack-Up')
-	elseif self:IsReagents() then
-		self:SetIcon('Interface/Icons/Achievement_GuildPerk_BountifulBags')
-	elseif self:IsKeyring() then
-		self:SetIcon('Interface/ContainerFrame/KeyRing-Bag-Icon')
-	else
-		self:SetIcon(info.icon or 'Interface/PaperDoll/UI-PaperDoll-Slot-Bag')
-	  	self.link = info.link
-
-		if not info.icon then
-			self.Count:SetText('')
-		end
-	end
-
-	if not self.cached then
+	if not cached then
 		local id = self:GetID()
-		for i, atlas in ipairs(self.FILTER_ICONS) do
+		for i, atlas in ipairs(self.FilterIcons) do
 			local active = C_Container and (id > 0 and C_Container.GetBagSlotFlag(id, 2^i)) or
 						   GetBagSlotFlag and (self:IsBankBag() and GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) or GetBagSlotFlag(id, i))
 			if active then
 				return self.FilterIcon.Icon:SetAtlas(atlas)
 			end
 		end
-
-		self.FilterIcon.Icon:SetAtlas(nil)
 	end
+
+	self.FilterIcon.Icon:SetAtlas(nil)
 end
 
 function Bag:UpdateToggle()
-	self:SetChecked(self:IsToggled())
+	self:SetChecked(self.owned and self.frame:IsShowingBag(self:GetID()))
 end
 
 function Bag:UpdateLock()
 	if self:IsCustomSlot() then
-    	SetItemButtonDesaturated(self, self:GetInfo().locked)
+    	--SetItemButtonDesaturated(self, self:GetInfo().locked)
  	end
 end
 
@@ -216,23 +277,15 @@ function Bag:UpdateTooltip()
 	GameTooltip:ClearLines()
 
 	-- title/item
-	if self:IsPurchasable() then
-		GameTooltip:SetText(self:IsReagents() and REAGENT_BANK or BANK_BAG_PURCHASE, 1, 1, 1)
-		GameTooltip:AddLine(L.TipPurchaseBag:format(L.Click))
+	local bag = self:GetID()
+	local name = self.StaticNames[bag]
 
-		SetTooltipMoney(GameTooltip, self.info.cost)
-	elseif self:IsBackpack() then
-		GameTooltip:SetText(BACKPACK_TOOLTIP, 1,1,1)
-	elseif self:IsBank() then
-		GameTooltip:SetText(BANK, 1,1,1)
-	elseif self:IsReagents() then
-		GameTooltip:SetText(REAGENT_BANK, 1,1,1)
-	elseif self:IsKeyring() then
-		GameTooltip:SetText(KEYRING, 1,1,1)
-	elseif self.link and self.info.cached then
+	if name then
+		GameTooltip:SetText(name, 1, 1, 1)
+	elseif self.link and self:IsCached() then
 		GameTooltip:SetHyperlink(self.link)
 	elseif self.link then
-		GameTooltip:SetInventoryItem('player', self.info.slot)
+		GameTooltip:SetInventoryItem('player', self.slot)
 	elseif self:IsBankBag() then
 		GameTooltip:SetText(BANK_BAG, 1, 1, 1)
 	else
@@ -240,103 +293,25 @@ function Bag:UpdateTooltip()
 	end
 
 	-- instructions
-	if self:CanToggle() then
-		GameTooltip:AddLine((self:IsToggled() and L.TipHideBag or L.TipShowBag):format(L.Click))
+	if self.owned then
+		GameTooltip:AddLine((self:GetChecked() and L.TipHideBag or L.TipShowBag):format(L.Click))
+	elseif not self:IsCached() then
+		GameTooltip:AddLine(L.TipPurchaseBag:format(L.Click))
+		SetTooltipMoney(GameTooltip, bag == REAGENTBANK_CONTAINER and GetReagentBankCost() or GetBankSlotCost())
 	end
 
 	GameTooltip:Show()
 end
 
 
---[[ Actions ]]--
+--[[ Proprieties ]]--
 
-function Bag:Purchase()
-	PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
-
-	if self:IsReagents() then
-		LibStub('Sushi-3.1').Popup('CONFIRM_BUY_REAGENTBANK_TAB')
-	else
-		LibStub('Sushi-3.1').Popup {
-			text = CONFIRM_BUY_BANK_SLOT, button1 = YES, button2 = NO,
-			hasMoneyFrame = 1, hideOnEscape = 1, timeout = 0,
-			OnAccept = PurchaseSlot,
-			OnShow = function(popup)
-				MoneyFrame_Update(popup.moneyFrame, GetBankSlotCost(GetNumBankSlots()))
-			end,
-		}
-	end
-end
-
-function Bag:Toggle()
-	local profile = self:GetProfile()
-	local hidden = profile.hiddenBags
-	local slot = profile.exclusiveReagent and not hidden[REAGENTBANK_CONTAINER] and REAGENTBANK_CONTAINER or self:GetSlot()
-	hidden[slot] = not hidden[slot]
-
-	self:SendFrameSignal('FILTERS_CHANGED')
-	self:SetFocus(true)
-end
-
-function Bag:SetFocus(focus)
-	local state = focus and self:GetSlot()
-	self:GetFrame().focusedBag = state
-	self:SendFrameSignal('FOCUS_BAG', state)
-end
-
-function Bag:SetIcon(icon)
-	local color = self.info.owned and 1 or .1
-	SetItemButtonTexture(self, icon)
-	SetItemButtonTextureVertexColor(self, 1, color, color)
-end
-
-
---[[ Bag Type ]]--
-
-function Bag:IsBackpack()
-	return Addon:IsBackpack(self:GetID())
-end
-
-function Bag:IsBackpackBag()
-  return Addon:IsBackpackBag(self:GetID())
-end
-
-function Bag:IsBank()
-	return Addon:IsBank(self:GetID())
-end
-
-function Bag:IsReagents()
-	return Addon:IsReagents(self:GetID())
-end
-
-function Bag:IsKeyring()
-	return Addon:IsKeyring(self:GetID())
+function Bag:IsCustomSlot()
+	return self:GetID() > BACKPACK_CONTAINER
 end
 
 function Bag:IsBankBag()
-	return Addon:IsBankBag(self:GetID())
-end
-
-function Bag:IsCustomSlot()
-	return self:IsBackpackBag() or self:IsBankBag()
+	return self:GetID() > Addon.NumBags
 end
 
 function Bag:IsCombinedBagContainer() end -- trick blizzard
-
-function Bag:CanToggle()
-	return self:IsBackpack() or self:IsBank() or self.info.owned
-end
-
-
---[[ Info ]]--
-
-function Bag:IsPurchasable()
-	return not self.info.cached and not self.info.owned
-end
-
-function Bag:IsToggled()
-	return self:GetFrame():IsShowingBag(self:GetID()) and self.info.owned
-end
-
-function Bag:GetInfo()
-	return self:GetFrame():GetBagInfo(self:GetID())
-end

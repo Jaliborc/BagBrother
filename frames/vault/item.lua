@@ -16,7 +16,6 @@ function Item:Construct()
 	b:SetScript('OnReceiveDrag', self.OnDragStart)
 	b:SetScript('OnDragStart', self.OnDragStart)
 	b:SetScript('OnClick', self.OnClick)
-	b:SetScript('PreClick', nil)
 	return b
 end
 
@@ -24,9 +23,7 @@ end
 --[[ Interaction ]]--
 
 function Item:OnClick(button)
-	if HandleModifiedItemClick(self.info.link) or self:FlashFind(button) or IsModifiedClick() then
-		return
-	elseif not self:IsCached() then
+	if not (HandleModifiedItemClick(self.info.link) or IsModifiedClick() or self:IsCached()) then
 		local isRight = button == 'RightButton'
 		local type, _, link = GetCursorInfo()
 
@@ -58,11 +55,11 @@ function Item:ShowTooltip()
 	if not self:IsCached() then
 		GameTooltip:SetOwner(self:GetTipAnchor())
 
-		if self:GetBag() == 'vault' then
+		if self.bag == 0 then
 			GameTooltip:SetVoidItem(1, self:GetID())
-		elseif self:GetBag() == DEPOSIT then
+		elseif self.bag == 1 then
 			GameTooltip:SetVoidDepositItem(self:GetID())
-		else
+		elseif self.bag == 2 then
 			GameTooltip:SetVoidWithdrawalItem(self:GetID())
 		end
 
@@ -79,5 +76,4 @@ end
 --[[ Proprieties ]]--
 
 function Item:IsCached() return not CanUseVoidStorage() or self:Super(Item):IsCached() end
-function Item:GetQuery() return self.info.link end
 function Item:UpdateSlotColor() end

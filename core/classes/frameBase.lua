@@ -11,7 +11,6 @@ local Frame = Addon.Base:NewClass('Frame', 'Frame', Addon.FrameTemplate, true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.MoneyFrame
-Frame.ItemGroup = Addon.ItemGroup
 Frame.BagGroup = Addon.BagGroup
 
 
@@ -127,11 +126,16 @@ end
 --[[ Proprieties ]]--
 
 function Frame:GetItemInfo(bag, slot)
-	return Addon:GetItemInfo(self:GetOwner().address, bag, slot)
-end
-
-function Frame:GetBagInfo(bag)
-	return Addon:GetBagInfo(self:GetOwner().address, bag)
+	local bag = self:GetOwner()[bag]
+	local data = bag and bag[slot]
+	if data then
+		local link, count = strsplit(';', data)
+		local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count)}
+		item.itemID, _,_,_, item.iconFileID = GetItemInfoInstant(item.hyperlink)
+		_, _, item.quality = GetItemInfo(item.hyperlink) 
+		return item
+	end
+	return {}
 end
 
 function Frame:IsCached()

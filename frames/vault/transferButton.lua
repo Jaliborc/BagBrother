@@ -25,6 +25,7 @@ function TransferButton:Construct()
 
 	f.Button = b
 	f:SetSize(50, 36)
+	f:SetScript('OnHide', f.OnHide)
 	return f
 end
 
@@ -37,25 +38,7 @@ function TransferButton:RegisterEvents()
 end
 
 
---[[ Update ]]--
-
-function TransferButton:Update()
-	local hasTransfer = self:HasTransfer()
-	self.Button.Icon:SetDesaturated(not hasTransfer)
-	self.Button:EnableMouse(hasTransfer)
-	self:Super(TransferButton):Update()
-end
-
-function TransferButton:HasTransfer()
-	return not self:IsCached() and (GetNumVoidTransferWithdrawal() + GetNumVoidTransferDeposit()) > 0
-end
-
-function TransferButton:GetMoney()
-	return GetVoidTransferCost()
-end
-
-
---[[ Interaction ]]--
+--[[ Events ]]--
 
 function TransferButton:OnClick()
 	if self:HasTransfer() then
@@ -85,4 +68,27 @@ function TransferButton:OnEnter()
 
 		GameTooltip:Show()
 	end
+end
+
+function TransferButton:OnHide()
+	self:SendFrameSignal('TRANFER_TOGGLED', false)
+	self:UnregisterAll()
+end
+
+
+--[[ Status ]]--
+
+function TransferButton:Update()
+	local hasTransfer = self:HasTransfer()
+	self.Button.Icon:SetDesaturated(not hasTransfer)
+	self.Button:EnableMouse(hasTransfer)
+	self:Super(TransferButton):Update()
+end
+
+function TransferButton:HasTransfer()
+	return not self:IsCached() and (GetNumVoidTransferWithdrawal() + GetNumVoidTransferDeposit()) > 0
+end
+
+function TransferButton:GetMoney()
+	return GetVoidTransferCost()
 end

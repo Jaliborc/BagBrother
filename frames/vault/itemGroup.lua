@@ -49,7 +49,7 @@ function Items:Layout()
 	self:Super(Items):Layout()
 
 	if self.Title then
-		local anyItems = self:NumButtons() > 0
+		local anyItems = #self.order > 0
 		self:SetHeight(self:GetHeight() + (anyItems and 20 or 0))
 		self.Title:SetShown(anyItems)
 	end
@@ -59,13 +59,8 @@ end
 --[[ Properties ]]--
 
 function Items:NumSlots()
-	if self:GetBag() == DEPOSIT then
-		return GetNumVoidTransferDeposit()
-	elseif self:GetBag() == WITHDRAW then
-		return GetNumVoidTransferWithdrawal()
-	elseif self:GetBag() == 'vault' then
-		return 160
-	end
+	local bag = self:GetBag()
+	return (bag == 0 and 160) or (bag == 1 and GetNumVoidTransferDeposit()) or (bag == 2 and GetNumVoidTransferWithdrawal())
 end
 
 function Items:GetBag()

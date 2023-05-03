@@ -8,8 +8,8 @@ local Frames = Addon:NewModule('Frames')
 Frames.Registry = {
 	{id = 'inventory', name = INVENTORY_TOOLTIP},
 	{id = 'bank', name = BANK},
-	{id = 'vault', name = VOID_STORAGE, addon = VoidStorage_LoadUI and ADDON .. '_VoidStorage'},
-	{id = 'guild', name = GUILD_BANK, addon = GuildBankFrame_LoadUI and ADDON .. '_GuildBank'},
+	{id = 'vault', name = VOID_STORAGE, addon = VoidStorage_LoadUI and ADDON..'_VoidStorage' or false},
+	{id = 'guild', name = GUILD_BANK, addon = GuildBankFrame_LoadUI and ADDON..'_GuildBank' or false},
 }
 
 
@@ -79,7 +79,7 @@ function Frames:New(id)
 	if self:IsEnabled(id) then
 		local info = self:Get(id)
 		if not info.addon or LoadAddOn(info.addon) then
-	 		info.object = info.object or Addon[id:gsub('^.', id.upper) .. 'Frame']:New(id)
+	 		info.object = info.object or Addon[id:gsub('^.', id.upper)]:New(id)
 	 		return info.object
 		end
  	end
@@ -93,14 +93,11 @@ function Frames:Iterate()
 	return ipairs(self.Registry)
 end
 
-function Frames:AreBasicsEnabled()
-    return self:IsEnabled('inventory') and self:IsEnabled('bank')
-end
-
 function Frames:IsEnabled(id)
 	local addon = self:Get(id).addon
 	if addon then
 		return GetAddOnEnableState(UnitName('player'), addon) == 2
+	else
+		return addon ~= false and Addon.player.profile[id].enabled
 	end
-	return addon ~= false and Addon.player.profile[id].enabled
 end

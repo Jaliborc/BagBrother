@@ -24,7 +24,7 @@ end
 --[[ Events ]]--
 
 function Item:OnClick(button)
-	if HandleModifiedItemClick(self.info.link) or self:FlashFind(button) then
+	if HandleModifiedItemClick(self.info.link) then
 		return
 	elseif IsModifiedClick('SPLITSTACK') then
 		if not CursorHasItem() and not self.info.locked and self.info.count > 1 then
@@ -63,7 +63,7 @@ function Item:OnReceiveDrag(button)
 end
 
 
---[[ Update ]]--
+--[[ Overrides ]]--
 
 function Item:ShowTooltip()
 	GameTooltip:SetOwner(self:GetTipAnchor())
@@ -73,15 +73,9 @@ function Item:ShowTooltip()
 end
 
 function Item:SplitStack(split)
-	local tab, slot = self:GetSlot()
-	SplitGuildBankItem(tab, slot, split)
+	SplitGuildBankItem(self:GetBag(), self:GetID(), split)
 end
 
-function Item:UpdateFocus() end
-
-
---[[ Proprieties ]]--
-
-function Item:GetSlot() return self:GetBag(), self:GetID() end
 function Item:GetBag() return GetCurrentGuildBankTab() end
-function Item:GetQuery() return self.info.link end
+function Item:UpdateSlotColor() end
+function Item:UpdateFocus() end
