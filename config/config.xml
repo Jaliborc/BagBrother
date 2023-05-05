@@ -1,0 +1,11 @@
+<Ui>
+  <Include file="localization\localization.xml"/>
+  <Script file="classes\optionsPanel.lua"/>
+
+	<Script file="panels\generalOptions.lua"/>
+  <Script file="panels\frameOptions.lua"/>
+  <Script file="panels\colorOptions.lua"/>
+  <Script file="panels\displayOptions.lua"/>
+  <Script file="panels\ruleOptions.lua"/>
+  <Script file="panels\creditsPanel.lua"/>
+</Ui>
