@@ -1,17 +1,6 @@
 --[[
 	sorting.lua
-		Client side bag sorting algorithm.
-
-  Start(job)
-  args: an object that declares id, bags and methods for item pickup and info retrieval
-    Stops any ongoing job and starts this one. The class Addon.Frame implements the requirements of this job interface.
-
-  Stop()
-    Stops any ongoing job
-
-  SORTING_STATUS
-  args: id
-    event called whenever a new job starts or the ongoing job stops, at which point the argument is nil
+		Client side bag sorting algorithm
 --]]
 
 local ADDON, Addon = ...
@@ -19,7 +8,7 @@ local Search = LibStub('ItemSearch-1.3')
 local Cache = LibStub('LibItemCache-2.0')
 local Sort = Addon:NewModule('Sorting', 'MutexDelay-1.0')
 
-Sort.Properties = {
+Sort.Proprieties = {
   'set',
   'class', 'subclass', 'equip',
   'quality',
@@ -31,20 +20,19 @@ Sort.Properties = {
 
 --[[ Process ]]--
 
-function Sort:Start(job)
-  if not self:CanRun(job) then
+function Sort:Start(id, owner, bags)
+  if not self:CanRun() then
     return
   end
 
-  self.job = job
-  self:SendSignal('SORTING_STATUS', job.id)
+  self.owner, self.bags = owner, bags
+  self:SendSignal('SORTING_STATUS', id)
   self:Run()
 end
 
 function Sort:Run()
-  ClearCursor()
-  
-  if self:CanRun(self.job) then
+  if self:CanRun() then
+    ClearCursor()
     self:Iterate()
   else
     self:Stop()
@@ -113,7 +101,6 @@ function Sort:Iterate()
 end
 
 function Sort:Stop()
-  self.job = nil
   self:SendSignal('SORTING_STATUS')
 end
 
@@ -123,17 +110,15 @@ end
 function Sort:GetSpaces()
   local spaces = {}
 
-  for i, bag in ipairs(self.job.Bags) do
-    if self.job:IsShowingBag(bag) then
-      local container = Cache:GetBagInfo(self.job:GetOwner().address, bag)
-      for slot = 1, (container.count or 0) do
-        local item = self.job:GetItemInfo(bag, slot)
-        tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
+  for _, bag in pairs(self.bags) do
+    local container = Cache:GetBagInfo(self.owner, bag)
+    for slot = 1, (container.count or 0) do
+      local item = Cache:GetItemInfo(self.owner, bag, slot)
+      tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
 
-        item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class
-        item.set = item.id and Search:BelongsToSet(item.id) and 0 or 1
-        item.space = spaces[#spaces]
-      end
+      item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class
+      item.set = item.id and Search:BelongsToSet(item.id) and 0 or 1
+      item.space = spaces[#spaces]
     end
   end
 
@@ -176,8 +161,8 @@ end
 
 --[[ API ]]--
 
-function Sort:CanRun(job)
-  return job and not job:IsCached() and not InCombatLockdown() and not UnitIsDead('player')
+function Sort:CanRun()
+  return not InCombatLockdown() and not UnitIsDead('player')
 end
 
 function Sort:FitsIn(id, family)
@@ -189,7 +174,7 @@ function Sort:FitsIn(id, family)
 end
 
 function Sort.Rule(a, b)
-  for _,prop in pairs(Sort.Properties) do
+  for _,prop in pairs(Sort.Proprieties) do
     if a[prop] ~= b[prop] then
       return a[prop] > b[prop]
     end
@@ -206,8 +191,8 @@ function Sort:Move(from, to)
     return
   end
 
-  self.job:PickupItem(from.bag, from.slot)
-  self.job:PickupItem(to.bag, to.slot)
+  Cache:PickupItem(self.owner, from.bag, from.slot)
+  Cache:PickupItem(self.owner, to.bag, to.slot)
 
   from.locked = true
   to.locked = true

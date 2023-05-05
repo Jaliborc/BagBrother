@@ -17,11 +17,14 @@ function Bank:OnHide()
 end
 
 function Bank:SortItems()
-	if C.SortBankBags then
+	if Addon.sets.serverSort and C.SortBankBags then
 		C.SortBankBags()
 
 		if REAGENTBANK_CONTAINER then
-			C_Timer.After(0.3, C.SortReagentBankBags)
+			C_Timer.After(0.3, function()
+				C.SortReagentBankBags()
+				self:SendSignal('SORTING_STATUS')
+			end)
 		end
 	else
 		self:Super(Bank):SortItems()

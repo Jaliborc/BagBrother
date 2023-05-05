@@ -79,17 +79,6 @@ function Frame:GetPosition()
 end
 
 
---[[ Sorting ]]--
-
-function Frame:SortItems()
-	Addon.Sorting:Start(self)
-end
-
-function Frame:PickupItem(bag, slot)
-	Addon:PickupItem(self:GetOwner().address, bag, slot)
-end
-
-
 --[[ Filtering ]]--
 
 function Frame:FindRules()
@@ -120,6 +109,10 @@ end
 
 function Frame:IsShowingQuality(quality)
 	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
+end
+
+function Frame:SortItems()
+	Addon.Sorting:Start(self.id, self:GetOwner().address, self.Bags)
 end
 
 

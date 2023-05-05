@@ -62,5 +62,10 @@ function Frame:GetItemInfo(bag, slot)
 end
 
 function Frame:SortItems()
-	return (Addon.sets.serverSort and C.SortBags or self:Super(Frame).SortItems)(self)
+	if Addon.sets.serverSort then
+		C.SortBags()
+		self:SendSignal('SORTING_STATUS')
+	else
+		self:Super(Frame):SortItems()
+	end
 end
