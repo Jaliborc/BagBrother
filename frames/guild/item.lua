@@ -77,5 +77,4 @@ function Item:SplitStack(split)
 end
 
 function Item:GetBag() return GetCurrentGuildBankTab() end
-function Item:UpdateSlotColor() end
 function Item:UpdateFocus() end

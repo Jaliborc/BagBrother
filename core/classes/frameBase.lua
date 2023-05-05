@@ -123,7 +123,7 @@ function Frame:IsShowingQuality(quality)
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 function Frame:GetItemInfo(bag, slot)
 	local bag = self:GetOwner()[bag]

@@ -90,6 +90,50 @@ function Bag:New(parent, id)
 end
 
 
+--[[ Events ]]--
+
+function Bag:RegisterEvents()
+	self:Update()
+	self:UnregisterAll()
+	self:RegisterFrameSignal('OWNER_CHANGED', 'RegisterEvents')
+	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateToggle')
+
+	if self:GetID() == BANK_CONTAINER or self:IsBankBag() or self:GetID() == REAGENTBANK_CONTAINER then
+		self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
+		self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
+	end
+
+	if not self:IsCached() then
+		if self:GetID() == REAGENTBANK_CONTAINER then
+			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
+		elseif self:IsCustomSlot() then
+			if self:IsBankBag() then
+				self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
+			end
+
+			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
+			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATE')
+			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
+			self:RegisterSignal('BAG_UPDATE')
+		end
+	elseif self:IsCustomSlot() then
+		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
+	end
+end
+
+function Bag:BAG_UPDATE(_, bag)
+	if bag == self:GetID() then
+		self:Update()
+	end
+end
+
+function Bag:GET_ITEM_INFO_RECEIVED(_, item)
+	if item == self.itemID then
+		self:Update()
+	end
+end
+
+
 --[[ Interaction ]]--
 
 function Bag:OnClick(button)
@@ -173,54 +217,11 @@ function Bag:Purchase()
 end
 
 
---[[ Events ]]--
-
-function Bag:RegisterEvents()
-	self:Update()
-	self:UnregisterAll()
-	self:RegisterFrameSignal('OWNER_CHANGED', 'RegisterEvents')
-	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateToggle')
-
-	if self:GetID() == BANK_CONTAINER or self:IsBankBag() or self:GetID() == REAGENTBANK_CONTAINER then
-		self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
-		self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
-	end
-
-	if not self:IsCached() then
-		if self:GetID() == REAGENTBANK_CONTAINER then
-			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
-		elseif self:IsCustomSlot() then
-			if self:IsBankBag() then
-				self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
-			end
-
-			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
-			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATE')
-			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
-			self:RegisterSignal('BAG_UPDATE')
-		end
-	elseif self:IsCustomSlot() then
-		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
-	end
-end
-
-function Bag:BAG_UPDATE(_, bag)
-	if bag == self:GetID() then
-		self:Update()
-	end
-end
-
-function Bag:GET_ITEM_INFO_RECEIVED(_, item)
-	if item == self.itemID then
-		self:Update()
-	end
-end
-
-
 --[[ Update ]]--
 
 function Bag:Update()
 	local bag, cached = self:GetID(), self:IsCached()
+	local free = not cached and C.GetContainerNumFreeSlots(bag)
 	local icon = self.StaticIcons[bag]
 
 	if not icon then
@@ -245,7 +246,7 @@ function Bag:Update()
 	SetItemButtonTexture(self, icon or 'interface/paperdoll/ui-paperdoll-slot-bag')
 	SetItemButtonTextureVertexColor(self, 1, color, color)
 
-	--self.Count:SetText(icon and (info.free or 0) > 0 and info.free or '')
+	self.Count:SetText((free or 0) > 0 and free or '')
 	self:UpdateToggle()
 	self:UpdateLock()
 
@@ -304,14 +305,8 @@ function Bag:UpdateTooltip()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
-function Bag:IsCustomSlot()
-	return self:GetID() > BACKPACK_CONTAINER
-end
-
-function Bag:IsBankBag()
-	return self:GetID() > Addon.NumBags
-end
-
+function Bag:IsCustomSlot() return self:GetID() > BACKPACK_CONTAINER end
+function Bag:IsBankBag() return self:GetID() > Addon.NumBags end
 function Bag:IsCombinedBagContainer() end -- trick blizzard

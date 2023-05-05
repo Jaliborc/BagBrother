@@ -73,7 +73,8 @@ function Item:ShowTooltip()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
-function Item:IsCached() return not CanUseVoidStorage() or self:Super(Item):IsCached() end
-function Item:UpdateSlotColor() end
+function Item:IsCached()
+	return not CanUseVoidStorage() or self:Super(Item):IsCached()
+end

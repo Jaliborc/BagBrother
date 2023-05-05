@@ -64,7 +64,7 @@ function Guild:OnHide()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 function Guild:GetItemInfo(bag, slot)
 	if self:IsCached() then

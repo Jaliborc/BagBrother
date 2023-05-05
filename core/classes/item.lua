@@ -143,7 +143,6 @@ function Item:Update()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
-	self:UpdateSlotColor()
 	self:UpdateBorder()
 
 	SetItemButtonTexture(self, self.info.iconFileID or self.Backgrounds[Addon.sets.slotBackground])
@@ -180,18 +179,6 @@ function Item:UpdateBorder()
 	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
 end
 
-function Item:UpdateSlotColor()
-	if not self.hasItem then
-		local color = Addon.sets.colorSlots and Addon.sets[self:GetBagFamily() .. 'Color'] or {}
-		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
-
-		SetItemButtonTextureVertexColor(self, r,g,b)
-		self:GetNormalTexture():SetVertexColor(r,g,b)
-	else
-		self:GetNormalTexture():SetVertexColor(1,1,1)
-	end
-end
-
 function Item:UpdateLocked()
 	self.info = self:GetInfo()
 	self:SetDesaturated(self.info.isLocked)
@@ -218,7 +205,11 @@ function Item:UpdateSecondary()
 end
 
 function Item:UpdateFocus()
-	self:SetHighlightLocked(self:GetBag() == self:GetFrame().focusedBag)
+	if self:GetBag() == self:GetFrame().focusedBag then
+		self:LockHighlight()
+	else
+		self:UnlockHighlight()
+	end
 end
 
 function Item:UpdateSearch()
@@ -301,7 +292,7 @@ do
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 function Item:GetInfo()
 	return self.frame:GetItemInfo(self:GetSlot())

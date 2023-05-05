@@ -69,7 +69,21 @@ end
 
 function Item:Update()
 	self:Super(Item):Update()
+	self:UpdateCooldown()
 
+	if self.hasItem then
+		self:GetNormalTexture():SetVertexColor(1,1,1)
+	else
+		local family = self:GetBagFamily()
+		local color = Addon.sets.colorSlots and Addon.sets[(self.BagFamilies[family] or 'normal') .. 'Color'] or {}
+		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
+
+		SetItemButtonTextureVertexColor(self, r,g,b)
+		self:GetNormalTexture():SetVertexColor(r,g,b)
+	end
+end
+
+function Item:UpdateCooldown()
 	if self.hasItem and not self:IsCached() then
 		local start, duration, enable = C.GetContainerItemCooldown(self:GetBag(), self:GetID())
 		local fade = duration > 0 and 0.4 or 1
@@ -90,7 +104,7 @@ function Item:MarkSeen()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 function Item:GetQuestInfo()
 	if self.hasItem then
@@ -105,11 +119,25 @@ function Item:GetQuestInfo()
 	end
 end
 
-function Item:GetQuery()
-	return {bagID = self:GetBag(), slotIndex = self:GetID()}
+function Item:GetBagFamily()
+	local bag = self:GetBag()
+	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then
+		return REAGENTBANK_CONTAINER
+	elseif bag == KEYRING_CONTAINER then
+		return 9
+	elseif bag > BACKPACK_CONTAINER then
+		if self:IsCached() then
+			local data = self:GetOwner()[bag]
+			if data and data.link then
+				return GetItemFamily('item:' .. data.link)
+			end
+		else
+			return select(2, C.GetContainerNumFreeSlots(bag))
+		end
+	end
+	return 0
 end
 
-function Item:GetBagFamily()
-	local family = 0
-	return self.BagFamilies[family] or 'normal'
+function Item:GetQuery()
+	return {bagID = self:GetBag(), slotIndex = self:GetID()}
 end

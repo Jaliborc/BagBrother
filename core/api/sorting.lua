@@ -16,9 +16,10 @@
 
 local ADDON, Addon = ...
 local Search = LibStub('ItemSearch-1.3')
+local Cache = LibStub('LibItemCache-2.0')
 local Sort = Addon:NewModule('Sorting', 'MutexDelay-1.0')
 
-Sort.Proprieties = {
+Sort.Properties = {
   'set',
   'class', 'subclass', 'equip',
   'quality',
@@ -124,7 +125,7 @@ function Sort:GetSpaces()
 
   for i, bag in ipairs(self.job.Bags) do
     if self.job:IsShowingBag(bag) then
-      local container = self.job:GetBagInfo(bag)
+      local container = Cache:GetBagInfo(self.job:GetOwner().address, bag)
       for slot = 1, (container.count or 0) do
         local item = self.job:GetItemInfo(bag, slot)
         tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
@@ -188,7 +189,7 @@ function Sort:FitsIn(id, family)
 end
 
 function Sort.Rule(a, b)
-  for _,prop in pairs(Sort.Proprieties) do
+  for _,prop in pairs(Sort.Properties) do
     if a[prop] ~= b[prop] then
       return a[prop] > b[prop]
     end
