@@ -68,9 +68,9 @@ end
 
 function Items:FLASH_ITEM(_,itemID)
 	for i, button in ipairs(self.order) do
-		self.Flash:Stop()
+		button.flashAnim:Stop()
 		if button.info.itemID == itemID then
-			self.Flash:Play()
+			button.flashAnim:Play()
 		end
 	end
 end
