@@ -66,7 +66,7 @@ function Bag:New(parent, id)
 	checked:SetBlendMode('ADD')
 	checked:SetAllPoints()
 
-	b.slot, b.owned = C.ContainerIDToInventoryID(id), true
+	b.slot, b.owned = id > BACKPACK_CONTAINER and C.ContainerIDToInventoryID(id), true
 	b.Icon, b.Count, b.FilterIcon = icon, count, filter
 	b.FilterIcon.Icon = filterIcon
 
@@ -106,7 +106,7 @@ function Bag:RegisterEvents()
 	if not self:IsCached() then
 		if self:GetID() == REAGENTBANK_CONTAINER then
 			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
-		elseif self:IsCustomSlot() then
+		elseif self.slot then
 			if self:IsBankBag() then
 				self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
 			end
@@ -116,7 +116,7 @@ function Bag:RegisterEvents()
 			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
 			self:RegisterSignal('BAG_UPDATE')
 		end
-	elseif self:IsCustomSlot() then
+	elseif self.slot then
 		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
 	end
 end
@@ -142,10 +142,10 @@ function Bag:OnClick(button)
 	elseif (self.owned and not CursorHasItem()) or self:IsCached() then
 		self:Toggle()
 	elseif CursorHasItem() then
-		if self:GetID() == BACKPACK_CONTAINER then
-			PutItemInBackpack()
-		else
+		if self.slot then
 			PutItemInBag(self.slot)
+		else
+			PutItemInBackpack()
 		end
 	else
 		self:Purchase()
@@ -155,7 +155,7 @@ function Bag:OnClick(button)
 end
 
 function Bag:OnDrag()
-	if self:IsCustomSlot() and not self:IsCached() then
+	if self.slot and not self:IsCached() then
 		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		PickupBagFromSlot(self.slot)
 	end
@@ -269,9 +269,7 @@ function Bag:UpdateToggle()
 end
 
 function Bag:UpdateLock()
-	if self:IsCustomSlot() then
-    	--SetItemButtonDesaturated(self, self:GetInfo().locked)
- 	end
+    SetItemButtonDesaturated(self, self.slot and IsInventoryItemLocked(self.slot))
 end
 
 function Bag:UpdateTooltip()
@@ -289,6 +287,8 @@ function Bag:UpdateTooltip()
 		GameTooltip:SetInventoryItem('player', self.slot)
 	elseif self:IsBankBag() then
 		GameTooltip:SetText(BANK_BAG, 1, 1, 1)
+	elseif bag > NUM_BAG_SLOTS then
+		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)
 	else
 		GameTooltip:SetText(EQUIP_CONTAINER, 1, 1, 1)
 	end
@@ -307,6 +307,5 @@ end
 
 --[[ Properties ]]--
 
-function Bag:IsCustomSlot() return self:GetID() > BACKPACK_CONTAINER end
 function Bag:IsBankBag() return self:GetID() > Addon.NumBags end
 function Bag:IsCombinedBagContainer() end -- trick blizzard
