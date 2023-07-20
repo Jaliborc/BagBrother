@@ -42,7 +42,7 @@ function Slash.OnSlashCommand(cmd)
 		Addon.Frames:Toggle('vault')
 	elseif cmd == 'version' then
 		print('|cff33ff99' .. ADDON .. '|r version ' .. Addon.Version)
-	elseif cmd == 'config' or cmd == 'options' then
+	elseif cmd == 'config' or cmd == 'options' or cmd == '' then
 		Addon:ShowOptions()
 	else
 		Slash:PrintHelp()
