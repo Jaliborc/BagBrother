@@ -7,9 +7,11 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
 local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
-Bank.GetItemInfo = Addon.Inventory.GetItemInfo
-Bank.ItemGroup = Addon.ContainerItemGroup
 Bank.Bags = Addon.BankBags
+
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
+	Bank[k] = Addon.Inventory[k]
+end
 
 function Bank:OnHide()
 	self:Super(Bank):OnHide()
@@ -31,10 +33,6 @@ function Bank:SortItems()
 	end
 end
 
-function Bank:IsCached()
-	return not Addon.Events.AtBank or self:GetOwner().offline
-end
-
 if REAGENTBANK_CONTAINER then
 	function Bank:IsShowingBag(bag)
 		local profile = self:GetProfile()
@@ -42,4 +40,8 @@ if REAGENTBANK_CONTAINER then
 			return not profile.hiddenBags[bag]
 		end
 	end
+end
+
+function Bank:IsCached()
+	return not Addon.Events.AtBank or self:GetOwner().offline
 end

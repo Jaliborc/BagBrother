@@ -47,25 +47,8 @@ function Items:ITEM_LOCK_CHANGED(_, bag, slot)
 	end
 end
 
-function Items:UNIT_QUEST_LOG_CHANGED(_,unit)
+function Items:UNIT_QUEST_LOG_CHANGED(_, unit)
 	if unit == 'player' then
 		self:ForAll('UpdateBorder')
 	end
-end
-
-function Items:NumSlots(bag)
-	local size
-	if bag <= BACKPACK_CONTAINER and bag ~= KEYRING_CONTAINER then
-		size = C.GetContainerNumSlots(bag)
-	elseif self:IsCached() then
-		local data = self:GetOwner()[bag]
-		if data then
-			size = data.size
-		end
-	elseif bag == KEYRING_CONTAINER then
-		size = HasKey and HasKey() and C.GetContainerNumSlots(bag)
-	else
-		size = C.GetContainerNumSlots(bag)
-	end
-	return size or 0
 end

@@ -12,21 +12,20 @@ Sort.Proprieties = {
   'set',
   'class', 'subclass', 'equip',
   'quality',
-  'icon',
-  'level', 'name', 'id',
-  'count'
+  'iconFileID', 'level', 'itemID',
+  'stackCount'
 }
 
 
 --[[ Process ]]--
 
-function Sort:Start(id, owner, bags)
+function Sort:Start(target)
   if not self:CanRun() then
     return
   end
 
-  self.owner, self.bags = owner, bags
-  self:SendSignal('SORTING_STATUS', id)
+  self:SendSignal('SORTING_STATUS', target.id)
+  self.target = target
   self:Run()
 end
 
@@ -44,17 +43,17 @@ function Sort:Iterate()
   local families = self:GetFamilies(spaces)
 
   local stackable = function(item)
-    return (item.count or 1) < (item.stack or 1)
+    return (item.stackCount or 1) < (item.stack or 1)
   end
 
   for k, target in pairs(spaces) do
     local item = target.item
-    if item.id and stackable(item) then
+    if item.itemID and stackable(item) then
       for j = k+1, #spaces do
         local from = spaces[j]
         local other = from.item
 
-        if item.id == other.id and stackable(other) then
+        if item.itemID == other.itemID and stackable(other) then
           self:Move(from, target)
           self:Delay(0.05, 'Run')
         end
@@ -80,7 +79,7 @@ function Sort:Iterate()
 
         for j = index, n do
           local other = order[j]
-          if other.id == item.id and other.count == item.count then
+          if other.itemID == item.itemID and other.stackCount == item.stackCount then
             local d = moveDistance(other, spaces[j])
             if d > distance then
               item = other
@@ -110,14 +109,21 @@ end
 function Sort:GetSpaces()
   local spaces = {}
 
-  for _, bag in pairs(self.bags) do
-    local container = Cache:GetBagInfo(self.owner, bag)
-    for slot = 1, (container.count or 0) do
-      local item = Cache:GetItemInfo(self.owner, bag, slot)
-      tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = container.family, item = item})
+  for _, bag in pairs(self.target.Bags) do
+    local family = self.target:GetBagFamily(bag)
+    for slot = 1, self.target:NumSlots(bag) do
+      local item = self.target:GetItemInfo(bag, slot)
+      local id = item.itemID
+      if id then
+        local name, _,_, level, _,_,_,_, equip, _, _, class, subclass = GetItemInfo(id) 
 
-      item.class = item.id and Search:IsQuestItem(item.id) and Enum.ItemClass.Questitem or item.class
-      item.set = item.id and Search:BelongsToSet(item.id) and 0 or 1
+        item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class
+        item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
+        item.subclass, item.equip, item.level = subclass, equip, level
+        item.family = GetItemFamily(id) or 0
+      end
+
+      tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
       item.space = spaces[#spaces]
     end
   end
@@ -145,7 +151,7 @@ function Sort:GetOrder(spaces, family)
 
   for _, space in ipairs(spaces) do
     local item = space.item
-    if item.id and not item.sorted and self:FitsIn(item.id, family) then
+    if item.itemID and not item.sorted and self:FitsIn(item.itemID, family) then
       tinsert(order, space.item)
     end
 
@@ -187,12 +193,12 @@ function Sort.Rule(a, b)
 end
 
 function Sort:Move(from, to)
-  if from.locked or to.locked or (to.item.id and not self:FitsIn(to.item.id, from.family)) then
+  if from.locked or to.locked or (to.item.itemID and not self:FitsIn(to.item.itemID, from.family)) then
     return
   end
 
-  Cache:PickupItem(self.owner, from.bag, from.slot)
-  Cache:PickupItem(self.owner, to.bag, to.slot)
+  self.target:PickupItem(from.bag, from.slot)
+  self.target:PickupItem(to.bag, to.slot)
 
   from.locked = true
   to.locked = true

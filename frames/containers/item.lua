@@ -74,7 +74,7 @@ function Item:Update()
 	if self.hasItem then
 		self:GetNormalTexture():SetVertexColor(1,1,1)
 	else
-		local family = self:GetBagFamily()
+		local family = self.frame:GetBagFamily(self:GetBag())
 		local color = Addon.sets.colorSlots and Addon.sets[(self.BagFamilies[family] or 'normal') .. 'Color'] or {}
 		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 
@@ -117,25 +117,6 @@ function Item:GetQuestInfo()
 			return self:Super(Item):GetQuestInfo()
 		end
 	end
-end
-
-function Item:GetBagFamily()
-	local bag = self:GetBag()
-	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then
-		return REAGENTBANK_CONTAINER
-	elseif bag == KEYRING_CONTAINER then
-		return 9
-	elseif bag > BACKPACK_CONTAINER then
-		if self:IsCached() then
-			local data = self:GetOwner()[bag]
-			if data and data.link then
-				return GetItemFamily('item:' .. data.link)
-			end
-		else
-			return select(2, C.GetContainerNumFreeSlots(bag))
-		end
-	end
-	return 0
 end
 
 function Item:GetQuery()

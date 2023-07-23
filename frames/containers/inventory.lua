@@ -46,6 +46,22 @@ function Frame:HighlightMainMenu(checked)
 end
 
 
+--[[ Sorting ]]--
+
+function Frame:SortItems()
+	if Addon.sets.serverSort and C.SortBags then
+		C.SortBags()
+		self:SendSignal('SORTING_STATUS')
+	else
+		self:Super(Frame):SortItems()
+	end
+end
+
+function Frame:PickupItem(bag, slot)
+	C.PickupContainerItem(bag, slot)
+end
+
+
 --[[ API ]]--
 
 function Frame:GetItemInfo(bag, slot)
@@ -61,11 +77,37 @@ function Frame:GetItemInfo(bag, slot)
 	end
 end
 
-function Frame:SortItems()
-	if Addon.sets.serverSort and C.SortBags then
-		C.SortBags()
-		self:SendSignal('SORTING_STATUS')
-	else
-		self:Super(Frame):SortItems()
+function Frame:GetBagFamily(bag)
+	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then
+		return REAGENTBANK_CONTAINER
+	elseif bag == KEYRING_CONTAINER then
+		return 9
+	elseif bag > BACKPACK_CONTAINER then
+		if self:IsCached() then
+			local data = self:GetOwner()[bag]
+			if data and data.link then
+				return GetItemFamily('item:' .. data.link)
+			end
+		else
+			return select(2, C.GetContainerNumFreeSlots(bag))
+		end
 	end
+	return 0
+end
+
+function Frame:NumSlots(bag)
+	local size
+	if bag <= BACKPACK_CONTAINER and bag ~= KEYRING_CONTAINER then
+		size = C.GetContainerNumSlots(bag)
+	elseif self:IsCached() then
+		local data = self:GetOwner()[bag]
+		if data then
+			size = data.size
+		end
+	elseif bag == KEYRING_CONTAINER then
+		size = HasKey and HasKey() and C.GetContainerNumSlots(bag)
+	else
+		size = C.GetContainerNumSlots(bag)
+	end
+	return size or 0
 end

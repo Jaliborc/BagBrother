@@ -87,8 +87,7 @@ function Items:Layout()
 	for i, frame in ipairs(self.bags) do
 		local bag = frame.id
 		if self.frame:IsShowingBag(bag) then
-			local numSlots = self:NumSlots(bag)
-			for slot = 1, numSlots do
+			for slot = 1, self.frame:NumSlots(bag) do
 				if self.frame:IsShowingItem(bag, slot) then
 					local button = self.Button(frame, bag, slot)
 					self.buttons[bag] = self.buttons[bag] or {}
@@ -111,7 +110,7 @@ function Items:Layout()
 		local slots = self.buttons[bag]
 
 		if slots then
-			local numSlots = self:NumSlots(bag)
+			local numSlots = self.frame:NumSlots(bag)
 			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
 				local button = slots[slot]
 				if button then

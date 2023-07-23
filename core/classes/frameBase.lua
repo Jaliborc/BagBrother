@@ -112,7 +112,7 @@ function Frame:IsShowingQuality(quality)
 end
 
 function Frame:SortItems()
-	Addon.Sorting:Start(self.id, self:GetOwner().address, self.Bags)
+	Addon.Sorting:Start(self)
 end
 
 
@@ -129,6 +129,10 @@ function Frame:GetItemInfo(bag, slot)
 		return item
 	end
 	return {}
+end
+
+function Frame:GetBagFamily()
+	return 0
 end
 
 function Frame:IsCached()
