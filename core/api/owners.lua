@@ -73,6 +73,10 @@ function Owners:Sort()
 	end
 
 	sort(self.ordered, function(a, b)
+		if not (self:HasRequiredProperties(a) and self:HasRequiredProperties(b)) then
+            -- If it does not have all the necessary attributes, we return false by default.
+			return false;
+        end
 		if a.isguild ~= b.isguild then
 			return b.isguild
 		elseif a.level == b.level or not (a.level and b.level) then
@@ -80,6 +84,13 @@ function Owners:Sort()
 		end
 		return a.level > b.level
 	end)
+end
+
+function Owners:HasRequiredProperties(element)
+    return type(element) == "table" and
+           type(element.name) == "string" and
+           type(element.level) == "number" and
+           type(element.isguild) == "boolean"
 end
 
 function Owners:Iterate()
