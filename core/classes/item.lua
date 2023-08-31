@@ -221,7 +221,12 @@ function Item:UpdateSearch()
 end
 
 function Item:UpdateUpgradeIcon()
-	self.UpgradeIcon:SetShown(self:IsUpgrade())
+	local isUpgrade = self:IsUpgrade()
+	if isUpgrade == nil then
+		self:Delay(0.5, 'UpdateUpgradeIcon')
+	else
+		self.UpgradeIcon:SetShown(isUpgrade)
+	end
 end
 
 function Item:UpdateNewItemAnimation()
@@ -307,7 +312,7 @@ function Item:GetQuery()
 end
 
 function Item:IsUpgrade()
-	return self.hasItem and IsAddOnLoaded('Pawn') and PawnShouldItemLinkHaveUpgradeArrow(self.info.hyperlink)
+	return (self.hasItem or false) and IsAddOnLoaded('Pawn') and PawnShouldItemLinkHaveUpgradeArrow(self.info.hyperlink)
 end
 
 function Item:GetInventorySlot()
