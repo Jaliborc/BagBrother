@@ -21,11 +21,3 @@ function Items:RegisterEvents()
 		self:RegisterEvent('GUILDBANK_ITEM_LOCK_CHANGED', 'ForAll', 'UpdateLocked')
 	end
 end
-
-function Items:IsShowingBag(bag)
-	return bag == GetCurrentGuildBankTab()
-end
-
-function Items:NumSlots()
-	return 98
-end

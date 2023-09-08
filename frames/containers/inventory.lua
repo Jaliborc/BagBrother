@@ -9,6 +9,7 @@ local Frame = Addon.Frame:NewClass('Inventory')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
 Frame.ItemGroup = Addon.ContainerItemGroup
 Frame.Bags = Addon.InventoryBags
+Frame.PickupItem = C.PickupContainerItem
 Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
@@ -43,22 +44,6 @@ function Frame:HighlightMainMenu(checked)
 			button:SetButtonState('NORMAL')
 		end
 	end
-end
-
-
---[[ Sorting ]]--
-
-function Frame:SortItems()
-	if Addon.sets.serverSort and C.SortBags then
-		C.SortBags()
-		self:SendSignal('SORTING_STATUS')
-	else
-		self:Super(Frame):SortItems()
-	end
-end
-
-function Frame:PickupItem(bag, slot)
-	C.PickupContainerItem(bag, slot)
 end
 
 
@@ -110,4 +95,13 @@ function Frame:NumSlots(bag)
 		size = C.GetContainerNumSlots(bag)
 	end
 	return size or 0
+end
+
+function Frame:SortItems()
+	if Addon.sets.serverSort and C.SortBags then
+		C.SortBags()
+		self:SendSignal('SORTING_STATUS')
+	else
+		self:Super(Frame):SortItems()
+	end
 end

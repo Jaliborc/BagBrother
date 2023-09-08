@@ -13,22 +13,23 @@ local Sushi = LibStub('Sushi-3.1')
 Vault.Title = L.TitleVault
 Vault.OpenSound = SOUNDKIT.UI_ETHEREAL_WINDOW_OPEN
 Vault.CloseSound = SOUNDKIT.UI_ETHEREAL_WINDOW_CLOSE
+Vault.PickupItem = ClickVoidStorageSlot
 Vault.ItemGroup = Addon.VaultItemGroup
 Vault.MoneyFrame = Addon.TransferButton
 Vault.PurchasePrice = 100 * 100 * 100
 Vault.MoneySpacing = -24
 Vault.BrokerSpacing = -6
-Vault.Bags = {0}
+Vault.Bags = {1}
 
 
 --[[ Startup ]]--
 
 function Vault:New(id)
 	local f = self:Super(Vault):New(id)
-	f.Deposit = self.ItemGroup:New(f, {1}, DEPOSIT)
+	f.Deposit = self.ItemGroup:New(f, {2}, DEPOSIT)
 	f.Deposit:SetPoint('TOPLEFT', 10, -55)
 	f.Deposit:Hide()
-	f.Withdraw = self.ItemGroup:New(f, {2}, WITHDRAW)
+	f.Withdraw = self.ItemGroup:New(f, {3}, WITHDRAW)
 	f.Withdraw:SetPoint('TOPLEFT', f.Deposit, 'BOTTOMLEFT', 0, -5)
 	f.Withdraw:Hide()
 	return f
@@ -108,10 +109,10 @@ end
 function Vault:GetItemInfo(bag, slot)
 	if not self:IsCached() then
 		local item = {}
-		if bag == 0 then
-			item.itemID, item.iconFileID, item.isLocked, _,_, item.quality = GetVoidItemInfo(1, slot)
+		if bag == 1 then
+			item.itemID, item.iconFileID, item.isLocked, _,_, item.quality = GetVoidItemInfo(bag, slot)
 		else
-			local get = bag == 1 and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
+			local get = bag == 2 and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
 			for i = 1,9 do
 				if get(i) then
 					slot = slot - 1
@@ -127,7 +128,7 @@ function Vault:GetItemInfo(bag, slot)
 			_, item.hyperlink = GetItemInfo(item.itemID) 
 		end
 		return item
-	elseif bag == 0 then
+	elseif bag == 1 then
 		return self:Super(Vault):GetItemInfo('vault', slot)
 	end
 end
@@ -140,6 +141,10 @@ function Vault:Close()
 	C_PlayerInteractionManager.ClearInteraction(Enum.PlayerInteractionType.VoidStorageBanker)
 end
 
-function Vault:IsBagGroupShown() end
+function Vault:NumSlots(bag)
+	return (bag == 1 and 160) or (bag == 2 and GetNumVoidTransferDeposit()) or (bag == 3 and GetNumVoidTransferWithdrawal())
+end
+
 function Vault:HasMoney() return true end
+function Vault:IsBagGroupShown() end
 function Vault:HasBagToggle() end

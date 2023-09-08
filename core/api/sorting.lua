@@ -197,8 +197,8 @@ function Sort:Move(from, to)
     return
   end
 
-  self.target:PickupItem(from.bag, from.slot)
-  self.target:PickupItem(to.bag, to.slot)
+  self.target.PickupItem(from.bag, from.slot)
+  self.target.PickupItem(to.bag, to.slot)
 
   from.locked = true
   to.locked = true

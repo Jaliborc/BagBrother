@@ -58,11 +58,6 @@ end
 
 --[[ Properties ]]--
 
-function Items:NumSlots()
-	local bag = self:GetBag()
-	return (bag == 0 and 160) or (bag == 1 and GetNumVoidTransferDeposit()) or (bag == 2 and GetNumVoidTransferWithdrawal())
-end
-
 function Items:GetBag()
 	return self.bags[1].id
 end

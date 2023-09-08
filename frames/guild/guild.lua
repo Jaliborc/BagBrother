@@ -8,6 +8,7 @@ local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local Guild = Addon.Frame:NewClass('Guild')
 local Sushi = LibStub('Sushi-3.1')
 
+Guild.PickupItem = PickupGuildBankItem
 Guild.NoGuild = setmetatable({name=ERR_GUILD_PLAYER_NOT_IN_GUILD, address=''}, {__index = Addon.player})
 Guild.CloseSound = SOUNDKIT.GUILD_VAULT_CLOSE
 Guild.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
@@ -87,6 +88,10 @@ end
 
 function Guild:GetOwner()
 	return self.owner or Addon.guild or self.NoGuild
+end
+
+function Guild:NumSlots(bag)
+	return self:IsShowingBag(bag) and 98 or 0
 end
 
 function Guild:IsShowingBag(bag)

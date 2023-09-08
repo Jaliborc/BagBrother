@@ -23,7 +23,7 @@ end
 --[[ Interaction ]]--
 
 function Item:OnClick(button)
-	if not (HandleModifiedItemClick(self.info.link) or IsModifiedClick() or self:IsCached()) then
+	if not (HandleModifiedItemClick(self.info.link) or IsModifiedClick() or self:IsCached()) and self.bag == 1 then
 		local isRight = button == 'RightButton'
 		local type, _, link = GetCursorInfo()
 
@@ -55,11 +55,11 @@ function Item:ShowTooltip()
 	if not self:IsCached() then
 		GameTooltip:SetOwner(self:GetTipAnchor())
 
-		if self.bag == 0 then
+		if self.bag == 1 then
 			GameTooltip:SetVoidItem(1, self:GetID())
-		elseif self.bag == 1 then
-			GameTooltip:SetVoidDepositItem(self:GetID())
 		elseif self.bag == 2 then
+			GameTooltip:SetVoidDepositItem(self:GetID())
+		elseif self.bag == 3 then
 			GameTooltip:SetVoidWithdrawalItem(self:GetID())
 		end
 
