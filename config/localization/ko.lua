@@ -9,7 +9,7 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = '환경 설정에 따라 설정을 전환 할 수 있는 일반적인 기능입니다.'
 L.Locked = '창 위치 잠금'
-L.TipCount = '아이템 갯수를 툴팁에 표시'
+L.CountItems = '아이템 갯수를 툴팁에 표시'
 L.CountGuild = '길드 금고 포함'
 L.FlashFind = '빠른 찾기 사용'
 L.DisplayBlizzard = '숨은 가방 대비책'

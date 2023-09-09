@@ -2,7 +2,8 @@
 	<Script file="autoDisplay.lua"/>
 	<Script file="basicRules.lua"/>
 	<Script file="caching.lua"/>
-	<Script file="cacheInterface.lua"/> <!-- temp -->
+	<Script file="cacheInterface.lua"/> <!-- temp backwards compatibility -->
+	<Script file="currencyTooltips.lua"/>
+	<Script file="itemTooltips.lua"/>
 	<Script file="slashCommands.lua"/>
-	<Script file="tooltipCounts.lua"/>
 </Ui>

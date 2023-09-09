@@ -1,6 +1,7 @@
 --[[
 	frames.lua
 		Manages frame creation and display
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

@@ -1,6 +1,7 @@
 --[[
 	frame.lua
 		Useful methods to implement a class for frame objects.
+		All Rights Reserved.
 --]]
 
 

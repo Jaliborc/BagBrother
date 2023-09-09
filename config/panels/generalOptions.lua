@@ -10,14 +10,15 @@ local General = Addon.OptionsPanel('GeneralOptions', '|TInterface/Addons/BagBrot
 
 function General:Populate()
 	self:AddCheck('locked')
-	self:AddCheck('tipCount')
+	self:AddCheck('countItems')
 
-	if CanGuildBankRepair and self.sets.tipCount then
+	if CanGuildBankRepair and self.sets.countItems then
 		local guild = self:AddCheck('countGuild')
 		guild.left = guild.left + 10
 		guild:SetSmall(true)
 	end
 
+	self:AddCheck('countCurrency')
 	self:AddCheck('flashFind')
 	self:AddCheck('displayBlizzard')
 

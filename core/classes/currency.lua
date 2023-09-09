@@ -1,6 +1,7 @@
 --[[
 	currency.lua
 		A currency button
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -34,5 +35,9 @@ end
 
 function Currency:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:SetBackpackToken(self.data.index)
+	if self:IsCached() then
+		(GameTooltip.SetCurrencyByID or GameTooltip.SetCurrencyTokenByID)(GameTooltip, self.data.currencyTypesID)
+	else
+		GameTooltip:SetBackpackToken(self.data.index)
+	end
 end

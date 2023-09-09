@@ -1,6 +1,7 @@
 --[[
 	basicFilters.lua
 		Basic item filters based on item classes
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

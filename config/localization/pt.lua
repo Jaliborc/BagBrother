@@ -9,8 +9,9 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = 'Funcionalidades gerais do %s.'
 L.Locked = 'Bloquear Posição das Janelas'
-L.TipCount = 'Contar Stock na Descrição de Itens'
+L.CountItems = 'Contar Stock na Descrição de Itens'
 L.CountGuild = 'Incluir Bancos de Guildas'
+L.CountCurrency = 'Contar Stock na Descrição de Moedas'
 L.FlashFind = 'Flash Find'
 L.DisplayBlizzard = 'Mostrar Janelas da Blizzard para Sacos Desligados'
 L.ConfirmGlobals = 'Tens a certeza que queres desligar a configuração individual desta personagem? Todas as diferenças individuais serão perdidas.'

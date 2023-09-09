@@ -10,8 +10,9 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = 'Funciones generales que puedes aplicar según tus preferencias.'
 L.Locked = 'Bloquear posiciones'
-L.TipCount = 'Contador de objetos en tooltips'
-L.FlashFind = 'Activar búsqueda rápida'
+L.CountItems = 'Contador en Tooltips de Objetos'
+L.CountCurrency = 'Contador en Tooltips de Monedas'
+L.FlashFind = 'Búsqueda Instantanea'
 L.DisplayBlizzard = 'Mostrar ventanas de Blizzard para bolsas desactivadas'
 L.DisplayBlizzardTip = 'Si se activa, se mostrará la interfaz por defecto de Blizzard para bolsas ocultas del inventario o del banco.\n\n|cffff1919Requiere reiniciar la interfaz (UI Reload).|r'
 L.ConfirmGlobals = '¿Estás seguro de que quieres desactivar la configuración específica para este personaje? Se perderán todos los ajustes guardados.'

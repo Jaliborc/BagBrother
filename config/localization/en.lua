@@ -8,8 +8,9 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 -- general
 L.GeneralOptionsDesc = 'These are general features that can be toggled depending on your preferences.'
 L.Locked = 'Lock Frames'
-L.TipCount = 'Tooltip Item Counts'
+L.CountItems = 'Item Tooltip Counts'
 L.CountGuild = 'Include Guild Banks'
+L.CountCurrency = 'Currency Tooltip Counts'
 L.FlashFind = 'Flash Find'
 L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with that same item across frames.'
 L.DisplayBlizzard = 'Fallback Hidden Bags'

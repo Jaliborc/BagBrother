@@ -1,6 +1,7 @@
 --[[
 	currencyTracker.lua
 		Shows tracked currencies
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -44,33 +45,38 @@ function CurrencyTracker:Update()
 	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
-local function getCurrency(i) -- temporary till bagbrother expansion
-	local data = C.GetBackpackCurrencyInfo(i)
-	if data then
-		data.iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
-		data.index = i
-	end
-	return data
-end
-
 function CurrencyTracker:Layout()
 	for _,button in ipairs(self.buttons) do
 		button:Hide()
 	end
 
 	local w = 0
-	for i = 1, BackpackTokenFrame:GetMaxTokensWatched() do -- safety limit
-		local data = getCurrency(i)
-    	if data then
-			self.buttons[i] = self.buttons[i] or Addon.Currency(self)
-			self.buttons[i]:SetPoint('LEFT', self.buttons[i-1] or self, i > 1 and 'RIGHT' or 'LEFT')
-			self.buttons[i]:Set(data)
-
-			w = w + self.buttons[i]:GetWidth()
-		else
-			break
-    	end
-  end
+	if not self:IsCached() then
+		for i = 1, BackpackTokenFrame:GetMaxTokensWatched() do -- safety limit
+			local data = C.GetBackpackCurrencyInfo(i)
+			if data then
+				w = w + self:AddButton(i, data)
+			else
+				break
+			end
+		end
+	else
+		local owner = self:GetOwner()
+		for i, id in ipairs(owner.currency and owner.currency.tracked or {}) do
+			w = w + self:AddButton(i, {currencyTypesID = id, quantity = owner.currency[id], iconFileID = C.GetCurrencyInfo(id).iconFileID})
+		end
+	end
 
 	self:SetWidth(max(w, 2))
+end
+
+function CurrencyTracker:AddButton(i, data)
+	data.iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
+	data.index = i
+
+	self.buttons[i] = self.buttons[i] or Addon.Currency(self)
+	self.buttons[i]:SetPoint('LEFT', self.buttons[i-1] or self, i > 1 and 'RIGHT' or 'LEFT')
+	self.buttons[i]:Set(data)
+
+	return self.buttons[i]:GetWidth()
 end

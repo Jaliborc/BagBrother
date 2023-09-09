@@ -1,6 +1,7 @@
 --[[
 	autoDisplay.lua
 		Handles when to display the different mod frames and when to keep the blizzard ones hidden. Not pretty.
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

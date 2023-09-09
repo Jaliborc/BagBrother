@@ -12,8 +12,9 @@ L.ConfirmGlobals = 'Êtes-vous sûr de vouloir désactiver les paramètres spéc
 -- general
 L.GeneralOptionsDesc = 'Configuration des options générales de %s'
 L.Locked = 'Bloquer la position des fenêtres'
-L.TipCount = 'Activer l\'info-bulle du compteur d\'objets'
+L.CountItems = 'Activer l\'info-bulle du compteur d\'objets'
 L.CountGuild = 'Inclure les banques de guilde'
+L.CountCurrency = 'Activer l\'info-bulle du compteur d\'monnaies'
 L.FlashFind = 'Activer résultat éclair'
 L.EmptySlots = 'Afficher un fond sur les emplacements vides'
 L.DisplayBlizzard = 'Afficher les cadres de Blizzard pour les sacs désactivés'

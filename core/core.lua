@@ -1,6 +1,7 @@
 --[[
 	core.lua
 		Computes global constants and sets up config loading
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -36,7 +37,7 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 	end
 
-	CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel):SetScript('OnShow', function()
+	CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame):SetScript('OnShow', function()
 		LoadAddOn(ADDON .. '_Config')
 	end)
 end

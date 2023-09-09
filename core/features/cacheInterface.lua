@@ -1,6 +1,7 @@
 --[[
 	cacheInterface.lua
 		Legacy support of LibItemCache
+    All Rights Reserved
 --]]
 
 local C = LibStub('C_Everywhere').Container

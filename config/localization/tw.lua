@@ -9,7 +9,7 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = '根據你的喜好來切換一般功能設定。'
 L.Locked = '鎖定框架'
-L.TipCount = '物品統計提示'
+L.CountItems = '物品統計提示'
 L.CountGuild = '包括工會銀行'
 L.FlashFind = '閃爍找到'
 L.EmptySlots = '在空的槽位顯示背景顏色'

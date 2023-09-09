@@ -9,7 +9,7 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = 'Impostazioni generali di configurazioni per %s.'
 L.Locked = 'Blocca la posizione della finestra.'
-L.TipCount = 'Attiva conteggio degli oggetti.'
+L.CountItems = 'Attiva conteggio degli oggetti.'
 L.CountGuild = 'Includi Banca di Gilda'
 L.FlashFind = 'Attiva Ricerca Veloce.'
 L.DisplayBlizzard = 'Mostra le finestre di Blizzard per le borse disabilitate.'

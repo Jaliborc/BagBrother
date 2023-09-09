@@ -1,6 +1,7 @@
 --[[
-	tooltipCounts.lua
+	itemTooltips.lua
 		Adds item counts to tooltips
+		All rights reserved
 ]]--
 
 local ADDON, Addon = ...
@@ -43,26 +44,26 @@ end
 --[[ Startup ]]--
 
 function TipCounts:OnEnable()
-	if Addon.sets.tipCount then
-		if not self.initialized then
-			if TooltipDataProcessor then
-				TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)
-			else
-				for _,frame in pairs {UIParent:GetChildren()} do
-					if not frame:IsForbidden() and frame:GetObjectType() == 'GameTooltip' then
-						hooksecurefunc(frame, 'SetQuestItem', self.OnQuest)
-						hooksecurefunc(frame, 'SetQuestLogItem', self.OnQuest)
-						hooksecurefunc(frame, 'SetCraftItem', self.OnSetCraftItem)
-						hooksecurefunc(frame, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
-					
-						frame:HookScript('OnTooltipCleared', self.OnClear)
-						frame:HookScript('OnTooltipSetItem', self.OnItem)
-					end
+	if Addon.sets.countItems then
+		if TooltipDataProcessor then
+			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)
+		else
+			for _,frame in pairs {UIParent:GetChildren()} do
+				if not frame:IsForbidden() and frame:GetObjectType() == 'GameTooltip' then
+					hooksecurefunc(frame, 'SetQuestItem', self.OnQuest)
+					hooksecurefunc(frame, 'SetQuestLogItem', self.OnQuest)
+					hooksecurefunc(frame, 'SetCraftItem', self.OnSetCraftItem)
+					hooksecurefunc(frame, 'SetTradeSkillItem', self.OnSetTradeSkillItem)
+				
+					frame:HookScript('OnTooltipCleared', self.OnClear)
+					frame:HookScript('OnTooltipSetItem', self.OnItem)
 				end
 			end
-
-			self.initialized = true
 		end
+		
+		self:UnregisterSignal('UPDATE_ALL')
+	else
+		self:RegisterSignal('UPDATE_ALL', 'OnEnable')
 	end
 end
 
@@ -100,7 +101,7 @@ end
 --[[ API ]]--
 
 function TipCounts:AddOwners(tip, link)
-	if not tip.__hasCounters and Addon.sets.tipCount then
+	if not tip.__hasCounters and Addon.sets.countItems then
 		local id = tonumber(link and GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
 		if id and id ~= HEARTHSTONE_ITEM_ID then
 			local players = 0

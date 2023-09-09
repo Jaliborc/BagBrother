@@ -1,6 +1,7 @@
 --[[
 	owners.lua
 		Maintains a list of owner objects
+		All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -96,7 +97,7 @@ end
 function Owners:New(id, realm)
 	local cache = GetOrCreateTableEntry(GetOrCreateTableEntry(BrotherBags, realm), id)
 	if not self.registry[cache] then
-		local isguild = id:find('*$')
+		local isguild = id:find('*$') and true
 		local name = isguild and id:sub(1,-2) or id
 		local owner = setmetatable({
 			id = id, realm = realm, name = name,

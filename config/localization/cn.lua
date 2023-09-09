@@ -10,7 +10,7 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = '这些通用功能可以依据配置切换。'
 L.Locked = '锁定框架'
-L.TipCount = '提示物品数目'
+L.CountItems = '提示物品数目'
 L.CountGuild = '包含公会银行'
 L.FlashFind = '闪烁搜索'
 L.DisplayBlizzard = '显示暴雪框架隐藏背包'

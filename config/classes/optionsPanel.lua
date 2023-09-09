@@ -1,5 +1,5 @@
 --[[
-	panel.lua
+	optionsPanel.lua
 		Options menu class with API shared among all panels
 --]]
 
