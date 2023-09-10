@@ -96,7 +96,7 @@ end
 function Cacher:CURRENCY_TRACKED_CHANGED()
 	wipe(self.player.currency.tracked)
 
-	for i = 1,30 do
+	for i = 1, Addon.CurrencyLimit do
 		local data = C.CurrencyInfo.GetBackpackCurrencyInfo(i)
 		if data then
 			tinsert(self.player.currency.tracked, data.currencyTypesID)

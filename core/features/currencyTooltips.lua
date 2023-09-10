@@ -9,8 +9,11 @@ local C = LibStub('C_Everywhere').CurrencyInfo
 local TipCounts = Addon:NewModule('CurrencyTooltipCounts')
 
 local SILVER = '|cffc7c7cf%s|r'
-local MAXIMUM = CURRENCY_TOTAL_CAP:match('[^:]+')
 local WEEKLY = CURRENCY_WEEKLY_CAP:match('[^:]+')
+local MAXIMUM = CURRENCY_TOTAL_CAP:match('[^:]+')
+
+
+--[[ Startup ]]--
 
 function TipCounts:OnEnable()
 	if Addon.sets.countCurrency then
@@ -30,6 +33,9 @@ function TipCounts:OnEnable()
 		self:RegisterSignal('UPDATE_ALL', 'OnEnable')
 	end
 end
+
+
+--[[ Events ]]--
 
 function TipCounts.OnCurrency(tip)
     local data = tip:GetPrimaryTooltipData()
@@ -52,7 +58,7 @@ function TipCounts.OnID(tip, id)
 			last:SetText('')
 			last = _G[name..tip:NumLines()-1]
 
-			if last:GetText():match('%s*') then
+			if last:GetText():match('^%s*$') then
 				last:SetText('')
 			end
 		end

@@ -9,7 +9,7 @@ local C = LibStub('C_Everywhere').CurrencyInfo
 local CurrencyTracker = Addon.Parented:NewClass('CurrencyTracker', 'Frame')
 
 if BackpackTokenFrame then
-	function BackpackTokenFrame:GetMaxTokensWatched() return 30 end
+	function BackpackTokenFrame:GetMaxTokensWatched() return Addon.CurrencyLimit end
 end
 
 
@@ -52,7 +52,7 @@ function CurrencyTracker:Layout()
 
 	local w = 0
 	if not self:IsCached() then
-		for i = 1, BackpackTokenFrame:GetMaxTokensWatched() do -- safety limit
+		for i = 1, Addon.CurrencyLimit do
 			local data = C.GetBackpackCurrencyInfo(i)
 			if data then
 				w = w + self:AddButton(i, data)
