@@ -26,8 +26,22 @@ function Cacher:OnEnable()
 	self.player.class = UnitClassBase('player')
 	self.player.level = UnitLevel('player')
 	self.player.sex = UnitSex('player')
+	--[[
+		When the player interacts with the banker and the bank window opens, event BANKFRAME_OPENED fires once.
+		After that, if the player closes the bank window manually, event BANKFRAME_CLOSED also fires once and bank vault data is still available for caching.
+		But if the bank window closes automatically (for example when the player moves away from the banker) then event BANKFRAME_CLOSED fires twice in a row.
+		When BANKFRAME_CLOSED event fires for the first time the bank data is still available, when it fires the second time the bank data is no longer available (so the player's bank cache can be overwritten with empty data).
+		As of August 4, 2023, this behavior is typical for WotLK and not for Retail, where bank data remains available for caching even after the second trigger of the BANKFRAME_CLOSED event.
+		
+		isBankFrameOpen parameter is used to avoid caching empty data when the bank window is closed and no data is available.
+	--]]
+	self.isBankFrameOpen = false
 
 	self:RegisterSignal('BAG_UPDATE')
+	--[[
+		Register signal BANK_OPEN for Blizzard API event BANKFRAME_OPENED
+	--]]
+	self:RegisterSignal('BANK_OPEN')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
 	self:RegisterEvent('PLAYER_MONEY')
@@ -104,16 +118,30 @@ function Cacher:CURRENCY_TRACKED_CHANGED()
 	end
 end
 
+--[[
+	Switching the state of parameter in order to further determine whether the bank window is open and whether player's data is available for caching
+--]]
+function Cacher:BANK_OPEN()
+	self.isBankFrameOpen = true
+end
+
 function Cacher:BANK_CLOSE()
-	for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-		self:SaveBag(i)
+	--[[
+		If the banking window is open then the player's data is available for caching
+	--]]
+	if self.isBankFrameOpen then
+		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
+			self:SaveBag(i)
+		end
+		if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
+			self:SaveBag(REAGENTBANK_CONTAINER)
+		end
+		self:SaveBag(BANK_CONTAINER)
 	end
-
-	if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-		self:SaveBag(REAGENTBANK_CONTAINER)
-	end
-
-	self:SaveBag(BANK_CONTAINER)
+	--[[
+		Returning the state of the parameter to its default value
+	--]]
+	self.isBankFrameOpen = false
 end
 
 function Cacher:VAULT_CLOSE()
