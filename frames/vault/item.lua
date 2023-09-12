@@ -23,7 +23,7 @@ end
 --[[ Interaction ]]--
 
 function Item:OnClick(button)
-	if not (HandleModifiedItemClick(self.info.link) or IsModifiedClick() or self:IsCached()) and self.bag == 1 then
+	if not (HandleModifiedItemClick(self.info.hyperlink) or IsModifiedClick() or self:IsCached()) and self.bag == 1 then
 		local isRight = button == 'RightButton'
 		local type, _, link = GetCursorInfo()
 
@@ -35,9 +35,9 @@ function Item:OnClick(button)
 					end
 				end
 			end
-		elseif isRight and self.info.locked then
+		elseif isRight and self.info.isLocked then
 			for i = 1,9 do
-				if GetVoidTransferWithdrawalInfo(i) == self.info.id then
+				if GetVoidTransferWithdrawalInfo(i) == self.info.itemID then
 					ClickVoidTransferWithdrawalSlot(i, true)
 				end
 			end

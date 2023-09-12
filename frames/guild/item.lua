@@ -24,14 +24,14 @@ end
 --[[ Events ]]--
 
 function Item:OnClick(button)
-	if HandleModifiedItemClick(self.info.link) then
+	if HandleModifiedItemClick(self.info.hyperlink) then
 		return
 	elseif IsModifiedClick('SPLITSTACK') then
-		if not CursorHasItem() and not self.info.locked and self.info.count > 1 then
+		if not CursorHasItem() and not self.info.isLocked and self.info.stackCount > 1 then
 			if OpenStackSplitFrame then
-				OpenStackSplitFrame(self.info.count, self, 'BOTTOMLEFT', 'TOPLEFT')
+				OpenStackSplitFrame(self.info.stackCount, self, 'BOTTOMLEFT', 'TOPLEFT')
 			else
-				StackSplitFrame:OpenStackSplitFrame(self.info.count, self, 'BOTTOMLEFT', 'TOPLEFT')
+				StackSplitFrame:OpenStackSplitFrame(self.info.stackCount, self, 'BOTTOMLEFT', 'TOPLEFT')
 			end
 		end
 	else

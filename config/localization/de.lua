@@ -67,6 +67,7 @@ L.Merchant = 'beim Verlassen des Handlers'
 -- colors
 L.ColorOptions = 'Farbeinstellungen'
 L.ColorOptionsDesc = 'Einstellungen für das Einfärben der Gegenstandslots'
+
 L.GlowQuality = 'Gegenstände nach der Seltenheit hervorheben'
 L.GlowNew = 'Neue Gegenstände hervorheben'
 L.GlowQuest = 'Questgegenstände hervorheben'

@@ -81,6 +81,7 @@ L.MapFrame = '지도를 열 때 가방 닫기'
 -- colors
 L.ColorOptions = '색상 설정'
 L.ColorOptionsDesc = '이 설정은 아이템의 변화 상황을 쉽게 구분할 수 있도록 표시합니다.'
+
 L.GlowQuality = '품질에 따라 아이템 강조'
 L.GlowQuest = '퀘스트 아이템 강조'
 L.GlowUnusable = '사용할 수 없는 아이템 강조'

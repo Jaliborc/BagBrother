@@ -41,7 +41,6 @@ L.DoubleClick = '<Doble Clic>'
 L.ShiftClick = '<Shift+Clic>'
 
 --tooltips
-L.Total = 'Total'
 L.GuildFunds = 'Fondos de hermandad'
 L.TipGoldOnRealm = 'Total en %s'
 L.NumWithdraw = 'Retirar %d'
@@ -75,7 +74,6 @@ L.TipCountBags = 'Bolsas: %d'
 L.TipCountBank = 'Banco: %d'
 L.TipCountVault = 'Depósito: %d'
 L.TipCountGuild = 'Hermandad: %d'
-L.TipDelimiter = '|'
 
 --dialogs
 L.AskMafia = 'Pregunta a La Mafia'

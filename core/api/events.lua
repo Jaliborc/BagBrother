@@ -152,6 +152,10 @@ function Events:UpdateContent(bag)
 end
 
 function Events:UpdateLocation(where)
-	self['At' .. where[1]] = where[2]
-	self:SendSignal(where[1]:upper() .. (where[2] and '_OPEN' or '_CLOSE'))
+	local location, state = unpack(where)
+	local key = 'At' .. location
+	if self[key] ~= state then -- Blizzard can fire multiple times
+		self[key] = state
+		self:SendSignal(location:upper() .. (state and '_OPEN' or '_CLOSE'))
+	end
 end

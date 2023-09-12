@@ -13,7 +13,7 @@ L.ToggleGuild = 'Afficher votre banque de guilde'
 L.ToggleVault = 'Afficher votre chambre du Vide'
 
 --terminal
-L.Commands = 'Liste des commandes :'
+L.Commands = 'Liste des commandes :'
 L.CmdShowInventory = 'Affiche ou cache votre inventaire'
 L.CmdShowBank = 'Affiche ou cache votre banque'
 L.CmdShowGuild = 'Affiche ou cache votre banque de guilde'
@@ -22,10 +22,15 @@ L.CmdShowVersion = 'Affiche la version actuelle'
 L.CmdShowOptions = 'Ouvre le menu de configuration'
 L.Updated = 'Mise à jour vers la v%s'
 
---frames
+--frame titles
 L.TitleBags = 'Inventaire |2 %s'
 L.TitleBank = 'Banque |2 %s'
 L.TitleVault = 'Chambre du Vide |2 %s'
+
+--dropdowns
+L.TitleFrames = '%s Fenêtres'
+L.SelectCharacter = 'Choisir Personnage'
+L.ConfirmDelete = 'Etes-vous sur de vouloir supprimer le cache de %s ?'
 
 --interactions
 L.Click = 'Cliquez'
@@ -36,37 +41,42 @@ L.DoubleClick = '<Double Clic>'
 L.ShiftClick = '<Shift+Clic>'
 
 --tooltips
-L.TipChangePlayer = '%s pour afficher les objets d\'un autre personnage.'
-L.TipCleanBags = '%s pour ranger vos sacs.'
-L.TipCleanBank = '%s pour ranger votre banque.'
-L.TipDepositReagents = '%s pour déposer tous les composants.'
-L.TipFrameToggle = '%s pour afficher d\'autres fenêtres.'
+L.GuildFunds = 'Fonds de Guilde'
 L.TipGoldOnRealm = '%s Totals'
+L.NumWithdraw = '%d |4retrait:retraits;'
+L.NumDeposit = '%d |4dépôt:dépôts;'
+L.NumRemainingWithdrawals = '%d Retraits Restant'
+
+--action tooltips
+L.TipChangePlayer = '%s pour afficher les objets d\'un autre personnage.'
+L.TipCleanItems = 'Tri automatique'
+L.TipConfigure = 'Configuration'
+L.TipDepositReagents = '%s pour déposer tous les composants.'
+L.TipDeposit = '%s pour déposer.'
+L.TipWithdraw = '%s pour retirer (%s restant).'
+L.TipFrameToggle = '%s pour afficher d\'autres fenêtres.'
 L.TipHideBag = '%s pour cacher ce sac.'
 L.TipHideBags = '%s pour cacher l\'affichage des sac.'
 L.TipHideSearch = '%s pour cacher le champ de recherche.'
-L.TipResetPlayer = '%s pour retourner sur le personnage actuel.'
+L.TipMove = '%s pour déplacer.'
 L.PurchaseBag = '%s pour acheter cet emplacement de sac.'
+L.TipResetPlayer = '%s pour retourner sur le personnage actuel.'
 L.TipShowBag = '%s pour afficher ce sac.'
 L.TipShowBags = '%s pour afficher la fenêtre de vos sacs.'
 L.TipShowBank = '%s pour afficher/cacher votre banque.'
 L.TipShowInventory = '%s pour afficher/cacher votre inventaire.'
-L.TipShowMenu = '%s pour configurer cette fenêtre.'
 L.TipShowOptions = '%s pour ouvrir le menu des options.'
-L.TipShowSearch = '%s pour rechercher.'
-L.TipShowFrameConfig = '%s pour configurer cette fenêtre.'
-L.TipDeposit = '%s pour déposer.'
-L.TipWithdrawRemaining = '%s pour retirer (%s encore possible).'
-L.TipWithdraw = '%s pour retirer (no remaining).'
-L.NumWithdraw = '%d |4retrait:retraits;'
-L.NumDeposit = '%d |4dépôt:dépôts;'
-L.GuildFunds = 'Guild Funds'
-L.Total = 'Total'
+L.TipShowSearch = 'Rechercher'
 
---itemcount tooltips
-L.TipCountEquip = 'Équipé : %d'
-L.TipCountBags = 'Sacs : %d'
-L.TipCountBank = 'Banque : %d'
-L.TipCountVault = 'Chambre : %d'
-L.TipCountGuild = 'Guilde : %d'
-L.TipDelimiter = '|'
+--item tooltips
+L.TipCountEquip = 'Équipé : %d'
+L.TipCountBags = 'Sacs : %d'
+L.TipCountBank = 'Banque : %d'
+L.TipCountVault = 'Chambre : %d'
+L.TipCountGuild = 'Guilde : %d'
+
+--dialogs
+L.AskMafia = 'Demander à la Mafia'
+L.ConfirmTransfer = 'Déposer un objet retirera toute modification et le rendra non échangeable et non remboursable.|n|nVoulez-vous continuer?'
+L.CannotPurchaseVault = 'Pas assez d\'or pour débloquer la Chambre du Vide|n|n|cffff2020Cost: %s|r'
+L.PurchaseVault = 'Souhaitez-vous débloquer la Banque du Chambre?|n|n|cffffd200Cost:|r %s'

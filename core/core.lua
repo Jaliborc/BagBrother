@@ -11,6 +11,7 @@ Addon.Version = GetAddOnMetadata(ADDON, 'Version')
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
+Addon.CurrencyLimit = 30  -- safety tracking limit
 
 Addon.None = {}
 Addon.BankBags = {BANK_CONTAINER}

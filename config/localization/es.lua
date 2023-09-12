@@ -82,6 +82,7 @@ L.MapFrame = 'Al abrir el mapa del mundo'
 -- colors
 L.ColorOptions = 'Opciones de color'
 L.ColorOptionsDesc = 'Estas opciones te permite cambiar los colores de las ranuras en las ventanas de %s.'
+
 L.GlowQuality = 'Colorear según la calidad'
 L.GlowQuest = 'Colorear objetos de misión'
 L.GlowUnusable = 'Colorear objetos inutilizables'

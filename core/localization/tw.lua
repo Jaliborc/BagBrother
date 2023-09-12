@@ -69,7 +69,6 @@ L.TipCountBags = '背包: %d'
 L.TipCountBank = '銀行: %d'
 L.TipCountVault = '虛空倉庫: %d'
 L.TipCountGuild = '工會銀行: %d'
-L.TipDelimiter = '|'
 
 --databroker plugin tooltips
 L.TipShowInventory = '<左鍵點擊>切換背包。'

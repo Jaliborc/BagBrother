@@ -73,6 +73,7 @@ L.MapFrame = '打開世界地圖'
 -- colors
 L.ColorOptions = '顏色設定'
 L.ColorOptionsDesc = '讓你設定在%s框架裡較簡單辨識物品槽位。'
+
 L.GlowQuality = '根據品質高亮物品'
 L.GlowNew = '高亮新物品'
 L.GlowQuest = '高亮任務物品'

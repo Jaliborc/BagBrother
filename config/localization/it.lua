@@ -81,6 +81,7 @@ L.MapFrame = 'Quando apri la Mappa del Mondo'
 -- colors
 L.ColorOptions = 'Impostazioni del Colore'
 L.ColorOptionsDesc = 'Impostazione dei Colori sui vari Oggetti.'
+
 L.GlowQuality = 'Evidenzia Oggetti per Qualità.'
 L.GlowQuest = 'Evidenzia Oggetti delle Missioni.'
 L.GlowUnusable = 'Evidenzia Oggetti non Utilizzabili.'
