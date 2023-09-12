@@ -52,7 +52,7 @@ function Item:Construct()
 	local b = self:Super(Item):Construct()
 	local name = b:GetName()
 
-	b.Flash = b:CreateAnimationGroup()
+	b.FlashFind = b:CreateAnimationGroup()
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
 	b.Cooldown, b.QuestBorder = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
 	b.UpdateTooltip = self.OnEnter
@@ -66,17 +66,19 @@ function Item:Construct()
 	b.IconGlow:SetSize(67, 67)
 
 	for i = 1, 3 do
-		local fade = b.Flash:CreateAnimation('Alpha')
+		local fade = b.FlashFind:CreateAnimation('Alpha')
+		fade:SetChildKey('flash')
 		fade:SetOrder(i * 2)
-		fade:SetDuration(.2)
-		fade:SetFromAlpha(.8)
-		fade:SetToAlpha(0)
+		fade:SetDuration(.4)
+		fade:SetFromAlpha(.1)
+		fade:SetToAlpha(1)
 
-		local fade = b.Flash:CreateAnimation('Alpha')
+		local fade = b.FlashFind:CreateAnimation('Alpha')
+		fade:SetChildKey('flash')
 		fade:SetOrder(i * 2 + 1)
-		fade:SetDuration(.3)
-		fade:SetFromAlpha(0)
-		fade:SetToAlpha(.8)
+		fade:SetDuration(.4)
+		fade:SetFromAlpha(1)
+		fade:SetToAlpha(.1)
 	end
 
 	b:SetScript('OnEvent', nil)
@@ -230,7 +232,7 @@ function Item:UpdateNewItemAnimation()
 	self.NewItemTexture:SetShown(new)
 
 	if new then
-		self.NewItemTexture:SetAtlas(quality and NEW_ITEM_ATLAS_BY_QUALITY[quality] or 'bags-glow-white')
+		self.NewItemTexture:SetAtlas(self.info.quality and NEW_ITEM_ATLAS_BY_QUALITY[self.info.quality] or 'bags-glow-white')
 		self.newitemglowAnim:Play()
 		self.flashAnim:Play()
 	end
