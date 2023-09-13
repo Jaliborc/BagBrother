@@ -104,7 +104,7 @@ function Cacher:PLAYER_MONEY()
 end
 
 function Cacher:CURRENCY_DISPLAY_UPDATE(_, id, quantity)
-	self.player.currency[id] = quantity > 0 and quantity or nil
+	self.player.currency[id] = quantity and quantity > 0 or nil
 end
 
 function Cacher:CURRENCY_TRACKED_CHANGED()
