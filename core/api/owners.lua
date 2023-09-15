@@ -137,14 +137,14 @@ end
 function Owners:GetIcon()
 	if self.race then
 		if RACE_TEXTURE then
-			return RACE_TEXTURE, RACE_TABLE[self.race:upper() .. '_' .. (self.gender == 3 and 'FEMALE' or 'MALE')]
+			return RACE_TEXTURE, RACE_TABLE[self.race:upper() .. '_' .. (self.sex == 3 and 'FEMALE' or 'MALE')]
 		end
 
 		local race = self.race:lower()
-		return format('raceicon-%s-%s', RACE_TABLE[race] or race, self.gender == 3 and 'female' or 'male')
+		return format('raceicon-%s-%s', RACE_TABLE[race] or race, self.sex == 3 and 'female' or 'male')
 	end
 
-	return self.faction == 'Alliance' and ALLIANCE_BANNER or HORDE_BANNER, DEFAULT_COORDS
+	return self.faction and ALLIANCE_BANNER or HORDE_BANNER, DEFAULT_COORDS
 end
 
 function Owners:GetColorMarkup()
@@ -156,7 +156,7 @@ function Owners:GetColorMarkup()
 end
 
 function Owners:GetColor()
-	return self.class and (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[self.class] or PASSIVE_SPELL_FONT_COLOR
+	return self.class and (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[self.class] or WHITE_FONT_COLOR
 end
 
 function Owners:GetMoney()
