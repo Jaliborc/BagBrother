@@ -216,7 +216,8 @@ end
 
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search or ''
-	local matches = search == '' or self.hasItem and Search:Matches(self:GetQuery(), search)
+	local itemInfo = self:GetInfo()
+	local matches = search == '' or self.hasItem and Search:Matches(itemInfo, search)
 
 	self:SetAlpha(matches and 1 or 0.3)
 	self:SetDesaturated(not matches or self.info.isLocked)
