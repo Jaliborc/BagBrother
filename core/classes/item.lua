@@ -216,7 +216,7 @@ end
 
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search or ''
-	local itemInfo= self:GetInfo()
+	local itemInfo = self:GetInfo()
 	local matches = search == '' or self.hasItem and Search:Matches(itemInfo.hyperlink, search)
 
 	self:SetAlpha(matches and 1 or 0.3)
