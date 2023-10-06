@@ -207,11 +207,7 @@ function Item:UpdateSecondary()
 end
 
 function Item:UpdateFocus()
-	if self:GetBag() == self:GetFrame().focusedBag then
-		self:LockHighlight()
-	else
-		self:UnlockHighlight()
-	end
+	self:SetHighlightLocked(self:GetBag() == self:GetFrame().focusedBag)
 end
 
 function Item:UpdateSearch()
