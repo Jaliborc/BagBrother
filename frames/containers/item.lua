@@ -13,6 +13,7 @@ local C = LibStub('C_Everywhere').Container
 
 function Item:Construct()
   local b = self:Super(Item):Construct()
+  b.Cooldown:SetScript('OnCooldownDone', function() SetItemButtonTextureVertexColor(b, 1,1,1) end)
   b:SetScript('PreClick', b.OnPreClick)
   return b
 end
@@ -85,10 +86,8 @@ end
 
 function Item:UpdateCooldown()
 	if self.hasItem and not self:IsCached() then
-		local start, duration, enable = C.GetContainerItemCooldown(self:GetBag(), self:GetID())
-		local fade = duration > 0 and 0.4 or 1
-
-		CooldownFrame_Set(self.Cooldown, start, duration, enable)
+		CooldownFrame_Set(self.Cooldown, C.GetContainerItemCooldown(self:GetBag(), self:GetID()))
+		local fade = self.Cooldown:IsShown() and 0.4 or 1
 		SetItemButtonTextureVertexColor(self, fade,fade,fade)
 	else
 		CooldownFrame_Set(self.Cooldown, 0,0,0)

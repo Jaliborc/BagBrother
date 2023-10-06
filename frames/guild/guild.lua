@@ -9,7 +9,7 @@ local Guild = Addon.Frame:NewClass('Guild')
 local Sushi = LibStub('Sushi-3.1')
 
 Guild.PickupItem = PickupGuildBankItem
-Guild.NoGuild = setmetatable({name=ERR_GUILD_PLAYER_NOT_IN_GUILD, address=''}, {__index = Addon.player})
+Guild.NoGuild = setmetatable({name=RED_FONT_COLOR:WrapTextInColorCode(ERR_GUILD_PLAYER_NOT_IN_GUILD), address='', isguild=true}, {__index = Addon.player})
 Guild.CloseSound = SOUNDKIT.GUILD_VAULT_CLOSE
 Guild.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
 Guild.MoneyFrame = Addon.GuildMoneyFrame

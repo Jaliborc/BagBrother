@@ -15,8 +15,8 @@ Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
 Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
 
 Bag.StaticIcons = {
-	[BACKPACK_CONTAINER] = 'interface/buttons/button-backpack-up',
-	[BANK_CONTAINER] = 'interface/buttons/button-backpack-up',
+	[BACKPACK_CONTAINER] = 130716,
+	[BANK_CONTAINER] = 'interface/addons/bagBrother/art/achievement-guildperk-mobilebanking',
 	[KEYRING_CONTAINER or false] = 'interface/containerframe/keyring-bag-icon',
 	[REAGENTBANK_CONTAINER or false] = 'interface/icons/achievement_guildperk_bountifulbags',
 }
@@ -192,7 +192,7 @@ function Bag:Toggle()
 end
 
 function Bag:ShowFilters()
-	if self:GetID() >= BACKPACK_CONTAINER and not self:IsCached() then
+	if self:GetID() >= BACKPACK_CONTAINER and not self:IsCached() and ContainerFrame1FilterDropDown then
 		ContainerFrame1FilterDropDown:SetParent(self)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 		ToggleDropDownMenu(1, nil, ContainerFrame1FilterDropDown, self, 0, 0)

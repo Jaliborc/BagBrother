@@ -161,7 +161,7 @@ end
 
 function Owners:GetMoney()
 	if self.offline then
-		return self.money
+		return self.money or 0
 	elseif self.isguild then
 		return GetGuildBankMoney() or 0
 	else

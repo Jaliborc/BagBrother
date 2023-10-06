@@ -3,7 +3,7 @@
         Credits/Blame: Phanx, Woopy, a14219
 --]]
 
-local CONFIG, Config = ...
+local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'esES') or LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'esMX')
 if not L then return end
 

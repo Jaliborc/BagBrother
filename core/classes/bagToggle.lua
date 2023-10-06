@@ -39,7 +39,7 @@ function BagToggle:OnClick(button)
 
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
 	else
-		self:ToggleDropdown()
+		Addon.Frames:Show(self:GetFrameID() == 'bank' and 'inventory' or 'bank', self:GetOwner())
 		self:Update()
 	end
 end
@@ -60,30 +60,6 @@ end
 
 
 --[[ API ]]--
-
-function BagToggle:ToggleDropdown()
-	local menu = {{text = L.TitleFrames:format(ADDON), isTitle = true}}
-
-	for i, frame in Addon.Frames:Iterate() do
-		if frame.id ~= self:GetFrameID() and frame.id ~= 'guild' and Addon.Frames:IsEnabled(frame.id) then
-			tinsert(menu, {
-				text = frame.name,
-				notCheckable = 1,
-				func = function()
-					Addon.Frames:Show(frame.id, self:GetOwner())
-				end
-			})
-		end
-	end
-
-	local drop = #menu > 2 and Sushi.Dropdown:Toggle(self)
-	if drop then
-		drop:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -11)
-		drop:SetChildren(menu)
-	elseif #menu == 2 then
-		menu[2].func()
-	end
-end
 
 function BagToggle:Update()
 	self:SetChecked(self:IsBagGroupShown())
