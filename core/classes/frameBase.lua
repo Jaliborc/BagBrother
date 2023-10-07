@@ -98,13 +98,26 @@ end
 function Frame:IsShowingItem(bag, slot)
 	local info = self:GetItemInfo(bag, slot)
 	local rule = Addon.Rules:Get(self.subrule or self.rule)
-
+	local profile = self:GetProfile()
+	local bagName =C_Container.GetBagName(bag)
+	local itemType, itemSubType
+	if bagName then
+		_, _, _, _, _, itemType, itemSubType= GetItemInfo(bagName)
+	end
 	if rule and rule.func then
 		if not rule.func(self.owner, bag, slot, self:GetBagInfo(bag), info) then
 			return
 		end
 	end
-
+	if info.itemID == nil then -- if itemID is nil, then it is an empty slot
+		if profile.HideEmptySlot == 'BAG' and (itemSubType == INVTYPE_BAG or bagName ~= nil)  then --bagName ~= nil is for the backpack
+			return
+		elseif profile.HideEmptySlot == 'KEYRING' and bagName == nil then -- if bagName is nil, then it is the keyring
+			return
+		elseif profile.HideEmptySlot == 'BOTH' then
+			return
+		end
+	end
 	return self:IsShowingQuality(info.quality)
 end
 
