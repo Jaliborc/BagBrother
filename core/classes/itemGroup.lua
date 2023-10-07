@@ -99,9 +99,8 @@ function Items:Layout()
 	end
 
 	-- Position slots
-	local profile = self:GetProfile()
 	local columns, scale, size = self:LayoutTraits()
-
+	local profile = self:GetProfile()
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
 	local x, y = 0,0
 
@@ -127,7 +126,8 @@ function Items:Layout()
 				end
 			end
 
-			if self:GetProfile().bagBreak and x > 0 then
+
+			if profile.bagBreak and x > 0 then
 				y = y + 1
 				x = 0
 			end
