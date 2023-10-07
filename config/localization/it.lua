@@ -46,6 +46,7 @@ L.Layer = 'Livello'
 L.BagBreak = 'Separazione tra Borse'
 L.ReverseBags = 'Inverti le Borse'
 L.ReverseSlots = 'Inverti gli Scomparti'
+L.HideEmptySlot = 'Nascondi gli spazi vuoti'
 
 L.Color = 'Colore della Finestra'
 L.BorderColor = 'Colore del Bordo'

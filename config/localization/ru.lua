@@ -45,6 +45,7 @@ L.Layer = 'Слой'
 L.BagBreak = 'Каждая сумка с новой строки'
 L.ReverseBags = 'Обратный порядок сумок'
 L.ReverseSlots = 'Обратный порядок ячеек'
+L.HideEmptySlot = 'Скрыть пустые слоты'
 
 L.Color = 'Цвет фона окна'
 L.BorderColor = 'Цвет границы окна'

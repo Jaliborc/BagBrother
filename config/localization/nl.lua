@@ -49,6 +49,7 @@ L.Layer = 'Laag'
 L.BagBreak = 'Tas Onderbreken'
 L.ReverseBags = 'Omgekeerde Tasvolgorde'
 L.ReverseSlots = 'Omgekeerde Slotvolgorde'
+L.HideEmptySlot = 'Verberg lege plaatsen'
 
 L.Color = 'Achtergrondkleur'
 L.BorderColor = 'Randkleur'

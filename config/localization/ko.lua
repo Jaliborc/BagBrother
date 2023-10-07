@@ -46,6 +46,7 @@ L.Layer = '레이어'
 L.BagBreak = '가방 별로 구분하여 표시'
 L.ReverseBags = '가방 순서 반대로'
 L.ReverseSlots = '칸 순서 반대로'
+L.HideEmptySlot = '빈 슬롯 숨기기'
 
 L.Color = '배경 색상'
 L.BorderColor = '테두리 색상'

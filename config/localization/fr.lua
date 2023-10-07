@@ -47,6 +47,7 @@ L.Layer = 'Couche'
 L.BagBreak = 'Séparation entre les sacs'
 L.ReverseBags = 'Inverser ordre des sacs'
 L.ReverseSlots = 'Inverser ordre de tri'
+L.HideEmptySlot = 'Cacher les emplacements vides'
 
 L.Color = 'Couleur de la fenêtre'
 L.BorderColor = 'Couleur de bordure'

@@ -37,6 +37,7 @@ L.Layer = '階層'
 L.BagBreak = '根據背包顯示'
 L.ReverseBags = '反轉背包順序'
 L.ReverseSlots = '反轉槽位順序'
+L.HideEmptySlot = '隱藏空槽'
 
 L.Color = '背景顏色'
 L.BorderColor = '邊框顏色'
