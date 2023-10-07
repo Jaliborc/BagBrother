@@ -116,11 +116,11 @@ function Sort:GetSpaces()
 		local item = self.target:GetItemInfo(bag, slot)
 		local id = item.itemID
 		if id then
-			local name, _,_, level, _,_,_,_, equip, _, _, class, subclass = GetItemInfo(id) 
+			local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
 
 			item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class
 			item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
-			item.subclass, item.equip, item.level = subclass, equip, level
+			item.subclass, item.equip, item.level, item.stack = subclass, equip, level, stack
 			item.family = GetItemFamily(id) or 0
 		end
 
