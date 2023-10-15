@@ -119,5 +119,5 @@ function Item:GetQuestInfo()
 end
 
 function Item:GetQuery()
-	return {bagID = self:GetBag(), slotIndex = self:GetID()}
+	return self:IsCached() and self.info.hyperlink or {bagID = self:GetBag(), slotIndex = self:GetID()}
 end

@@ -44,21 +44,21 @@ function Sort:Iterate()
 	local families = self:GetFamilies(spaces)
 
 	local stackable = function(item)
-		return (item.stackCount or 1) < (item.stack or 1)
+		return (item.stackCount or 1) < (item.stackSize or 1)
 	end
 
 	for k, target in pairs(spaces) do
 		local item = target.item
 		if item.itemID and stackable(item) then
-		for j = k+1, #spaces do
-			local from = spaces[j]
-			local other = from.item
+			for j = k+1, #spaces do
+				local from = spaces[j]
+				local other = from.item
 
-			if item.itemID == other.itemID and stackable(other) then
-				self:Move(from, target)
-				self:Delay(0.05, 'Run')
+				if item.itemID == other.itemID and stackable(other) then
+					self:Move(from, target)
+					self:Delay(0.05, 'Run')
+				end
 			end
-		end
 		end
 	end
 
@@ -71,27 +71,27 @@ function Sort:Iterate()
 		local n = min(#order, #spaces)
 
 		for index = 1, n do
-		local goal = spaces[index]
-		local item = order[index]
-		item.sorted = true
+			local goal = spaces[index]
+			local item = order[index]
+			item.sorted = true
 
-		if item.space ~= goal then
-			local distance = moveDistance(item, goal)
+			if item.space ~= goal then
+				local distance = moveDistance(item, goal)
 
-			for j = index, n do
-				local other = order[j]
-				if other.itemID == item.itemID and other.stackCount == item.stackCount then
-				local d = moveDistance(other, spaces[j])
-				if d > distance then
-					item = other
-					distance = d
+				for j = index, n do
+					local other = order[j]
+					if other.itemID == item.itemID and other.stackCount == item.stackCount then
+						local d = moveDistance(other, spaces[j])
+						if d > distance then
+							item = other
+							distance = d
+						end
+					end
 				end
-				end
+
+				self:Move(item.space, goal)
+				self:Delay(0.05, 'Run')
 			end
-
-			self:Move(item.space, goal)
-			self:Delay(0.05, 'Run')
-		end
 		end
 	end
 
@@ -113,19 +113,19 @@ function Sort:GetSpaces()
 	for _, bag in pairs(self.target.Bags) do
 		local family = self.target:GetBagFamily(bag)
 		for slot = 1, self.target:NumSlots(bag) do
-		local item = self.target:GetItemInfo(bag, slot)
-		local id = item.itemID
-		if id then
-			local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
+			local item = self.target:GetItemInfo(bag, slot)
+			local id = item.itemID
+			if id then
+				local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
 
-			item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class
-			item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
-			item.subclass, item.equip, item.level, item.stack = subclass, equip, level, stack
-			item.family = GetItemFamily(id) or 0
-		end
+				item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class
+				item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
+				item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
+				item.family = GetItemFamily(id) or 0
+			end
 
-		tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
-		item.space = spaces[#spaces]
+			tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
+			item.space = spaces[#spaces]
 		end
 	end
 
@@ -153,11 +153,11 @@ function Sort:GetOrder(spaces, family)
 	for _, space in ipairs(spaces) do
 		local item = space.item
 		if item.itemID and not item.sorted and self:FitsIn(item.itemID, family) then
-		tinsert(order, space.item)
+			tinsert(order, space.item)
 		end
 
 		if space.family == family then
-		tinsert(slots, space)
+			tinsert(slots, space)
 		end
 	end
 
@@ -183,7 +183,7 @@ end
 function Sort.Rule(a, b)
 	for _,prop in pairs(Sort.Proprieties) do
 		if a[prop] ~= b[prop] then
-		return a[prop] > b[prop]
+			return a[prop] > b[prop]
 		end
 	end
 
@@ -191,13 +191,14 @@ function Sort.Rule(a, b)
 		return a.space.family > b.space.family
 	end
 	return a.space.index < b.space.index
-	end
+end
 
-	function Sort:Move(from, to)
+function Sort:Move(from, to)
 	if from.locked or to.locked or (to.item.itemID and not self:FitsIn(to.item.itemID, from.family)) then
 		return
 	end
 
+	ClearCursor()
 	self.target.PickupItem(from.bag, from.slot)
 	self.target.PickupItem(to.bag, to.slot)
 
