@@ -45,6 +45,7 @@ local FrameDefaults = {
 	brokerObject = Addon.Name .. 'Launcher',
 	hiddenRules = {contain = true},
 	hiddenBags = {},
+	hiddenBagsSlots = {},
 
 	rules = AsArray({
 		'all', 'all/normal', 'all/trade', 'all/reagent', 'all/keys', 'all/quiver',
