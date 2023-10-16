@@ -154,8 +154,8 @@ function Bag:OnClick(button)
 			end
 			self:Purchase()
 		end
-		self:UpdateToggle()
 	end
+	self:UpdateToggle()
 
 end
 
