@@ -11,7 +11,6 @@ local Frames = Addon.GeneralOptions:New('FrameOptions', CreateAtlasMarkup('Vehic
 function Frames:Populate()
   -- Selection
   self.sets = Addon.player.profile[self.frame]
-
   self:AddFrameChoice()
 
   local enabled = Addon.Frames:IsEnabled(self.frame)
@@ -59,7 +58,7 @@ function Frames:Populate()
 
 		-- Appearance
 		self:Add('Header', L.Appearance, 'GameFontHighlight', true)
-		self:AddRow(90, function()
+		self:AddRow(70, function()
 			if Config.colors then
 				self:AddColor('color')
 				self:AddColor('borderColor')
@@ -72,7 +71,6 @@ function Frames:Populate()
 			if REAGENTBANK_CONTAINER and self.frame == 'bank' then
 				self:AddCheck('exclusiveReagent')
 			end
-
 		end)
 
     self:AddRow(150, function()
@@ -85,9 +83,6 @@ function Frames:Populate()
       if Config.columns then
         self:AddSlider('columns', 1, 50)
       end
-        if self.frame == 'inventory'then
-            self:AddChoice{arg = 'HideEmptySlot',{key='NONE',text = NONE} ,{key = 'BAG', text = INVTYPE_BAG }, {key = 'KEYRING', text = KEYRING},{key = 'BOTH', text = STATUS_TEXT_BOTH }}
-        end
     end)
   end
 end
