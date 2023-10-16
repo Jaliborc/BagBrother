@@ -85,7 +85,7 @@ function Frames:Populate()
       self:AddChoice{arg = 'bagBreak', {key = 0, text = NONE}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
       self:AddPercentage('itemScale', 20, 200)
       self:AddSlider('spacing', -15, 15)
-  
+
       if Config.columns then
         self:AddSlider('columns', 1, 50)
       end
