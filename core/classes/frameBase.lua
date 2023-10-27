@@ -160,3 +160,19 @@ end
 function Frame:GetFrameID()
 	return self.id
 end
+
+function Frame:GetBagType(bag)
+	local data = self:GetOwner()[bag]
+	if data and data.link then
+		link, owned = 'item:' .. data.link, true
+		_, _, _, _, _, itemType, itemSubType,
+		_, _, _, _, _, subclassID, _,
+		_, _, isCraftingReagent = GetItemInfo(link)
+	else
+		itemType = nil
+		itemSubType = nil
+		subclassID = nil
+		isCraftingReagent = nil
+	end
+	return itemType,itemSubType,subclassID,isCraftingReagent
+end

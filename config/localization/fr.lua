@@ -45,6 +45,7 @@ L.ExclusiveReagent = 'Séparer la banque des composants'
 L.Appearance = 'Apparence'
 L.Layer = 'Couche'
 L.BagBreak = 'Séparation entre les sacs'
+L.BagBreakProfession = 'Métiers'
 L.ReverseBags = 'Inverser ordre des sacs'
 L.ReverseSlots = 'Inverser ordre de tri'
 

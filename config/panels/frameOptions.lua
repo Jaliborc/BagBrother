@@ -66,7 +66,7 @@ function Frames:Populate()
 
 			self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
-			self:AddCheck('bagBreak')
+			-- self:AddCheck('bagBreak') -- old version
 
 			if REAGENTBANK_CONTAINER and self.frame == 'bank' then
 				self:AddCheck('exclusiveReagent')
@@ -83,6 +83,8 @@ function Frames:Populate()
       if Config.columns then
         self:AddSlider('columns', 1, 50)
       end
+        self:AddChoice{arg='bagBreak',{key='NONE',text=NONE},{key='PROFESSION',text = L.BagBreakProfession},{key='ALL',text=ALL}}
+
     end)
   end
 end

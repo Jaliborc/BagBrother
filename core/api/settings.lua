@@ -34,6 +34,7 @@ local FrameDefaults = {
 	money = true, broker = true,
 	bagToggle = true, sort = true, search = true, options = true,
 
+	bagBreak = 'NONE',
 	strata = 'HIGH', alpha = 1,
 	scale = Addon.FrameScale or 1,
 	color = {0, 0, 0, 0.5},

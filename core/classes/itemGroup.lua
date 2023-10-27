@@ -86,6 +86,7 @@ function Items:Layout()
 	-- Acquire slots
 	for i, frame in ipairs(self.bags) do
 		local bag = frame.id
+
 		if self.frame:IsShowingBag(bag) then
 			for slot = 1, self.frame:NumSlots(bag) do
 				if self.frame:IsShowingItem(bag, slot) then
@@ -104,6 +105,7 @@ function Items:Layout()
 
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
 	local x, y = 0,0
+	local previousBagType = nil
 
 	for k = revBags and #self.bags or 1, revBags and 1 or #self.bags, revBags and -1 or 1 do
 		local bag = self.bags[k].id
@@ -127,9 +129,28 @@ function Items:Layout()
 				end
 			end
 
-			if self:GetProfile().bagBreak and x > 0 then
-				y = y + 1
-				x = 0
+			if self:GetProfile().bagBreak ~= 'NONE' and x > 0 then
+				local itemType,itemSubType,subclassID,isCraftingReagent = self.frame:GetBagType(bag)
+				local currentBagType = subclassID  -- Supposons que subclassID représente le type de sac.
+				local nextBag = self.bags[k + 1]
+
+				if nextBag and self:GetProfile().bagBreak == 'PROFESSION' then
+					local itemType, itemSubType, subclassID, isCraftingReagent = self.frame:GetBagType(nextBag.id)
+					local currentBagType = subclassID  -- Supposons que subclassID représente le type de sac.
+
+					-- Vérifiez si le type de sac change du sac précédent au sac suivant.
+					if previousBagType and previousBagType ~= currentBagType then
+						-- Il y a un changement de type de sac.
+						y = y + 1
+						x = 0
+					end
+
+					-- Mettez à jour la variable previousBagType pour le prochain tour de la boucle.
+					previousBagType = currentBagType
+				elseif nextBag and self:GetProfile().bagBreak == 'ALL' then
+					y = y + 1
+					x = 0
+				end
 			end
 		end
 	end
