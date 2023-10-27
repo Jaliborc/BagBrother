@@ -35,6 +35,7 @@ L.Options = '設定按鈕'
 L.Appearance = '外觀'
 L.Layer = '階層'
 L.BagBreak = '根據背包顯示'
+L.BagBreakProfession = '職業'
 L.ReverseBags = '反轉背包順序'
 L.ReverseSlots = '反轉槽位順序'
 

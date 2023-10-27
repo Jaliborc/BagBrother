@@ -43,6 +43,7 @@ L.LeftTabsTip = [[
 L.Appearance = 'Внешний вид'
 L.Layer = 'Слой'
 L.BagBreak = 'Каждая сумка с новой строки'
+L.BagBreakProfession = 'Профессии'
 L.ReverseBags = 'Обратный порядок сумок'
 L.ReverseSlots = 'Обратный порядок ячеек'
 

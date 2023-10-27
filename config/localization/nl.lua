@@ -47,6 +47,7 @@ weergegeven aan de linkerkant van het paneel.]]
 L.Appearance = 'Uiterlijk'
 L.Layer = 'Laag'
 L.BagBreak = 'Tas Onderbreken'
+L.BagBreakProfession = 'Beroepen'
 L.ReverseBags = 'Omgekeerde Tasvolgorde'
 L.ReverseSlots = 'Omgekeerde Slotvolgorde'
 

@@ -45,6 +45,7 @@ se mostrarán en el lado izquierdo del panel.]]
 L.Appearance = 'Apariencia'
 L.Layer = 'Capa'
 L.BagBreak = 'Espacio entre bolsas'
+L.BagBreakProfession = 'Oficios'
 L.ReverseBags = 'Invertir bolsas'
 L.ReverseSlots = 'Invertir ranuras'
 

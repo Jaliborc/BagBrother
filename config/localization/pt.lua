@@ -42,6 +42,7 @@ L.LeftTabsTip = 'Se ativado, os separadores laterais serão exibidos no lado esq
 L.Appearance = 'Aparência'
 L.Layer = 'Camada'
 L.BagBreak = 'Quebras entre Sacos'
+L.BagBreakProfession = 'Profissões'
 L.ReverseBags = 'Inverter Sacos'
 L.ReverseSlots = 'Inverter Itens'
 L.Color = 'Cor de Fundo'

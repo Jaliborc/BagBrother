@@ -44,6 +44,7 @@ L.LeftTabsTip = [[
 L.Appearance = '모양'
 L.Layer = '레이어'
 L.BagBreak = '가방 별로 구분하여 표시'
+L.BagBreakProfession = '직업'
 L.ReverseBags = '가방 순서 반대로'
 L.ReverseSlots = '칸 순서 반대로'
 

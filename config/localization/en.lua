@@ -46,6 +46,7 @@ displayed on the left side of the panel.]]
 L.Appearance = 'Appearance'
 L.Layer = 'Layer'
 L.BagBreak = 'Bag Break'
+L.BagBreakProfession = 'Professions'
 L.ReverseBags = 'Reverse Bag Order'
 L.ReverseSlots = 'Reverse Slot Order'
 

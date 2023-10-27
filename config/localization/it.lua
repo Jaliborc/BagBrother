@@ -44,6 +44,7 @@ Se abilitato, i pannelli laterali verranno mostrati a sinistra della finestra]]
 L.Appearance = 'Aspetto'
 L.Layer = 'Livello'
 L.BagBreak = 'Separazione tra Borse'
+L.BagBreakProfession = 'Mestieri'
 L.ReverseBags = 'Inverti le Borse'
 L.ReverseSlots = 'Inverti gli Scomparti'
 

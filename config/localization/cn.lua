@@ -46,6 +46,7 @@ L.LeftTabsTip = [[
 L.Appearance = '外观'
 L.Layer = '层级'
 L.BagBreak = '背包分散'
+L.BagBreakProfession = '职业'
 L.ReverseBags = '反向背包排列'
 L.ReverseSlots = '反向物品排列'
 
