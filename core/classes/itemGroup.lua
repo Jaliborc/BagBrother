@@ -130,12 +130,12 @@ function Items:Layout()
 			end
 
 			if self:GetProfile().bagBreak ~= 'NONE' and x > 0 then
-				local itemType,itemSubType,subclassID,isCraftingReagent = self.frame:GetBagType(bag)
+				local itemType,itemSubType,subclassID,isCraftingReagent = self.frame:GetBagInfo(bag)
 				local currentBagType = subclassID  -- Supposons que subclassID représente le type de sac.
 				local nextBag = self.bags[k + 1]
 
 				if nextBag and self:GetProfile().bagBreak == 'PROFESSION' then
-					local itemType, itemSubType, subclassID, isCraftingReagent = self.frame:GetBagType(nextBag.id)
+					local itemType, itemSubType, subclassID, isCraftingReagent = self.frame:GetBagInfo(nextBag.id)
 					local currentBagType = subclassID  -- Supposons que subclassID représente le type de sac.
 
 					-- Vérifiez si le type de sac change du sac précédent au sac suivant.

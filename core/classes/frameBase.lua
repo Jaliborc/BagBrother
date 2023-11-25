@@ -161,7 +161,7 @@ function Frame:GetFrameID()
 	return self.id
 end
 
-function Frame:GetBagType(bag)
+function Frame:GetBagInfo(bag)
 	local data = self:GetOwner()[bag]
 	if data and data.link then
 		link, owned = 'item:' .. data.link, true
