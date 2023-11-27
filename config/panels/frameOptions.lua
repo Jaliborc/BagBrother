@@ -66,7 +66,6 @@ function Frames:Populate()
 
 			self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
-			-- self:AddCheck('bagBreak') -- old version
 
 			if REAGENTBANK_CONTAINER and self.frame == 'bank' then
 				self:AddCheck('exclusiveReagent')
