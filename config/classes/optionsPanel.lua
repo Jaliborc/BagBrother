@@ -3,19 +3,17 @@
 		Options menu class with API shared among all panels
 --]]
 
-local CONFIG = ...
-local L = LibStub('AceLocale-3.0'):GetLocale(CONFIG)
-local ADDON, Addon = CONFIG:match('[^_]+'), _G[CONFIG:match('[^_]+')]
-local Panel = Addon:NewModule('OptionsPanel', LibStub('Sushi-3.1').OptionsGroup:NewClass())
+local L, ADDON, Addon = select(2, ...).Addon()
+local Panel = Addon:NewModule('OptionsPanel', LibStub('Sushi-3.2').OptionsGroup:NewClass())
 
 
 --[[ Groups ]]--
 
 function Panel:New(id, icons)
 	local parent = self ~= Panel and self
-	local f = Addon:NewModule(id, Panel:Super(Panel):New(parent or (icons .. ' ' .. ADDON), parent and (L[id] .. ' ' .. icons)))
+	local f = Addon:NewModule(id, Panel:Super(Panel):New(parent or (icons .. ' ' .. ADDON), parent and (L[id] .. '  ' .. icons)))
 	f:SetFooter('Copyright 2006-2023 João Cardoso and Jason Greer')
-	f:SetSubtitle(L[id .. 'Desc']:format(ADDON))
+	f:SetSubtitle(L[id .. 'Description']:format(ADDON))
 	f:SetChildren(function() f:Populate() end)
 	f.sets, f.frame = Addon.sets, 'inventory'
 	return f

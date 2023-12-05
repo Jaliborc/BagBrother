@@ -1,11 +1,10 @@
 --[[
-	frames.lua
+	frame.lua
 		Frame specific settings menu
 --]]
 
-local CONFIG, Config = ...
-local L = LibStub('AceLocale-3.0'):GetLocale(CONFIG)
-local ADDON, Addon = CONFIG:match('[^_]+'), _G[CONFIG:match('[^_]+')]
+
+local L, ADDON, Addon, Config = select(2, ...).Addon()
 local Frames = Addon.GeneralOptions:New('FrameOptions', CreateAtlasMarkup('Vehicle-HammerGold-2'))
 
 function Frames:Populate()

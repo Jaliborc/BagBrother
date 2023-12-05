@@ -3,9 +3,7 @@
 		General settings menu
 --]]
 
-local CONFIG = ...
-local L = LibStub('AceLocale-3.0'):GetLocale(CONFIG)
-local ADDON, Addon = CONFIG:match('[^_]+'), _G[CONFIG:match('[^_]+')]
+local L, ADDON, Addon, Config = select(2, ...).Addon()
 local General = Addon.OptionsPanel('GeneralOptions', '|TInterface/Addons/BagBrother/Art/'..ADDON..'-Small:16:16|t')
 
 function General:Populate()
@@ -13,18 +11,16 @@ function General:Populate()
 	self:AddCheck('countItems')
 
 	if CanGuildBankRepair and self.sets.countItems then
-		local guild = self:AddCheck('countGuild')
-		guild.left = guild.left + 10
-		guild:SetSmall(true)
+		self:AddCheck('countGuild'):SetSmall(true).left = 20
 	end
 
 	self:AddCheck('countCurrency')
 	self:AddCheck('flashFind')
 	self:AddCheck('displayBlizzard')
 
-	local global = self:Add('Check', L.CharacterSpecific)
-	global:SetChecked(Addon.player.profile ~= Addon.sets.global)
-	global:SetCall('OnInput', function() self:ToggleGlobals() end)
+	self:Add('Check', L.CharacterSpecific)
+		:SetCall('OnInput', function() self:ToggleGlobals() end)
+		:SetChecked(Addon.player.profile ~= Addon.sets.global)
 end
 
 function General:ToggleGlobals()
@@ -32,9 +28,8 @@ function General:ToggleGlobals()
 		self:SetProfile(CopyTable(Addon.sets.global))
 	else
 		LibStub('Sushi-3.1').Popup {
-			id = ADDON .. 'ConfirmGlobals',
-			text = L.ConfirmGlobals, button1 = YES, button2 = NO,
-			whileDead = 1, exclusive = 1, hideOnEscape = 1,
+			text = L.ConfirmGlobals, 
+			button1 = YES, button2 = NO, whileDead = true,
 			OnAccept = function()
 				self:SetProfile(nil)
 				self:Update()
