@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local Sushi = LibStub('Sushi-3.1')
+local Sushi = LibStub('Sushi-3.2')
 local C = LibStub('C_Everywhere').Container
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
@@ -203,15 +203,16 @@ function Bag:Purchase()
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
 
 	if self:GetID() == REAGENTBANK_CONTAINER then
-		Sushi.Popup('CONFIRM_BUY_REAGENTBANK_TAB')
+		Sushi.Popup {
+			text = CONFIRM_BUY_REAGENTBANK_TAB, button1 = YES, button2 = NO,
+			money = GetReagentBankCost(),
+			OnAccept = BuyReagentBank
+		}
 	else
 		Sushi.Popup {
 			text = CONFIRM_BUY_BANK_SLOT, button1 = YES, button2 = NO,
-			hasMoneyFrame = 1, hideOnEscape = 1, timeout = 0,
-			OnAccept = PurchaseSlot,
-			OnShow = function(popup)
-				MoneyFrame_Update(popup.moneyFrame, GetBankSlotCost(GetNumBankSlots()))
-			end,
+			money = GetBankSlotCost(GetNumBankSlots()),
+			OnAccept = PurchaseSlot
 		}
 	end
 end

@@ -6,7 +6,7 @@
 local MODULE =  ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local Guild = Addon.Frame:NewClass('Guild')
-local Sushi = LibStub('Sushi-3.1')
+local Sushi = LibStub('Sushi-3.2')
 
 Guild.PickupItem = PickupGuildBankItem
 Guild.NoGuild = setmetatable({name=RED_FONT_COLOR:WrapTextInColorCode(ERR_GUILD_PLAYER_NOT_IN_GUILD), address='', isguild=true}, {__index = Addon.player})
@@ -58,9 +58,9 @@ end
 
 function Guild:OnHide()
 	self:Super(Guild):OnHide()
-	Sushi.Popup:Hide('GUILDBANK_WITHDRAW')
-	Sushi.Popup:Hide('GUILDBANK_DEPOSIT')
-	Sushi.Popup:Hide('CONFIRM_BUY_GUILDBANK_TAB')
+	Sushi.Popup:Cancel(CONFIRM_BUY_GUILDBANK_TAB)
+	Sushi.Popup:Cancel(GUILDBANK_WITHDRAW)
+	Sushi.Popup:Cancel(GUILDBANK_DEPOSIT)
 	CloseGuildBankFrame()
 end
 

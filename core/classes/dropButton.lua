@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local Button = Addon:NewModule('DropButton', LibStub('Sushi-3.1').DropButton:NewClass(nil, ADDON .. 'DropButton'))
+local Button = Addon:NewModule('DropButton', LibStub('Sushi-3.2').DropButton:NewClass(nil, ADDON .. 'DropButton'))
 
 function Button:Construct()
 	local b = self:Super(Button):Construct()

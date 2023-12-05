@@ -8,7 +8,7 @@ local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local Vault = Addon.Frame:NewClass('Vault')
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
-local Sushi = LibStub('Sushi-3.1')
+local Sushi = LibStub('Sushi-3.2')
 
 Vault.Title = L.TitleVault
 Vault.OpenSound = SOUNDKIT.UI_ETHEREAL_WINDOW_OPEN
@@ -50,24 +50,19 @@ function Vault:OnNPC()
 	if not CanUseVoidStorage() then
 		if COST > GetMoney() then
 			Sushi.Popup {
-				id = MODULE,
 				text = format(L.CannotPurchaseVault, GetMoneyString(self.PurchasePrice, true)),
 				button1 = CHAT_LEAVE, button2 = L.AskMafia,
-				timeout = 0, hideOnEscape = 1,
-				OnAccept = self.Close,
-				OnCancel = self.Close,
+				OnAccept = self.Close, OnCancel = self.Close
 			}
 		else
 			Sushi.Popup {
-				id = MODULE,
 				text = format(L.PurchaseVault, GetMoneyString(self.PurchasePrice, true)),
 				button1 = UNLOCK, button2 = NO,
-				timeout = 0, hideOnEscape = 1,
 				OnCancel = self.Close,
 				OnAccept = function()
 					PlaySound(SOUNDKIT.UI_VOID_STORAGE_UNLOCK)
 					UnlockVoidStorage()
-				end,
+				end
 			}
 		end
 	end
@@ -79,22 +74,16 @@ function Vault:OnTransfer(_, transfering)
 	self.ItemGroup:SetShown(not transfering)
 
 	if transfering then
-		self.popup = Sushi.Popup {
-			id = MODULE,
-			text = L.ConfirmTransfer,
-			button1 = YES, button2 = NO,
-			timeout = 0, hideOnEscape = 1,
-
-			OnAccept = function(popup)
+		Sushi.Popup {
+			text = L.ConfirmTransfer, button1 = YES, button2 = NO,
+			OnCancel = function() self:SendFrameSignal('TRANFER_TOGGLED') end,
+			OnAccept = function()
 				ExecuteVoidTransfer()
-				self:SendFrameSignal('TRANFER_TOGGLED')
-			end,
-			OnCancel = function(popup)
 				self:SendFrameSignal('TRANFER_TOGGLED')
 			end
 		}
-	elseif self.popup then
-		Sushi.Popup:Hide(MODULE)
+	else
+		Sushi.Popup:Cancel(L.ConfirmTransfer)
 	end
 end
 
