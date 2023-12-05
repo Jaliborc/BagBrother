@@ -15,6 +15,8 @@ end
 
 function Bank:OnHide()
 	self:Super(Bank):OnHide()
+	LibStub('Sushi-3.2').Popup:Cancel(CONFIRM_BUY_REAGENTBANK_TAB)
+	LibStub('Sushi-3.2').Popup:Cancel(CONFIRM_BUY_BANK_SLOT)
 	CloseBankFrame()
 end
 
