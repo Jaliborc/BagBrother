@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local Sushi = LibStub('Sushi-3.1')
+local Sushi = LibStub('Sushi-3.2')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local BagToggle = Addon.Tipped:NewClass('BagToggle', 'CheckButton', true)
 local Dropdown = CreateFrame('Frame', ADDON .. 'BagToggleDropdown', nil, 'UIDropDownMenuTemplate')
@@ -47,13 +47,7 @@ end
 function BagToggle:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(BAGSLOTTEXT)
-
-	if self:IsBagGroupShown() then
-		GameTooltip:AddLine(L.TipHideBags:format(L.LeftClick), 1,1,1)
-	else
-		GameTooltip:AddLine(L.TipShowBags:format(L.LeftClick), 1,1,1)
-	end
-
+	GameTooltip:AddLine((self:IsBagGroupShown() and L.TipHideBags or L.TipShowBags):format(L.LeftClick), 1,1,1)
 	GameTooltip:AddLine(L.TipFrameToggle:format(L.RightClick), 1,1,1)
 	GameTooltip:Show()
 end
