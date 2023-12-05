@@ -6,7 +6,8 @@ local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 
 -- general
-L.GeneralOptionsDesc = 'These are general features that can be toggled depending on your preferences.'
+L.GeneralOptionsDescription = 'These are general features that can be toggled depending on your preferences.'
+
 L.Locked = 'Lock Frames'
 L.CountItems = 'Item Tooltip Counts'
 L.CountGuild = 'Include Guild Banks'
@@ -20,7 +21,8 @@ L.CharacterSpecific = 'Character Specific Settings'
 
 -- frame
 L.FrameOptions = 'Frame Settings'
-L.FrameOptionsDesc = 'These are configuration settings specific to a %s frame.'
+L.FrameOptionsDescription = 'These are configuration settings specific to a %s frame.'
+
 L.Frame = 'Frame'
 L.Enabled = 'Enable Frame'
 L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919Requires UI reload.|r'
@@ -62,7 +64,8 @@ L.Alpha = 'Opacity'
 
 -- auto display
 L.DisplayOptions = 'Automatic Display'
-L.DisplayOptionsDesc = 'These settings allow you to configure when your inventory automatically opens or closes due to game events.'
+L.DisplayOptionsDescription = 'These settings allow you to configure when your inventory automatically opens or closes due to game events.'
+
 L.DisplayInventory = 'Display Inventory'
 L.CloseInventory = 'Close Inventory'
 
@@ -83,7 +86,7 @@ L.Vehicle = 'Entering a Vehicle'
 
 -- colors
 L.ColorOptions = 'Slot Settings'
-L.ColorOptionsDesc = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
+L.ColorOptionsDescription = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
 
 L.GlowQuality = 'Color by Quality'
 L.GlowQuest = 'Color Quest Items'
@@ -113,4 +116,21 @@ L.FridgeColor = 'Refrigerator Color'
 
 -- rulesets
 L.RuleOptions = 'Item Rulesets'
-L.RuleOptionsDesc = 'These settings allow you to choose which item rulesets to display and in which order.'
+L.RuleOptionsDescription = 'These settings allow you to choose which item rulesets to display and in which order.'
+
+-- info
+L.Help = HELP_LABEL
+L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
+L.Patrons = 'Patrons'
+L.PatronsDescription = '%s is distributed for free and supported trough donations. A massive thank you to all the supporters on Patreon and Paypal who keep development alive. You can become a patron too at |cFFF96854patreon.com/jaliborc|r.'
+
+L.FAQ = {
+  'How to see the bank, guild or another character offline?',
+  'Click on the "Offline Viewing" button in the top left of your inventory. It looks like a portrait of the character you are currently playing.',
+
+  'How to make Bagnon forget a deleted/renamed character?',
+  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name will have a red cross next to it. Click on the cross for the character you wish to delete.',
+
+  'Something is wrong! Item levels aren\'t showing over the slots.',
+  'Bagnon does not natively display item levels. You must be using a third party plugin, such as Bagnon ItemLevel or Bagnon ItemInfo. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.'
+}
