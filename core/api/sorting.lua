@@ -118,7 +118,7 @@ function Sort:GetSpaces()
 			if id then
 				local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
 
-				item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class
+				item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
 				item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
 				item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
 				item.family = GetItemFamily(id) or 0
