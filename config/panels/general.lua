@@ -28,8 +28,7 @@ function General:ToggleGlobals()
 		self:SetProfile(CopyTable(Addon.sets.global))
 	else
 		LibStub('Sushi-3.1').Popup {
-			text = L.ConfirmGlobals, 
-			button1 = YES, button2 = NO, whileDead = true,
+			text = L.ConfirmGlobals, showAlertGear = true, button1 = YES, button2 = NO,
 			OnAccept = function()
 				self:SetProfile(nil)
 				self:Update()
