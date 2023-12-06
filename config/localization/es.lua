@@ -1,6 +1,6 @@
 --[[
     Spanish Localization
-        Credits/Blame: Phanx, Woopy, a14219
+        Credits/Blame: Phanx, Woopy
 --]]
 
 local CONFIG = ...
@@ -11,6 +11,7 @@ if not L then return end
 L.GeneralOptionsDesc = 'Funciones generales que puedes aplicar según tus preferencias.'
 L.Locked = 'Bloquear posiciones'
 L.CountItems = 'Contador en Tooltips de Objetos'
+L.CountGuild = 'Incluir Banco de Hermandad'
 L.CountCurrency = 'Contador en Tooltips de Monedas'
 L.FlashFind = 'Búsqueda Instantanea'
 L.DisplayBlizzard = 'Mostrar ventanas de Blizzard para bolsas desactivadas'
@@ -66,6 +67,7 @@ L.CloseInventory = 'Cerrar inventario'
 
 L.Banker = 'Al visitar el banco'
 L.GuildBanker = 'Al abrir el banco de hermandad'
+L.VoidStorageBanker = 'Al visitar el Depósito del Vacío'
 L.Auctioneer = 'Al visitar la casa de subastas'
 L.MailInfo = 'Al abrir el buzón'
 L.TradePartner = 'Al comerciar'
