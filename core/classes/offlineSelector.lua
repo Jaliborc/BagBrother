@@ -89,7 +89,7 @@ end
 
 function OfflineSelector:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:SetText('Offline Viewing')
+	GameTooltip:SetText(L.OfflineViewing)
 	GameTooltip:AddLine(L.TipChangePlayer:format(L.LeftClick), 1, 1, 1)
 	GameTooltip:AddLine(L.TipResetPlayer:format(L.RightClick), 1, 1, 1)
 	GameTooltip:Show()

@@ -28,7 +28,7 @@ L.TitleVault = '%s\'s Void Storage'
 
 --dropdowns
 L.TitleFrames = '%s Frames'
-L.SelectCharacter = 'Select Character'
+L.OfflineViewing = 'Offline Viewing'
 L.ConfirmDelete = 'Are you sure you want to delete   %s\'s cached data?'
 
 --interactions
