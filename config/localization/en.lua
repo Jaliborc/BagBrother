@@ -134,5 +134,8 @@ L.FAQ = {
   'Click on the "Offline Viewing" button in the top left of your inventory. Each character name will have a red cross next to it. Click on the cross for the character you wish to delete.',
 
   'Something is wrong! Item levels aren\'t showing over the slots.',
-  'Bagnon does not natively display item levels. You must be using a third party plugin, such as Bagnon ItemLevel or Bagnon ItemInfo. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.'
+  'Bagnon does not natively display item levels. You must be using a third party plugin, such as |cffffd200Bagnon ItemLevel|r or |cffffd200Bagnon ItemInfo|r. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.',
+
+  'How to toggle Bagnon for Bank, VoidStorage, etc?',
+  'Go to Bagnon -> Frame Settings. You are looking for the two options at the very top of the panel. Choose the "Frame" you wish to toggle and then click "Enable Frame"'
 }
