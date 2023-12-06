@@ -3,7 +3,7 @@
 		Help and credits menus
 --]]
 
-local PATRONS = {{title='Jenkins',people={'Gnare','Adcantu','Justin Hall','Debora S Ogormanw','Johnny Rabbit','Francesco Rollo'}},{title='Ambassador',people={'Julia F','Lolari ','Dodgen','Kopernikus ','Ptsdthegamer','Burt Humburg','Adam Mann','Christie Hopkins','Bc Spear','Jury ','Tigran Andrew','Jeffrey Jones','Swallow@area52','Peter Hollaubek','Michael Kinasz','Sam Ramji','Kelly Wolf','Syed Hamdani','Thinkdesigner ','Charles Howarth','Harry J Hightower'}}} -- generated patron list
+local PATRONS = {{title='Jenkins',people={'Gnare','Adcantu','Justin Hall','Debora S Ogormanw','Johnny Rabbit','Francesco Rollo'}},{title='Ambassador',people={'Julia F','Lolari ','Dodgen','Kelly Wolf','Kopernikus ','Ptsdthegamer','Burt Humburg','Adam Mann','Christie Hopkins','Bc Spear','Jury ','Tigran Andrew','Swallow@area52','Peter Hollaubek','Michael Kinasz','Sam Ramji','Syed Hamdani','Ds9293','Charles Howarth'}}} -- generated patron list
 local L, ADDON, Addon = select(2, ...).Addon()
 local Sushi = LibStub('Sushi-3.2')
 
@@ -20,7 +20,7 @@ function Help:Populate()
 		end
 	end
 
-	self:Add('RedButton', 'Ask Community'):SetWidth(200):SetCall('OnClick', function()
+	self:Add('RedButton', L.AskCommunity):SetWidth(200):SetCall('OnClick', function()
 		Sushi.Popup:External('bit.ly/discord-jaliborc')
 		SettingsPanel:Close(true)
 	end).top = 10
@@ -37,7 +37,8 @@ function Credits:Populate()
 		end
 	end
 
-	self:Add('RedButton', 'Join Us'):SetWidth(200):SetCall('OnClick', function()
+	self:AddBreak()
+	self:Add('RedButton', L.JoinUs):SetWidth(200):SetCall('OnClick', function()
 		Sushi.Popup:External('patreon.com/jaliborc')
 		SettingsPanel:Close(true)
 	end).top = 20

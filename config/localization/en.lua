@@ -123,6 +123,8 @@ L.Help = HELP_LABEL
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
 L.Patrons = 'Patrons'
 L.PatronsDescription = '%s is distributed for free and supported trough donations. A massive thank you to all the supporters on Patreon and Paypal who keep development alive. You can become a patron too at |cFFF96854patreon.com/jaliborc|r.'
+L.AskCommunity = 'Ask Community'
+L.JoinUs = 'Join Us'
 
 L.FAQ = {
   'How to see the bank, guild or another character offline?',
