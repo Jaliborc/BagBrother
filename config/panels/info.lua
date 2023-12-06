@@ -8,7 +8,7 @@ local L, ADDON, Addon = select(2, ...).Addon()
 local Sushi = LibStub('Sushi-3.2')
 
 local Help = Addon.GeneralOptions:New('Help', '|T516770:13:13:0:0:64:64:14:50:14:50|t')
-local Credits = Addon.GeneralOptions:New('Patrons', '|TInterface/Addons/PetTracker/art/patreon:12:12|t'):SetOrientation('HORIZONTAL')
+local Credits = Addon.GeneralOptions:New('Patrons', '|TInterface/Addons/BagBrother/art/patreon:12:12|t'):SetOrientation('HORIZONTAL')
 
 function Help:Populate()
 	for i = 1, #L.FAQ, 2 do
