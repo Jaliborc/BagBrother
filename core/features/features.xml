@@ -6,4 +6,5 @@
 	<Script file="currencyTooltips.lua"/>
 	<Script file="itemTooltips.lua"/>
 	<Script file="slashCommands.lua"/>
+	<Script file="updateDetection.lua"/>
 </Ui>

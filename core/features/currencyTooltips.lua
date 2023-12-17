@@ -1,7 +1,6 @@
 --[[
-	currencyTooltips.lua
-		Adds counts to currency tooltips and reorganizes meta info for better readability.
-		All Rights Reserved.
+	Adds counts to currency tooltips and reorganizes meta info for better readability.
+	All Rights Reserved
 ]]--
 
 local ADDON, Addon = ...

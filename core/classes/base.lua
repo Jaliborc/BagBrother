@@ -1,6 +1,6 @@
 --[[
-	base.lua
-		Abstract class that all others derive from
+	Abstract class that all others derive from.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

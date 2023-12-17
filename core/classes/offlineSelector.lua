@@ -1,6 +1,6 @@
 --[[
-	offlineSelector.lua
-		A button for opening offline owners or locations
+	A button for opening offline owners or locations.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

@@ -1,8 +1,7 @@
 --[[
-	cache.lua
-		The old BagBrother, now implemented as a feature within the Wildpants core,
-		where it can take advantage of Wildpants API and dependencies.
-		All Rights Reserved.
+	The old BagBrother, now implemented as a feature within the Wildpants core,
+	where it can take advantage of Wildpants API and dependencies.
+	All Rights Reserved
 --]]
 
 

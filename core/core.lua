@@ -5,9 +5,10 @@
 --]]
 
 local ADDON, Addon = ...
+local C = LibStub('C_Everywhere').AddOns
 local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'LibItemCache-2.0')
 
-Addon.Version = GetAddOnMetadata(ADDON, 'Version')
+Addon.Version =  C.GetAddOnMetadata(ADDON, 'version')
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
@@ -38,13 +39,18 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 	end
 
-	CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame):SetScript('OnShow', function()
-		LoadAddOn(ADDON .. '_Config')
-	end)
+	(SettingsPanel or InterfaceOptionsFrame):HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
+	if AddonCompartmentFrame then
+		AddonCompartmentFrame:RegisterAddon {
+			text = 'Scrap', keepShownOnClick = true, notCheckable = true,
+			icon = 'interface/addons/bagnon/art/bagnon-small',
+			func = function() self:ShowOptions() end
+		}
+	end
 end
 
 function Addon:ShowOptions()
-	if LoadAddOn(ADDON .. '_Config') then
+	if C.LoadAddOn(ADDON .. '_Config') then
 		Addon.GeneralOptions:Open()
 	end
 end

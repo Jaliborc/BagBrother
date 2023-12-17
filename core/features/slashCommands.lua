@@ -1,7 +1,6 @@
 --[[
-	commands.lua
-		Defines keybindings and a slash command menu
-		All Rights Reserved
+	Defines keybindings and a slash command menu.
+	All Rights Reserved
 --]]
 
 

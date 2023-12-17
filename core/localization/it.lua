@@ -1,6 +1,6 @@
 --[[
 	Italian Localization
-]]--
+--]]
 
 local ADDON = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'itIT')
@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Mostra la tua Banca di Gilda'
 L.CmdShowVault = 'Mostra la tua Banca Eterea'
 L.CmdShowVersion = 'Mostra la versione attuale'
 L.CmdShowOptions = 'Apri il menù di configurazione'
-L.Updated = 'Aggiornato a v%s'
 
 --frame titles
 L.TitleBags = 'Inventario di %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Banca di %s'
 L.TitleVault = 'Banca Eterea di %s'
 
 --dropdowns
-L.TitleFrames = 'Riquadro di %s'
 L.SelectCharacter = 'Seleziona Personaggio'
 L.ConfirmDelete = 'Sei sicuro di voler eliminare i dati di %s presenti nella cache?'
 

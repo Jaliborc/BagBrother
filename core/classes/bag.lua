@@ -1,6 +1,6 @@
 --[[
-	bag.lua
-		A bag button object
+	A bag button object.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

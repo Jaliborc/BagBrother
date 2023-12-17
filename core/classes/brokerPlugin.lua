@@ -1,6 +1,6 @@
 --[[
-	brokerPlugin.lua
-		A databroker launcher plugin
+	A databroker launcher plugin.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

@@ -20,7 +20,6 @@ L.CmdShowGuild = 'открыть/закрыть банк гильдии'
 L.CmdShowVault = 'открыть/закрыть Хранилище Бездны'
 L.CmdShowVersion = 'сообщить текущую версию модификации'
 L.CmdShowOptions = 'открыть меню настроек'
-L.Updated = 'Обновлено до v%s'
 
 --frame titles
 L.TitleBags = 'Инвентарь |3-1(%s)'
@@ -28,7 +27,6 @@ L.TitleBank = 'Банк |3-1(%s)'
 L.TitleVault = 'Хранилище Бездны |3-1(%s)'
 
 --dropdowns
-L.TitleFrames = 'Окна %s'
 L.SelectCharacter = 'Выберите персонажа'
 L.ConfirmDelete = 'Удалить кэшированные данные %s?'
 

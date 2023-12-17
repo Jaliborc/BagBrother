@@ -1,6 +1,6 @@
 --[[
-  dropButton.lua
-		A dropdown button with a delete option
+	A dropdown button with a delete option.
+	All Rights Reserved		
 --]]
 
 local ADDON, Addon = ...

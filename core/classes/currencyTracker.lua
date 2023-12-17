@@ -1,7 +1,6 @@
 --[[
-	currencyTracker.lua
-		Shows tracked currencies
-		All Rights Reserved
+	Shows tracked currencies.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

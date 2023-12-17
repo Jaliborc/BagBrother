@@ -20,7 +20,6 @@ L.CmdShowGuild = '切换公会银行'
 L.CmdShowVault = '切换虚空仓库'
 L.CmdShowVersion = '列出当前版本'
 L.CmdShowOptions = '打开配置菜单'
-L.Updated = '已更新到 v%s'
 
 --frame titles
 L.TitleBags = '%s的背包'
@@ -28,7 +27,6 @@ L.TitleBank = '%s的银行'
 L.TitleVault = '%s的虚空仓库'
 
 --dropdowns
-L.TitleFrames = '%s的框架'
 L.SelectCharacter = '选择角色'
 L.ConfirmDelete = '确定要删除 %s 的缓存数据？'
 

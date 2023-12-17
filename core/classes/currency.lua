@@ -1,7 +1,6 @@
 --[[
-	currency.lua
-		A currency button
-		All Rights Reserved
+	A currency button.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

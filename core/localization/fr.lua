@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Affiche ou cache votre banque de guilde'
 L.CmdShowVault = 'Affiche ou cache votre chambre du Vide'
 L.CmdShowVersion = 'Affiche la version actuelle'
 L.CmdShowOptions = 'Ouvre le menu de configuration'
-L.Updated = 'Mise à jour vers la v%s'
 
 --frame titles
 L.TitleBags = 'Inventaire |2 %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Banque |2 %s'
 L.TitleVault = 'Chambre du Vide |2 %s'
 
 --dropdowns
-L.TitleFrames = '%s Fenêtres'
 L.SelectCharacter = 'Choisir Personnage'
 L.ConfirmDelete = 'Etes-vous sur de vouloir supprimer le cache de %s ?'
 

@@ -1,7 +1,6 @@
 --[[
-	frames.lua
-		Manages frame creation and display
-		All Rights Reserved
+	Manages frame creation and display.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -80,7 +79,7 @@ end
 function Frames:New(id)
 	if self:IsEnabled(id) then
 		local info = self:Get(id)
-		if not info.addon or LoadAddOn(info.addon) then
+		if not info.addon or C.AddOns.LoadAddOn(info.addon) then
 	 		info.object = info.object or Addon[id:gsub('^.', id.upper)]:New(id)
 	 		return info.object
 		end

@@ -1,6 +1,6 @@
 ﻿--[[
-	brokerCarrousel.lua
-		A databroker display object that cycles between plugins
+	A databroker display object that cycles between plugins.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

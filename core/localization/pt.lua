@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Abre o banco da sua guilda'
 L.CmdShowVault = 'Abre o seu cofre'
 L.CmdShowVersion = 'Mostra a versão atual'
 L.CmdShowOptions = 'Abre o menu de configuração'
-L.Updated = 'Atualizado para versão %s'
 
 --frame titles
 L.TitleBags = 'Mochila de %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Banco de %s'
 L.TitleVault = 'Cofre de %s'
 
 --dropdowns
-L.TitleFrames = 'Quadros de %s'
 L.SelectCharacter = 'Selecionar Personagem'
 L.ConfirmDelete = 'Tem certeza de que deseja apagar os dados em cache de %s?'
 
