@@ -30,7 +30,7 @@ end
 
 local FrameDefaults = {
 	enabled = true,
-	money = true, broker = true,
+	money = true, broker = true, bagBreak = 0,
 	bagToggle = true, sort = true, search = true, options = true,
 
 	strata = 'HIGH', alpha = 1,
@@ -126,11 +126,25 @@ function Settings:OnEnable()
 		herbColor = {.5, 1, .5},
 	})
 
+	----- upgrade old setting
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
 			SetDefaults(profile, ProfileDefaults)
+			
+			for frame, options in pairs(profile) do
+				if type(options) == 'table' then
+					options.bagBreak = options.bagBreak == true and 2 or nil -- upgrade old setting
+				end
+			end
 		end
 	end
+
+	for frame, options in pairs(Addon.sets.global) do
+		if type(options) == 'table' then
+			options.bagBreak = options.bagBreak == true and 2 or nil -- upgrade old setting
+		end
+	end
+	----
 
 	_G[VAR] = Addon.sets
 end

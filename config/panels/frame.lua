@@ -57,31 +57,32 @@ function Frames:Populate()
 
 		-- Appearance
 		self:Add('Header', L.Appearance, 'GameFontHighlight', true)
-		self:AddRow(70, function()
-			if Config.colors then
-				self:AddColor('color')
+    self:AddRow(250, function(row)
+      self:AddChoice {arg = 'strata', {key = 'LOW', text = LOW}, {key = 'MEDIUM', text = AUCTION_TIME_LEFT2}, {key = 'HIGH', text = HIGH}}
+      self:AddPercentage('scale', 20, 300)
+      self:AddPercentage('alpha')
+
+      if Config.colors then
+				self:AddColor('color').top = 15
 				self:AddColor('borderColor')
 			end
 
-			self:AddCheck('reverseBags')
+      self:AddBreak()
+      self:AddChoice {arg = 'bagBreak', {key = 0, text = NONE}, {key = 1, text = 'By Type'}, {key = 2, text = ALWAYS}}
+      self:AddPercentage('itemScale', 20, 200)
+      self:AddSlider('spacing', -15, 15)
+  
+      if Config.columns then
+        self:AddSlider('columns', 1, 50)
+      end
+
+      self:AddBreak()
+      self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
-			self:AddCheck('bagBreak')
 
 			if REAGENTBANK_CONTAINER and self.frame == 'bank' then
 				self:AddCheck('exclusiveReagent')
 			end
-		end)
-
-    self:AddRow(150, function()
-      self:AddChoice {arg = 'strata', {key = 'LOW', text = LOW}, {key = 'MEDIUM', text = AUCTION_TIME_LEFT2}, {key = 'HIGH', text = HIGH}}
-      self:AddPercentage('alpha')
-      self:AddPercentage('scale', 20, 300)
-      self:AddPercentage('itemScale', 20, 200)
-      self:AddSlider('spacing', -15, 15)
-
-      if Config.columns then
-        self:AddSlider('columns', 1, 50)
-      end
     end)
   end
 end

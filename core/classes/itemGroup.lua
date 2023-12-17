@@ -1,6 +1,6 @@
 --[[
-	itemGroup.lua
-		A frame that organizes item buttons in a grid and manages updating them
+	A frame that organizes item buttons in a grid and manages updating them.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -101,13 +101,21 @@ function Items:Layout()
 	-- Position slots
 	local profile = self:GetProfile()
 	local columns, scale, size = self:LayoutTraits()
-
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
+
 	local x, y = 0,0
+	local group = 0
 
 	for k = revBags and #self.bags or 1, revBags and 1 or #self.bags, revBags and -1 or 1 do
 		local bag = self.bags[k].id
 		local slots = self.buttons[bag]
+		local family = self.frame:GetBagFamily(bag)
+
+		if x > 0 and (profile.bagBreak > 1 or profile.bagBreak > 0 and (family == 0) ~= (group == 0)) then
+			group = family
+			y = y + 1
+			x = 0
+		end
 
 		if slots then
 			local numSlots = self.frame:NumSlots(bag)
@@ -125,11 +133,6 @@ function Items:Layout()
 
 					x = x + 1
 				end
-			end
-
-			if self:GetProfile().bagBreak and x > 0 then
-				y = y + 1
-				x = 0
 			end
 		end
 	end
