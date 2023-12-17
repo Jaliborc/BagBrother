@@ -79,6 +79,10 @@ function Panel:AddLabeled(class, id)
 	return f
 end
 
+function Panel:AddBreak()
+	return self:GetSuper().AddBreak(self.row or self)
+end
+
 
 --[[ Specific ]]--
 
