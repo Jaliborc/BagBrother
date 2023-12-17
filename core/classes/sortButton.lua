@@ -1,6 +1,6 @@
 --[[
-	sortButton.lua
-		A style agnostic item sorting button
+	A style agnostic item sorting button.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

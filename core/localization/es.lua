@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Muestra tu banco de hermandad'
 L.CmdShowVault = 'Muestra tu Depósito del Vacío'
 L.CmdShowVersion = 'Muestra la versión actual'
 L.CmdShowOptions = 'Abre el menú de configuración'
-L.Updated = 'Actualizado a v%s'
 
 --frame titles
 L.TitleBags = 'Inventario de %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Banco de %s'
 L.TitleVault = 'Depósito del Vacío de %s'
 
 --dropdowns
-L.TitleFrames = 'Ventana de %s'
 L.SelectCharacter = 'Seleccionar personaje'
 L.ConfirmDelete = '¿Estás seguro de querer eliminar los datos guardados de %s?'
 

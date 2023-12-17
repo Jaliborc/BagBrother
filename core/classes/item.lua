@@ -1,6 +1,6 @@
 --[[
-	item.lua
-		An item slot button
+	An item slot button.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

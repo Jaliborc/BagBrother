@@ -1,7 +1,6 @@
 --[[
-	settings.lua
-		Initializes the settings, checks for version updates and provides the necessary API for profile management
-		All Rights Reserved
+	Initializes the settings, checks for version updates and provides the necessary API for profile management.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -96,9 +95,9 @@ local ProfileDefaults = {
 
 function Settings:OnEnable()
 	BrotherBags = BrotherBags or {}
-	_G[VAR] = SetDefaults(_G[VAR] or {}, {
+	Addon.sets = SetDefaults(_G[VAR] or {}, {
 		global = SetDefaults({}, ProfileDefaults),
-        version = Addon.Version,
+        latest = Addon.Version,
 		profiles = {},
 
 		resetPlayer = true, flashFind = true, serverSort = true,
@@ -127,24 +126,13 @@ function Settings:OnEnable()
 		herbColor = {.5, 1, .5},
 	})
 
-	Addon.sets = _G[VAR]
-    Addon.sets.version = Addon.Version
-
-	----- convert old profiles
-	for address, profile in pairs(Addon.sets.profiles) do
-		local realm, name = address:match('(%w+) %- (%w+)')
-		if realm and name then
-			realm = GetOrCreateTableEntry(Addon.sets.profiles, realm)
-			realm[name .. (address:find('^®') and '*' or '')] = profile
-		end
-	end
-	-----
-
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
 			SetDefaults(profile, ProfileDefaults)
 		end
 	end
+
+	_G[VAR] = Addon.sets
 end
 
 function Settings:SetProfile(realm, id, profile)

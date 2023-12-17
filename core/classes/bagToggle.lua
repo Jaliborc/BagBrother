@@ -1,6 +1,6 @@
 --[[
-	bagToggle.lua
-		A style agnostic bag toggle button
+	A style agnostic bag toggle button.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

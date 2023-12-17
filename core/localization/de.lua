@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Schaltet die Gildenbank um'
 L.CmdShowVault = 'Schaltet das Leerenlager um'
 L.CmdShowVersion = 'Zeigt die aktuelle Version an'
 L.CmdShowOptions = 'Öffnet das Konfigurationsmenü'
-L.Updated = 'Aktualisiert auf v%s'
 
 --frame titles
 L.TitleBags = 'Inventar von %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Bank von %s'
 L.TitleVault = 'Leerenlager von %s'
 
 --dropdowns
-L.TitleFrames = '%s Rahmen'
 L.SelectCharacter = 'Charakter auswählen'
 L.ConfirmDelete = 'Sind Sie sicher, dass Sie die zwischengespeicherten Daten von %s löschen möchten?'
 

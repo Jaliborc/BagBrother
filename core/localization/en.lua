@@ -19,17 +19,12 @@ L.CmdShowGuild = 'Toggles your guild bank'
 L.CmdShowVault = 'Toggles your void storage'
 L.CmdShowVersion = 'Prints the current version'
 L.CmdShowOptions = 'Opens the configuration menu'
-L.Updated = 'Updated to v%s'
+L.CmdOutOfDate = '|cffff0000You are running an outdated |cffffffff%s|r version! Latest is at least version %s, please update.|r'
 
 --frame titles
 L.TitleBags = '%s\'s Inventory'
 L.TitleBank = '%s\'s Bank'
 L.TitleVault = '%s\'s Void Storage'
-
---dropdowns
-L.TitleFrames = '%s Frames'
-L.OfflineViewing = 'Offline Viewing'
-L.ConfirmDelete = 'Are you sure you want to delete   %s\'s cached data?'
 
 --interactions
 L.Click = 'Click'
@@ -76,8 +71,13 @@ L.TipCountVault = 'Vault: %d'
 L.TipCountGuild = 'Guild: %d'
 L.TipDelimiter = '|'
 
+--dropdowns
+L.OfflineViewing = 'Offline Viewing'
+L.ConfirmDelete = 'Are you sure you want to delete %s\'s cached data?'
+
 --dialogs
 L.AskMafia = 'Ask Mafia'
 L.ConfirmTransfer = 'Depositing any items will remove all modifications and make them non-tradeable and non-refundable.|n|nDo you wish to continue?'
 L.CannotPurchaseVault = 'You do not have enough money to unlock the Void Storage service|n|n|cffff2020Cost: %s|r'
 L.PurchaseVault = 'Would you like to unlock the Void Storage service?|n|n|cffffd200Cost:|r %s'
+L.OutOfDate = 'You are running an outdated |cffffd200%s|r version!|nLatest is at least version |cff82c5ff%s|r, please update.'

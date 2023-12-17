@@ -1,6 +1,6 @@
 --[[
-	bagGroup.lua
-		A container frame for bags
+	A container frame for bags.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

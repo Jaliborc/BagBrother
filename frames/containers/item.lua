@@ -98,6 +98,7 @@ end
 function Item:MarkSeen()
 	if self.NewItemTexture:IsShown() then
 		C_NewItems.RemoveNewItem(self:GetBag(), self:GetID())
+		self.info.isNew = false
 		self:UpdateNewItemAnimation()
 	end
 end

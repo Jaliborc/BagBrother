@@ -1,7 +1,6 @@
 --[[
-	sorting.lua
-		Client side bag sorting algorithm
-		All Rights Reserved
+	Client side bag sorting algorithm.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

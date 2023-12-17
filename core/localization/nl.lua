@@ -1,6 +1,6 @@
 --[[
 	Dutch Localization
-]]--
+--]]
 
 local ADDON = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'nlNL')
@@ -20,7 +20,6 @@ L.CmdShowGuild = 'Schakelt je gildebank'
 L.CmdShowVault = 'Schakelt je lege opslag'
 L.CmdShowVersion = 'Toont de huidige versie'
 L.CmdShowOptions = 'Opent het configuratiemenu'
-L.Updated = 'Bijgewerkt naar v%s'
 
 --frame titles
 L.TitleBags = 'Inventaris van %s'
@@ -28,7 +27,6 @@ L.TitleBank = 'Bank van %s'
 L.TitleVault = 'Lege Opslag van %s'
 
 --dropdowns
-L.TitleFrames = '%s Frames'
 L.SelectCharacter = 'Selecteer Personage'
 L.ConfirmDelete = 'Weet je zeker dat je de cachegegevens van %s wilt verwijderen?'
 

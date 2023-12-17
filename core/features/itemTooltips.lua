@@ -1,7 +1,6 @@
 --[[
-	itemTooltips.lua
-		Adds item counts to tooltips
-		All rights reserved
+	Adds item counts to tooltips.
+	All Rights Reserved
 ]]--
 
 local ADDON, Addon = ...

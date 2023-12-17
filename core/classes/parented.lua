@@ -1,6 +1,6 @@
 --[[
-	parented.lua
-		Abstract class for widgets that are parented to a frame
+	Abstract class for widgets that are parented to a frame.
+  All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

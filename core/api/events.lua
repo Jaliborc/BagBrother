@@ -1,7 +1,6 @@
 --[[
-	events.lua
-		Custom events for better item performance and location awareness.
-		All Rights Reserved.
+	Custom events for better item performance and location awareness.
+	All Rights Reserved
 
 	BAG_UPDATE_SIZE
 	args: bag

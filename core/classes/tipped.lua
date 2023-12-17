@@ -1,6 +1,6 @@
 --[[
-	tipped.lua
-		Abstract class with utility methods for managing tooltips
+	Abstract class with utility methods for managing tooltips.
+  All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

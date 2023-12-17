@@ -1,7 +1,6 @@
 --[[
-	owners.lua
-		Maintains a list of owner objects
-		All Rights Reserved
+	Maintains a list of owner objects.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

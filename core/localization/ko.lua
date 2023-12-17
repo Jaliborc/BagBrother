@@ -20,7 +20,6 @@ L.CmdShowGuild = '길드 금고 온/오프'
 L.CmdShowVault = '공허 보관 온/오프'
 L.CmdShowVersion = '현재 버전 정보 출력'
 L.CmdShowOptions = '설정메뉴 열기'
-L.Updated = '업데이트 v%s'
 
 --frame titles
 L.TitleBags = '%s의 소지품'
@@ -28,7 +27,6 @@ L.TitleBank = '%s의 은행'
 L.TitleVault = '%s의 공허'
 
 --dropdowns
-L.TitleFrames = '%s 프레임'
 L.SelectCharacter = '캐릭터 선택'
 L.ConfirmDelete = '%s의 캐시된 데이터를 삭제하시겠습니까?'
 

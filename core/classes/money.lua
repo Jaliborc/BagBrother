@@ -1,6 +1,6 @@
 --[[
-	moneyFrame.lua
-		Displays the player money stack
+	Displays the player money stack.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...

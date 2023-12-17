@@ -19,7 +19,6 @@ L.CmdShowBank = '切換銀行'
 L.CmdShowGuild = '切換公會銀行'
 L.CmdShowVault = '切換虛空倉庫'
 L.CmdShowVersion = '顯示目前版本'
-L.Updated = '已更新到 v%s'
 
 --frames
 L.TitleBags = '%s的背包'
