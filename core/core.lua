@@ -42,8 +42,8 @@ function Addon:OnEnable()
 	(SettingsPanel or InterfaceOptionsFrame):HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {
-			text = 'Scrap', keepShownOnClick = true, notCheckable = true,
-			icon = 'interface/addons/bagnon/art/bagnon-small',
+			text = 'Bagnon', keepShownOnClick = true, notCheckable = true,
+			icon = 'interface/addons/bagbrother/art/bagnon-small',
 			func = function() self:ShowOptions() end
 		}
 	end
