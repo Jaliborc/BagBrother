@@ -48,7 +48,7 @@ function BagToggle:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(BAGSLOTTEXT)
 	GameTooltip:AddLine((self:IsBagGroupShown() and L.TipHideBags or L.TipShowBags):format(L.LeftClick), 1,1,1)
-	GameTooltip:AddLine(L.TipFrameToggle:format(L.RightClick), 1,1,1)
+	GameTooltip:AddLine(L.TipToggleBank:format(L.RightClick), 1,1,1)
 	GameTooltip:Show()
 end
 

@@ -83,7 +83,7 @@ end
 
 function Frame:FindRules()
 	for id, rule in Addon.Rules:Iterate() do
-		if not tContains(self.profile.rules, id) and not self.profile.hiddenRules[id] then
+		if not tContains(self.profile.rules, id) then
 			self:Delay(0.01, 'SendFrameSignal', 'RULES_UPDATED')
 			tinsert(self.profile.rules, id)
 		end

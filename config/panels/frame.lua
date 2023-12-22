@@ -57,7 +57,7 @@ function Frames:Populate()
 
 		-- Appearance
 		self:Add('Header', L.Appearance, 'GameFontHighlight', true)
-    self:AddRow(250, function(row)
+    self:AddRow(250, function()
       self:AddChoice {arg = 'strata', {key = 'LOW', text = LOW}, {key = 'MEDIUM', text = AUCTION_TIME_LEFT2}, {key = 'HIGH', text = HIGH}}
       self:AddPercentage('scale', 20, 300)
       self:AddPercentage('alpha')
@@ -68,7 +68,7 @@ function Frames:Populate()
 			end
 
       self:AddBreak()
-      self:AddChoice {arg = 'bagBreak', {key = 0, text = NONE}, {key = 1, text = 'By Type'}, {key = 2, text = ALWAYS}}
+      self:AddChoice {arg = 'bagBreak', {key = 0, text = NONE}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
       self:AddPercentage('itemScale', 20, 200)
       self:AddSlider('spacing', -15, 15)
   

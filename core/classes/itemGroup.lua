@@ -44,6 +44,7 @@ function Items:RegisterEvents()
 	self:RegisterSignal('SEARCH_CHANGED', 'ForAll', 'UpdateSearch')
 	self:RegisterSignal('SEARCH_TOGGLED', 'ForAll', 'UpdateSearch')
 	self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
+	self:RegisterSignal('LOCKING_TOGGLED')
 	self:RegisterSignal('FLASH_ITEM')
 
 	if not self:IsCached() then
@@ -71,6 +72,15 @@ function Items:FLASH_ITEM(_,itemID)
 		button.FlashFind:Stop()
 		if button.info.itemID == itemID then
 			button.FlashFind:Play()
+		end
+	end
+end
+
+function Items:LOCKING_TOGGLED()
+	local locks = self:GetProfile().lockedSlots
+	for bag, slots in pairs(self.buttons) do
+		for slot, button in pairs(self.buttons[bag]) do
+			button.IgnoredOverlay:SetShown(Addon.lockMode and locks[bag] and locks[bag][slot])
 		end
 	end
 end

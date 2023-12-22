@@ -4,7 +4,7 @@
 --]]
 
 local L, ADDON, Addon = select(2, ...).Addon()
-local Display = Addon.GeneralOptions:New('DisplayOptions', CreateAtlasMarkup('poi-town'))
+local Display = Addon.GeneralOptions:New('DisplayOptions', '|A:Innkeeper:14:14:-2:0|a')
 
 function Display:Populate()
 	self.sets = Addon.sets.display
