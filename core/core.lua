@@ -39,11 +39,11 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 	end
 
-	(SettingsPanel or InterfaceOptionsFrame):HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
+	SettingsPanel.CategoryList:HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {
-			text = 'Scrap', keepShownOnClick = true, notCheckable = true,
-			icon = 'interface/addons/bagnon/art/bagnon-small',
+			text = ADDON, keepShownOnClick = true, notCheckable = true,
+			icon = 'interface/addons/bagbrother/art/' ..ADDON .. '-small',
 			func = function() self:ShowOptions() end
 		}
 	end

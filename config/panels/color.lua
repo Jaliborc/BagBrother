@@ -4,8 +4,7 @@
 --]]
 
 local L, ADDON, Addon = select(2, ...).Addon()
-local Color = Addon.GeneralOptions:New('ColorOptions',
-	strjoin(CreateAtlasMarkup('Vehicle-TempleofKotmogu-GreenBall'), CreateAtlasMarkup('Vehicle-TempleofKotmogu-PurpleBall'), CreateAtlasMarkup('Vehicle-TempleofKotmogu-OrangeBall')))
+local Color = Addon.GeneralOptions:New('ColorOptions', '|TInterface/Addons/BagBrother/art/brush:16:16:-5:0|t')
 
 function Color:Populate()
   -- Items

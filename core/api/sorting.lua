@@ -107,24 +107,29 @@ end
 --[[ Data Structures ]]--
 
 function Sort:GetSpaces()
+	local profile = self.target:GetProfile()
 	local spaces = {}
 
 	for _, bag in pairs(self.target.Bags) do
 		local family = self.target:GetBagFamily(bag)
+		local locked = profile.lockedSlots[bag]
+		
 		for slot = 1, self.target:NumSlots(bag) do
-			local item = self.target:GetItemInfo(bag, slot)
-			local id = item.itemID
-			if id then
-				local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
+			if not locked or not locked[slot] then
+				local item = self.target:GetItemInfo(bag, slot)
+				local id = item.itemID
+				if id then
+					local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
 
-				item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
-				item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
-				item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
-				item.family = GetItemFamily(id) or 0
+					item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
+					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
+					item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
+					item.family = GetItemFamily(id) or 0
+				end
+
+				tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
+				item.space = spaces[#spaces]
 			end
-
-			tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
-			item.space = spaces[#spaces]
 		end
 	end
 
@@ -142,7 +147,7 @@ function Sort:GetFamilies(spaces)
 		tinsert(list, family)
 	end
 
-	sort(list, function(a, b) return a > b end)
+	sort(list, function(a, b) return a > b or a < 0 end)
 	return list
 end
 
@@ -174,8 +179,10 @@ end
 function Sort:FitsIn(id, family)
 	if family == 9 then
 		return GetItemFamily(id) == 256
+	elseif family == -3 then
+		return select(17, GetItemInfo(id))
 	end
-
+	
 	return family == 0 or (bit.band(GetItemFamily(id), family) > 0 and select(9, GetItemInfo(id)) ~= 'INVTYPE_BAG')
 end
 

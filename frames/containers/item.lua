@@ -66,7 +66,7 @@ function Item:OnHide()
 end
 
 
---[[ API ]]--
+--[[ Update ]]--
 
 function Item:Update()
 	self:Super(Item):Update()
@@ -95,16 +95,35 @@ function Item:UpdateCooldown()
 	end
 end
 
-function Item:MarkSeen()
-	if self.NewItemTexture:IsShown() then
-		C_NewItems.RemoveNewItem(self:GetBag(), self:GetID())
-		self.info.isNew = false
-		self:UpdateNewItemAnimation()
+function Item:UpdateSecondary()
+	self:Super(Item):UpdateSecondary()
+	if self.frame then
+		self:UpdateGlow()
+	end
+end
+
+function Item:UpdateGlow()
+	local new = Addon.sets.glowNew and self.info.isNew
+	self.BattlepayItemTexture:SetShown(new and self.info.isPaid)
+	self.NewItemTexture:SetShown(new)
+
+	if new then
+		self.NewItemTexture:SetAtlas(self.info.quality and NEW_ITEM_ATLAS_BY_QUALITY[self.info.quality] or 'bags-glow-white')
+		self.newitemglowAnim:Play()
+		self.flashAnim:Play()
 	end
 end
 
 
---[[ Properties ]]--
+--[[ API ]]--
+
+function Item:MarkSeen()
+	if self.NewItemTexture:IsShown() then
+		C_NewItems.RemoveNewItem(self:GetBag(), self:GetID())
+		self.info.isNew = false
+		self:UpdateGlow()
+	end
+end
 
 function Item:GetQuestInfo()
 	if self.hasItem then
