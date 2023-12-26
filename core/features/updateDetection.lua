@@ -4,8 +4,16 @@
 --]]
 
 local ADDON, Addon = ...
+local C = LibStub('C_Everywhere').AddOns
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Detection = Addon:NewModule('UpdateDetection')
+
+local nextExpansion = 0
+for k, v in pairs(_G) do
+    if type(k) == 'string' and type(v) == 'number' and k:match('^LE_EXPANSION_[%u_]+$') then
+        nextExpansion = max(nextExpansion, (v+2) * 10000)
+    end
+end
 
 local function int(version)
     local major, minor, patch = version:match('(%d+)%.*(%d*)%.*(%d*)')
@@ -44,7 +52,7 @@ function Detection:OnMessage(_, prefix, version, channel)
         local ours, theirs = int(Addon.Version), int(version)
         if theirs < ours then
             self.Queued[channel] = true
-        elseif theirs > ours then
+        elseif theirs > ours and theirs < nextExpansion then
             Addon.sets.latest = version
         end
     end
@@ -61,8 +69,10 @@ end
 --[[ API ]]--
 
 function Detection:RegisterUpdateEvent(event, condition)
-    self:RegisterEvent(event, 'OnUpdate', condition)
-    self:OnUpdate(condition)
+    if not C.GetAddOnMetadata(ADDON, 'x-development') then
+        self:RegisterEvent(event, 'OnUpdate', condition)
+        self:OnUpdate(condition)
+    end
 end
 
 function Detection:Broadcast()
