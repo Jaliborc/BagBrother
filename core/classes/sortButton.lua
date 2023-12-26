@@ -60,13 +60,12 @@ function SortButton:OnClick(button)
 end
 
 function SortButton:OnLocking()
-	if Addon.lockMode then
+	if not Addon.lockMode then
+		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarLeft() and 'RIGHT' or 'LEFT', self:IsFarLeft() and -23 or 23,0)
+							:SetCall('OnClose', function() self:OnLocking() end)
+	else
 		Addon.lockMode:Release()
 		Addon.lockMode = nil
-	else
-		Addon.lockMode = Sushi.HelpTip(self.frame, 'You are now in the client-side sorting configuration mode.|n|nClick item slots to toggle if they should be locked while sorting.', 'RIGHT')
-			:SetCall('OnClose', function() self:OnLocking() end)
-			:SetPoint('RIGHT', self.frame, 'LEFT', -23,0)
 	end
 
 	self:SendSignal('LOCKING_TOGGLED')
