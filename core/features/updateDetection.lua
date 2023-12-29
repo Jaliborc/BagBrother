@@ -30,17 +30,11 @@ function Detection:OnEnable()
     self:RegisterUpdateEvent('GUILD_ROSTER_UPDATE', function() return IsInGuild() and 'GUILD' end)
     self:RegisterUpdateEvent('GROUP_ROSTER_UPDATE', function() return IsInGroup() and 'RAID' end)
 
-    if int(Addon.Version) < int(Addon.sets.latest) and GetServerTime() >= (Addon.sets.latestCooldown or 0) then
-        print(format(L.CmdOutOfDate, ADDON, Addon.sets.latest))
-        xpcall(function()
-            LibStub('Sushi-3.2').Popup {
-                text = format(L.OutOfDate, ADDON, Addon.sets.latest), button1 = OKAY,
-                icon = format('Interface/Addons/BagBrother/art/%s-big', ADDON)
-            }
-        end, function() end)
-
-        Addon.sets.latest = Addon.Version
-        Addon.sets.latestCooldown = GetServerTime() + 3 * 24 * 60 * 60
+    if Addon.sets.latest and GetServerTime() >= (Addon.sets.latestCooldown or 0) then
+        Addon.sets.latestCooldown, Addon.sets.latest = GetServerTime() + 7 * 24 * 60 * 60
+        self:Popup(L.OutOfDate, Addon.sets.latest)
+    elseif int(Addon.Version) > nextExpansion then
+        self:Popup(L.InvalidVersion)
     end
 
     C_ChatInfo.RegisterAddonMessagePrefix(ADDON)
@@ -49,7 +43,7 @@ end
 
 function Detection:OnMessage(_, prefix, version, channel)
     if prefix == ADDON then
-        local ours, theirs = int(Addon.Version), int(version)
+        local ours, theirs = int(Addon.sets.latest or Addon.Version), int(version)
         if theirs < ours then
             self.Queued[channel] = true
         elseif theirs > ours and theirs < nextExpansion then
@@ -67,6 +61,16 @@ end
 
 
 --[[ API ]]--
+
+function Detection:Popup(text, version)
+    print(format('|cffff0000' .. text:gsub('|c%x%x%x%x%x%x%x%x', '|cffffffff'):gsub('|n', ' ') .. '|r', ADDON, version))
+    xpcall(function()
+        LibStub('Sushi-3.2').Popup {
+            text = format(text, ADDON, version), button1 = OKAY,
+            icon = format('Interface/Addons/BagBrother/art/%s-big', ADDON)
+        }
+    end, function() end)
+end
 
 function Detection:RegisterUpdateEvent(event, condition)
     if not C.GetAddOnMetadata(ADDON, 'x-development') then
