@@ -108,9 +108,22 @@ function Carrousel:OnLeave()
 end
 
 function Carrousel:OnClick(...)
-	local object = self:GetObject()
-	if object and object.OnClick then
-		object.OnClick(self, ...)
+	GetValueOrCallFunction(self:GetObject(), 'OnClick', self, ...)
+end
+
+function Carrousel:OnDragStart()
+	GetValueOrCallFunction(self:GetObject(), 'OnDragStart', self)
+end
+
+function Carrousel:OnReceiveDrag()
+	GetValueOrCallFunction(self:GetObject(), 'OnReceiveDrag', self)
+end
+
+function Carrousel:OnMouseWheel(direction)
+	if direction > 0 then
+		self:SetNextObject()
+	else
+		self:SetPreviousObject()
 	end
 end
 
@@ -120,14 +133,6 @@ end
 
 function Carrousel:OnHide()
 	LDB.UnregisterAllCallbacks(self)
-end
-
-function Carrousel:OnMouseWheel(direction)
-	if direction > 0 then
-		self:SetNextObject()
-	else
-		self:SetPreviousObject()
-	end
 end
 
 
