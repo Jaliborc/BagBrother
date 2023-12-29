@@ -19,7 +19,6 @@ L.CmdShowGuild = 'Toggles your guild bank'
 L.CmdShowVault = 'Toggles your void storage'
 L.CmdShowVersion = 'Prints the current version'
 L.CmdShowOptions = 'Opens the configuration menu'
-L.CmdOutOfDate = '|cffff0000You might be running an outdated |cffffffff%s|r version! Someone in your party or guild reported version |cffffffff%s|r, please update if true.|r'
 
 --frame titles
 L.TitleBags = '%s\'s Inventory'
@@ -62,6 +61,7 @@ L.TipShowInventory = '%s to toggle your inventory.'
 L.TipShowOptions = '%s to open the options menu.'
 L.TipShowSearch = '%s to search.'
 L.TipToggleBank = '%s to toggle bank.'
+L.TipToggleTrade = '%s to toggle profession bags.'
 
 --item tooltips
 L.TipCountEquip = 'Equipped: %d'
@@ -87,3 +87,4 @@ L.CannotPurchaseVault = 'You do not have enough money to unlock the Void Storage
 L.PurchaseVault = 'Would you like to unlock the Void Storage service?|n|n|cffffd200Cost:|r %s'
 L.ConfigurationMode = 'You are now in the client-side sorting configuration mode.|n|nClick item slots to toggle if they should be locked while sorting.'
 L.OutOfDate = 'You might be running an outdated |cffffd200%s|r version!|nSomeone in your party or guild reported having|n|cff82c5ff%s|r, please update if true.'
+L.InvalidVersion = 'Your copy of |cffffd200%s|r is either corrupted or illegal.|nPlease download an official build for free.'

@@ -9,7 +9,7 @@ local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
 Bank.Bags = Addon.BankBags
 
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'GetExtraButtons', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
 end
 
@@ -32,15 +32,6 @@ function Bank:SortItems()
 		end
 	else
 		self:Super(Bank):SortItems()
-	end
-end
-
-if REAGENTBANK_CONTAINER then
-	function Bank:IsShowingBag(bag)
-		local profile = self:GetProfile()
-		if not profile.exclusiveReagent or bag == REAGENTBANK_CONTAINER or profile.hiddenBags[REAGENTBANK_CONTAINER] then
-			return not profile.hiddenBags[bag]
-		end
 	end
 end
 

@@ -98,15 +98,6 @@ function Guild:IsShowingBag(bag)
 	return bag == GetCurrentGuildBankTab()
 end
 
+function Guild:GetExtraButtons() return self.LogToggles end
 function Guild:IsBagGroupShown() return true end
 function Guild:HasOwnerSelector() end
-function Guild:HasBagToggle() end
-
-function Guild:ListMenuButtons() -- not bagnon agnostic, must address
-	for i, toggle in ipairs(self.LogToggles) do
-		tinsert(self.menuButtons, toggle)
-	end
-
-	self:Super(Guild):ListMenuButtons()
-end
-

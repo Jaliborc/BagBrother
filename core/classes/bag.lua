@@ -182,10 +182,9 @@ function Bag:SetFocus(focus)
 end
 
 function Bag:Toggle()
+	local slot = self:GetID()
 	local profile = self:GetProfile()
-	local hidden = profile.hiddenBags
-	local slot = profile.exclusiveReagent and not hidden[REAGENTBANK_CONTAINER] and REAGENTBANK_CONTAINER or self:GetID()
-	hidden[slot] = not hidden[slot]
+	profile.hiddenBags[slot] = not profile.hiddenBags[slot]
 
 	self:SendFrameSignal('FILTERS_CHANGED')
 	self:SetFocus(true)
@@ -204,7 +203,7 @@ function Bag:Purchase()
 
 	if self:GetID() == REAGENTBANK_CONTAINER then
 		Sushi.Popup {
-			text = CONFIRM_BUY_REAGENTBANK_TAB, button1 = YES, button2 = NO,
+			text = CONFIRM_BUY_REAGNETBANK_TAB, button1 = YES, button2 = NO,
 			money = GetReagentBankCost(),
 			OnAccept = BuyReagentBank
 		}

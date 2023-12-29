@@ -50,13 +50,13 @@ function SortButton:OnClick(button)
 				}
 			}
 		end
-
-		self:SetChecked(nil)
 	elseif not self:GetChecked() then
-		Addon.Sorting:Stop()
+		return Addon.Sorting:Stop()
 	elseif not self.frame:IsCached() then
-		self.frame:SortItems()
+		return self.frame:SortItems()
 	end
+
+	self:SetChecked(nil)
 end
 
 function SortButton:OnLocking()
