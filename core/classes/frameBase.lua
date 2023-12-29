@@ -31,7 +31,7 @@ function Frame:OnHide()
 end
 
 
---[[ Appearance ]]--
+--[[ UI ]]--
 
 function Frame:UpdateAppearance()
 	self:ClearAllPoints()
@@ -76,6 +76,10 @@ end
 
 function Frame:GetPosition()
 	return self.profile.point or 'CENTER', self.profile.x, self.profile.y
+end
+
+function Frame:GetExtraButtons()
+	return {}
 end
 
 
@@ -132,7 +136,7 @@ function Frame:GetItemInfo(bag, slot)
 		local link, count = strsplit(';', data)
 		local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count)}
 		item.itemID, _,_,_, item.iconFileID = GetItemInfoInstant(item.hyperlink)
-		_, _, item.quality = GetItemInfo(item.hyperlink) 
+		_, item.hyperlink, item.quality = GetItemInfo(item.hyperlink) 
 		return item
 	end
 	return {}
