@@ -7,7 +7,6 @@ local ADDON, Addon = ...
 local Sushi = LibStub('Sushi-3.2')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local BagToggle = Addon.Tipped:NewClass('BagToggle', 'CheckButton', true)
-local Dropdown = CreateFrame('Frame', ADDON .. 'BagToggleDropdown', nil, 'UIDropDownMenuTemplate')
 
 
 --[[ Construct ]]--

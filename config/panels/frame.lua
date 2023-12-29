@@ -31,8 +31,9 @@ function Frames:Populate()
 		self:Add('Header', DISPLAY, 'GameFontHighlight', true)
 		self:AddRow(Config.displayRowHeight, function()
 			if Config.components then
-				if self.frame ~= 'guild' then
+				if self.frame == 'inventory' or self.frame == 'bank' then
 					self:AddCheck('bagToggle')
+          self:AddCheck('reagents')
 				end
 
         self:AddCheck('sort')
@@ -79,10 +80,6 @@ function Frames:Populate()
       self:AddBreak()
       self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
-
-			if REAGENTBANK_CONTAINER and self.frame == 'bank' then
-				self:AddCheck('exclusiveReagent')
-			end
     end)
   end
 end

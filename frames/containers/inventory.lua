@@ -97,6 +97,13 @@ function Frame:NumSlots(bag)
 	return size or 0
 end
 
+function Frame:GetExtraButtons()
+	return {
+		self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end),
+		self.profile.reagents and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
+	}
+end
+
 function Frame:SortItems()
 	if Addon.sets.serverSort and C.SortBags then
 		C.SortBags()

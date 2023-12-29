@@ -13,7 +13,7 @@ end
 
 local FrameDefaults = {
 	enabled = true,
-	money = true, broker = true, bagBreak = 0,
+	money = true, broker = true,
 	bagToggle = true, sort = true, search = true, options = true,
 
 	strata = 'HIGH', alpha = 1,
@@ -23,9 +23,9 @@ local FrameDefaults = {
 
 	hiddenBags = {}, lockedSlots = {},
 	itemScale = Addon.ItemScale or 1,
-	spacing = 2,
+	spacing = 2, bagBreak = 0,
 
-	brokerObject = Addon.Name .. 'Launcher',
+	brokerObject = ADDON .. 'Launcher',
 	rules = AsArray({
 		'all', 'all/normal', 'all/trade', 'all/reagent', 'all/keys', 'all/quiver',
 		'equip', 'equip/armor', 'equip/weapon', 'equip/trinket',
@@ -39,7 +39,7 @@ local ProfileDefaults = {
 	inventory = Addon:SetDefaults({
 		reversedTabs = true,
 		borderColor = {1, 1, 1, 1},
-		currency = true, broker = Addon.IsClassic,
+		currency = true, broker = true, reagents = REAGENTBANK_CONTAINER,
 		point = 'BOTTOMRIGHT',
 		x = -50, y = 100,
 		columns = 10,
@@ -49,7 +49,7 @@ local ProfileDefaults = {
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
-		currency = true,
+		currency = true, reagents = NUM_TOTAL_EQUIPPED_BAG_SLOTS,
 		point = 'LEFT',
 		columns = 14,
 		width = 600,
@@ -78,7 +78,6 @@ function Settings:OnEnable()
 	BrotherBags = BrotherBags or {}
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
 		global = self:SetDefaults({}, ProfileDefaults),
-        latest = Addon.Version,
 		profiles = {},
 
 		resetPlayer = true, flashFind = true, serverSort = true,
@@ -113,16 +112,16 @@ function Settings:OnEnable()
 			self:SetDefaults(profile, ProfileDefaults)
 			
 			for frame, options in pairs(profile) do
-				if type(options) == 'table' then
-					options.bagBreak = options.bagBreak == true and 2 or nil -- upgrade old setting
+				if type(options) == 'table' and options.bagBreak == true then
+					options.bagBreak = 2 -- upgrade old setting
 				end
 			end
 		end
 	end
 
 	for frame, options in pairs(Addon.sets.global) do
-		if type(options) == 'table' then
-			options.bagBreak = options.bagBreak == true and 2 or nil -- upgrade old setting
+		if type(options) == 'table' and options.bagBreak == true then
+			options.bagBreak = 2 -- upgrade old setting
 		end
 	end
 	----
