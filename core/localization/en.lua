@@ -89,5 +89,5 @@ L.ConfirmTransfer = 'Depositing any items will remove all modifications and make
 L.CannotPurchaseVault = 'You do not have enough money to unlock the Void Storage service|n|n|cffff2020Cost: %s|r'
 L.PurchaseVault = 'Would you like to unlock the Void Storage service?|n|n|cffffd200Cost:|r %s'
 L.ConfigurationMode = 'You are now in the client-side sorting configuration mode.|n|nClick item slots to toggle if they should be locked while sorting.'
-L.OutOfDate = 'You might be running an outdated |cffffd200%s|r version!|nSomeone in your party or guild reported having|n|cff82c5ff%s|r, please update if true.'
+L.OutOfDate = 'Your |cffffd200%s|r version might be outdated!|n%s reported having|n|cff82c5ff%s|r, please update if true.'
 L.InvalidVersion = 'Your copy of |cffffd200%s|r is either corrupted or illegal.|nPlease download an official build for free.'

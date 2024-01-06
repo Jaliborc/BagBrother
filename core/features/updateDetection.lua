@@ -30,24 +30,26 @@ function Detection:OnEnable()
     self:RegisterUpdateEvent('GUILD_ROSTER_UPDATE', function() return IsInGuild() and 'GUILD' end)
     self:RegisterUpdateEvent('GROUP_ROSTER_UPDATE', function() return IsInGroup() and 'RAID' end)
 
-    if Addon.sets.latest and GetServerTime() >= (Addon.sets.latestCooldown or 0) then
-        Addon.sets.latestCooldown, Addon.sets.latest = GetServerTime() + 7 * 24 * 60 * 60
-        self:Popup(L.OutOfDate, Addon.sets.latest)
+    local latest = Addon.sets.latest
+    if latest.id and GetServerTime() >= (latest.cooldown or 0) then
+        self:Popup(L.OutOfDate, latest.who, latest.id)
+        Addon.sets.latest = {cooldown = GetServerTime() + 7 * 24 * 60 * 60}
     elseif int(Addon.Version) > nextExpansion then
         self:Popup(L.InvalidVersion)
     end
 
     C_ChatInfo.RegisterAddonMessagePrefix(ADDON)
-    C_Timer.NewTicker(100, function() self:Broadcast() end)
+    C_Timer.NewTicker(1, function() self:Broadcast() end)
 end
 
-function Detection:OnMessage(_, prefix, version, channel)
+function Detection:OnMessage(_, prefix, version, channel, sender)
     if prefix == ADDON then
-        local ours, theirs = int(Addon.sets.latest or Addon.Version), int(version)
+        local latest = Addon.sets.latest
+        local ours, theirs = int(latest.id or Addon.Version), int(version)
         if theirs < ours then
             self.Queued[channel] = true
         elseif theirs > ours and theirs < nextExpansion then
-            Addon.sets.latest = version
+            latest.id, latest.who = version, sender
         end
     end
 end
@@ -62,11 +64,11 @@ end
 
 --[[ API ]]--
 
-function Detection:Popup(text, version)
-    print(format('|cffff0000' .. text:gsub('|c%x%x%x%x%x%x%x%x', '|cffffffff'):gsub('|n', ' ') .. '|r', ADDON, version))
+function Detection:Popup(text, who, version)
+    print(format('|cffff0000' .. text:gsub('|c%x%x%x%x%x%x%x%x', '|cffffffff'):gsub('|n', ' ') .. '|r', ADDON, who, version))
     xpcall(function()
         LibStub('Sushi-3.2').Popup {
-            text = format(text, ADDON, version), button1 = OKAY,
+            text = format(text, ADDON, who, version), button1 = OKAY,
             icon = format('Interface/Addons/BagBrother/art/%s-big', ADDON)
         }
     end, function() end)
