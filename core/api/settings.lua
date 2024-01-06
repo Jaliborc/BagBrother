@@ -106,14 +106,14 @@ function Settings:OnEnable()
 		herbColor = {.5, 1, .5},
 	})
 
-	----- upgrade old setting
+	----- upgrade old settings (temporary till next xpac)
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
 			self:SetDefaults(profile, ProfileDefaults)
 			
 			for frame, options in pairs(profile) do
 				if type(options) == 'table' and options.bagBreak == true then
-					options.bagBreak = 2 -- upgrade old setting
+					options.bagBreak = 2
 				end
 			end
 		end
@@ -121,9 +121,13 @@ function Settings:OnEnable()
 
 	for frame, options in pairs(Addon.sets.global) do
 		if type(options) == 'table' and options.bagBreak == true then
-			options.bagBreak = 2 -- upgrade old setting
+			options.bagBreak = 2
 		end
 	end
+
+	if type(Addon.sets.latest) ~= 'table' then
+		Addon.sets.latest = {}
+    end
 	----
 
 	_G[VAR] = Addon.sets

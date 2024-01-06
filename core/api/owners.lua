@@ -120,7 +120,7 @@ end
 
 function Owners:SetProfile(profile)
 	Addon.Settings:SetProfile(self.realm, self.id, profile)
-	self.profile = Addon.Settings:GetProfile(owner.realm, owner.id)
+	self.profile = Addon.Settings:GetProfile(self.realm, self.id)
 end
 
 function Owners:GetIconMarkup(size, x, y)
