@@ -52,6 +52,7 @@ L.BagBreak = 'Bag Break'
 L.ByType = 'By Type'
 L.ReverseBags = 'Reverse Bag Order'
 L.ReverseSlots = 'Reverse Slot Order'
+L.HideEmptySlot = 'Hide empty slots'
 
 L.Color = 'Background Color'
 L.BorderColor = 'Border Color'

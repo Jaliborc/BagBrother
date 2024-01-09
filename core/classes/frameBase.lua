@@ -98,6 +98,10 @@ function Frame:IsShowingBag(bag)
 	return not self:GetProfile().hiddenBags[bag]
 end
 
+function Frame:IsShowingEmptySlots(bag)
+	return not self:GetProfile().hiddenBagsSlots[bag]
+end
+
 function Frame:IsShowingItem(bag, slot)
 	local info = self:GetItemInfo(bag, slot)
 	local rule = Addon.Rules:Get(self.subrule or self.rule)
@@ -106,6 +110,9 @@ function Frame:IsShowingItem(bag, slot)
 		if not rule.func(self.owner, bag, slot, self:GetBagInfo(bag), info) then
 			return
 		end
+	end
+	if not self:IsShowingEmptySlots(bag) and info.itemID == nil then
+		return
 	end
 
 	return self:IsShowingQuality(info.quality)

@@ -35,6 +35,7 @@ L.Layer = 'Ebene'
 L.BagBreak = 'Trennen der Taschen aktivieren'
 L.ReverseBags = 'Taschen umkehren'
 L.ReverseSlots = 'Slots umkehren'
+L.HideEmptySlot = 'Leere Plätze verbergen'
 
 L.Color = 'Farbe des Fensters'
 L.BorderColor = 'Farbe des Fensterrands'

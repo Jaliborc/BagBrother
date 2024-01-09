@@ -24,6 +24,10 @@ local FrameDefaults = {
 	hiddenBags = {}, lockedSlots = {},
 	itemScale = Addon.ItemScale or 1,
 	spacing = 2, bagBreak = 0,
+  
+	hiddenRules = {contain = true},
+	hiddenBags = {},
+	hiddenBagsSlots = {},
 
 	brokerObject = ADDON .. 'Launcher',
 	rules = AsArray({
@@ -110,7 +114,7 @@ function Settings:OnEnable()
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
 			self:SetDefaults(profile, ProfileDefaults)
-			
+
 			for frame, options in pairs(profile) do
 				if type(options) == 'table' and options.bagBreak == true then
 					options.bagBreak = 2

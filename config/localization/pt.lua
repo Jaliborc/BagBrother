@@ -44,6 +44,8 @@ L.Layer = 'Camada'
 L.BagBreak = 'Quebras entre Sacos'
 L.ReverseBags = 'Inverter Sacos'
 L.ReverseSlots = 'Inverter Itens'
+L.HideEmptySlot = 'Ocultar espaços vazios'
+
 L.Color = 'Cor de Fundo'
 L.BorderColor = 'Cor do Bordo'
 L.Strata = 'Camada'

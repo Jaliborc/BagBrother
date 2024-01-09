@@ -139,19 +139,24 @@ end
 function Bag:OnClick(button)
 	if button == 'RightButton' then
 		self:ShowFilters()
-	elseif (self.owned and not CursorHasItem()) or self:IsCached() then
-		self:Toggle()
-	elseif CursorHasItem() then
-		if self.slot then
-			PutItemInBag(self.slot)
-		else
-			PutItemInBackpack()
+	elseif button == 'MiddleButton'then
+		if (self.owned and not CursorHasItem()) or self:IsCached() then
+			self:ToggleEmptySlots()
 		end
 	else
-		self:Purchase()
+		if (self.owned and not CursorHasItem()) or self:IsCached() then
+			self:Toggle()
+		elseif CursorHasItem() then
+			if self.slot then
+				PutItemInBag(self.slot)
+			else
+				PutItemInBackpack()
+			end
+			self:Purchase()
+		end
 	end
-
 	self:UpdateToggle()
+
 end
 
 function Bag:OnDrag()
@@ -188,6 +193,16 @@ function Bag:Toggle()
 
 	self:SendFrameSignal('FILTERS_CHANGED')
 	self:SetFocus(true)
+end
+
+function Bag:ToggleEmptySlots()
+	local profile = self:GetProfile()
+	local emptySlots = profile.hiddenBagsSlots
+	local slot = profile.exclusiveReagent and not emptySlots[REAGENTBANK_CONTAINER] and REAGENTBANK_CONTAINER or self:GetID()
+	emptySlots[slot] = not emptySlots[slot]
+	self:SendFrameSignal('FILTERS_CHANGED')
+	self:SetFocus(true)
+
 end
 
 function Bag:ShowFilters()
@@ -296,6 +311,7 @@ function Bag:UpdateTooltip()
 	-- instructions
 	if self.owned then
 		GameTooltip:AddLine((self:GetChecked() and L.TipHideBag or L.TipShowBag):format(L.Click))
+		GameTooltip:AddLine((self.frame:IsShowingEmptySlots(bag)and L.TipHideEmptySlots or L.TipShowEmptySlots):format(L.MiddleClickPhrase))
 	elseif not self:IsCached() then
 		GameTooltip:AddLine(L.TipPurchaseBag:format(L.Click))
 		SetTooltipMoney(GameTooltip, bag == REAGENTBANK_CONTAINER and GetReagentBankCost() or GetBankSlotCost())

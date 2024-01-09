@@ -48,6 +48,7 @@ L.Layer = 'Capa'
 L.BagBreak = 'Espacio entre bolsas'
 L.ReverseBags = 'Invertir bolsas'
 L.ReverseSlots = 'Invertir ranuras'
+L.HideEmptySlot = 'Ocultar espacios vacíos'
 
 L.Color = 'Color de fondo'
 L.BorderColor = 'Color de borde'

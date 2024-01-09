@@ -31,7 +31,8 @@ L.SelectCharacter = 'Seleziona Personaggio'
 L.ConfirmDelete = 'Sei sicuro di voler eliminare i dati di %s presenti nella cache?'
 
 --interactions
-L.Click = 'Clicca'
+L.Click = 'Clic sinistro'
+L.MiddleClickPhrase = 'Clic centrale'
 L.Drag = '<Trascina>'
 L.LeftClick = '<Clic Sinistro>'
 L.RightClick = '<Clic Destro>'
@@ -56,6 +57,8 @@ L.TipWithdraw = '%s per prelevare (%s rimanenti).'
 L.TipFrameToggle = "per attivare un'altra finestra."
 L.TipHideBag = '%s per nascondere questa borsa.'
 L.TipHideBags = '%s per nascondere il riquadro delle borse.'
+L.TipHideEmptySlots = '%s per nascondere gli slot vuoti.'
+L.TipShowEmptySlots = '%s per mostrare gli slot vuoti.'
 L.TipHideSearch = '%s per nascondere la barra di ricerca.'
 L.TipMove = '%s per muovere.'
 L.PurchaseBag = '%s per comprare questo spazio di Banca.'
