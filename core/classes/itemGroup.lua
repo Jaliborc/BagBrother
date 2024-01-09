@@ -1,6 +1,6 @@
 --[[
-	itemGroup.lua
-		A frame that organizes item buttons in a grid and manages updating them
+	A frame that organizes item buttons in a grid and manages updating them.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -112,6 +112,7 @@ function Items:Layout()
 	local profile = self:GetProfile()
 	local columns, scale, size = self:LayoutTraits()
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
+
 	local x, y = 0,0
 	local group = 0
 

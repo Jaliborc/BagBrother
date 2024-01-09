@@ -24,12 +24,12 @@ local FrameDefaults = {
 	hiddenBags = {}, lockedSlots = {},
 	itemScale = Addon.ItemScale or 1,
 	spacing = 2, bagBreak = 0,
-
-	brokerObject = ADDON .. 'Launcher',
+  
 	hiddenRules = {contain = true},
 	hiddenBags = {},
 	hiddenBagsSlots = {},
 
+	brokerObject = ADDON .. 'Launcher',
 	rules = AsArray({
 		'all', 'all/normal', 'all/trade', 'all/reagent', 'all/keys', 'all/quiver',
 		'equip', 'equip/armor', 'equip/weapon', 'equip/trinket',
