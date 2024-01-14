@@ -29,10 +29,9 @@ L.ViewSlots = 'View Slots'
 L.FocusNormal = 'Focus Normal'
 L.FocusTrade = 'Focus Trade'
 L.GuildFunds = 'Guild Funds'
-L.TipDeposit = '%s to deposit.'
-L.TipWithdraw = '%s to withdraw (%s remaining).'
-L.NumWithdraw = '%d withdraw'
-L.NumDeposit = '%d deposit'
+L.NumAllowed = '%s Allowed'
+L.NumWithdraw = '%d Withdraw'
+L.NumDeposit = '%d Deposit'
 L.NumRemainingWithdrawals = '%d Withdrawals Remaining'
 
 --dropdowns

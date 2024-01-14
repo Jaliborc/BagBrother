@@ -5,9 +5,9 @@
 
 local ADDON, Addon = ...
 local MoneyFrame = Addon.Tipped:NewClass('MoneyFrame', 'Frame', 'SmallMoneyFrameTemplate', true)
+MoneyFrame.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
 MoneyFrame.Type = 'PLAYER'
 
-local GRAY = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
 local Stroke = CreateFrame('Frame')
 Stroke:SetHeight(5)
 
@@ -100,7 +100,7 @@ function MoneyFrame:OnEnter()
 	end
 
 	GameTooltip_InsertFrame(GameTooltip, Stroke)
-	GameTooltip:AddDoubleLine(GRAY:format(TOTAL), GRAY:format(GetMoneyString(total, true)))
+	GameTooltip:AddDoubleLine(self.GRAY:format(TOTAL), self.GRAY:format(GetMoneyString(total, true)))
 	GameTooltip:Show()
 	Stroke:SetWidth(GameTooltip:GetWidth()-20)
 end

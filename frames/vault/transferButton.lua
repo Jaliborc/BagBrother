@@ -55,18 +55,9 @@ function TransferButton:OnEnter()
 	local deposits = GetNumVoidTransferDeposit()
 
 	if (withdraws + deposits) > 0 then
-		GameTooltip:SetOwner(self:GetTipAnchor())
-		GameTooltip:SetText(TRANSFER)
-
-		if withdraws > 0 then
-			GameTooltip:AddLine(format(L.NumWithdraw, withdraws), 1,1,1)
-		end
-
-		if deposits > 0 then
-			GameTooltip:AddLine(format(L.NumDeposit, deposits), 1,1,1)
-		end
-
-		GameTooltip:Show()
+		self:ShowTooltip(TRANSFER,
+			withdraws > 0 and L.NumWithdraw:format(withdraws),
+			deposits > 0 and L.NumDeposit:format(deposits))
 	end
 end
 

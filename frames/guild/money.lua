@@ -16,6 +16,11 @@ function Money:RegisterEvents()
 	self:Update()
 end
 
+function Money:OnEnter()
+	local allowed = CanWithdrawGuildBankMoney() and GetMoneyString(min(GetGuildBankWithdrawMoney(), GetGuildBankMoney()), true)
+	self:ShowTooltip(L.GuildFunds, '|L '..DEPOSIT, allowed and ('|R '..WITHDRAW..'  '..self.Gray:format(L.NumAllowed:format(allowed))))
+end
+
 function Money:OnClick(button)
 	if self:IsCached() then return end
 
@@ -39,17 +44,4 @@ function Money:OnClick(button)
 			OnAccept = function(popup, money) WithdrawGuildBankMoney(money) end
 		}
 	end
-end
-
-function Money:OnEnter()
-	GameTooltip:SetOwner(self, self:GetTop() > (GetScreenHeight() / 2) and 'ANCHOR_BOTTOM' or 'ANCHOR_TOP')
-	GameTooltip:SetText(L.GuildFunds)
-	GameTooltip:AddLine(L.TipDeposit:format(L.LeftClick), 1, 1, 1)
-
-	if CanWithdrawGuildBankMoney() then
-		local money = min(GetGuildBankWithdrawMoney(), GetGuildBankMoney())
-		GameTooltip:AddLine(L.TipWithdraw:format(L.RightClick, money > 0 and GetMoneyString(money, true) or NONE:lower()), 1,1,1)
-	end
-
-	GameTooltip:Show()
 end

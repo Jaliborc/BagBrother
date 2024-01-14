@@ -21,7 +21,9 @@ function Tipped:ShowTooltip(title, ...)
   GameTooltip:AddLine(title, 1,1,1)
 
 	for i = 1, select('#', ...) do
-	  GameTooltip:AddLine(self.MarkupTooltip(select(i, ...)))
+    if select(i, ...) then
+	    GameTooltip:AddLine(self.MarkupTooltip(select(i, ...)))
+    end
 	end
 
 	GameTooltip:Show()
