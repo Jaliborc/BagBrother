@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'esES') or LibStub('AceLocal
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Mostrar inventario'
-L.ToggleBank = 'Mostrar banco'
-L.ToggleGuild = 'Mostrar banco de hermandad'
-L.ToggleVault = 'Mostrar Depósito del Vacío'
+L.OpenBags = 'Mostrar inventario'
+L.OpenBank = 'Mostrar banco'
+L.OpenGuild = 'Mostrar banco de hermandad'
+L.OpenVault = 'Mostrar Depósito del Vacío'
 
 --terminal
 L.Commands = 'Lista de comandos'

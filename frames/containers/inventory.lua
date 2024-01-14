@@ -98,10 +98,7 @@ function Frame:NumSlots(bag)
 end
 
 function Frame:GetExtraButtons()
-	return {
-		self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end),
-		self.profile.reagents and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
-	}
+	return {self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end)}
 end
 
 function Frame:SortItems()

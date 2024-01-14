@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'koKR')
 if not L then return end
 
 --keybindings
-L.ToggleBags = '소지품 온/오프'
-L.ToggleBank = '은행 온/오프'
-L.ToggleGuild = '길드 금고 온/오프'
-L.ToggleVault = '공허 보관 온/오프'
+L.OpenBags = '소지품 온/오프'
+L.OpenBank = '은행 온/오프'
+L.OpenGuild = '길드 금고 온/오프'
+L.OpenVault = '공허 보관 온/오프'
 
 --terminal
 L.Commands = '명령어:'

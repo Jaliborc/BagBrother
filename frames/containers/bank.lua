@@ -9,7 +9,7 @@ local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
 Bank.Bags = Addon.BankBags
 
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'GetExtraButtons', 'NumSlots'} do
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
 end
 
@@ -35,6 +35,14 @@ function Bank:SortItems()
 	end
 end
 
+function Bank:GetExtraButtons()
+	return {
+		self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end),
+		DepositReagentBank and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
+	}
+end
+
 function Bank:IsCached()
 	return not Addon.Events.AtBank or self:GetOwner().offline
 end
+	

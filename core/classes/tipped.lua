@@ -16,6 +16,21 @@ function Tipped:OnLeave()
   end
 end
 
+function Tipped:ShowTooltip(title, ...)
+  GameTooltip:SetOwner(self:GetTipAnchor())
+  GameTooltip:AddLine(title, 1,1,1)
+
+	for i = 1, select('#', ...) do
+	  GameTooltip:AddLine(self.MarkupTooltip(select(i, ...)))
+	end
+
+	GameTooltip:Show()
+end
+
+function Tipped.MarkupTooltip(text)
+  return text:gsub('|L', '|A:NPE_LeftClick:14:14|a'):gsub('|R', '|A:NPE_RightClick:14:14|a'), nil
+end
+
 function Tipped:GetTipAnchor()
   return self, self:IsFarLeft() and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
 end

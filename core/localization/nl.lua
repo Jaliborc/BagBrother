@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'nlNL')
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Inventaris Wisselen'
-L.ToggleBank = 'Bank Wisselen'
-L.ToggleGuild = 'Gildebank Wisselen'
-L.ToggleVault = 'Lege Opslag Wisselen'
+L.OpenBags = 'Inventaris Wisselen'
+L.OpenBank = 'Bank Wisselen'
+L.OpenGuild = 'Gildebank Wisselen'
+L.OpenVault = 'Lege Opslag Wisselen'
 
 --terminal
 L.Commands = 'commandolijst'

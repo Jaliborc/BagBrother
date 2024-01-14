@@ -27,10 +27,8 @@ Addon:NewModule('LDB', LDB:NewDataObject(ADDON .. 'Launcher', {
 	end,
 
 	OnTooltipShow = function(tooltip)
-		tooltip:AddLine(format('|TInterface/Addons/BagBrother/Art/%s-Small:18:18|t %s', ADDON, ADDON))
-		tooltip:AddLine(L.TipShowInventory:format(L.LeftClick), 1, 1, 1)
-		tooltip:AddLine(L.TipShowBank:format(L.RightClick), 1, 1, 1)
-		tooltip:AddLine(L.TipShowOptions:format(L.ShiftClick), 1, 1, 1)
+		tooltip:AddLine(format('|TInterface/Addons/BagBrother/Art/%s-Small:18:18|t %s', ADDON, ADDON), 1,1,1)
+		tooltip:AddLine(Addon.Tipped.MarkupTooltip('|L %s|n|R %s'):format(L.OpenBags, L.OpenBank))
 	end,
 
 	OnUpdate = function(self)

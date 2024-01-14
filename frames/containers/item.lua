@@ -76,7 +76,7 @@ function Item:Update()
 		self:GetNormalTexture():SetVertexColor(1,1,1)
 	else
 		local family = self.frame:GetBagFamily(self:GetBag())
-		local color = Addon.sets.colorSlots and Addon.sets[(self.BagFamilies[family] or 'normal') .. 'Color'] or {}
+		local color = Addon.sets.colorSlots and Addon.sets[(self.BagFamilies[family] or 'normal') .. 'Color'] or Addon.None
 		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 
 		SetItemButtonTextureVertexColor(self, r,g,b)

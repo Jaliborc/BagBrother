@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'ptBR')
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Abrir Mochila'
-L.ToggleBank = 'Abrir Banco'
-L.ToggleGuild = 'Abrir Banco da Guilda'
-L.ToggleVault = 'Abrir Cofre'
+L.OpenBags = 'Abrir Mochila'
+L.OpenBank = 'Abrir Banco'
+L.OpenGuild = 'Abrir Banco da Guilda'
+L.OpenVault = 'Abrir Cofre'
 
 --terminal
 L.Commands = 'Commandos:'

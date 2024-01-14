@@ -286,7 +286,12 @@ function Bag:UpdateTooltip()
 	elseif self.link then
 		GameTooltip:SetInventoryItem('player', self.slot)
 	elseif self:IsBankBag() then
-		GameTooltip:SetText(BANK_BAG, 1, 1, 1)
+		if self.owned then
+			GameTooltip:SetText(BANK_BAG, 1, 1, 1)
+		else
+			GameTooltip:AddLine(BANK_BAG_PURCHASE, 1,1,1)
+			SetTooltipMoney(GameTooltip, bag == REAGENTBANK_CONTAINER and GetReagentBankCost() or GetBankSlotCost())
+		end
 	elseif bag > NUM_BAG_SLOTS then
 		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)
 	else
@@ -295,10 +300,7 @@ function Bag:UpdateTooltip()
 
 	-- instructions
 	if self.owned then
-		GameTooltip:AddLine((self:GetChecked() and L.TipHideBag or L.TipShowBag):format(L.Click))
-	elseif not self:IsCached() then
-		GameTooltip:AddLine(L.TipPurchaseBag:format(L.Click))
-		SetTooltipMoney(GameTooltip, bag == REAGENTBANK_CONTAINER and GetReagentBankCost() or GetBankSlotCost())
+		GameTooltip:AddLine(self:GetChecked() and L.HideBag or L.ShowBag)
 	end
 
 	GameTooltip:Show()
@@ -308,4 +310,4 @@ end
 --[[ Properties ]]--
 
 function Bag:IsBankBag() return self:GetID() > Addon.NumBags end
-function Bag:IsCombinedBagContainer() end -- trick blizzard
+function Bag:IsCombinedBagContainer() end -- delicious hack

@@ -39,6 +39,7 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 	end
 
+	self:RegisterEvent('PLAYER_ENTERING_WORLD', function() self.Frames:New('inventory') end)
 	SettingsPanel.CategoryList:HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {

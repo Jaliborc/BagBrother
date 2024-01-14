@@ -85,7 +85,7 @@ function Carrousel:OnEnter()
 		if object.OnEnter then
 			object.OnEnter(self)
 		else
-			GameTooltip:SetOwner(self:GetTipAnchor())
+			GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
 
 			if object.OnTooltipShow then
 				object.OnTooltipShow(GameTooltip)
@@ -216,7 +216,9 @@ function Carrousel:GetAvailableObjects()
 	wipe(self.objects)
 
 	for name, obj in LDB:DataObjectIterator() do
-		tinsert(self.objects, name)
+		if obj.type == 'launcher' or obj.type == 'data source' then
+			tinsert(self.objects, name)
+		end
 	end
 
 	sort(self.objects)

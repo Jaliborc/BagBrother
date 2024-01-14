@@ -4,9 +4,18 @@
 --]]
 
 local ADDON, Addon = ...
-local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local MoneyFrame = Addon.Tipped:NewClass('MoneyFrame', 'Frame', 'SmallMoneyFrameTemplate', true)
 MoneyFrame.Type = 'PLAYER'
+
+local GRAY = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
+local Stroke = CreateFrame('Frame')
+Stroke:SetHeight(5)
+
+local Line = Stroke:CreateLine()
+Line:SetStartPoint('LEFT', 0, -5)
+Line:SetEndPoint('RIGHT', 0, -5)
+Line:SetColorTexture(.3, .3, .3)
+Line:SetThickness(1)
 
 
 --[[ Construct ]]--
@@ -73,17 +82,10 @@ function MoneyFrame:OnClick()
 end
 
 function MoneyFrame:OnEnter()
-	-- Total
+	GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+	GameTooltip:SetText(MONEY, 1,1,1)
+
 	local total = 0
-	for i, owner in Addon.Owners:Iterate() do
-		total = total + ((not owner.isguild and owner:GetMoney()) or 0)
-	end
-
-	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:AddDoubleLine(L.Total, GetMoneyString(total, true), nil,nil,nil, 1,1,1)
-	GameTooltip:AddLine(' ')
-
-	-- Each owner
 	for i, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
 		if money then
@@ -91,11 +93,16 @@ function MoneyFrame:OnEnter()
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)
 
-			GameTooltip:AddDoubleLine(icon .. ' ' .. owner.name, coins, color.r, color.g, color.b, 1,1,1)
+			GameTooltip:AddDoubleLine(icon .. ' ' .. owner.name, coins, color.r, color.g, color.b, color.r, color.g, color.b)
 		end
+
+		total = total + (money or 0)
 	end
 
+	GameTooltip_InsertFrame(GameTooltip, Stroke)
+	GameTooltip:AddDoubleLine(GRAY:format(TOTAL), GRAY:format(GetMoneyString(total, true)))
 	GameTooltip:Show()
+	Stroke:SetWidth(GameTooltip:GetWidth()-20)
 end
 
 

@@ -1,6 +1,7 @@
 <Ui>
 	<Script file="autoDisplay.lua"/>
 	<Script file="basicRules.lua"/>
+	<Script file="brokerPlugin.lua"/>
 	<Script file="caching.lua"/>
 	<Script file="cacheInterface.lua"/> <!-- temp backwards compatibility -->
 	<Script file="currencyTooltips.lua"/>

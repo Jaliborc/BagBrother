@@ -14,7 +14,6 @@
 
 	<Script file="currency.lua"/>
 	<Script file="currencyTracker.lua"/>
-	<Script file="brokerPlugin.lua"/>
 	<Script file="brokerCarrousel.lua"/>
 	<Script file="money.lua"/>
 

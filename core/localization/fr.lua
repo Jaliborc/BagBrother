@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'frFR')
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Afficher votre inventaire'
-L.ToggleBank = 'Afficher votre banque'
-L.ToggleGuild = 'Afficher votre banque de guilde'
-L.ToggleVault = 'Afficher votre chambre du Vide'
+L.OpenBags = 'Afficher votre inventaire'
+L.OpenBank = 'Afficher votre banque'
+L.OpenGuild = 'Afficher votre banque de guilde'
+L.OpenVault = 'Afficher votre chambre du Vide'
 
 --terminal
 L.Commands = 'Liste des commandes :'

@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'itIT')
 if not L then return end
 
 --keybindings
-L.ToggleBags = "Attiva l'Inventario"
-L.ToggleBank = 'Attiva la Banca'
-L.ToggleGuild = 'Attiva la Banca di Gilda'
-L.ToggleVault = 'Attiva la Banca Eterea'
+L.OpenBags = "Attiva l'Inventario"
+L.OpenBank = 'Attiva la Banca'
+L.OpenGuild = 'Attiva la Banca di Gilda'
+L.OpenVault = 'Attiva la Banca Eterea'
 
 --terminal
 L.Commands = 'lista comandi:'

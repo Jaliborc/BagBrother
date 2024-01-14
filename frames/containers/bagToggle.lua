@@ -31,24 +31,26 @@ function BagToggle:OnShow()
 	self:Update()
 end
 
+function BagToggle:OnEnter()
+	self:ShowTooltip('Bags',
+		'|L ' .. (self:IsBagGroupShown() and L.HideSlots or L.ViewSlots),
+		'|R ' .. AREA_NAME_FONT_COLOR:WrapTextInColorCode(self:IsFocusingTrade() and L.FocusNormal or L.FocusTrade) .. '|A:NPE_ExclamationPoint:12:18|a')
+end
+
 function BagToggle:OnClick(button)
 	if button == 'LeftButton' then
 		local profile = self:GetProfile()
 		profile.showBags = not profile.showBags or nil
-
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
 	else
-		Addon.Frames:Show(self:GetFrameID() == 'bank' and 'inventory' or 'bank', self:GetOwner())
-		self:Update()
-	end
-end
+		local profile = self:GetProfile()
+		local focus = not self:IsFocusingTrade()
 
-function BagToggle:OnEnter()
-	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:SetText(BAGSLOTTEXT)
-	GameTooltip:AddLine((self:IsBagGroupShown() and L.TipHideBags or L.TipShowBags):format(L.LeftClick), 1,1,1)
-	GameTooltip:AddLine(L.TipToggleBank:format(L.RightClick), 1,1,1)
-	GameTooltip:Show()
+		for i, bag in ipairs(self.frame.Bags) do
+			profile.hiddenBags[bag] = self:IsStandardBag(bag) == focus
+			self:SendFrameSignal('FILTERS_CHANGED')
+		end
+	end
 end
 
 
@@ -60,4 +62,19 @@ end
 
 function BagToggle:IsBagGroupShown()
 	return self:GetProfile().showBags
+end
+
+function BagToggle:IsFocusingTrade()
+	local profile = self:GetProfile()
+	for i, bag in ipairs(self.frame.Bags) do
+		if self:IsStandardBag(bag) and not profile.hiddenBags[bag] then
+			return false
+		end
+	end
+	return true
+end
+
+function BagToggle:IsStandardBag(bag)
+	local family = self.frame:GetBagFamily(bag)
+	return family == 0 or family == 9
 end

@@ -33,7 +33,10 @@ function Frames:Populate()
 			if Config.components then
 				if self.frame == 'inventory' or self.frame == 'bank' then
 					self:AddCheck('bagToggle')
-          self:AddCheck('reagents')
+
+          if DepositReagentBank and self.frame == 'bank' then
+            self:AddCheck('reagents')
+          end
 				end
 
         self:AddCheck('sort')

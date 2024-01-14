@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'ruRU')
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Переключить инвентарь'
-L.ToggleBank = 'Переключить банк'
-L.ToggleGuild = 'Переключить банк гильдии'
-L.ToggleVault = 'Переключить Хранилище Бездны'
+L.OpenBags = 'Переключить инвентарь'
+L.OpenBank = 'Переключить банк'
+L.OpenGuild = 'Переключить банк гильдии'
+L.OpenVault = 'Переключить Хранилище Бездны'
 
 --terminal
 L.Commands = 'Команды:'

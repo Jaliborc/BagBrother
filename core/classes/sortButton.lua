@@ -28,6 +28,10 @@ end
 
 --[[ Interaction ]]--
 
+function SortButton:OnEnter()
+	self:ShowTooltip(BAG_FILTER_CLEANUP, AREA_NAME_FONT_COLOR:WrapTextInColorCode('|R ' .. OPTIONS)  .. '|A:NPE_ExclamationPoint:12:18|a')
+end
+
 function SortButton:OnClick(button)
 	if button == 'RightButton' then
 		local serverSort = Addon.IsRetail and Addon.sets.serverSort
@@ -39,14 +43,12 @@ function SortButton:OnClick(button)
 				{
 					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSortingTip,
 					func = function() Addon.sets.serverSort = not Addon.sets.serverSort end,
-					checked = serverSort, disabled = not Addon.IsRetail,
-					isNotRadio = true
+					checked = serverSort, disabled = not Addon.IsRetail, isNotRadio = true
 				},
 				{
 					text = '     |A:legionmission-lock:14:14|a ' .. L.LockItems,
 					tooltipTitle = serverSort and RED_FONT_COLOR:WrapTextInColorCode(L.RequiresClientSorting),
-					func = function() self:OnLocking() end,
-					notCheckable = true,
+					func = function() self:OnLocking() end, notCheckable = true,
 				}
 			}
 		end
@@ -69,12 +71,4 @@ function SortButton:OnLocking()
 	end
 
 	self:SendSignal('LOCKING_TOGGLED')
-end
-
-function SortButton:OnEnter()
-	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:SetText(BAG_FILTER_CLEANUP)
-	GameTooltip:AddLine(L.TipCleanItems:format(L.LeftClick), 1,1,1)
-	GameTooltip:AddLine(('%s to configure.'):format(L.RightClick), 1,1,1)
-	GameTooltip:Show()
 end

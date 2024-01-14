@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'zhTW')
 if not L then return end
 
 --keybindings
-L.ToggleBags = '切換 背包'
-L.ToggleBank = '切換 銀行'
-L.ToggleGuild = '切換 公會銀行'
-L.ToggleVault = '切換 虛空倉庫'
+L.OpenBags = '切換 背包'
+L.OpenBank = '切換 銀行'
+L.OpenGuild = '切換 公會銀行'
+L.OpenVault = '切換 虛空倉庫'
 
 --terminal
 L.Commands = '命令：'

@@ -7,10 +7,10 @@ local L = LibStub('AceLocale-3.0'):NewLocale(ADDON, 'deDE')
 if not L then return end
 
 --keybindings
-L.ToggleBags = 'Inventar umschalten'
-L.ToggleBank = 'Bank umschalten'
-L.ToggleGuild = 'Gildenbank umschalten'
-L.ToggleVault = 'Leerenlager umschalten'
+L.OpenBags = 'Inventar umschalten'
+L.OpenBank = 'Bank umschalten'
+L.OpenGuild = 'Gildenbank umschalten'
+L.OpenVault = 'Leerenlager umschalten'
 
 --terminal
 L.Commands = 'Befehlsliste'

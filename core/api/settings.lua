@@ -112,16 +112,24 @@ function Settings:OnEnable()
 			self:SetDefaults(profile, ProfileDefaults)
 			
 			for frame, options in pairs(profile) do
-				if type(options) == 'table' and options.bagBreak == true then
-					options.bagBreak = 2
+				if type(options) == 'table' then
+					if options.bagBreak == true then
+						options.bagBreak = 2
+					elseif not options.bagBreak then
+						options.bagBreak = nil
+					end
 				end
 			end
 		end
 	end
 
 	for frame, options in pairs(Addon.sets.global) do
-		if type(options) == 'table' and options.bagBreak == true then
-			options.bagBreak = 2
+		if type(options) == 'table' then
+			if options.bagBreak == true then
+				options.bagBreak = 2
+			elseif not options.bagBreak then
+				options.bagBreak = nil
+			end
 		end
 	end
 

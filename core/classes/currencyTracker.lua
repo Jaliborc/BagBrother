@@ -61,7 +61,7 @@ function CurrencyTracker:Layout()
 		end
 	else
 		local owner = self:GetOwner()
-		for i, id in ipairs(owner.currency and owner.currency.tracked or {}) do
+		for i, id in ipairs(owner.currency and owner.currency.tracked or Addon.None) do
 			w = w + self:AddButton(i, {currencyTypesID = id, quantity = owner.currency[id], iconFileID = C.GetCurrencyInfo(id).iconFileID})
 		end
 	end

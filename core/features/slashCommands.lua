@@ -14,10 +14,10 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 do
 	local ADDON_UPPER = ADDON:upper()
 	_G['BINDING_HEADER_' .. ADDON_UPPER] = ADDON
-	_G['BINDING_NAME_' .. ADDON_UPPER .. '_TOGGLE'] = L.ToggleBags
-	_G['BINDING_NAME_' .. ADDON_UPPER .. '_BANK_TOGGLE'] = L.ToggleBank
-	_G['BINDING_NAME_' .. ADDON_UPPER .. '_VAULT_TOGGLE'] = L.ToggleVault
-	_G['BINDING_NAME_' .. ADDON_UPPER .. '_GUILD_TOGGLE'] = L.ToggleGuild
+	_G['BINDING_NAME_' .. ADDON_UPPER .. '_TOGGLE'] = L.OpenBags
+	_G['BINDING_NAME_' .. ADDON_UPPER .. '_BANK_TOGGLE'] = L.OpenBank
+	_G['BINDING_NAME_' .. ADDON_UPPER .. '_VAULT_TOGGLE'] = L.OpenVault
+	_G['BINDING_NAME_' .. ADDON_UPPER .. '_GUILD_TOGGLE'] = L.OpenGuild
 end
 
 

@@ -53,7 +53,5 @@ function Toggle:OnClick()
 end
 
 function Toggle:OnEnter()
-	GameTooltip:SetOwner(self:GetTipAnchor())
-	GameTooltip:SetText(self.Titles[self.id])
-	GameTooltip:Show()
+	self:ShowTooltip(self.Titles[self.id])
 end
