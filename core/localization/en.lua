@@ -17,6 +17,7 @@ L.TitleBank = '%s\'s Bank'
 L.TitleVault = '%s\'s Void Storage'
 
 --actions
+L.Bags = 'Bags'
 L.Drag = 'Drag'
 L.Guilds = 'Guilds'
 L.Locations = 'Locations'

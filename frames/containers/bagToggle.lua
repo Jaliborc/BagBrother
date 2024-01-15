@@ -32,7 +32,7 @@ function BagToggle:OnShow()
 end
 
 function BagToggle:OnEnter()
-	self:ShowTooltip('Bags',
+	self:ShowTooltip(L.Bags,
 		'|L ' .. (self:IsBagGroupShown() and L.HideSlots or L.ViewSlots),
 		'|R ' .. AREA_NAME_FONT_COLOR:WrapTextInColorCode(self:IsFocusingTrade() and L.FocusNormal or L.FocusTrade) .. '|A:NPE_ExclamationPoint:12:18|a')
 end
