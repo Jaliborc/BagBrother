@@ -12,10 +12,10 @@ local Credits = Addon.GeneralOptions:New('Patrons', '|TInterface/Addons/BagBroth
 
 function Help:Populate()
 	for i = 1, #L.FAQ, 2 do
-		self:Add('ExpandHeader', L.FAQ[i], GameFontHighlightSmall):SetExpanded(self[i]):SetCall('OnClick', function() self[i] = not self[i] end)
+		self:Add('ExpandHeader', L.FAQ[i]:gsub('ADDON', ADDON), GameFontHighlightSmall):SetExpanded(self[i]):SetCall('OnClick', function() self[i] = not self[i] end)
 
 		if self[i] then
-			local answer = self:Add('Header', L.FAQ[i+1], GameFontHighlightSmall)
+			local answer = self:Add('Header', L.FAQ[i+1]:gsub('ADDON', ADDON), GameFontHighlightSmall)
 			answer.left, answer.right, answer.bottom = 16, 16, 16
 		end
 	end
