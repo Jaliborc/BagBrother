@@ -4,5 +4,6 @@
 	<Script file="owners.lua"/>
 	<Script file="frames.lua"/>
 	<Script file="rules.lua"/>
+	<Script file="skins.lua"/>
 	<Script file="sorting.lua"/>
 </Ui>
