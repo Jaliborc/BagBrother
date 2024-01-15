@@ -7,8 +7,8 @@
 
 local ADDON, Addon = ...
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
-Rules.registry = {}
 Rules.hierarchy = {}
+Rules.registry = {}
 
 
 --[[ Public API ]]--
