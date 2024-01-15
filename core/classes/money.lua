@@ -100,7 +100,7 @@ function MoneyFrame:OnEnter()
 	end
 
 	GameTooltip_InsertFrame(GameTooltip, Stroke)
-	GameTooltip:AddDoubleLine(self.GRAY:format(TOTAL), self.GRAY:format(GetMoneyString(total, true)))
+	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total, true)))
 	GameTooltip:Show()
 	Stroke:SetWidth(GameTooltip:GetWidth()-20)
 end
