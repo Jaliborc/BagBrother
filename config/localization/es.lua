@@ -1,6 +1,5 @@
 --[[
-    Spanish Localization
-        Credits/Blame: Phanx, Woopy
+    Spanish Localization (Credits/Blame: Phanx, Woopy)
 --]]
 
 local CONFIG = ...
@@ -15,7 +14,7 @@ L.CountItems = 'Contador en tooltips de objetos'
 L.CountGuild = 'Incluir banco de hermandad'
 L.CountCurrency = 'Contador en tooltips de monedas'
 L.FlashFind = 'Búsqueda instantánea'
-L.FlashFindTip = 'Si se activa, al hacer clic con Alt en un objeto, parpadearán todas las ranuras con ese mismo objeto en todos los marcos.'
+L.FlashFindTip = 'Si se activa, al hacer clic con Alt en un objeto, resaltarán todas las ranuras con ese mismo objeto en todos los marcos.'
 L.DisplayBlizzard = 'Mostrar ventanas de Blizzard para bolsas desactivadas'
 L.DisplayBlizzardTip = 'Si se activa, se mostrará la interfaz por defecto de Blizzard para bolsas ocultas del inventario o del banco.\n\n|cffff1919Requiere recargar la IU.|r'
 L.ConfirmGlobals = '¿Estás seguro de que quieres desactivar la configuración específica para este personaje? Se perderán todos los ajustes guardados.'
@@ -48,7 +47,6 @@ L.LeftTabsTip = [[
 Si está activado, las pestañas laterales
 se mostrarán en el lado izquierdo del panel.]]
 
-
 L.Appearance = 'Apariencia'
 L.Layer = 'Capa'
 L.BagBreak = 'Espacio entre bolsas'
@@ -60,6 +58,7 @@ L.Color = 'Color de fondo'
 L.BorderColor = 'Color de borde'
 
 L.Strata = 'Nivel de superposición'
+L.Skin = 'Piel'
 L.Columns = 'Columnas'
 L.Scale = 'Escala'
 L.ItemScale = 'Escala de objetos'
@@ -69,24 +68,24 @@ L.Alpha = 'Opacidad'
 -- auto display
 L.DisplayOptions = 'Apertura automática'
 L.DisplayOptionsDescription = 'Estos ajustes permiten configurar si tu inventario se muestra o se oculta automáticamente en repuesta a ciertos eventos del juego.'
+
 L.DisplayInventory = 'Mostrar inventario'
 L.CloseInventory = 'Cerrar inventario'
 
-L.Banker = 'Al visitar el banco'
-L.GuildBanker = 'Al abrir el banco de hermandad'
-L.VoidStorageBanker = 'Al visitar el Depósito del Vacío'
 L.Auctioneer = 'Al visitar la casa de subastas'
+L.Banker = 'Al visitar el banco'
+L.Combat = 'Al entrar en combate'
+L.Crafting = 'Al abrir una ventana de profesión'
+L.GuildBanker = 'Al abrir el banco de hermandad'
+L.VoidStorageBanker = 'Al visitar el depósito del vacío'
 L.MailInfo = 'Al abrir el buzón'
-L.TradePartner = 'Al comerciar'
+L.MapFrame = 'Al abrir el mapa del mundo'
+L.Merchant = 'Al salir de un vendedor'
+L.PlayerFrame = 'Al abrir la información del personaje'
 L.ScrappingMachine = 'Al reciclar equipo'
 L.Socketing = 'Al insertar gemas'
-L.Crafting = 'Al abrir una ventana de profesión'
-L.PlayerFrame = 'Al abrir el panel del personaje'
-L.Merchant = 'Al salir de un vendedor'
-
-L.Combat = 'Al entrar en combate'
+L.TradePartner = 'Al comerciar'
 L.Vehicle = 'Al entrar en un vehículo'
-L.MapFrame = 'Al abrir el mapa del mundo'
 
 -- colors
 L.ColorOptions = 'Opciones de color'
