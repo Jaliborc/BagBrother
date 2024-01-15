@@ -32,7 +32,7 @@ a sí mismo igual que los paneles estándar, como el |cffffffffLibro de hechizos
 o el |cffffffffBuscador de mazmorras|r, y no se podrá mover.]]
 
 L.BagToggle = 'Mostrar bolsas'
-L.Money = 'Dinero'
+L.Money = 'Moneda'
 L.Broker = 'Panel de información'
 L.Sort = 'Botón para ordenar'
 L.Search = 'Botón para buscar'
