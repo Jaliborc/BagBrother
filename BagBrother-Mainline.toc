@@ -1,6 +1,8 @@
 ## Title: BagBrother
 ## IconTexture: Interface/Addons/BagBrother/Art/Bagnon-Small
 ## Notes: Bagnon and Bagnonium's shared engine,|nstorage and everything.|n|cffbbbbbbBy João Cardoso and Jason Greer|r|n|n|TInterface/Addons/BagBrother/Art/Patreon:12:12|t |cff82c5ffpatreon.com/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Paypal:12:12|t |cff82c5ffpaypal.me/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Discord:12:12:0:-2|t |cff82c5ffbit.ly/discord-jaliborc|r
+## Notes-esMX: Motor compartido de Bagnon y Bagnonium,|nalmacenamiento y todo.|n|cffbbbbbbPor João Cardoso y Jason Greer|r|n|n|TInterface/Addons/BagBrother/Art/Patreon:12:12|t |cff82c5ffpatreon.com/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Paypal:12:12|t |cff82c5ffpaypal.me/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Discord:12:12:0:-2|t |cff82c5ffbit.ly/discord-jaliborc|r
+## Notes-esES: Motor compartido de Bagnon y Bagnonium,|nalmacenamiento y todo.|n|cffbbbbbbPor João Cardoso y Jason Greer|r|n|n|TInterface/Addons/BagBrother/Art/Patreon:12:12|t |cff82c5ffpatreon.com/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Paypal:12:12|t |cff82c5ffpaypal.me/jaliborc|r|n|TInterface/Addons/BagBrother/Art/Discord:12:12:0:-2|t |cff82c5ffbit.ly/discord-jaliborc|r
 ## Author: Jaliborc (João Cardoso)
 ## X-License: All Rights Reserved
 ## X-Category: Bags & Inventory
