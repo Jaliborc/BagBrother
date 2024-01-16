@@ -7,11 +7,13 @@
 local ADDON, Addon = ...
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Frame = Addon.Base:NewClass('Frame', 'Frame')
-
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.MoneyFrame
 Frame.BagGroup = Addon.BagGroup
+
+local KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
+local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 
 --[[ Frame Events ]]--
@@ -126,11 +128,25 @@ function Frame:GetItemInfo(bag, slot)
 	local bag = self:GetOwner()[bag]
 	local data = bag and bag[slot]
 	if data then
-		local link, count = strsplit(';', data)
-		local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count)}
-		item.itemID, _,_,_, item.iconFileID = GetItemInfoInstant(item.hyperlink)
-		_, item.hyperlink, item.quality = GetItemInfo(item.hyperlink) 
-		return item
+		if data:find(PET_FORMAT) then
+			local id, _, quality = data:match('(%d+):(%d+):(%d+)')
+			local item = {itemID = tonumber(id), quality = tonumber(quality)}
+			item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
+			item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, GetItemQualityColor(item.quality)), data, item.name)
+			return item
+		elseif data:find(KEYSTONE_FORMAT) then
+			local item = {itemID = tonumber(data:match('(%d+)'))}
+			_,_,_,_, item.iconFileID = GetItemInfoInstant(item.itemID)
+			_, item.hyperlink, item.quality = GetItemInfo(item.itemID)
+			item.hyperlink = item.hyperlink:gsub('item[:%d]+', data, 1)
+			return item
+		else
+			local link, count = strsplit(';', data)
+			local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count)}
+			item.itemID, _,_,_, item.iconFileID = GetItemInfoInstant(item.hyperlink)
+			_, item.hyperlink, item.quality = GetItemInfo(item.hyperlink) 
+			return item
+		end
 	end
 	return {}
 end
