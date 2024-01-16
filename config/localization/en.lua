@@ -64,31 +64,9 @@ L.ItemScale = 'Item Scale'
 L.Spacing = 'Spacing'
 L.Alpha = 'Opacity'
 
--- auto display
-L.DisplayOptions = 'Display Events'
-L.DisplayOptionsDescription = 'These settings allow you to configure when your inventory automatically opens or closes due to game events.'
-
-L.DisplayInventory = 'Display Inventory'
-L.CloseInventory = 'Close Inventory'
-
-L.Auctioneer = 'At the Auction House'
-L.Banker = 'At the Bank'
-L.Combat = 'Entering Combat'
-L.Crafting = 'Crafting'
-L.GuildBanker = 'At the Guild Bank'
-L.VoidStorageBanker = 'At Void Storage'
-L.MailInfo = 'At a Mailbox'
-L.MapFrame = 'Opening the World Map'
-L.Merchant = 'Talking to Merchant'
-L.PlayerFrame = 'Opening the Character Info'
-L.ScrappingMachine = 'Scrapping Equipment'
-L.Socketing = 'Socketing Equipment'
-L.TradePartner = 'Trading'
-L.Vehicle = 'Entering a Vehicle'
-
--- colors
-L.ColorOptions = 'Slot Settings'
-L.ColorOptionsDescription = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
+-- slots
+L.SlotOptions = 'Slot Settings'
+L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
 
 L.GlowQuality = 'Color by Quality'
 L.GlowQuest = 'Color Quest Items'
@@ -115,6 +93,28 @@ L.GemColor = 'Gem Color'
 L.MineColor = 'Mining Color'
 L.TackleColor = 'Tackle Box Color'
 L.FridgeColor = 'Refrigerator Color'
+
+-- auto display
+L.DisplayOptions = 'Display Events'
+L.DisplayOptionsDescription = 'These settings allow you to configure when your inventory automatically opens or closes due to game events.'
+
+L.DisplayInventory = 'Display Inventory'
+L.CloseInventory = 'Close Inventory'
+
+L.Auctioneer = 'At the Auction House'
+L.Banker = 'At the Bank'
+L.Combat = 'Entering Combat'
+L.Crafting = 'Crafting'
+L.GuildBanker = 'At the Guild Bank'
+L.VoidStorageBanker = 'At Void Storage'
+L.MailInfo = 'At a Mailbox'
+L.MapFrame = 'Opening the World Map'
+L.Merchant = 'Talking to Merchant'
+L.PlayerFrame = 'Opening the Character Info'
+L.ScrappingMachine = 'Scrapping Equipment'
+L.Socketing = 'Socketing Equipment'
+L.TradePartner = 'Trading'
+L.Vehicle = 'Entering a Vehicle'
 
 -- rulesets
 L.RuleOptions = 'Item Rulesets'

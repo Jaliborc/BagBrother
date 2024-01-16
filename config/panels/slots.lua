@@ -4,9 +4,9 @@
 --]]
 
 local L, ADDON, Addon = select(2, ...).Addon()
-local Color = Addon.GeneralOptions:New('ColorOptions', '|TInterface/Addons/BagBrother/art/brush:16:16:-5:0|t')
+local Slots = Addon.GeneralOptions:New('SlotOptions', '|TInterface/Addons/BagBrother/art/brush:16:16:-5:0|t')
 
-function Color:Populate()
+function Slots:Populate()
   -- Items
 	self:Add('Header', ITEMS, 'GameFontHighlight', true)
 	self:AddRow(35*2, function()
@@ -34,7 +34,7 @@ function Color:Populate()
 	self:AddChoice {arg = 'slotBackground', LAYOUT_STYLE_MODERN and {key = 3, text = LAYOUT_STYLE_MODERN} or false, {key = 2, text = EXPANSION_NAME0}, {key = 1, text = NONE}}
 end
 
-function Color:SlotTypes()
+function Slots:SlotTypes()
 	local types = {}
 	for bits, name in pairs(Addon.Item.BagFamilies) do
 		if not tContains(types, name) then

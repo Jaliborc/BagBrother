@@ -1,7 +1,7 @@
 <Ui>
   <Script file="general.lua"/>
   <Script file="frame.lua"/>
-  <Script file="color.lua"/>
+  <Script file="slots.lua"/>
   <Script file="display.lua"/>
   <Script file="info.lua"/>
 </Ui>

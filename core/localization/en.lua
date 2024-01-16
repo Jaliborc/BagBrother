@@ -38,7 +38,7 @@ L.NumRemainingWithdrawals = '%d Withdrawals Remaining'
 --dropdowns
 L.OfflineViewing = 'Offline Viewing'
 L.ServerSorting = 'Server-Side Sorting'
-L.ServerSortingTip = 'Whether to let the game server sort items where available.'
+L.ServerSortingTip = 'Whether to let the game server sort items, where available.'
 L.CleanupOptions = 'Cleanup Options'
 L.LockItems = 'Lock Item Slots'
 L.RequiresClientSorting = 'Requires client-side sorting!'
