@@ -34,9 +34,9 @@ a sí mismo igual que los paneles estándar, como el |cffffffffLibro de hechizos
 o el |cffffffffBuscador de mazmorras|r, y no se podrá mover.]]
 
 L.BagToggle = 'Mostrar bolsas'
-L.Money = 'Moneda'
+L.Money = 'Dinero'
 L.Broker = 'Panel de información'
-L.Currency = 'Monedas'
+L.Currency = 'Moneda'
 L.ExclusiveReagent = 'Banco de componentes separado'
 L.Sort = 'Botón para ordenar'
 L.Search = 'Botón para buscar'
