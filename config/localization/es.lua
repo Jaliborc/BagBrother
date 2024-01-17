@@ -58,7 +58,7 @@ L.Color = 'Color de fondo'
 L.BorderColor = 'Color de borde'
 
 L.Strata = 'Nivel de superposición'
-L.Skin = 'Estilo'
+L.Skin = 'Piel'
 L.Columns = 'Columnas'
 L.Scale = 'Escala'
 L.ItemScale = 'Escala de objetos'
