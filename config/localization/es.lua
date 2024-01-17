@@ -10,10 +10,10 @@ if not L then return end
 -- general
 L.GeneralOptionsDesc = 'Funciones generales que puedes aplicar según tus preferencias.'
 L.Locked = 'Bloquear posiciones'
-L.CountItems = 'Contador en Tooltips de Objetos'
+L.CountItems = 'Contador en tooltips de objetos'
 L.CountGuild = 'Incluir Banco de Hermandad'
-L.CountCurrency = 'Contador en Tooltips de Monedas'
-L.FlashFind = 'Búsqueda Instantanea'
+L.CountCurrency = 'Contador en tooltips de moneda'
+L.FlashFind = 'Búsqueda instantánea'
 L.DisplayBlizzard = 'Mostrar ventanas de Blizzard para bolsas desactivadas'
 L.DisplayBlizzardTip = 'Si se activa, se mostrará la interfaz por defecto de Blizzard para bolsas ocultas del inventario o del banco.\n\n|cffff1919Requiere reiniciar la interfaz (UI Reload).|r'
 L.ConfirmGlobals = '¿Estás seguro de que quieres desactivar la configuración específica para este personaje? Se perderán todos los ajustes guardados.'
@@ -32,7 +32,7 @@ a sí mismo igual que los paneles estándar, como el |cffffffffLibro de hechizos
 o el |cffffffffBuscador de mazmorras|r, y no se podrá mover.]]
 
 L.BagToggle = 'Mostrar bolsas'
-L.Money = 'Moneda'
+L.Money = 'Dinero'
 L.Broker = 'Panel de información'
 L.Sort = 'Botón para ordenar'
 L.Search = 'Botón para buscar'
