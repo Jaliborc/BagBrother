@@ -87,9 +87,9 @@ L.Socketing = '鑲崁寶石'
 L.TradePartner = '交易物品'
 L.Vehicle = '進入載具'
 
--- colors
-L.ColorOptions = '欄位設定'
-L.ColorOptionsDescription = '這些設置允許您更改在 %s 框架上呈現物品欄位的方式，使其更容易識別。'
+-- slots
+L.SlotOptions = '欄位設定'
+L.SlotOptionsDescription = '這些設置允許您更改在 %s 框架上呈現物品欄位的方式，使其更容易識別。'
 
 L.GlowQuality = '根據品質高亮物品'
 L.GlowQuest = '高亮任務物品'
