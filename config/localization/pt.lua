@@ -36,7 +36,7 @@ L.Currency = 'Moedas'
 L.Money = 'Dinheiro'
 L.Sort = 'Botão de Ordenação'
 L.Search = 'Botão de Pesquisa'
-L.Options = 'Botão de Configração'
+L.Options = 'Botão de Configuração'
 L.LeftTabs = 'Separadores à Esquerda'
 L.LeftTabsTip = 'Se ativado, os separadores laterais serão exibidos no lado esquerdo da janela.'
 
