@@ -44,7 +44,6 @@ L.GuildFunds = 'Золото гильдии'
 L.TipGoldOnRealm = 'Всего золота на %s'
 L.NumWithdraw = '%d снять'
 L.NumDeposit = '%d внести'
-L.NumRemainingWithdrawals = 'Осталось снятий: %d'
 
 --action tooltips
 L.TipChangePlayer = '%s — просмотреть предметы другого персонажа.'

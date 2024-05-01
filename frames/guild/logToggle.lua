@@ -9,14 +9,12 @@ local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', ADDON..'MenuChe
 
 Toggle.Icons = {
 	'Interface/Icons/INV_Crate_03',
-	'Interface/Icons/INV_Misc_Coin_01',
-	'Interface/Icons/Inv_misc_note_02'
+	'Interface/Icons/INV_Misc_Coin_01'
 }
 
 Toggle.Titles = {
 	GUILD_BANK_LOG,
-	GUILD_BANK_MONEY_LOG,
-	GUILD_BANK_TAB_INFO
+	GUILD_BANK_MONEY_LOG
 }
 
 

@@ -44,7 +44,6 @@ L.GuildFunds = '公会基金'
 L.TipGoldOnRealm = '%s总资产'
 L.NumWithdraw = '%d取出'
 L.NumDeposit = '%d存入'
-L.NumRemainingWithdrawals = '%d取出剩余'
 
 --action tooltips
 L.TipChangePlayer = '<点击>查看其他角色的物品。'

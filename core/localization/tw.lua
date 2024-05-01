@@ -60,7 +60,6 @@ L.TipConfigure = '%s設定這框架'
 L.GuildFunds = '工會資金'
 L.NumWithdraw = '%d 提款'
 L.NumDeposit = '%d 存款'
-L.NumRemainingWithdrawals = '%d 剩餘提款'
 
 --itemcount tooltips
 L.TipCountEquip = '已裝備: %d'

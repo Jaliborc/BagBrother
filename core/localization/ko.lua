@@ -44,7 +44,6 @@ L.GuildFunds = '길드 금고'
 L.TipGoldOnRealm = '총 %s'
 L.NumWithdraw = '%d 출금'
 L.NumDeposit = '%d 입금'
-L.NumRemainingWithdrawals = '출금 잔고 %d'
 
 --action tooltips
 L.TipChangePlayer = '다른 캐릭터의 아이템 보기'

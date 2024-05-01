@@ -43,7 +43,6 @@ L.GuildFunds = 'Fondos de hermandad'
 L.TipGoldOnRealm = 'Total en %s'
 L.NumWithdraw = 'Retirar %d'
 L.NumDeposit = 'Depositar %d'
-L.NumRemainingWithdrawals = 'Puedes retirar %d objetos más'
 
 --action tooltips
 L.TipChangePlayer = '%s para ver los objetos de otro personaje.'

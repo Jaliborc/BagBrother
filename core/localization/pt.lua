@@ -34,7 +34,7 @@ L.GuildFunds = 'Dinheiro da Guilda'
 L.NumAllowed = '%s Permitidos'
 L.NumWithdraw = '%d Retirar'
 L.NumDeposit = '%d Depositar'
-L.NumRemainingWithdrawals = '%d Levantamentos Restantes'
+L.NumRemaining = '%d Restantes'
 
 --dropdowns
 L.OfflineViewing = 'Visualização Offline'

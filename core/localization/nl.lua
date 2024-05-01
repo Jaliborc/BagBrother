@@ -42,9 +42,9 @@ L.ShiftClick = '<Shift-Klik>'
 L.Total = 'Totaal'
 L.GuildFunds = 'Gilde Fonds'
 L.TipGoldOnRealm = 'Totaal op %s'
-L.NumWithdraw = '%d opname'
-L.NumDeposit = '%d storting'
-L.NumRemainingWithdrawals = '%d resterende opnames'
+L.NumWithdraw = '%d Opname'
+L.NumDeposit = '%d Storting'
+L.NumRemaining = '%d Resterende'
 
 --action tooltips
 L.TipChangePlayer = '%s om items van een ander personage te bekijken.'
