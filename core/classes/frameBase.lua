@@ -6,7 +6,7 @@
 
 local ADDON, Addon = ...
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
-local Frame = Addon.Base:NewClass('Frame', 'Frame')
+local Frame = Addon.Base:NewClass('Frame', 'Frame', nil, true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.MoneyFrame
@@ -16,11 +16,15 @@ local KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
 local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 
---[[ Frame Events ]]--
+--[[ Events ]]--
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
+	self:RegisterSignal('UPDATE_ALL', 'Update')
+	self:RegisterSignal('RULES_LOADED', 'FindRules')
+	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
 	self:RegisterSignals()
+	self:Update()
 end
 
 function Frame:OnHide()
@@ -35,12 +39,39 @@ end
 
 --[[ UI ]]--
 
-function Frame:UpdateAppearance()
+function Frame:Update()
+	self.profile = self:GetBaseProfile()
 	self:ClearAllPoints()
 	self:SetFrameStrata(self.profile.strata)
 	self:SetAlpha(self.profile.alpha)
 	self:SetScale(self.profile.scale)
 	self:SetPoint(self:GetPosition())
+	self:UpdateSkin()
+	self:Layout()
+end
+
+function Frame:UpdateSkin()
+	if self.bg then
+		Addon.Skins:Release(self.bg)
+	end
+
+	local center = self.profile.color
+	local border = self.profile.borderColor
+	local bg = Addon.Skins:Acquire(self.profile.skin)
+	bg:SetParent(self)
+	bg:SetFrameLevel(self:GetFrameLevel())
+	bg:SetPoint('BOTTOMLEFT', bg.skin.x or 0, bg.skin.y or 0)
+	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
+	bg:EnableMouse(true)
+
+	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
+	self.Title:SetHighlightFontObject(bg.skin.fontH or self.FontH)
+	self.Title:SetNormalFontObject(bg.skin.font or self.Font)
+	self.bg = bg
+
+	Addon.Skins:Call('load', bg)
+	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
+	Addon.Skins:Call('centerColor', bg, center[1], center[2], center[3], center[4])
 end
 
 function Frame:RecomputePosition()

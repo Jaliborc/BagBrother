@@ -38,7 +38,7 @@ end
 function Bank:GetExtraButtons()
 	return {
 		self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end),
-		DepositReagentBank and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
+		DepositReagentBank and self.profile.reagents and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
 	}
 end
 

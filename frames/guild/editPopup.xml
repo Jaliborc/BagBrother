@@ -1,0 +1,61 @@
+<Ui>
+	<Frame name="BagBrotherGuildTabEditPopup" inherits="IconSelectorPopupFrameTemplate" parent="UIParent" hidden="true" enableMouse="true" frameLevel="50">
+		<Size x="525" y="615"/>
+		<KeyValues>
+			<KeyValue key="editBoxHeaderText" value="GUILDBANK_POPUP_TEXT" type="global"/>
+		</KeyValues>
+		<Layers>
+			<Layer level="BORDER">
+				<Texture parentKey="MiddleEdge" atlas="_macropopup-top2" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.IconSelector" relativePoint="BOTTOMLEFT" x="-10" y="7"/>
+						<Anchor point="TOPRIGHT" relativeKey="$parent.IconSelector" relativePoint="BOTTOMRIGHT" x="0" y="7"/>
+					</Anchors>
+				</Texture>
+				<FontString parentKey="InfoHeaderText" inherits="GameFontHighlightSmall">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.IconSelector" relativePoint="BOTTOMLEFT" x="0" y="-10"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Info" inherits="TooltipBackdropTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.InfoHeaderText" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+					<Anchor point="BOTTOMRIGHT" x="-20" y="45"/>
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="backdropColor" value="BLACK_FONT_COLOR" type="global"/>
+					<KeyValue key="backdropColorAlpha" value="0.9" type="number"/>
+				</KeyValues>
+				<Frames>
+					<ScrollFrame parentKey="ScrollFrame" inherits="ScrollFrameTemplate">
+						<KeyValues>
+							<KeyValue key="scrollBarX" value="6" type="number"/>
+							<KeyValue key="scrollBarTopY" value="-5" type="number"/>
+							<KeyValue key="scrollBarBottomY" value="5" type="number"/>
+						</KeyValues>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="4" y="-4"/>
+							<Anchor point="BOTTOMRIGHT" x="-26" y="4"/>
+						</Anchors>
+						<ScrollChild>
+							<EditBox parentKey="EditBox" multiLine="true" autoFocus="false">
+								<Size x="218" y="1"/>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+								<Scripts>
+									<OnEscapePressed function="EditBox_ClearFocus"/>
+									<OnEditFocusLost> self:HighlightText(0, 0) </OnEditFocusLost>
+								</Scripts>
+								<FontString inherits="GameFontHighlight"/>
+							</EditBox>
+						</ScrollChild>
+					</ScrollFrame>
+				</Frames>
+            </Frame>
+		</Frames>
+    </Frame>
+</Ui>

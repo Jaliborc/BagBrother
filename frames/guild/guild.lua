@@ -32,13 +32,8 @@ function Guild:New(id)
 	log:SetPoint('TOPLEFT', 10, -70)
 	log:Hide()
 
-	local edit = Addon.EditFrame:New(f)
-	edit:SetPoint('BOTTOMRIGHT', -32, 35)
-	edit:SetPoint('TOPLEFT', 10, -75)
-	edit:Hide()
-
 	f.LogToggles = Addon.LogToggle:NewSet(f)
-	f.Log, f.EditFrame = log, edit
+	f.Log = log
 	return f
 end
 
@@ -52,8 +47,7 @@ end
 
 function Guild:OnLogSelected(_, logID)
 	self.ItemGroup:SetShown(not logID)
-	self.EditFrame:SetShown(logID == 3)
-	self.Log:SetShown(logID and logID < 3)
+	self.Log:SetShown(logID)
 end
 
 function Guild:OnHide()

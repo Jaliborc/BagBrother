@@ -43,7 +43,6 @@ L.GuildFunds = 'Fonds de Guilde'
 L.TipGoldOnRealm = '%s Totals'
 L.NumWithdraw = '%d |4retrait:retraits;'
 L.NumDeposit = '%d |4dépôt:dépôts;'
-L.NumRemainingWithdrawals = '%d Retraits Restant'
 
 --action tooltips
 L.TipChangePlayer = '%s pour afficher les objets d\'un autre personnage.'

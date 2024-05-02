@@ -26,9 +26,9 @@ function Slots:Populate()
 	if Addon.sets.colorSlots then
 		self:AddRow(35* ceil(#self:SlotTypes() / 3), function()
 			for i, name in ipairs(self:SlotTypes()) do
-				self:AddColor(name .. 'Color')
+				self:AddColor(name .. 'Color'):SetSmall(true)
 			end
-		end)
+		end).left = 20
 	end
 
 	self:AddChoice {arg = 'slotBackground', LAYOUT_STYLE_MODERN and {key = 3, text = LAYOUT_STYLE_MODERN} or false, {key = 2, text = EXPANSION_NAME0}, {key = 1, text = NONE}}

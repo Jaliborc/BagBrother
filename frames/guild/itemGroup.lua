@@ -16,8 +16,14 @@ function Items:RegisterEvents()
 		self:RegisterSignal('GUILD_OPEN', 'RegisterEvents')
 		self:RegisterSignal('GUILD_TAB_CHANGED', 'ForAll', 'Update')
   	else
+		self:QueryServer()
 		self:RegisterSignal('GUILD_CLOSE', 'RegisterEvents')
+		self:RegisterSignal('GUILD_TAB_CHANGED', 'QueryServer')
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED', 'ForAll', 'Update')
 		self:RegisterEvent('GUILDBANK_ITEM_LOCK_CHANGED', 'ForAll', 'UpdateLocked')
 	end
+end
+
+function Items:QueryServer()
+	QueryGuildBankTab(GetCurrentGuildBankTab())
 end

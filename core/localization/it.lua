@@ -44,7 +44,6 @@ L.GuildFunds = 'Fondi di Gilda'
 L.TipGoldOnRealm = '%s Totali'
 L.NumWithdraw = '%d Prelevati'
 L.NumDeposit = '%d Depositati'
-L.NumRemainingWithdrawals = '%d Rimanenti da Prelevare'
 
 --action tooltips
 L.TipChangePlayer = '%s per vedere gli oggetti di un altro personaggio.'

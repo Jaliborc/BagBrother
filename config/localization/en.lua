@@ -34,9 +34,8 @@ or the |cffffffffDungeon Finder|r, and will not be movable.]]
 
 L.BagToggle = 'Bags Toggle'
 L.Broker = 'Databroker Plugins'
-L.Currency = 'Currencies'
-L.ExclusiveReagent = 'Separate Reagent Bank'
-L.Money = 'Money'
+L.Currency = CURRENCY
+L.Money = MONEY
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'
@@ -80,7 +79,7 @@ L.EmptySlots = 'Display Background'
 L.SlotBackground = 'Artwork'
 L.ColorSlots = 'Color by Bag Type'
 L.NormalColor = 'Normal Color'
-L.KeyColor = 'Key Color'
+L.KeyColor = 'Keyring Color'
 L.QuiverColor = 'Quiver Color'
 L.SoulColor = 'Soul Bag Color'
 L.ReagentColor = 'Reagent Color'

@@ -34,7 +34,7 @@ L.TipDeposit = '%s para depositar.'
 L.TipWithdraw = '%s para retirar (%s restantes).'
 L.NumWithdraw = 'Retirar %d'
 L.NumDeposit = 'Depositar %d'
-L.NumRemainingWithdrawals = '%d retiros restantes'
+L.NumRemainingWithdrawals = '%d Restantes'
 
 --dropdowns
 L.OfflineViewing = 'Visualización sin conexión'

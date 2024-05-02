@@ -28,7 +28,7 @@ function General:ToggleGlobals()
 	if Addon.player.profile == Addon.sets.global then
 		self:SetProfile(CopyTable(Addon.sets.global))
 	else
-		LibStub('Sushi-3.1').Popup {
+		LibStub('Sushi-3.2').Popup {
 			text = L.ConfirmGlobals, showAlertGear = true, button1 = YES, button2 = NO,
 			OnAccept = function()
 				self:SetProfile(nil)
