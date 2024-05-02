@@ -34,7 +34,7 @@ L.BagToggle = 'Lista de Bolsas'
 L.Broker = 'DataBroker'
 L.Sort = 'Botão de Limpeza'
 L.Search = 'Botão de Pesquisa'
-L.Options = 'Botão de Configração'
+L.Options = 'Botão de Configuração'
 L.LeftTabs = 'Separadores à Esquerda'
 L.LeftTabsTip = 'Se ativado, os separadores laterais serão exibidos no lado esquerdo da janela.'
 
