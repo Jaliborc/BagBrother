@@ -44,7 +44,7 @@ end
 
 function TipCounts:OnEnable()
 	if Addon.sets.countItems then
-		if TooltipDataProcessor then
+		if C_TooltipInfo then
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)
 		else
 			for _,frame in pairs {UIParent:GetChildren()} do
@@ -165,7 +165,7 @@ function TipCounts:AddOwners(tip, link)
 				end
 			end
 
-			tip.__hasCounters = not TooltipDataProcessor
+			tip.__hasCounters = not C_TooltipInfo
 			tip:Show()
 		end
 	end
