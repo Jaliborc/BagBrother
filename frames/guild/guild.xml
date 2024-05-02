@@ -1,10 +1,11 @@
 <Ui>
+	<Include file="editPopup.xml"/>
+
 	<Script file="tab.lua"/>
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>
 	<Script file="money.lua"/>
 
-	<Script file="editFrame.lua"/>
 	<Script file="logFrame.lua"/>
 	<Script file="logToggle.lua"/>
 

@@ -34,7 +34,7 @@ L.GuildFunds = '公會資金'
 L.NumAllowed = '%s允許'
 L.NumWithdraw = '%d提領'
 L.NumDeposit = '%d存入'
-L.NumRemainingWithdrawals = '剩餘的每日提領額度：%d'
+L.NumRemaining = '%d餘的'
 
 --dropdowns
 L.OfflineViewing = '離線瀏覽'

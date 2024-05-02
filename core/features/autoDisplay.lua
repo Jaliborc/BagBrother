@@ -46,7 +46,7 @@ function AutoDisplay:HookBaseUI()
 
 	self:StopIf(PlayerInteractionFrameManager, 'ShowFrame', function(manager, type)
 		return type == Interactions.Banker and Addon.Frames:Show('bank') or
-			    type == Interactions.GuildBanker and Addon.Frames:Show('guild') or
+				type == Interactions.GuildBanker and Addon.Frames:Show('guild') or
 				type == Interactions.VoidStorageBanker and Addon.Frames:Show('vault')
 	end)
 
