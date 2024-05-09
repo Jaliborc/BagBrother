@@ -20,10 +20,12 @@ local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
-	self:RegisterSignal('UPDATE_ALL', 'Update')
-	self:RegisterSignal('RULES_LOADED', 'FindRules')
+	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
+	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
-	self:RegisterSignals()
+	self:RegisterSignal('RULES_LOADED', 'FindRules')
+	self:RegisterSignal('UPDATE_ALL', 'Update')
+	self:RegisterEvents()
 	self:Update()
 end
 

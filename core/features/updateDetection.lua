@@ -40,17 +40,17 @@ function Detection:OnEnable()
     end
 
     C_ChatInfo.RegisterAddonMessagePrefix(ADDON)
-    C_Timer.NewTicker(60*5, function() self:Broadcast() end)
+    C_Timer.NewTicker(60, function() self:Broadcast() end)
 end
 
 function Detection:OnMessage(_, prefix, version, channel, sender)
     if prefix == ADDON then
         local latest = Addon.sets.latest
         local ours, theirs = int(latest.id or Addon.Version), int(version)
-        if theirs < ours then
-            self.Queued[channel] = true
-        elseif theirs > ours and theirs < nextExpansion then
+        if theirs > ours and theirs < nextExpansion then
             latest.id, latest.who = version, sender
+        else
+            self.Queued[channel] = theirs < ours or nil
         end
     end
 end
