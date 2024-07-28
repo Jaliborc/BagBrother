@@ -59,6 +59,7 @@ function Item:Construct()
 	b.QuestBang:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 	b.IconOverlay:SetAtlas('AzeriteIconFrame')
 	b.BattlepayItemTexture:Hide()
+	b.NewItemTexture:Hide()
 
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
 	b.IconGlow:SetTexture('Interface/Buttons/UI-ActionButton-Border')
