@@ -184,6 +184,21 @@ function Cacher:SaveEquip(i)
 end
 
 function Cacher:ParseItem(link, count)
+	-- get mouse focus
+	--
+	-- @return frame that currently has mouse focus
+	local function GetMouseFocus()
+		-- since tww 11.0.0
+		if (GetMouseFoci) then
+			local frames = GetMouseFoci();
+			
+			return frames and frames[1];
+		end
+		
+		-- before tww 11.0.0
+		return GetMouseFocus();
+	end
+	
 	if link then
 		local id = tonumber(link:match('item:(%d+):')) -- check for profession window bug
 		if id == 0 and TradeSkillFrame then
