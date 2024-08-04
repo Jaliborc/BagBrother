@@ -196,7 +196,7 @@ function Cacher:ParseItem(link, count)
 		end
 		
 		-- before tww 11.0.0
-		return GetMouseFocus();
+		return _G.GetMouseFocus();
 	end
 	
 	if link then
