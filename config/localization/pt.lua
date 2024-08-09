@@ -19,6 +19,7 @@ L.DisplayBlizzard = 'Mostrar Janelas da Blizzard para Bolsas Desligadas'
 L.DisplayBlizzardTip = 'Se ativado, os paineis padrão da Blizzard seram exibido para bolsas do inventário ou banco escondidos.\n\n|cffff1919Necessário recarregar a IU.|r'
 L.ConfirmGlobals = 'Tens a certeza que queres desligar a configuração individual desta personagem? Todas as diferenças individuais serão perdidas.'
 L.CharacterSpecific = 'Configuração Individual por Personagem'
+L.ExclusiveReagent = 'Banco de reagentes separado'
 
 -- frame
 L.FrameOptions = 'Janelas'

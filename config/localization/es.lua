@@ -18,6 +18,7 @@ L.DisplayBlizzard = 'Mostrar ventanas de Blizzard para bolsas desactivadas'
 L.DisplayBlizzardTip = 'Si se activa, se mostrará la interfaz por defecto de Blizzard para bolsas ocultas del inventario o del banco.\n\n|cffff1919Requiere reiniciar la interfaz (UI Reload).|r'
 L.ConfirmGlobals = '¿Estás seguro de que quieres desactivar la configuración específica para este personaje? Se perderán todos los ajustes guardados.'
 L.CharacterSpecific = 'Ajustes del personaje'
+L.ExclusiveReagent = 'Banco de reactivos separado'
 
 -- frame
 L.FrameOptions = 'Opciones de ventana'

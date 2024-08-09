@@ -18,6 +18,7 @@ L.DisplayBlizzard = 'Fallback Hidden Bags'
 L.DisplayBlizzardTip = 'If enabled, the default Blizzard UI bag panels will be displayed for hidden inventory or bank containers.\n\n|cffff1919Requires UI reload.|r'
 L.ConfirmGlobals = 'Are you sure you want to disable specific settings for this character? All specific settings will be lost.'
 L.CharacterSpecific = 'Character Specific Settings'
+L.ExclusiveReagent = 'Separate Reagent Bank'
 
 -- frame
 L.FrameOptions = 'Frame Settings'
