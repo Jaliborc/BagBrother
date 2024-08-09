@@ -34,6 +34,14 @@ function Bank:SortItems()
 		self:Super(Bank):SortItems()
 	end
 end
+if REAGENTBANK_CONTAINER then
+	function Bank:IsShowingBag(bag)
+		local profile = self:GetProfile()
+		if not profile.exclusiveReagent or bag == REAGENTBANK_CONTAINER or profile.hiddenBags[REAGENTBANK_CONTAINER] then
+			return not profile.hiddenBags[bag]
+		end
+	end
+end
 
 function Bank:GetExtraButtons()
 	return {
