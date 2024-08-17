@@ -11,7 +11,7 @@ local Detection = Addon:NewModule('UpdateDetection')
 local nextExpansion = 0
 for k, v in pairs(_G) do
     if type(k) == 'string' and type(v) == 'number' and k:match('^LE_EXPANSION_[%u_]+$') then
-        nextExpansion = max(nextExpansion, (v+2) * 10000)
+        nextExpansion = max(nextExpansion, (v+3) * 10000)
     end
 end
 
@@ -35,7 +35,7 @@ function Detection:OnEnable()
     if latest.id and GetServerTime() >= (latest.cooldown or 0) then
         self:Popup(L.OutOfDate, latest.who, latest.id)
         Addon.sets.latest = {cooldown = GetServerTime() + 7 * 24 * 60 * 60}
-    elseif int(Addon.Version) > nextExpansion then
+    elseif int(Addon.Version) >= nextExpansion then
         self:Popup(L.InvalidVersion)
     end
 

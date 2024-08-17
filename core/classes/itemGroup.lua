@@ -93,57 +93,47 @@ function Items:Layout()
 	wipe(self.buttons)
 	wipe(self.order)
 
-	-- Acquire slots
-	for i, frame in ipairs(self.bags) do
-		local bag = frame.id
-		if self.frame:IsShowingBag(bag) then
-			for slot = 1, self.frame:NumSlots(bag) do
-				if self.frame:IsShowingItem(bag, slot) then
-					local button = self.Button(frame, bag, slot)
-					self.buttons[bag] = self.buttons[bag] or {}
-					self.buttons[bag][slot] = button
-					tinsert(self.order, button)
-				end
-			end
-		end
-	end
-
-	-- Position slots
 	local profile = self:GetProfile()
-	local columns, scale, size = self:LayoutTraits()
+	local columns, scale, size, space = profile.columns, profile.itemScale, 37 + profile.spacing, profile.breakSpace
 	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
 
 	local x, y = 0,0
 	local group = 0
 
 	for k = revBags and #self.bags or 1, revBags and 1 or #self.bags, revBags and -1 or 1 do
-		local bag = self.bags[k].id
-		local slots = self.buttons[bag]
-		local family = self.frame:GetBagFamily(bag)
+		local frame = self.bags[k]
+		local bag = frame.id
+		local numSlots = self.frame:NumSlots(bag)
 
-		if x > 0 and (profile.bagBreak > 1 or profile.bagBreak > 0 and (family == 0) ~= (group == 0)) then
-			group = family
-			y = y + 1
-			x = 0
-		end
+		if numSlots > 0 and self.frame:IsShowingBag(bag) then
+			local family = self.frame:GetBagFamily(bag)
+			local slots = {}
 
-		if slots then
-			local numSlots = self.frame:NumSlots(bag)
+			if x > 0 and (profile.bagBreak > 1 or profile.bagBreak > 0 and (family == 0) ~= (group == 0)) then
+				group = family
+				y = y + space
+				x = 0
+			end
+
 			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
-				local button = slots[slot]
-				if button then
+				if self.frame:IsShowingItem(bag, slot) then
 					if x == columns then
 						y = y + 1
 						x = 0
 					end
 
+					local button = self.Button(frame, bag, slot)
 					button:ClearAllPoints()
 					button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
 					button:SetScale(scale)
 
 					x = x + 1
+					slots[slot] = button
+					tinsert(self.order, button)
 				end
 			end
+
+			self.buttons[bag] = slots
 		end
 	end
 
@@ -169,9 +159,4 @@ function Items:ForBag(bag, method, ...)
 			button[method](button, ...)
 		end
 	end
-end
-
-function Items:LayoutTraits()
-	local profile = self:GetProfile()
-	return profile.columns, profile.itemScale, 37 + profile.spacing
 end

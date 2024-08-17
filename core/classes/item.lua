@@ -59,6 +59,7 @@ function Item:Construct()
 	b.QuestBang:SetTexture(TEXTURE_ITEM_QUEST_BANG)
 	b.IconOverlay:SetAtlas('AzeriteIconFrame')
 	b.BattlepayItemTexture:Hide()
+	b.NewItemTexture:Hide()
 
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
 	b.IconGlow:SetTexture('Interface/Buttons/UI-ActionButton-Border')
@@ -307,7 +308,7 @@ function Item:GetQuery()
 end
 
 function Item:IsUpgrade()
-	return (self.hasItem or false) and C.Addons.IsAddOnLoaded('Pawn') and PawnShouldItemLinkHaveUpgradeArrow(self.info.hyperlink)
+	return (self.hasItem or false) and C.AddOns.IsAddOnLoaded('Pawn') and PawnShouldItemLinkHaveUpgradeArrow(self.info.hyperlink)
 end
 
 function Item:GetInventorySlot()

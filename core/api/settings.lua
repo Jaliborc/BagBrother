@@ -21,8 +21,7 @@ local FrameDefaults = {
 	x = 0, y = 0,
 
 	hiddenBags = {}, lockedSlots = {},
-	itemScale = Addon.ItemScale or 1,
-	spacing = 2, bagBreak = 0,
+	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
 
 	brokerObject = ADDON .. 'Launcher',
 	rules = AsArray({
@@ -105,37 +104,11 @@ function Settings:OnEnable()
 		herbColor = {.5, 1, .5},
 	})
 
-	----- upgrade old settings (temporary till next xpac)
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
 			self:SetDefaults(profile, ProfileDefaults)
-			
-			for frame, options in pairs(profile) do
-				if type(options) == 'table' then
-					if options.bagBreak == true then
-						options.bagBreak = 2
-					elseif not options.bagBreak then
-						options.bagBreak = nil
-					end
-				end
-			end
 		end
 	end
-
-	for frame, options in pairs(Addon.sets.global) do
-		if type(options) == 'table' then
-			if options.bagBreak == true then
-				options.bagBreak = 2
-			elseif not options.bagBreak then
-				options.bagBreak = nil
-			end
-		end
-	end
-
-	if type(Addon.sets.latest) ~= 'table' then
-		Addon.sets.latest = {}
-    end
-	----
 
 	_G[VAR] = Addon.sets
 end

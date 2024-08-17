@@ -85,7 +85,6 @@ function Frames:Populate()
       self:AddPercentage('alpha')
 
       self:AddBreak()
-      self:AddChoice{arg = 'bagBreak', {key = 0, text = NONE}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
       self:AddPercentage('itemScale', 20, 200)
       self:AddSlider('spacing', -15, 15)
   
@@ -93,9 +92,14 @@ function Frames:Populate()
         self:AddSlider('columns', 1, 50)
       end
 
+      
       self:AddBreak()
       self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
+      self:AddChoice{arg = 'bagBreak', {key = 0, text = NEVER}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
+      if self.sets.bagBreak > 0 then
+        self:AddPercentage('breakSpace', 100, 200):SetSmall(true)
+      end
     end)
   end
 end

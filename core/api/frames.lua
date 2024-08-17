@@ -97,7 +97,7 @@ end
 function Frames:IsEnabled(id)
 	local addon = self:Get(id).addon
 	if addon then
-		return C.Addons.GetAddOnEnableState(addon, UnitName('player')) == 2
+		return C.AddOns.GetAddOnEnableState(addon, UnitName('player')) == 2
 	else
 		return addon ~= false and Addon.player.profile[id].enabled
 	end

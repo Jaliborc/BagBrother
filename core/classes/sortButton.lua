@@ -29,7 +29,7 @@ end
 --[[ Interaction ]]--
 
 function SortButton:OnEnter()
-	self:ShowTooltip(BAG_FILTER_CLEANUP, AREA_NAME_FONT_COLOR:WrapTextInColorCode('|R ' .. OPTIONS)  .. '|A:NPE_ExclamationPoint:12:18|a')
+	self:ShowTooltip(BAG_FILTER_CLEANUP, '|R ' .. OPTIONS)
 end
 
 function SortButton:OnClick(button)

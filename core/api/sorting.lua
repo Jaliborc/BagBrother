@@ -4,9 +4,9 @@
 --]]
 
 local ADDON, Addon = ...
-local Search = LibStub('ItemSearch-1.3')
-local Cache = LibStub('LibItemCache-2.0')
 local Sort = Addon:NewModule('Sorting', 'MutexDelay-1.0')
+local Search = LibStub('ItemSearch-1.3')
+local C = LibStub('C_Everywhere').Item
 
 Sort.Proprieties = {
 	'set',
@@ -119,12 +119,12 @@ function Sort:GetSpaces()
 				local item = self.target:GetItemInfo(bag, slot)
 				local id = item.itemID
 				if id then
-					local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = GetItemInfo(id) 
+					local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = C.GetItemInfo(id) 
 
 					item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
 					item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
-					item.family = GetItemFamily(id) or 0
+					item.family = C.GetItemFamily(id) or 0
 				end
 
 				tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
@@ -178,12 +178,12 @@ end
 
 function Sort:FitsIn(id, family)
 	if family == 9 then
-		return GetItemFamily(id) == 256
+		return C.GetItemFamily(id) == 256
 	elseif family == -3 then
-		return select(17, GetItemInfo(id))
+		return select(17, C.GetItemInfo(id))
 	end
 	
-	return family == 0 or (bit.band(GetItemFamily(id), family) > 0 and select(9, GetItemInfo(id)) ~= 'INVTYPE_BAG')
+	return family == 0 or (bit.band(C.GetItemFamily(id), family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
 end
 
 function Sort.Rule(a, b)

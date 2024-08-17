@@ -48,6 +48,7 @@ displayed on the left side of the panel.]]
 L.Appearance = 'Appearance'
 L.Layer = 'Layer'
 L.BagBreak = 'Bag Break'
+L.BreakSpace = 'Break Spacing'
 L.ByType = 'By Type'
 L.ReverseBags = 'Reverse Bag Order'
 L.ReverseSlots = 'Reverse Slot Order'
