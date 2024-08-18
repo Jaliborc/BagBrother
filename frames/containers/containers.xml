@@ -1,10 +1,11 @@
 <Ui>
 	<Script file="bagToggle.lua"/>
 	<Script file="reagentButton.lua"/>
-	<Script file="bankTab.lua"/>
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>
-
 	<Script file="inventory.lua"/>
+
+	<Script file="bankTab.lua"/>
+	<Script file="accountMoney.lua"/>
 	<Script file="bank.lua"/>
 </Ui>

@@ -126,7 +126,7 @@ function TipCounts:AddOwners(tip, link)
 
 						equip = find(owner.equip, id)
 						vault = find(owner.vault, id)
-						bank = C.GetItemCount(id, true) - carrying
+						bank = C.GetItemCount(id, true, nil, true) - carrying
 						bags = carrying - equip
 					else
 						equip, bags = owner.counts.equip[id], owner.counts.bags[id]

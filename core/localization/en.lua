@@ -35,6 +35,7 @@ L.NumAllowed = '%s Allowed'
 L.NumWithdraw = '%d Withdraw'
 L.NumDeposit = '%d Deposit'
 L.NumRemaining = '%d Remaining'
+L.WarbandMoney = 'Warband Money'
 
 --dropdowns
 L.OfflineViewing = 'Offline Viewing'

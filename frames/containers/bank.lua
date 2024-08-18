@@ -4,10 +4,12 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere')
 local Sushi = LibStub('Sushi-3.2')
+local C = LibStub('C_Everywhere')
+
 local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
+Bank.MoneyFrame = Addon.AccountMoney
 Bank.Bags = Addon.BankBags
 
 for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
@@ -28,7 +30,7 @@ function Bank:OnHide()
 end
 
 function Bank:SortItems()
-	if Addon.sets.serverSort and C_Container.SortBankBags then
+	if Addon.sets.serverSort and C.Container.SortBankBags then
 		local API = {'SortAccountBankBags', 'SortReagentBankBags', 'SortBankBags'}
 		local function queue()
 			local sort = C_Container[tremove(API)]

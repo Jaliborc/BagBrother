@@ -4,7 +4,7 @@
 --]]
 
 
-if not C_Bank.FetchPurchasedBankTabData then
+if not (C_Bank and C_Bank.FetchPurchasedBankTabData) then
 	return
 end
 

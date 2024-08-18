@@ -68,13 +68,13 @@ function MoneyFrame:OnClick()
 
 	local name = self:GetName()
 	if MouseIsOver(_G[name .. 'GoldButton']) then
-		OpenCoinPickupFrame(COPPER_PER_GOLD, MoneyTypeInfo[self.moneyType].UpdateFunc(self), self)
+		OpenCoinPickupFrame(COPPER_PER_GOLD, self.info.UpdateFunc(self), self)
 		self.hasPickup = 1
 	elseif MouseIsOver(_G[name .. 'SilverButton']) then
-		OpenCoinPickupFrame(COPPER_PER_SILVER, MoneyTypeInfo[self.moneyType].UpdateFunc(self), self)
+		OpenCoinPickupFrame(COPPER_PER_SILVER, self.info.UpdateFunc(self), self)
 		self.hasPickup = 1
 	elseif MouseIsOver(_G[name .. 'CopperButton']) then
-		OpenCoinPickupFrame(1, MoneyTypeInfo[self.moneyType].UpdateFunc(self), self)
+		OpenCoinPickupFrame(1, self.info.UpdateFunc(self), self)
 		self.hasPickup = 1
 	end
 
@@ -82,7 +82,7 @@ function MoneyFrame:OnClick()
 end
 
 function MoneyFrame:OnEnter()
-	GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(MONEY, 1,1,1)
 
 	local total = 0
@@ -112,9 +112,6 @@ function MoneyFrame:GetMoney()
 	return self:GetOwner():GetMoney() or 0
 end
 
-function MoneyFrame:GetCoins(money)
-	local gold = floor(money / (COPPER_PER_SILVER * SILVER_PER_GOLD))
-	local silver = floor((money - (gold * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
-	local copper = money % COPPER_PER_SILVER
-	return gold, silver, copper
+function MoneyFrame:GetTipAnchor()
+	return self, 'ANCHOR_TOP'
 end

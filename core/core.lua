@@ -5,10 +5,10 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere')
+local C = LibStub('C_Everywhere').AddOns
 local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'LibItemCache-2.0')
 
-Addon.Version =  C.AddOns.GetAddOnMetadata(ADDON, 'version')
+Addon.Version =  C.GetAddOnMetadata(ADDON, 'version')
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
@@ -36,7 +36,7 @@ if REAGENTBANK_CONTAINER then
 	tinsert(Addon.BankBags, REAGENTBANK_CONTAINER)
 end
 
-if C.Bank.FetchPurchasedBankTabIDs then
+if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
 	for i = Addon.LastBankBag + 1, Addon.LastBankTab do
 		tinsert(Addon.BankBags, i)
 	end
@@ -49,11 +49,10 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_BAG_SLOTS_AUTHENTICATOR, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_MOUNT_EQUIPMENT_SLOT_FRAME, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_UPGRADEABLE_ITEM_IN_SLOT, true)
-		
 	end
 
 	self:RegisterEvent('PLAYER_ENTERING_WORLD', function() self.Frames:New('inventory') end)
-	SettingsPanel.CategoryList:HookScript('OnShow', function() C.AddOns.LoadAddOn(ADDON .. '_Config') end)
+	SettingsPanel.CategoryList:HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {
 			text = ADDON, keepShownOnClick = true, notCheckable = true,
@@ -64,7 +63,7 @@ function Addon:OnEnable()
 end
 
 function Addon:ShowOptions()
-	if C.AddOns.LoadAddOn(ADDON .. '_Config') then
+	if C.LoadAddOn(ADDON .. '_Config') then
 		Addon.GeneralOptions:Open()
 	end
 end
