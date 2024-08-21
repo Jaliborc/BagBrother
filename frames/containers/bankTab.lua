@@ -17,6 +17,7 @@ Tab.Settings:Hide()
 
 --[[ Interaction ]]
 
+function Tab:OnDrag() end
 function Tab:OnClick(button)
 	if self.name then
 		if button == 'RightButton' then
@@ -26,7 +27,7 @@ function Tab:OnClick(button)
 		else
 			self:Toggle()
 		end
-	else
+	elseif not self:IsCached() then
 		LibStub('Sushi-3.2').Popup {
 			text = CONFIRM_BUY_ACCOUNT_BANK_TAB, button1 = YES, button2 = NO,
 			money = C_Bank.FetchNextPurchasableBankTabCost(2),
@@ -57,14 +58,14 @@ function Tab:RegisterEvents()
 	self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
 	self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
 
-	if not self:IsCached() then
+	if C_Bank.CanViewBank(2) then
 		self:RegisterEvent('BANK_TAB_SETTINGS_UPDATED', 'Update')
 		self:RegisterEvent('BANK_TABS_CHANGED', 'Update')
 	end
 end
 
 function Tab:Update()
-    local data = C_Bank.FetchPurchasedBankTabData(2)
+    local data = C_Bank.CanViewBank(2) and C_Bank.FetchPurchasedBankTabData(2) or BrotherBags.account
     local info = data[self:GetID() - Addon.LastBankBag]
 
 	local color = info and 1 or 0.1
@@ -77,7 +78,6 @@ function Tab:Update()
 	self:UpdateToggle()
 	self:UpdateLock()
 end
-
 
 function Tab:UpdateTooltip()
 	GameTooltip:ClearLines()

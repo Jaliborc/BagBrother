@@ -159,7 +159,7 @@ end
 --[[ Properties ]]--
 
 function Frame:GetItemInfo(bag, slot)
-	local bag = self:GetOwner()[bag]
+	local bag = self:GetBagInfo(bag)
 	local data = bag and bag[slot]
 	if data then
 		if data:find(PET_FORMAT) then
@@ -183,6 +183,10 @@ function Frame:GetItemInfo(bag, slot)
 		end
 	end
 	return {}
+end
+
+function Frame:GetBagInfo(bag)
+	return self:GetOwner()[bag]
 end
 
 function Frame:GetBagFamily()

@@ -106,13 +106,23 @@ function Cacher:CURRENCY_TRACKED_CHANGED()
 end
 
 function Cacher:BANK_CLOSE()
-	for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-		self:SaveBag(i)
+	local view = C.Bank.CanViewBank
+	if not view or view(0) then
+		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
+			self:SaveBag(i)
+		end
+		if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
+			self:SaveBag(REAGENTBANK_CONTAINER)
+		end
+		self:SaveBag(BANK_CONTAINER)
 	end
-	if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-		self:SaveBag(REAGENTBANK_CONTAINER)
+
+	if view and view(2) then
+		BrotherBags.account = C_Bank.FetchPurchasedBankTabData(2)
+		for _, bag in pairs(BrotherBags.account) do
+			Mixin(bag, self:ParseBag(bag.ID))
+		end
 	end
-	self:SaveBag(BANK_CONTAINER)
 end
 
 function Cacher:VAULT_CLOSE()
@@ -154,7 +164,15 @@ end
 
 --[[ API ]]--
 
+function Cacher:SaveEquip(slot)
+	self.player.equip[slot] = self:ParseItem(GetInventoryItemLink('player', slot), GetInventoryItemCount('player', slot))
+end
+
 function Cacher:SaveBag(bag)
+	self.player[bag] = self:ParseBag(bag)
+end
+
+function Cacher:ParseBag(bag)
 	local size = C.Container.GetContainerNumSlots(bag)
 	if size > 0 then
 		local items = {}
@@ -173,14 +191,8 @@ function Cacher:SaveBag(bag)
 			items.link = self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag)))
 		end
 
-		self.player[bag] = items
-	else
-		self.player[bag] = nil
+		return items
 	end
-end
-
-function Cacher:SaveEquip(i)
-	self.player.equip[i] = self:ParseItem(GetInventoryItemLink('player', i), GetInventoryItemCount('player', i))
 end
 
 function Cacher:ParseItem(link, count)

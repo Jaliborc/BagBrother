@@ -12,6 +12,9 @@ Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
 Bank.MoneyFrame = Addon.AccountMoney
 Bank.Bags = Addon.BankBags
 
+
+--[[ API  ]]--
+
 for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
 end
@@ -55,7 +58,22 @@ function Bank:GetExtraButtons()
 	}
 end
 
-function Bank:IsCached()
-	return not Addon.Events.AtBank or self:GetOwner().offline
+
+--[[ Warband Support ]]--
+
+function Bank:GetBagInfo(bag)
+	if bag > Addon.LastBankBag then
+		return BrotherBags.account[bag - Addon.LastBankBag]
+	end
+	return self:GetOwner()[bag]
 end
-	
+
+function Bank:IsCached(bag)
+	if not Addon.Events.AtBank then
+		return true
+	elseif (bag or 0) >= Addon.LastBankBag then
+		return not C.Bank.CanViewBank(2)
+	else
+		return self:GetOwner().offline or C.Bank.CanViewBank and not C.Bank.CanViewBank(0)
+	end
+end

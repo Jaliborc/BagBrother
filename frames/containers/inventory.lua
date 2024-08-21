@@ -50,7 +50,7 @@ end
 --[[ API ]]--
 
 function Frame:GetItemInfo(bag, slot)
-	if self:IsCached() then
+	if self:IsCached(bag) then
 		return self:Super(Frame):GetItemInfo(bag, slot)
 	else
 		local item = C.GetContainerItemInfo(bag, slot)
@@ -85,9 +85,9 @@ function Frame:NumSlots(bag)
 	if bag <= BACKPACK_CONTAINER and bag ~= KEYRING_CONTAINER then
 		size = C.GetContainerNumSlots(bag)
 	elseif self:IsCached() then
-		local data = self:GetOwner()[bag]
+		local data = self:GetBagInfo(bag)
 		if data then
-			size = data.size
+			size = bag > Addon.LastBankBag and 98 or data.size
 		end
 	elseif bag == KEYRING_CONTAINER then
 		size = HasKey and HasKey() and C.GetContainerNumSlots(bag)

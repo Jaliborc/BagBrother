@@ -24,8 +24,8 @@ function Money:OnEnter()
 end
 
 function Money:OnClick(button)
-    if self:IsCached() then return end
-
+    if not C_Bank.CanViewBank(2) then return end
+	
     local money = GetCursorMoney() or 0
 	if money > 0 then
         C_Bank.DepositMoney(2, money)
