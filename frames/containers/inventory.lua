@@ -68,8 +68,8 @@ function Frame:GetBagFamily(bag)
 	elseif bag == KEYRING_CONTAINER then
 		return 9
 	elseif bag > BACKPACK_CONTAINER then
-		if self:IsCached() then
-			local data = self:GetOwner()[bag]
+		if self:IsCached(bag) then
+			local data = self:GetBagInfo(bag)
 			if data and data.link then
 				return GetItemFamily('item:' .. data.link)
 			end
@@ -82,15 +82,17 @@ end
 
 function Frame:NumSlots(bag)
 	local size
-	if bag <= BACKPACK_CONTAINER and bag ~= KEYRING_CONTAINER then
+	if bag <= BACKPACK_CONTAINER and bag ~= (KEYRING_CONTAINER or REAGENTBANK_CONTAINER) then
 		size = C.GetContainerNumSlots(bag)
-	elseif self:IsCached() then
+	elseif self:IsCached(bag) then
 		local data = self:GetBagInfo(bag)
 		if data then
-			size = bag > Addon.LastBankBag and 98 or data.size
+			size = (bag > Addon.LastBankBag or bag == REAGENTBANK_CONTAINER) and 98 or data.size
 		end
 	elseif bag == KEYRING_CONTAINER then
 		size = HasKey and HasKey() and C.GetContainerNumSlots(bag)
+	elseif bag == REAGENTBANK_CONTAINER then
+		size = IsReagentBankUnlocked() and C.GetContainerNumSlots(bag)
 	else
 		size = C.GetContainerNumSlots(bag)
 	end

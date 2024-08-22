@@ -68,12 +68,14 @@ function Bank:GetBagInfo(bag)
 	return self:GetOwner()[bag]
 end
 
-function Bank:IsCached(bag)
+function Bank:IsCached(bag) -- maybe should optimize this, calculating a lot per item (not good)
 	if not Addon.Events.AtBank then
 		return true
-	elseif (bag or 0) >= Addon.LastBankBag then
-		return not C.Bank.CanViewBank(2)
-	else
-		return self:GetOwner().offline or C.Bank.CanViewBank and not C.Bank.CanViewBank(0)
+	elseif bag then
+		if bag > Addon.LastBankBag then
+			return not C.Bank.CanViewBank(2)
+		else
+			return self:GetOwner().offline or C.Bank.CanViewBank and not C.Bank.CanViewBank(0)
+		end
 	end
 end

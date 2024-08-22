@@ -141,3 +141,7 @@ end
 function Item:GetQuery()
 	return self:IsCached() and self.info.hyperlink or {bagID = self:GetBag(), slotIndex = self:GetID()}
 end
+
+function Item:IsCached()
+	return self.frame:IsCached(self:GetBag())
+end
