@@ -8,4 +8,6 @@
 	<Script file="bankTab.lua"/>
 	<Script file="accountMoney.lua"/>
 	<Script file="bank.lua"/>
+
+	<Script file="tempFilters.lua"/>
 </Ui>

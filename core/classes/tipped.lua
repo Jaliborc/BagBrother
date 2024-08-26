@@ -10,10 +10,6 @@ function Tipped:OnLeave()
   if GameTooltip:IsOwned(self) then
     GameTooltip:Hide()
   end
-
-  if BattlePetTooltip then
-    BattlePetTooltip:Hide()
-  end
 end
 
 function Tipped:ShowTooltip(title, ...)

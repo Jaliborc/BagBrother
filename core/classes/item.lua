@@ -57,7 +57,6 @@ function Item:Construct()
 	b.FlashFind = b:CreateAnimationGroup()
 	b.Cooldown, b.QuestBang = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
 	b.QuestBang:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-	b.IconOverlay:SetAtlas('AzeriteIconFrame')
 	b.BattlepayItemTexture:Hide()
 	b.NewItemTexture:Hide()
 
@@ -182,7 +181,13 @@ function Item:UpdateBorder()
 
 		if r then
 			self.IconGlow:SetVertexColor(r,g,b, Addon.sets.glowAlpha)
+			self.IconOverlay:SetVertexColor(r,g,b)
 			self.IconBorder:SetVertexColor(r,g,b)
+		end
+
+		if Search:IsUncollected(id) then
+			self.IconOverlay:SetAtlas('CosmeticIconFrame')
+			self.IconOverlay:Show()
 		end
 	end
 

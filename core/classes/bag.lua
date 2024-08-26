@@ -138,7 +138,7 @@ end
 
 function Bag:OnClick(button)
 	if button == 'RightButton' then
-		self:ShowFilters()
+		self:ShowMenu()
 	elseif (self.owned and not CursorHasItem()) or self:IsCached() then
 		self:Toggle()
 	elseif CursorHasItem() then
@@ -190,11 +190,10 @@ function Bag:Toggle()
 	self:SetFocus(true)
 end
 
-function Bag:ShowFilters()
-	if self:GetID() >= BACKPACK_CONTAINER and not self:IsCached() and ContainerFrame1FilterDropDown then
-		ContainerFrame1FilterDropDown:SetParent(self)
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-		ToggleDropDownMenu(1, nil, ContainerFrame1FilterDropDown, self, 0, 0)
+function Bag:ShowMenu()
+	if ContainerFrame13.SetBagID then
+		ContainerFrame13:SetBagID(self:GetID()) -- how I met your local function, now streaming on jali+
+		MenuUtil.CreateContextMenu(self, ContainerFrame13.PortraitButton.menuGenerator)
 	end
 end
 

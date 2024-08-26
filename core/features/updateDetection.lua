@@ -32,7 +32,7 @@ function Detection:OnEnable()
     self:RegisterUpdateEvent('GROUP_ROSTER_UPDATE', function() return IsInRaid(LE_PARTY_CATEGORY_HOME) and 'RAID' end)
 
     local latest = Addon.sets.latest
-    if latest.id and GetServerTime() >= (latest.cooldown or 0) then
+    if latest and latest.id and GetServerTime() >= (latest.cooldown or 0) then
         self:Popup(L.OutOfDate, latest.who, latest.id)
         Addon.sets.latest = {cooldown = GetServerTime() + 7 * 24 * 60 * 60}
     elseif int(Addon.Version) >= nextExpansion then
@@ -72,7 +72,7 @@ function Detection:Popup(text, who, version)
             text = format(text, ADDON, who, version), button1 = OKAY,
             icon = format('Interface/Addons/BagBrother/art/%s-big', ADDON)
         }
-    end, function() end)
+    end, nop)
 end
 
 function Detection:RegisterUpdateEvent(event, condition)
