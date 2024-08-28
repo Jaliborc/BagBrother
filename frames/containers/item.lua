@@ -8,6 +8,27 @@ local ADDON, Addon = ...
 local Item = Addon.Item:NewClass('ContainerItem')
 local C = LibStub('C_Everywhere').Container
 
+Item.BagFamilies = {
+	[-1] = 'account',
+	[0x00001] = 'quiver',
+	[0x00002] = 'quiver',
+	[0x00003] = 'soul',
+	[0x00004] = 'soul',
+	[0x00006] = 'herb',
+	[0x00007] = 'enchant',
+	[0x00008] = 'leather',
+	[0x00009] = 'key',
+	[0x00010] = 'inscribe',
+	[0x00020] = 'herb',
+	[0x00040] = 'enchant',
+	[0x00080] = 'engineer',
+	[0x00200] = 'gem',
+	[0x00400] = 'mine',
+ 	[0x08000] = 'tackle',
+ 	[0x10000] = 'fridge',
+	[0x80000] = 'reagent'
+}
+
 
 --[[ Events ]]--
 
@@ -76,7 +97,7 @@ function Item:Update()
 		self:GetNormalTexture():SetVertexColor(1,1,1)
 	else
 		local family = self.frame:GetBagFamily(self:GetBag())
-		local color = Addon.sets.colorSlots and Addon.sets[(self.BagFamilies[family] or 'normal') .. 'Color'] or Addon.None
+		local color = Addon.sets.colorSlots and Addon.sets.color[self.BagFamilies[family] or 'normal'] or Addon.None
 		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 
 		SetItemButtonTextureVertexColor(self, r,g,b)

@@ -147,7 +147,7 @@ function Sort:GetFamilies(spaces)
 		tinsert(list, family)
 	end
 
-	sort(list, function(a, b) return a > b or a < 0 end)
+	sort(list, function(a, b) return a > b and (a ~= 0x80000 or b == 0) end)
 	return list
 end
 
@@ -179,11 +179,11 @@ end
 function Sort:FitsIn(id, family)
 	if family == 9 then
 		return C.GetItemFamily(id) == 256
-	elseif family == -3 then
+	elseif family == 0x80000 then
 		return select(17, C.GetItemInfo(id))
 	end
 	
-	return family == 0 or (bit.band(C.GetItemFamily(id), family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
+	return family <= 0 or (bit.band(C.GetItemFamily(id), family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
 end
 
 function Sort.Rule(a, b)

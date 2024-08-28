@@ -26,7 +26,10 @@ function Slots:Populate()
 	if Addon.sets.colorSlots then
 		self:AddRow(35* ceil(#self:SlotTypes() / 3), function()
 			for i, name in ipairs(self:SlotTypes()) do
-				self:AddColor(name .. 'Color'):SetSmall(true)
+				self:AddLabeled('ColorPicker', name .. 'Color')
+					:SetValue(CreateColor(self.sets.color[name][1], self.sets.color[name][2], self.sets.color[name][3], self.sets.color[name][4]))
+					:SetCall('OnColor', function(_, v) self.sets.color[name] = {v:GetRGBA()} end)
+					:SetSmall(true)
 			end
 		end).left = 20
 	end
@@ -36,17 +39,16 @@ end
 
 function Slots:SlotTypes()
 	local types = {}
-	for bits, name in pairs(Addon.Item.BagFamilies) do
-		if not tContains(types, name) then
-			tinsert(types, name)
-		end
+	for name in pairs(Addon.sets.color) do
+		tinsert(types, name)
 	end
 
-	for i, name in ipairs(Addon.IsRetail and {'key', 'soul', 'quiver'} or {'reagent', 'inscribe', 'tackle', 'fridge', 'gem'}) do
+	for i, name in ipairs(Addon.IsRetail and {'key', 'soul', 'quiver'} or {'account', 'reagent', 'inscribe', 'tackle', 'fridge', 'gem'}) do
 		tremove(types, tIndexOf(types, name))
 	end
 
 	sort(types)
+	tremove(types, tIndexOf(types, 'normal'))
 	tinsert(types, 1, 'normal')
 	return types
 end

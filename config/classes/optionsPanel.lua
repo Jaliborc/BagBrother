@@ -41,6 +41,7 @@ function Panel:AddColor(arg)
 	local b = self:AddLabeled('ColorPicker', arg)
 	b:SetCall('OnColor', function(_, v) self.sets[arg] = {v:GetRGBA()} end)
 	b:SetValue(CreateColor(self.sets[arg][1], self.sets[arg][2], self.sets[arg][3], self.sets[arg][4]))
+	b:SetSmall(true)
 	return b
 end
 

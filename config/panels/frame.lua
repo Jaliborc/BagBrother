@@ -72,10 +72,10 @@ function Frames:Populate()
         local current = Addon.Skins:Get(self.sets.skin)
         if current then
           if current.centerColor then
-				    self:AddColor('color'):SetSmall(true):SetKeys{left = 25, top = -5}
+				    self:AddColor('color'):SetKeys{left = 25, top = -5}
           end
           if current.borderColor then
-				    self:AddColor('borderColor'):SetSmall(true):SetKeys{left = 25, top = -5}
+				    self:AddColor('borderColor'):SetKeys{left = 25, top = -5}
           end
         end
 			end

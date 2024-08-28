@@ -8,26 +8,6 @@ local Item = Addon.Tipped:NewClass('Item', Addon.IsRetail and 'ItemButton' or 'B
 local Search = LibStub('ItemSearch-1.3')
 local C = LibStub('C_Everywhere')
 
-Item.BagFamilies = {
-	[-3] = 'reagent',
-	[0x00001] = 'quiver',
-	[0x00002] = 'quiver',
-	[0x00003] = 'soul',
-	[0x00004] = 'soul',
-	[0x00006] = 'herb',
-	[0x00007] = 'enchant',
-	[0x00008] = 'leather',
-	[0x00009] = 'key',
-	[0x00010] = 'inscribe',
-	[0x00020] = 'herb',
-	[0x00040] = 'enchant',
-	[0x00080] = 'engineer',
-	[0x00200] = 'gem',
-	[0x00400] = 'mine',
- 	[0x08000] = 'tackle',
- 	[0x10000] = 'fridge'
-}
-
 Item.Backgrounds = {
 	LAYOUT_STYLE_MODERN and 'item/weapon/1_null',
 	'interface/paperdoll/ui-backpack-emptyslot'
@@ -317,9 +297,9 @@ function Item:IsUpgrade()
 end
 
 function Item:GetInventorySlot()
-	local api = Addon:IsBank(self.bag) and BankButtonIDToInvSlotID or
-				Addon:IsKeyring(self.bag) and KeyRingButtonIDToInvSlotID or
-				Addon:IsReagents(self.bag) and ReagentBankButtonIDToInvSlotID
+	local api = self.bag == BANK_CONTAINER and BankButtonIDToInvSlotID or
+				self.bag == REAGENTBANK_CONTAINER and ReagentBankButtonIDToInvSlotID or
+				self.bag == -2 and KeyRingButtonIDToInvSlotID
 	return api and api(self:GetID())
 end
 

@@ -1,0 +1,7 @@
+<Ui>
+	<Script file="bagToggle.lua"/>
+	<Script file="item.lua"/>
+	<Script file="itemGroup.lua"/>
+
+	<Script file="inventory.lua"/>
+</Ui>

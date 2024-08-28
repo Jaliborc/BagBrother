@@ -69,7 +69,7 @@ function AutoDisplay:HookBaseUI()
 end
 
 function AutoDisplay:Bag2Frame(bag)
-	return Addon:IsBankBag(bag) and 'bank' or 'inventory', bag
+	return bag > Addon.NumBags and 'bank' or 'inventory', bag
 end
 
 function AutoDisplay:If(setting, func)

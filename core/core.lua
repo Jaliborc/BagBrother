@@ -6,7 +6,7 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').AddOns
-local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'LibItemCache-2.0')
+local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
 Addon.Version =  C.GetAddOnMetadata(ADDON, 'version')
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
@@ -51,7 +51,6 @@ function Addon:OnEnable()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_UPGRADEABLE_ITEM_IN_SLOT, true)
 	end
 
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', function() self.Frames:New('inventory') end)
 	SettingsPanel.CategoryList:HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {
@@ -60,6 +59,11 @@ function Addon:OnEnable()
 			func = function() self:ShowOptions() end
 		}
 	end
+
+	self:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+		self:CheckForUpdates(ADDON, self.sets, 'interface/addons/bagbrother/art/'..ADDON..'-big')
+		self.Frames:New('inventory') -- prevent combat block
+	end)
 end
 
 function Addon:ShowOptions()
