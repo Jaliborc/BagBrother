@@ -93,16 +93,16 @@ function Item:Update()
 	self:Super(Item):Update()
 	self:UpdateCooldown()
 
-	if self.hasItem then
-		self:GetNormalTexture():SetVertexColor(1,1,1)
-	else
+	local r,g,b = 1,1,1
+	if not self.hasItem then
 		local family = self.frame:GetBagFamily(self:GetBag())
 		local color = Addon.sets.colorSlots and Addon.sets.color[self.BagFamilies[family] or 'normal'] or Addon.None
-		local r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 
-		SetItemButtonTextureVertexColor(self, r,g,b)
-		self:GetNormalTexture():SetVertexColor(r,g,b)
+		r,g,b = color[1] or 1, color[2] or 1, color[3] or 1
 	end
+
+	SetItemButtonTextureVertexColor(self, r,g,b)
+	self:GetNormalTexture():SetVertexColor(r,g,b)
 end
 
 function Item:UpdateCooldown()

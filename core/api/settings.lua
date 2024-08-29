@@ -84,7 +84,7 @@ function Settings:OnEnable()
 		slotBackground = 2, colorSlots = true,
 		color = {
 			normal = {1, 1, 1},
-			account = {1, 1, 1},
+			account = {0.86, 1, .98},
 			key = {1, .9, .19},
 			quiver = {1, .87, .68},
 			soul = {0.64, 0.39, 1},
