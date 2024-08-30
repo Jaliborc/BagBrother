@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local MoneyFrame = Addon.Tipped:NewClass('MoneyFrame', 'Frame', 'SmallMoneyFrameTemplate', true)
+local MoneyFrame = Addon.Tipped:NewClass('MoneyFrame', 'Button', 'SmallMoneyFrameTemplate', true)
 MoneyFrame.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
 MoneyFrame.Type = 'PLAYER'
 

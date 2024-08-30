@@ -74,6 +74,7 @@ function Settings:OnEnable()
 
 		resetPlayer = true, flashFind = true, serverSort = true,
 		countItems = true, countGuild = true, countCurrency = true, 
+		depositAccount = true, depositReagents = true,
 		display = {
 			banker = true, guildBanker = true, voidStorageBanker = true, crafting = true, tradePartner = true, socketing = true,
 			auctioneer = true, merchant = true, mailInfo = true, scrappingMachine = true},

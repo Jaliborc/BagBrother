@@ -72,22 +72,22 @@ function Item:Construct()
 	return b
 end
 
-function Item:Bind(frame) -- required for secure frames
-	for k in pairs(frame) do
+function Item:Bind(button) -- required for secure frames
+	for k in pairs(button) do
 		if self[k] then
-			frame[k] = nil
+			button[k] = nil
 		end
 	end
 
 	local class = self
 	while class do
 		for k,v in pairs(class) do
-			frame[k] = frame[k] or v
+			button[k] = button[k] or v
 		end
 
 		class = class:GetSuper()
 	end
-	return frame
+	return button
 end
 
 
@@ -114,13 +114,6 @@ end
 function Item:OnLeave()
 	self:Super(Item):OnLeave()
 	ResetCursor()
-end
-
-function Item:OnHide()
-	if self.hasStackSplit == 1 then
-		StackSplitFrame:Hide()
-	end
-	self:UnregisterAll()
 end
 
 
@@ -262,7 +255,7 @@ do
 	Item.Dummy:SetScript('OnClick', function(dummy, button)
 		local parent = dummy:GetParent()
 		if not HandleModifiedItemClick(parent.info.hyperlink) then
-			parent:OnPostClick(button)
+			parent:PostClick(button)
 		end
 	end)
 	

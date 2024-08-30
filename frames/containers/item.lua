@@ -80,11 +80,6 @@ function Item:OnEnter()
 	self:MarkSeen()
 end
 
-function Item:OnHide()
-	self:Super(Item):OnHide()
-	self:MarkSeen()
-end
-
 
 --[[ Update ]]--
 

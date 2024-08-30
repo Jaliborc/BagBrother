@@ -8,6 +8,7 @@ if not REAGENTBANK_CONTAINER then
 end
 
 local ADDON, Addon = ...
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local DepositButton = Addon.Tipped:NewClass('DepositButton', 'Button', true)
 
 function DepositButton:New(...)
@@ -18,16 +19,26 @@ end
 
 function DepositButton:OnClick(button)
 	if button == 'RightButton' then
+		local toggle = function(var) Addon.sets[var] = not Addon.sets[var] end
+		local get = function(var) return Addon.sets[var] end
+
 		MenuUtil.CreateContextMenu(self, function(_, drop)
 			drop:SetTag(ADDON .. 'DepositOptions')
-			drop:CreateTitle('Deposit Options')
-			drop:CreateCheckbox('Reagents', nop, nop)
-			drop:CreateCheckbox('Warbound Items', nop, nop)
-				:CreateCheckbox('Include Reagents', nop, nop)
+			drop:CreateTitle(GUILDCONTROL_DEPOSIT_ITEMS)
+			drop:CreateCheckbox(BAG_FILTER_REAGENTS, get, toggle, 'depositReagents')
+			drop:CreateCheckbox(ITEM_ACCOUNTBOUND, get, toggle, 'depositAccount')
+				:CreateCheckbox(L.IncludeReagents, GetCVarBool, function(cvar)
+					SetCVar(cvar, GetCVarBool(cvar) and '0' or '1')
+				end, 'bankAutoDepositReagents')
 		end)
 	else
-		DepositReagentBank()
-		C_Bank.AutoDepositItemsIntoBank(2)
+		if Addon.sets.depositReagents then
+			DepositReagentBank()
+		end
+
+		if Addon.sets.depositAccount then
+			C_Bank.AutoDepositItemsIntoBank(2)
+		end
 	end
 end
 

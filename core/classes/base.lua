@@ -24,7 +24,7 @@ end
 function Base:Construct()
 	local f = self:Super(Base):Construct()
 	for i, script in ipairs(self.Scripts) do
-		if f[script] and f:HasScript(script) then
+		if f.__index[script] then
 			f:SetScript(script, f[script])
 		end
 	end

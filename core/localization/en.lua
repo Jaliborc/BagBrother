@@ -44,6 +44,7 @@ L.ServerSortingTip = 'Whether to let the game server sort items, where available
 L.CleanupOptions = 'Cleanup Options'
 L.LockItems = 'Lock Item Slots'
 L.RequiresClientSorting = 'Requires client-side sorting!'
+L.IncludeReagents = 'Include Reagents'
 
 --dialogs
 L.AskMafia = 'Ask Mafia'
