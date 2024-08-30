@@ -9,17 +9,6 @@ local Item = Addon.Item:NewClass('VaultItem')
 local C = LibStub('C_Everywhere').Container
 
 
---[[ Construct ]]--
-
-function Item:Construct()
-	local b = self:Super(Item):Construct()
-	b:SetScript('OnReceiveDrag', self.OnDragStart)
-	b:SetScript('OnDragStart', self.OnDragStart)
-	b:SetScript('OnClick', self.OnClick)
-	return b
-end
-
-
 --[[ Interaction ]]--
 
 function Item:OnClick(button)

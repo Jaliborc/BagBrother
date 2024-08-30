@@ -7,12 +7,9 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').CurrencyInfo
 local Currency = Addon.Tipped:NewClass('Currency', 'Button')
 
-function Currency:New(parent)
-	local b = self:Super(Currency):New(parent)
+function Currency:Construct()
+	local b = self:Super(Currency):Construct()
 	b:SetNormalFontObject('NumberFontNormalRight')
-	b:SetScript('OnClick', self.OnClick)
-	b:SetScript('OnEnter', self.OnEnter)
-	b:SetScript('OnLeave', self.OnLeave)
 	b:SetHeight(24)
 	return b
 end

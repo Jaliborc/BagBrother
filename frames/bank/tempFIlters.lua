@@ -1,6 +1,6 @@
 --[[
-	tempFilters.lua
-		A static, temporary implementation of bank tabs for retail, until I'm ready to mport the more feature-complete version from Bagnonium.
+	A static, temporary implementation of bank tabs for retail, until I'm ready to mport the more feature-complete version from Bagnonium.
+    All Rights Reserved
 --]]
 
 if not (C_Bank and C_Bank.FetchPurchasedBankTabData) then

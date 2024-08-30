@@ -12,9 +12,6 @@ local Item = Addon.Item:NewClass('GuildItem')
 
 function Item:Construct()
 	local b = self:Super(Item):Construct()
-	b:SetScript('OnReceiveDrag', self.OnReceiveDrag)
-	b:SetScript('OnDragStart', self.OnDragStart)
-	b:SetScript('OnClick', self.OnClick)
 	b:RegisterForDrag('LeftButton')
 	b:RegisterForClicks('anyUp')
 	return b

@@ -1,6 +1,6 @@
 --[[
-	bankTab.lua
-		A modified bag button because that seemed simpler to implement.
+	A modified bag button because that seemed simpler to implement.
+	All Rights Reserved
 --]]
 
 

@@ -1,6 +1,6 @@
 --[[
-	accountMoney.lua
-		A warband money display
+	A warband money display
+	All Rights Reserved
 --]]
 
 if not (C_Bank and C_Bank.FetchDepositedMoney) then

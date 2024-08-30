@@ -1,6 +1,6 @@
 --[[
-	bank.lua
-		A specialized version of the window frame for the bank
+	A specialized version of the window frame for the bank
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
@@ -53,8 +53,8 @@ end
 
 function Bank:GetExtraButtons()
 	return {
-		self.profile.bagToggle and self:Get('BagToggle', function() return Addon.BagToggle(self) end),
-		DepositReagentBank and self.profile.reagents and self:Get('ReagentButton', function() return Addon.ReagentButton(self) end)
+		self.profile.bagToggle and self:GetWidget('BagToggle'),
+		DepositReagentBank and self.profile.reagents and self:GetWidget('DepositButton')
 	}
 end
 

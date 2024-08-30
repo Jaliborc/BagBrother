@@ -69,10 +69,6 @@ function Item:Construct()
 
 	b:SetScript('OnEvent', nil)
 	b:SetScript('OnShow', b.Update)
-	b:HookScript('OnClick', b.OnPostClick)
-	b:SetScript('OnEnter', b.OnEnter)
-	b:SetScript('OnLeave', b.OnLeave)
-	b:SetScript('OnHide', b.OnHide)
 	return b
 end
 
@@ -97,7 +93,7 @@ end
 
 --[[ Interaction ]]--
 
-function Item:OnPostClick(button)
+function Item:PostClick(button)
 	if Addon.lockMode then
 		local locks = GetOrCreateTableEntry(self:GetProfile().lockedSlots, self:GetBag())
 		locks[self:GetID()] = not locks[self:GetID()] or nil

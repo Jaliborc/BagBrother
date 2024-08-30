@@ -12,12 +12,6 @@ local Carrousel = Addon.Tipped:NewClass('BrokerCarrousel', 'Button')
 
 function Carrousel:New(parent)
 	local f = self:Super(Carrousel):New(parent)
-	f:SetScript('OnMouseWheel', f.OnMouseWheel)
-	f:SetScript('OnEnter', f.OnEnter)
-	f:SetScript('OnLeave', f.OnLeave)
-	f:SetScript('OnClick', f.OnClick)
-	f:SetScript('OnShow', f.OnShow)
-	f:SetScript('OnHide', f.OnHide)
 	f:RegisterForClicks('anyUp')
 	f:EnableMouseWheel(true)
 

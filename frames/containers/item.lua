@@ -33,13 +33,12 @@ Item.BagFamilies = {
 --[[ Events ]]--
 
 function Item:Construct()
-  local b = self:Super(Item):Construct()
-  b.Cooldown:SetScript('OnCooldownDone', function() SetItemButtonTextureVertexColor(b, 1,1,1) end)
-  b:SetScript('PreClick', b.OnPreClick)
-  return b
+	local b = self:Super(Item):Construct()
+	b.Cooldown:SetScript('OnCooldownDone', function() SetItemButtonTextureVertexColor(b, 1,1,1) end)
+	return b
 end
 
-function Item:OnPreClick(button)
+function Item:PreClick(button)
 	if not IsModifiedClick() and button == 'RightButton' then
 		if REAGENTBANK_CONTAINER and Addon.Events.AtBank and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
 			if not Addon:IsReagents(self:GetBag()) and select(17, GetItemInfo(self.info.itemID)) then
@@ -64,8 +63,8 @@ function Item:OnPreClick(button)
 	self.locked = self.info.isLocked
 end
 
-function Item:OnPostClick(button)
-	self:Super(Item):OnPostClick(button)
+function Item:PostClick(button)
+	self:Super(Item):PostClick(button)
 
 	if Addon.Events.AtVault and self.locked and not IsModifiedClick() and button == 'RightButton' then
 		for i = 10, 1, -1 do

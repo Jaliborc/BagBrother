@@ -11,13 +11,10 @@ local OfflineSelector = Addon.Tipped:NewClass('OwnerSelector', 'Button', true)
 
 --[[ Construct ]]--
 
-function OfflineSelector:New(...)
-	local b = self:Super(OfflineSelector):New(...)
+function OfflineSelector:New(parent)
+	local b = self:Super(OfflineSelector):New(parent)
 	b:RegisterEvent('UNIT_PORTRAIT_UPDATE', 'Update')
 	b:RegisterFrameSignal('OWNER_CHANGED', 'Update')
-	b:SetScript('OnClick', b.OnClick)
-	b:SetScript('OnEnter', b.OnEnter)
-	b:SetScript('OnLeave', b.OnLeave)
 	b:SetScript('OnShow', b.Update)
 	b:RegisterForClicks('anyUp')
 	b:Update()
