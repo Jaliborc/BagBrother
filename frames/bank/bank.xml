@@ -1,7 +1,7 @@
 <Ui>
 	<Script file="bankTab.lua"/>
 	<Script file="accountMoney.lua"/>
-	<Script file="reagentButton.lua"/>
+	<Script file="depositButton.lua"/>
 
 	<Script file="bank.lua"/>
 	<Script file="tempFilters.lua"/>
