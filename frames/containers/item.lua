@@ -41,7 +41,7 @@ end
 function Item:PreClick(button)
 	if not IsModifiedClick() and button == 'RightButton' then
 		if REAGENTBANK_CONTAINER and Addon.Events.AtBank and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
-			if not Addon:IsReagents(self:GetBag()) and select(17, GetItemInfo(self.info.itemID)) then
+			if self:GetBag() ~= REAGENTBANK_CONTAINER and select(17, GetItemInfo(self.info.itemID)) then
 				local stackSize = select(8, GetItemInfo(self.info.itemID))
 				for _, bag in ipairs(Addon.BankBags) do
 					for slot = 1, C.GetContainerNumSlots(bag) do

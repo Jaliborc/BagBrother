@@ -63,23 +63,24 @@ function Frame:GetItemInfo(bag, slot)
 end
 
 function Frame:GetBagFamily(bag)
+	local family
 	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then
-		return 0x80000
+		family = 0x80000
 	elseif bag == KEYRING_CONTAINER then
-		return 9
+		family = 9
 	elseif bag > Addon.LastBankBag then
-		return -1
+		family = -1
 	elseif bag > BACKPACK_CONTAINER then
 		if self:IsCached(bag) then
 			local data = self:GetBagInfo(bag)
 			if data and data.link then
-				return GetItemFamily('item:' .. data.link) or 0
+				family = GetItemFamily('item:' .. data.link)
 			end
 		else
-			return select(2, C.GetContainerNumFreeSlots(bag)) or 0
+			family = select(2, C.GetContainerNumFreeSlots(bag))
 		end
 	end
-	return 0
+	return family or 0
 end
 
 function Frame:NumSlots(bag)
