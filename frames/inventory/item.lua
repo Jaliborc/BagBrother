@@ -1,6 +1,6 @@
 --[[
-	item.lua
-		A container item button.
+	A container item button.
+	All Rights Reserved
 --]]
 
 

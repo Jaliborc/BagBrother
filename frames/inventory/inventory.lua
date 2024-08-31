@@ -1,10 +1,11 @@
 --[[
-	inventory.lua
-		A specialized version of the window frame for the inventory
+	A specialized version of the window frame for the inventory
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
+
 local Frame = Addon.Frame:NewClass('Inventory')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
 Frame.ItemGroup = Addon.ContainerItemGroup

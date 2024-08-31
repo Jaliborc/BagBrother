@@ -14,6 +14,7 @@ Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.MoneyFrame
 Frame.BagGroup = Addon.BagGroup
+Frame.RegisterEvents = nop
 
 local KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
 local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'

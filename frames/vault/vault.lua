@@ -35,8 +35,8 @@ function Vault:New(id)
 	return f
 end
 
-function Vault:RegisterSignals()
-	self:Super(Vault):RegisterSignals()
+function Vault:RegisterEvents()
+	self:Super(Vault):RegisterEvents()
 	self:RegisterFrameSignal('TRANFER_TOGGLED', 'OnTransfer')
 	self:RegisterSignal('VAULT_OPEN', 'OnNPC')
 end
@@ -48,7 +48,7 @@ function Vault:OnNPC()
 	IsVoidStorageReady()
 
 	if not CanUseVoidStorage() then
-		if COST > GetMoney() then
+		if GetMoney() < 100 * 100*100 then
 			Sushi.Popup {
 				text = format(L.CannotPurchaseVault, GetMoneyString(self.PurchasePrice, true)),
 				button1 = CHAT_LEAVE, button2 = L.AskMafia,
