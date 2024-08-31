@@ -4,6 +4,7 @@
 --]]
 
 
+local C = LibStub('C_Everywhere').AddOns
 local L, ADDON, Addon, Config = select(2, ...).Addon()
 local Frames = Addon.GeneralOptions:New('FrameOptions', CreateAtlasMarkup('Vehicle-HammerGold-2'))
 
@@ -19,9 +20,9 @@ function Frames:Populate()
     local addon = Addon.Frames:Get(self.frame).addon
     if addon then
       if enabled then
-        DisableAddOn(addon)
+        C.DisableAddOn(addon)
       else
-        EnableAddOn(addon)
+        C.EnableAddOn(addon)
       end
     end
   end)
@@ -35,7 +36,7 @@ function Frames:Populate()
 					self:AddCheck('bagToggle')
 
           if DepositReagentBank and self.frame == 'bank' then
-            self:AddCheck('reagents')
+            self:AddCheck('deposit')
           end
 				end
 

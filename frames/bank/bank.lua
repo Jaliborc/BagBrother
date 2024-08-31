@@ -54,7 +54,7 @@ end
 function Bank:GetExtraButtons()
 	return {
 		self.profile.bagToggle and self:GetWidget('BagToggle'),
-		DepositReagentBank and self.profile.reagents and self:GetWidget('DepositButton')
+		DepositReagentBank and self.profile.deposit and self:GetWidget('DepositButton')
 	}
 end
 

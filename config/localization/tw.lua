@@ -41,7 +41,6 @@ L.Money = '金錢'
 L.Sort = '排序按鈕'
 L.Search = '切換搜尋'
 L.Options = '設定按鈕'
-L.Reagents = '材料按鈕'
 L.LeftTabs = '左側的規則集'
 L.LeftTabsTip = [[
 如果啟用，側邊標籤將顯示在

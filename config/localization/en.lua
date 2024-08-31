@@ -39,7 +39,7 @@ L.Money = MONEY
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'
-L.Reagents = 'Reagents Button'
+L.Deposit = 'Deposit Button'
 L.LeftTabs = 'Rulesets on Left'
 L.LeftTabsTip = [[
 If enabled, the side tabs will be
