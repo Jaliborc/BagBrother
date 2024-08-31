@@ -1,6 +1,6 @@
 --[[
-	display.lua
-		Automatic display settings menu
+	Automatic display settings menu.
+	All Rights Reserved
 --]]
 
 local L, ADDON, Addon = select(2, ...).Addon()

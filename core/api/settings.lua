@@ -40,7 +40,7 @@ local ProfileDefaults = {
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
-		currency = true,
+		currency = true, serverSort = true,
 		point = 'LEFT',
 		columns = 14,
 		width = 600,
@@ -71,7 +71,7 @@ function Settings:OnEnable()
 		global = self:SetDefaults({}, ProfileDefaults),
 		profiles = {},
 
-		resetPlayer = true, flashFind = true, serverSort = true,
+		resetPlayer = true, flashFind = true,
 		countItems = true, countGuild = true, countCurrency = true, 
 		depositAccount = true, depositReagents = true,
 		display = {

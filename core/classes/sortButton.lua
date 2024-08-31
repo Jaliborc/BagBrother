@@ -31,7 +31,9 @@ end
 
 function SortButton:OnClick(button)
 	if button == 'RightButton' then
-		local serverSort = Addon.IsRetail and Addon.sets.serverSort
+		local hasServer = self.frame.HasServerSort
+		local serverSort = hasServer and self.frame.profile.serverSort
+
 		local drop = Sushi.Dropdown:Toggle(self)
 		if drop then
 			drop:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -11)
@@ -39,13 +41,12 @@ function SortButton:OnClick(button)
 				{text = L.CleanupOptions, isTitle = true},
 				{
 					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSortingTip,
-					func = function() Addon.sets.serverSort = not Addon.sets.serverSort end,
-					checked = serverSort, disabled = not Addon.IsRetail, isNotRadio = true
+					func = function() self.frame.profile.serverSort = not self.frame.profile.serverSort end,
+					checked = serverSort, disabled = not hasServer, isNotRadio = true
 				},
 				{
 					text = '     |A:legionmission-lock:14:14|a ' .. L.LockItems,
-					tooltipTitle = serverSort and RED_FONT_COLOR:WrapTextInColorCode(L.RequiresClientSorting),
-					func = function() self:OnLocking() end, notCheckable = true,
+					func = function() self:OnLocking() end, disabled = serverSort, notCheckable = true,
 				}
 			}
 		end

@@ -4,7 +4,7 @@
 	<Script file="tab.lua"/>
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>
-	<Script file="money.lua"/>
+	<Script file="guildMoney.lua"/>
 
 	<Script file="logFrame.lua"/>
 	<Script file="logToggle.lua"/>

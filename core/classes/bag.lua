@@ -194,8 +194,6 @@ function Bag:ShowMenu()
 end
 
 function Bag:Purchase()
-	PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
-
 	if self:GetID() == REAGENTBANK_CONTAINER then
 		Sushi.Popup {
 			text = CONFIRM_BUY_REAGNETBANK_TAB, button1 = YES, button2 = NO,

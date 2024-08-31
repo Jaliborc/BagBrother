@@ -12,7 +12,7 @@ Guild.PickupItem = PickupGuildBankItem
 Guild.NoGuild = setmetatable({name=RED_FONT_COLOR:WrapTextInColorCode(ERR_GUILD_PLAYER_NOT_IN_GUILD), address='', isguild=true}, {__index = Addon.player})
 Guild.CloseSound = SOUNDKIT.GUILD_VAULT_CLOSE
 Guild.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
-Guild.MoneyFrame = Addon.GuildMoneyFrame
+Guild.MoneyFrame = Addon.GuildMoney
 Guild.ItemGroup = Addon.GuildItemGroup
 Guild.BagGroup = Addon.GuildTabGroup
 Guild.Title = '%s'

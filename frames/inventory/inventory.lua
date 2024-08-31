@@ -11,6 +11,7 @@ Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
 Frame.ItemGroup = Addon.ContainerItemGroup
 Frame.Bags = Addon.InventoryBags
 Frame.PickupItem = C.PickupContainerItem
+Frame.HasServerSort = C.SortBags
 Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
@@ -108,7 +109,7 @@ function Frame:GetExtraButtons()
 end
 
 function Frame:SortItems()
-	if Addon.sets.serverSort and C.SortBags then
+	if C.SortBags and self.profile.serverSort then
 		C.SortBags()
 		self:SendSignal('SORTING_STATUS')
 	else

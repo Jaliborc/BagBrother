@@ -1,6 +1,6 @@
 --[[
-	general.lua
-		General settings menu
+	General settings menu.
+	All Rights Reserved
 --]]
 
 local L, ADDON, Addon, Config = select(2, ...).Addon()

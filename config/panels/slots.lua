@@ -1,6 +1,6 @@
 --[[
-	color.lua
-		Color settings menu
+	Color settings menu.
+	All Rights Reserved
 --]]
 
 local L, ADDON, Addon = select(2, ...).Addon()

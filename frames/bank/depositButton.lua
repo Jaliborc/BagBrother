@@ -32,7 +32,7 @@ function DepositButton:OnClick(button)
 				end, 'bankAutoDepositReagents')
 		end)
 	else
-		if Addon.sets.depositReagents then
+		if Addon.sets.depositReagents and IsReagentBankUnlocked() then
 			DepositReagentBank()
 		end
 

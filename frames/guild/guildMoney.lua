@@ -5,7 +5,7 @@
 
 local MODULE = ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Money = Addon.MoneyFrame:NewClass('GuildMoneyFrame')
+local Money = Addon.MoneyFrame:NewClass('GuildMoney')
 Money.Type = 'GUILDBANK'
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
@@ -30,17 +30,17 @@ function Money:OnClick(button)
 		DropCursorMoney()
 
 	elseif button == 'LeftButton' and not IsShiftKeyDown() then
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		Sushi.Popup:Cancel(GUILDBANK_WITHDRAW)
 		Sushi.Popup:Toggle {
 			text = GUILDBANK_DEPOSIT, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
+			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
 			OnAccept = function(popup, money) DepositGuildBankMoney(money) end
 		}
 	elseif CanWithdrawGuildBankMoney() then
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		Sushi.Popup:Cancel(GUILDBANK_DEPOSIT)
 		Sushi.Popup:Toggle {
 			text = GUILDBANK_WITHDRAW, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
+			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
 			OnAccept = function(popup, money) WithdrawGuildBankMoney(money) end
 		}
 	end

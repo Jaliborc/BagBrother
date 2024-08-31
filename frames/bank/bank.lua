@@ -9,6 +9,7 @@ local C = LibStub('C_Everywhere')
 
 local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
+Bank.HasServerSort = C.Container.SortBankBags
 Bank.MoneyFrame = Addon.AccountMoney
 Bank.Bags = Addon.BankBags
 
@@ -33,7 +34,7 @@ function Bank:OnHide()
 end
 
 function Bank:SortItems()
-	if Addon.sets.serverSort and C.Container.SortBankBags then
+	if self.HasServerSort and self.profile.serverSort then
 		local API = {'SortAccountBankBags', 'SortReagentBankBags', 'SortBankBags'}
 		local function queue()
 			local sort = C_Container[tremove(API)]

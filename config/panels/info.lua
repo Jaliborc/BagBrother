@@ -1,6 +1,6 @@
 --[[
-	info.lua
-		Help and credits menus
+	Help and credits menus.
+	All Rights Reserved
 --]]
 
 local PATRONS = {{title='Jenkins',people={'Gnare','Adcantu','Debora S Ogormanw','Johnny Rabbit','Shaun Potts'}},{title='Ambassador',people={'Julia F','Lolari ','Rafael Lins','Dodgen','Ptsdthegamer','Adam Mann','Bc Spear','Jury ','Swallow@area52','Peter Hollaubek','Michael Kinasz','Metadata','Kelly Wolf','Ds9293','Lisa','נעמי מקינו','Melinani King'}}} -- generated patron list
