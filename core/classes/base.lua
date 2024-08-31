@@ -31,19 +31,19 @@ function Base:Construct()
 	return f
 end
 
-function Base:RegisterFrameSignal(msg, call, ...)
-	self:RegisterSignal(self:GetFrameID() .. msg, call or msg, ...)
+function Base:RegisterFrameSignal(event, call, ...)
+	self:RegisterSignal(self:GetFrameID() .. '.' .. event, call or event, ...)
 end
 
-function Base:UnregisterFrameSignal(msg, ...)
-	self:UnregisterSignal(self:GetFrameID() .. msg, ...)
+function Base:UnregisterFrameSignal(event)
+	self:UnregisterSignal(self:GetFrameID() .. '.' .. event)
 end
 
-function Base:SendFrameSignal(msg, ...)
-	self:SendSignal(self:GetFrameID() .. msg, ...)
+function Base:SendFrameSignal(event)
+	self:SendSignal(self:GetFrameID() .. '.' .. event)
 end
 
-function Base:UnregisterAll()
+function Base:UnregisterAll() -- remove on wildaddon 1.1
 	self:UnregisterAllMessages()
 	self:UnregisterAllEvents()
 end
