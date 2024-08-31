@@ -12,7 +12,7 @@ local Frame = Addon.Base:NewClass('Frame', 'Frame', nil, true)
 Frame.Get = GetOrCreateTableEntryByCallback
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
-Frame.MoneyFrame = Addon.MoneyFrame
+Frame.MoneyFrame = Addon.PlayerMoney
 Frame.BagGroup = Addon.BagGroup
 Frame.RegisterEvents = nop
 

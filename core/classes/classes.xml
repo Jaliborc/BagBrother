@@ -15,7 +15,7 @@
 	<Script file="currency.lua"/>
 	<Script file="currencyTracker.lua"/>
 	<Script file="brokerCarrousel.lua"/>
-	<Script file="money.lua"/>
+	<Script file="playerMoney.lua"/>
 
 	<Script file="frameBase.lua"/>
 </Ui>

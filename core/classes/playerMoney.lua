@@ -4,9 +4,9 @@
 --]]
 
 local ADDON, Addon = ...
-local MoneyFrame = Addon.Tipped:NewClass('MoneyFrame', 'Button', 'SmallMoneyFrameTemplate', true)
-MoneyFrame.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
-MoneyFrame.Type = 'PLAYER'
+local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTemplate', true)
+Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
+Money.Type = 'PLAYER'
 
 local Stroke = CreateFrame('Frame')
 Stroke:SetHeight(5)
@@ -20,14 +20,14 @@ Line:SetThickness(1)
 
 --[[ Construct ]]--
 
-function MoneyFrame:New(parent)
-	local f = self:Super(MoneyFrame):New(parent)
+function Money:New(parent)
+	local f = self:Super(Money):New(parent)
 	f:RegisterEvents()
 	return f
 end
 
-function MoneyFrame:Construct()
-	local f = self:Super(MoneyFrame):Construct()
+function Money:Construct()
+	local f = self:Super(Money):Construct()
 	f.trialErrorButton:SetPoint('LEFT', -14, 0)
 	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
@@ -47,13 +47,13 @@ function MoneyFrame:Construct()
 	return f
 end
 
-function MoneyFrame:RegisterEvents()
+function Money:RegisterEvents()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	self:RegisterEvent('PLAYER_MONEY', 'Update')
 	self:Update()
 end
 
-function MoneyFrame:Update()
+function Money:Update()
 	local money = self:GetMoney()
 	MoneyFrame_Update(self:GetName(), money, money == 0)
 end
@@ -61,7 +61,7 @@ end
 
 --[[ Interaction ]]--
 
-function MoneyFrame:OnClick()
+function Money:OnClick()
 	if self:IsCached() then
 		return
 	end
@@ -81,7 +81,7 @@ function MoneyFrame:OnClick()
 	self:OnLeave()
 end
 
-function MoneyFrame:OnEnter()
+function Money:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(MONEY, 1,1,1)
 
@@ -108,10 +108,10 @@ end
 
 --[[ API ]]--
 
-function MoneyFrame:GetMoney()
+function Money:GetMoney()
 	return self:GetOwner():GetMoney() or 0
 end
 
-function MoneyFrame:GetTipAnchor()
+function Money:GetTipAnchor()
 	return self, 'ANCHOR_TOP'
 end

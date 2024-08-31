@@ -110,7 +110,6 @@ function Items:Layout()
 			local slots = {}
 
 			if x > 0 and (profile.bagBreak > 1 or profile.bagBreak > 0 and family ~= group and family * group <= 0) then
-				group = family
 				y = y + space
 				x = 0
 			end
@@ -133,6 +132,7 @@ function Items:Layout()
 				end
 			end
 
+			group = family
 			self.buttons[bag] = slots
 		end
 	end

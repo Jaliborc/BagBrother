@@ -11,7 +11,7 @@ local ADDON, Addon = ...
 local Sushi = LibStub('Sushi-3.2')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
-local Money = Addon.MoneyFrame:NewClass('AccountMoney')
+local Money = Addon.PlayerMoney:NewClass('AccountMoney')
 Money.Type = 'ACCOUNT'
 
 function Money:RegisterEvents()

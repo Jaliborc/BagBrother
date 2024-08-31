@@ -5,7 +5,7 @@
 
 local MODULE = ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Money = Addon.MoneyFrame:NewClass('GuildMoney')
+local Money = Addon.PlayerMoney:NewClass('GuildMoney')
 Money.Type = 'GUILDBANK'
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
