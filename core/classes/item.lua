@@ -131,11 +131,11 @@ function Item:Update()
 end
 
 function Item:UpdateBorder()
-	local id, quality = self.info.itemID, self.info.quality
+	local id, link, quality = self.info.itemID, self.info.hyperlink, self.info.quality
 	local quest, bang = self:GetQuestInfo()
 	local r,g,b
 
-	SetItemButtonQuality(self, quality, self.info.hyperlink, false, self.info.isBound)
+	SetItemButtonQuality(self, quality, link, false, self.info.isBound)
 
 	if id then
 		if Addon.sets.glowQuest and quest or bang then
@@ -154,7 +154,7 @@ function Item:UpdateBorder()
 			self.IconBorder:SetVertexColor(r,g,b)
 		end
 
-		if Search:IsUncollected(id) then
+		if link and Search:IsUncollected(id, link) then
 			self.IconOverlay:SetAtlas('CosmeticIconFrame')
 			self.IconOverlay:Show()
 		end

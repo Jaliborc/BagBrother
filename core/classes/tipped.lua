@@ -8,8 +8,8 @@ local Tipped = Addon.Parented:NewClass('Tipped')
 
 function Tipped:OnLeave()
 	if GameTooltip:IsOwned(self) then
+		GameTooltip_HideBattlePetTooltip()
 		GameTooltip:Hide()
-		BattlePetTooltip:Hide()
 	end
 end
 

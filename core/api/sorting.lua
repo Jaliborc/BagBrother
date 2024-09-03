@@ -20,12 +20,8 @@ Sort.Proprieties = {
 --[[ Process ]]--
 
 function Sort:Start(target)
-	if not self:CanRun() then
-		return
-	end
-
-	self:SendSignal('SORTING_STATUS', target.id)
 	self.target = target
+	self:SendSignal('SORTING_STATUS', target.id)
 	self:Run()
 end
 
@@ -173,7 +169,7 @@ end
 --[[ API ]]--
 
 function Sort:CanRun()
-	return not InCombatLockdown() and not UnitIsDead('player')
+	return not InCombatLockdown() and not UnitIsDead('player') and not self.target:IsCached()
 end
 
 function Sort:FitsIn(id, family)
