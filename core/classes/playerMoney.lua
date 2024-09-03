@@ -22,7 +22,8 @@ Line:SetThickness(1)
 
 function Money:New(parent)
 	local f = self:Super(Money):New(parent)
-	f:RegisterEvents()
+	f:SetScript('OnShow', f.RegisterEvents)
+	f:SetScript('OnHide', f.UnregisterAll)
 	return f
 end
 

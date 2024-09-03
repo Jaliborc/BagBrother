@@ -39,6 +39,8 @@ function DepositButton:OnClick(button)
 		if Addon.sets.depositAccount then
 			C_Bank.AutoDepositItemsIntoBank(2)
 		end
+
+		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 	end
 end
 

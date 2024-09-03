@@ -36,7 +36,6 @@ function Carrousel:New(parent)
 	f.Left, f.Right = left, right
 	f:SetHeight(26)
 	f:Update()
-
 	return f
 end
 
@@ -72,6 +71,14 @@ end
 
 
 --[[ Frame Events ]]--
+
+function Carrousel:OnShow()
+	self:Update()
+end
+
+function Carrousel:OnHide()
+	LDB.UnregisterAllCallbacks(self)
+end
 
 function Carrousel:OnEnter()
 	local object = self:GetObject()
@@ -119,14 +126,6 @@ function Carrousel:OnMouseWheel(direction)
 	else
 		self:SetPreviousObject()
 	end
-end
-
-function Carrousel:OnShow()
-	self:Update()
-end
-
-function Carrousel:OnHide()
-	LDB.UnregisterAllCallbacks(self)
 end
 
 
@@ -196,6 +195,8 @@ function Carrousel:SetObject(name)
 	if GameTooltip:IsOwned(self) then
 		self:OnEnter()
 	end
+
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_FAER_TAB)
 end
 
 function Carrousel:GetObject()

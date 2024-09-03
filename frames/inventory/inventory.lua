@@ -110,6 +110,7 @@ end
 
 function Frame:SortItems()
 	if C.SortBags and self.profile.serverSort then
+		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 		C.SortBags()
 		self:SendSignal('SORTING_STATUS')
 	else

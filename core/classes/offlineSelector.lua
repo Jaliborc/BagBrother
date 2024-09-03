@@ -17,7 +17,6 @@ function OfflineSelector:New(parent)
 	b:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	b:SetScript('OnShow', b.Update)
 	b:RegisterForClicks('anyUp')
-	b:Update()
 	return b
 end
 

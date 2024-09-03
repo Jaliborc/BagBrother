@@ -41,7 +41,7 @@ function Slash.OnSlashCommand(cmd)
 	elseif cmd == 'vault' then
 		Addon.Frames:Toggle('vault')
 	elseif cmd == 'version' then
-		print('|cff33ff99' .. ADDON .. '|r version ' .. Addon.Version)
+		print('|cff33ff99' .. ADDON .. '|r version ' .. LibStub('C_Everywhere').AddOns.GetAddOnMetadata(ADDON, 'version'))
 	elseif cmd == 'config' or cmd == 'options' or cmd == '' then
 		Addon:ShowOptions()
 	else

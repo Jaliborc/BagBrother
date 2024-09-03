@@ -46,6 +46,7 @@ function Bank:SortItems()
 			end
 		end
 
+		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
 		queue() -- callback chain
 	else
 		self:Super(Bank):SortItems()

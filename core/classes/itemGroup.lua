@@ -23,7 +23,7 @@ function Items:New(parent, bags)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f:SetScript('OnShow', f.Update)
 	f:SetSize(1,1)
-	f:Update()
+	f:Show()
 	return f
 end
 

@@ -16,10 +16,9 @@ end
 
 function CurrencyTracker:New(parent)
 	local f = self:Super(CurrencyTracker):New(parent)
-	f.buttons = {}
 	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
-	f:RegisterEvents()
+	f.buttons = {}
 
 	C.hooksecurefunc('SetCurrencyBackpack', function()
 		if f:IsVisible() then

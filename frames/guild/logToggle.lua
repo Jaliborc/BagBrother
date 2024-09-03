@@ -31,9 +31,6 @@ end
 function Toggle:New(parent, id)
 	local b = self:Super(Toggle):New(parent)
 	b:RegisterFrameSignal('LOG_SELECTED', 'OnLogSelected')
-	b:SetScript('OnClick', b.OnClick)
-	b:SetScript('OnEnter', b.OnEnter)
-	b:SetScript('OnLeave', b.OnLeave)
 	b.Icon:SetTexture(self.Icons[id])
 	b.id = id
 	return b

@@ -26,7 +26,6 @@ function TransferButton:Construct()
 
 	f.Button = b
 	f:SetSize(50, 36)
-	f:SetScript('OnHide', f.OnHide)
 	return f
 end
 

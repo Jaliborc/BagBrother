@@ -35,14 +35,14 @@ function Money:OnClick(button)
 		Sushi.Popup:Cancel(BANK_MONEY_WITHDRAW_PROMPT)
 		Sushi.Popup:Toggle {
 			text = BANK_MONEY_DEPOSIT_PROMPT, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
-			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
+			open = SOUNDKIT.MONEY_FRAME_OPEN, close = SOUNDKIT.MONEY_FRAME_CLOSE,
 			OnAccept = function(popup, money) C_Bank.DepositMoney(2, money) end
 		}
 	else
 		Sushi.Popup:Cancel(BANK_MONEY_DEPOSIT_PROMPT)
 		Sushi.Popup:Toggle {
 			text = BANK_MONEY_WITHDRAW_PROMPT, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
-			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
+			open = SOUNDKIT.MONEY_FRAME_OPEN, close = SOUNDKIT.MONEY_FRAME_CLOSE,
 			OnAccept = function(popup, money) C_Bank.WithdrawMoney(2, money) end
 		}
 	end

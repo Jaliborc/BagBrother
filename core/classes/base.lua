@@ -23,6 +23,8 @@ end
 
 function Base:Construct()
 	local f = self:Super(Base):Construct()
+	f:Hide()
+	
 	for i, script in ipairs(self.Scripts) do
 		if f.__index[script] then
 			f:SetScript(script, f[script])
@@ -39,8 +41,8 @@ function Base:UnregisterFrameSignal(event)
 	self:UnregisterSignal(self:GetFrameID() .. '.' .. event)
 end
 
-function Base:SendFrameSignal(event)
-	self:SendSignal(self:GetFrameID() .. '.' .. event)
+function Base:SendFrameSignal(event, ...)
+	self:SendSignal(self:GetFrameID() .. '.' .. event, ...)
 end
 
 function Base:UnregisterAll() -- remove on wildaddon 1.1

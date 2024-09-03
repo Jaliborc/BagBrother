@@ -39,10 +39,13 @@ function Item:Construct()
 end
 
 function Item:PreClick(button)
-	if not IsModifiedClick() and button == 'RightButton' then
-		if REAGENTBANK_CONTAINER and Addon.Events.AtBank and IsReagentBankUnlocked() and C.GetContainerNumFreeSlots(REAGENTBANK_CONTAINER) > 0 then
-			if self:GetBag() ~= REAGENTBANK_CONTAINER and select(17, GetItemInfo(self.info.itemID)) then
-				local stackSize = select(8, GetItemInfo(self.info.itemID))
+	if self.hasItem and button == 'RightButton' and REAGENTBANK_CONTAINER then
+		if (IsShiftKeyDown() or not C_Bank.CanUseBank(0)) and C_Bank.CanUseBank(2) then
+			C.UseContainerItem(self:GetBag(), self:GetID(), nil, 2)
+
+		elseif tContains(Addon.InventoryBags, self:GetBag()) and not IsModifiedClick() and C_Bank.CanUseBank(0) then
+			local stackSize, _,_,_,_,_,_,_,_, isReagent = select(8, GetItemInfo(self.info.itemID))
+			if isReagent and self.frame:NumSlots(REAGENTBANK_CONTAINER) > 0 then
 				for _, bag in ipairs(Addon.BankBags) do
 					for slot = 1, C.GetContainerNumSlots(bag) do
 						if C.GetContainerItemID(bag, slot) == self.info.itemID then
@@ -55,18 +58,18 @@ function Item:PreClick(button)
 					end
 				end
 
-				C.UseContainerItem(self:GetBag(), self:GetID(), nil, true)
+				C.UseContainerItem(self:GetBag(), self:GetID(), nil, nil, true)
 			end
 		end
 	end
 
-	self.locked = self.info.isLocked
+	self.wasLocked = self.info.isLocked
 end
 
 function Item:PostClick(button)
 	self:Super(Item):PostClick(button)
 
-	if Addon.Events.AtVault and self.locked and not IsModifiedClick() and button == 'RightButton' then
+	if Addon.Events.AtVault and self.wasLocked and not IsModifiedClick() and button == 'RightButton' then
 		for i = 10, 1, -1 do
 			if GetVoidTransferDepositInfo(i) == self.info.itemID then
 				ClickVoidTransferDepositSlot(i, true)

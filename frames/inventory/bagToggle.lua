@@ -9,18 +9,14 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local BagToggle = Addon.Tipped:NewClass('BagToggle', 'CheckButton', true)
 
 
---[[ Construct ]]--
+--[[ Events ]]--
 
 function BagToggle:New(...)
 	local b = self:Super(BagToggle):New(...)
 	b:SetScript('OnHide', b.UnregisterAll)
 	b:RegisterForClicks('anyUp')
-	b:Update()
 	return b
 end
-
-
---[[ Events ]]--
 
 function BagToggle:OnShow()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
@@ -35,9 +31,10 @@ end
 
 function BagToggle:OnClick(button)
 	if button == 'LeftButton' then
-		local profile = self:GetProfile()
-		profile.showBags = not profile.showBags or nil
+		self:GetProfile().showBags = not self:GetProfile().showBags or nil
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
+		
+		PlaySound(self:GetProfile().showBags and 857 or 856)
 	else
 		local profile = self:GetProfile()
 		local focus = not self:IsFocusingTrade()

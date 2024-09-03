@@ -81,7 +81,7 @@ function Bag:New(parent, id)
 	b:SetSize(self.Size, self.Size)
 	b:RegisterForDrag('LeftButton')
 	b:RegisterForClicks('anyUp')
-	b:RegisterEvents()
+	b:Show()
 	return b
 end
 
@@ -182,6 +182,7 @@ function Bag:Toggle()
 	local profile = self:GetProfile()
 	profile.hiddenBags[slot] = not profile.hiddenBags[slot]
 
+	PlaySound(profile.hiddenBags and 856 or 857)
 	self:SendFrameSignal('FILTERS_CHANGED')
 	self:SetFocus(true)
 end

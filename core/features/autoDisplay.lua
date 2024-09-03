@@ -40,10 +40,6 @@ function AutoDisplay:HookBaseUI()
 	hooksecurefunc('CloseAllBags', self:Hide('inventory'))
 
 	-- banking frames
-	self:StopIf(_G, 'GuildBankFrame_LoadUI', self:Show('guild'))
-	self:StopIf(_G, 'VoidStorage_LoadUI', self:Show('vault'))
-	self:StopIf(_G, 'BankFrame_Open', self:Show('bank'))
-
 	self:StopIf(PlayerInteractionFrameManager, 'ShowFrame', function(manager, type)
 		return type == Interactions.Banker and Addon.Frames:Show('bank') or
 				type == Interactions.GuildBanker and Addon.Frames:Show('guild') or

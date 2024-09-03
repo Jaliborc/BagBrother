@@ -8,17 +8,17 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').AddOns
 local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
-Addon.Version =  C.GetAddOnMetadata(ADDON, 'version')
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
 Addon.LastBankBag = Addon.NumBags + NUM_BANKBAGSLOTS
 Addon.LastBankTab = Addon.LastBankBag + 5
+Addon.CurrencyLimit = 30  -- safety tracking limit
 
 Addon.None = {}
-Addon.BankBags = {BANK_CONTAINER}
 Addon.InventoryBags = {}
-Addon.CurrencyLimit = 30  -- safety tracking limit
+Addon.BankBags = {BANK_CONTAINER}
 
 for i = BACKPACK_CONTAINER, Addon.NumBags do
 	tinsert(Addon.InventoryBags, i)
@@ -62,7 +62,7 @@ function Addon:OnEnable()
 
 	self:RegisterEvent('PLAYER_ENTERING_WORLD', function()
 		self:CheckForUpdates(ADDON, self.sets, 'interface/addons/bagbrother/art/'..ADDON..'-big')
-		self.Frames:New('inventory') -- prevent combat block
+		self.Frames:New('inventory'):Hide() -- prevent combat block
 	end)
 end
 

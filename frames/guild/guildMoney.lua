@@ -33,14 +33,14 @@ function Money:OnClick(button)
 		Sushi.Popup:Cancel(GUILDBANK_WITHDRAW)
 		Sushi.Popup:Toggle {
 			text = GUILDBANK_DEPOSIT, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
-			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
+			open = SOUNDKIT.MONEY_FRAME_OPEN, close = SOUNDKIT.MONEY_FRAME_CLOSE,
 			OnAccept = function(popup, money) DepositGuildBankMoney(money) end
 		}
 	elseif CanWithdrawGuildBankMoney() then
 		Sushi.Popup:Cancel(GUILDBANK_DEPOSIT)
 		Sushi.Popup:Toggle {
 			text = GUILDBANK_WITHDRAW, moneyInput = 0, button1 = ACCEPT, button2 = CANCEL,
-			open = SOUNDKIT.IG_BACKPACK_COIN_SELECT, close = SOUNDKIT.IG_BACKPACK_COIN_OK,
+			open = SOUNDKIT.MONEY_FRAME_OPEN, close = SOUNDKIT.MONEY_FRAME_CLOSE,
 			OnAccept = function(popup, money) WithdrawGuildBankMoney(money) end
 		}
 	end
