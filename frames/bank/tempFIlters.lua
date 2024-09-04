@@ -47,6 +47,7 @@ function TempFilters:New(frame)
     f:SetWidth(38)
     f:SetScale(.8)
     f:Update()
+    f:Show()
     return f
 end
 
