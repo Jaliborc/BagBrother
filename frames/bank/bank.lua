@@ -9,15 +9,32 @@ local C = LibStub('C_Everywhere')
 
 local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
-Bank.HasServerSort = C.Container.SortBankBags
 Bank.MoneyFrame = Addon.AccountMoney
 Bank.Bags = Addon.BankBags
 
 
---[[ API  ]]--
+--[[ General API  ]]--
 
 for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
+end
+
+if C.Container.SortBankBags then
+	function Bank:ServerSort()
+		local api = {'SortAccountBankBags', 'SortReagentBankBags', 'SortBankBags'}
+		local function queue()
+			local sort = C_Container[tremove(api)]
+			if sort then
+				EventUtil.RegisterOnceFrameEventAndCallback('ITEM_UNLOCKED', function() C_Timer.After(0, queue) end)
+				sort()
+			else
+				self:SendSignal('SORTING_STATUS')
+			end
+		end
+
+		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
+		queue() -- callback chain
+	end
 end
 
 function Bank:OnHide()
@@ -31,26 +48,6 @@ function Bank:OnHide()
 	end
 	
 	C.Bank.CloseBankFrame()
-end
-
-function Bank:SortItems()
-	if self.HasServerSort and self.profile.serverSort then
-		local API = {'SortAccountBankBags', 'SortReagentBankBags', 'SortBankBags'}
-		local function queue()
-			local sort = C_Container[tremove(API)]
-			if sort then
-				EventUtil.RegisterOnceFrameEventAndCallback('ITEM_UNLOCKED', function() C_Timer.After(0, queue) end)
-				sort()
-			else
-				self:SendSignal('SORTING_STATUS')
-			end
-		end
-
-		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
-		queue() -- callback chain
-	else
-		self:Super(Bank):SortItems()
-	end
 end
 
 function Bank:GetExtraButtons()
@@ -70,14 +67,14 @@ function Bank:GetBagInfo(bag)
 	return self:GetOwner()[bag]
 end
 
-function Bank:IsCached(bag) -- maybe should optimize this, calculating a lot per item (not good)
+function Bank:IsCached(bag)
 	if not Addon.Events.AtBank then
 		return true
 	elseif bag then
 		if bag > Addon.LastBankBag then
 			return not C.Bank.CanViewBank(2)
 		else
-			return self:GetOwner().offline or C.Bank.CanViewBank and not C.Bank.CanViewBank(0)
+			return self:GetOwner().offline or not C.Bank.CanViewBank(0)
 		end
 	end
 end

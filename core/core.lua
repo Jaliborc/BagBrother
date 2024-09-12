@@ -13,7 +13,7 @@ Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
 Addon.LastBankBag = Addon.NumBags + NUM_BANKBAGSLOTS
-Addon.LastBankTab = Addon.LastBankBag + 5
+Addon.LastAccountBag = Addon.LastBankBag + (Constants.InventoryConstants.NumAccountBankSlots or 0)
 Addon.CurrencyLimit = 30  -- safety tracking limit
 
 Addon.None = {}
@@ -37,7 +37,7 @@ if REAGENTBANK_CONTAINER then
 end
 
 if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
-	for i = Addon.LastBankBag + 1, Addon.LastBankTab do
+	for i = Addon.LastBankBag + 1, Addon.LastAccountBag do
 		tinsert(Addon.BankBags, i)
 	end
 end

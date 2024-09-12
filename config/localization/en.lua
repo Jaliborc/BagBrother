@@ -130,6 +130,9 @@ L.AskCommunity = 'Ask Community'
 L.JoinUs = 'Join Us'
 
 L.FAQ = {
+  'How to deposit items directly into the warband bank?',
+  'Shift right-click on the item slot and it will be placed in the warband bags instead of the normal ones.',
+
   'How to see the bank, guild or another character offline?',
   'Click on the "Offline Viewing" button in the top left of your inventory. It looks like a portrait of the character you are currently playing.',
 

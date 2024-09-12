@@ -31,7 +31,7 @@ end
 
 function SortButton:OnClick(button)
 	if button == 'RightButton' then
-		local hasServer = self.frame.HasServerSort
+		local hasServer = self.frame.ServerSort
 		local serverSort = hasServer and self.frame.profile.serverSort
 
 		local drop = Sushi.Dropdown:Toggle(self)

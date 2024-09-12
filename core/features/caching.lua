@@ -57,7 +57,7 @@ function Cacher:OnEnable()
 
 	for id = 1, 5000 do
 		local data = C.CurrencyInfo.GetCurrencyInfo(id)
-		if data and data.quantity > 0 and data.quality > 0 then
+		if data and data.quantity > 0 and data.quality > 0 and not C.CurrencyInfo.IsAccountWideCurrency(id) then
 			self.player.currency[id] = data.quantity
 		end
 	end
@@ -89,7 +89,7 @@ function Cacher:PLAYER_MONEY()
 end
 
 function Cacher:CURRENCY_DISPLAY_UPDATE(_, id, quantity)
-	if id and quantity then
+	if id and quantity and not C.CurrencyInfo.IsAccountWideCurrency(id) then
 		self.player.currency[id] = quantity > 0 and quantity or nil
 	end
 end
@@ -106,8 +106,7 @@ function Cacher:CURRENCY_TRACKED_CHANGED()
 end
 
 function Cacher:BANK_CLOSE()
-	local view = C.Bank.CanViewBank
-	if not view or view(0) then
+	if C.Bank.CanViewBank(0) then
 		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
 			self:SaveBag(i)
 		end
@@ -117,8 +116,8 @@ function Cacher:BANK_CLOSE()
 		self:SaveBag(BANK_CONTAINER)
 	end
 
-	if view and view(2) then
-		BrotherBags.account = C_Bank.FetchPurchasedBankTabData(2)
+	if C.Bank.CanViewBank(2) then
+		BrotherBags.account = C.Bank.FetchPurchasedBankTabData(2)
 		for _, bag in pairs(BrotherBags.account) do
 			Mixin(bag, self:ParseBag(bag.ID))
 		end

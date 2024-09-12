@@ -119,7 +119,7 @@ function Sort:GetSpaces()
 
 					item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
-					item.subclass, item.equip, item.level, item.stackSize = subclass, equip, level, stack
+					item.subclass, item.equip, item.level, item.stackSize = subclass or -1, equip, level, stack
 					item.family = C.GetItemFamily(id) or 0
 				end
 
@@ -149,10 +149,11 @@ end
 
 function Sort:GetOrder(spaces, family)
 	local order, slots = {}, {}
+	local sign = family < 0
 
 	for _, space in ipairs(spaces) do
 		local item = space.item
-		if item.itemID and not item.sorted and self:FitsIn(item.itemID, family) then
+		if item.itemID and not item.sorted and (space.family < 0) == sign and self:FitsIn(item.itemID, family) then
 			tinsert(order, space.item)
 		end
 

@@ -4,6 +4,8 @@
 --]]
 
 local ADDON, Addon = ...
+local C = LibStub('C_Everywhere')
+
 local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTemplate', true)
 Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
 Money.Type = 'PLAYER'
@@ -100,8 +102,13 @@ function Money:OnEnter()
 		total = total + (money or 0)
 	end
 
+	local account = (C.Bank.FetchDepositedMoney or nop)(2) or 0
+	if account > 0 then
+		GameTooltip:AddDoubleLine('|A:questlog-questtypeicon-account:0:0|a '..ACCOUNT_QUEST_LABEL, GetMoneyString(account, true))
+	end
+
 	GameTooltip_InsertFrame(GameTooltip, Stroke)
-	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total, true)))
+	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total + account, true)))
 	GameTooltip:Show()
 	Stroke:SetWidth(GameTooltip:GetWidth()-20)
 end

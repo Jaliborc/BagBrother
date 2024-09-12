@@ -159,7 +159,11 @@ function Frame:IsShowingQuality(quality)
 end
 
 function Frame:SortItems()
-	Addon.Sorting:Start(self)
+	if self.profile.serverSort and self.ServerSort then
+		self:ServerSort()
+	else
+		Addon.Sorting:Start(self)
+	end
 end
 
 

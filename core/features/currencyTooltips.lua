@@ -50,7 +50,7 @@ function TipCounts.OnTracked(tip, index)
 end
 
 function TipCounts.OnID(tip, id)
-	if Addon.sets.countCurrency then
+	if Addon.sets.countCurrency and not C.IsAccountWideCurrency(id) then
 		local name = tip:GetName()..'TextLeft'
 		local last = _G[name..tip:NumLines()]
 		if last:GetText():find(TOTAL) then
@@ -62,12 +62,26 @@ function TipCounts.OnID(tip, id)
 			end
 		end
 
+		local left, right = {}, {}
+		local total = 0
+
 		for i, owner in Addon.Owners:Iterate() do
 			local count = owner.currency and owner.currency[id]
 			if count and count > 0 then
 				local color = owner:GetColorMarkup()
-				tip:AddDoubleLine(owner:GetIconMarkup(12,0,0) ..' '.. color:format(owner.name), color:format(count))
+			
+				tinsert(left, owner:GetIconMarkup(12,0,0) ..' '.. color:format(owner.name))
+				tinsert(right, color:format(count))
+				total = total + count
 			end
+		end
+
+		if C.IsAccountTransferableCurrency(id) and total > 0 then
+			tip:AddLine(format('|n%s: |cffffffff%d|r', TOTAL, total))
+		end
+
+		for i, who in ipairs(left) do
+			tip:AddDoubleLine(who, right[i])
 		end
 
 		local info = C.GetCurrencyInfo(id)

@@ -81,7 +81,7 @@ end
 
 function Tab:UpdateTooltip()
 	GameTooltip:ClearLines()
-	GameTooltip:SetText('|A:warbands-icon:0:0:0:0|a ' .. (self.name or BANK_BAG_PURCHASE), 1, 1, 1)
+	GameTooltip:SetText('|A:questlog-questtypeicon-account:0:0|a ' .. (self.name or BANK_BAG_PURCHASE), 1, 1, 1)
 
 	if self.name then
 		if FlagsUtil.IsSet(self.flags, Enum.BagSlotFlags.ExpansionCurrent) then
