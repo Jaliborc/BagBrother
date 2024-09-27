@@ -8,7 +8,7 @@ local C = LibStub('C_Everywhere').AddOns
 local Frames = Addon:NewModule('Frames')
 Frames.Registry = {
 	{id = 'inventory', name = INVENTORY_TOOLTIP, icon = 130716},
-	{id = 'bank', name = BANK, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking'},
+	{id = 'bank', name = BANK, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking', ADDON..'_Bank'},
 	{id = 'vault', name = VOID_STORAGE, icon = 1711338, addon = VoidStorage_LoadUI and ADDON..'_VoidStorage' or false},
 	{id = 'guild', name = GUILD_BANK, icon = 'Interface/Addons/BagBrother/art/vas-guildfactionchange', addon = GuildBankFrame_LoadUI and ADDON..'_GuildBank' or false},
 }

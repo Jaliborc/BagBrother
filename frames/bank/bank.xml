@@ -4,5 +4,7 @@
 	<Script file="depositButton.lua"/>
 
 	<Script file="bank.lua"/>
+
 	<Script file="tempFilters.lua"/>
+	<Include file="filterEdit.xml"/>
 </Ui>

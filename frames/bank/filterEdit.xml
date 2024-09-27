@@ -1,0 +1,61 @@
+<Ui>
+    <Frame name="selfYo" parent="UIParent" inherits="IconSelectorPopupFrameTemplate">
+        <Size x="525" y="594"/>
+        <Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="MacroHeader" inherits="GameFontHighlightSmall" text="Enter Macro:" maxLines="1" justifyH="LEFT">
+					<Size x="100"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="21" y="-78"/>
+					</Anchors>
+				</FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <ScrollFrame parentKey="Macro" inherits="InputScrollFrameTemplate">
+                <Size x="470" y="55"/>
+                <Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MacroHeader" relativePoint="BOTTOMLEFT" x="7" y="-10"/>
+				</Anchors>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+			<OnLoad>
+                IconSelectorPopupFrameTemplateMixin.OnLoad(self)
+
+                self:ClearAllPoints()
+                self:SetPoint('CENTER', UIParent)
+
+                self.Macro.CharCount:Hide()
+                self.BorderBox.IconSelectionText:ClearAllPoints()
+                self.BorderBox.IconSelectionText:SetPoint('BOTTOMLEFT', self.IconSelector, 'TOPLEFT', 0, 10)
+                self.BorderBox.IconTypeDropdown:ClearAllPoints()
+                self.BorderBox.IconTypeDropdown:SetPoint('BOTTOMRIGHT', self.IconSelector, 'TOPRIGHT', -33, 0)
+                self.BorderBox.EditBoxHeaderText:SetText('Enter Filter Name:')
+
+                self.IconSelector:SetPoint('TOPLEFT', self.BorderBox, 'TOPLEFT', 21, -196)
+                self.IconSelector:SetSelectedCallback(function(_, icon)
+                    self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(icon)
+                end)
+
+
+                self.OkayButton_OnClick = function()
+                    print(self.BorderBox.IconSelectorEditBox:GetText() or '')
+                    print(self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture() or QUESTION_MARK_ICON)
+                    print(self.Macro.EditBox:GetText())
+                    --self:Hide()
+                end
+            </OnLoad>
+            <OnShow>
+                IconSelectorPopupFrameTemplateMixin.OnShow(self)
+
+                self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.None)
+                self.IconSelector:SetSelectionsDataProvider(GenerateClosure(self.GetIconByIndex, self), GenerateClosure(self.GetNumIcons, self))
+
+                self.IconSelector:SetSelectedIndex(120)
+                self.IconSelector:ScrollToSelectedIndex()
+                self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(self:GetIconByIndex(120))
+            </OnShow>
+        </Scripts>
+    </Frame>
+</Ui>

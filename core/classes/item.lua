@@ -16,10 +16,10 @@ Item.Backgrounds = {
 
 --[[ Construct ]]--
 
-function Item:New(parent, bag, slot)
+function Item:New(parent, bag, slot, info)
 	local b = self:Super(Item):New(parent)
+	b.bag, b.info = bag, info
 	b:SetID(slot)
-	b.bag = bag
 
 	if b:IsVisible() then
 		b:Update()
@@ -120,7 +120,6 @@ end
 --[[ Update ]]--
 
 function Item:Update()
-	self.info = self:GetInfo()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')

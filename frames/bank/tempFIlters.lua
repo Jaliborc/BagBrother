@@ -10,9 +10,9 @@ end
 local ADDON, Addon = ...
 local TempFilters = Addon.Parented:NewClass('SideFilters', 'Frame')
 TempFilters.Preset = {
-    {ALL, 413587, nop},
-    {PLAYER, 895888, function(bag) return bag > Addon.LastBankBag end},
-    {ACCOUNT_QUEST_LABEL, 629054, function(bag) return bag <= Addon.LastBankBag end}
+    {ALL, 413587, nil},
+    {PLAYER, 895888, function(bag) return bag <= Addon.LastBankBag end},
+    {ACCOUNT_QUEST_LABEL, 629054, function(bag) return bag > Addon.LastBankBag end}
 }
 
 function TempFilters:New(frame)
@@ -63,8 +63,4 @@ function Addon.Bank:New(...)
     f.filter = nop
     f.FilterGroup = TempFilters(f)
     return f
-end
-
-function Addon.Bank:IsShowingBag(bag)
-	return not self:GetProfile().hiddenBags[bag] and not (self.filter or nop)(bag)
 end

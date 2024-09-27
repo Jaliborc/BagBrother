@@ -115,13 +115,14 @@ function Items:Layout()
 			end
 
 			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
-				if self.frame:IsShowingItem(bag, slot) then
+				local info = self:GetItemInfo(bag, slot)
+				if self.frame:IsShowingItem(bag, slot, info, family) then
 					if x == columns then
 						y = y + 1
 						x = 0
 					end
 
-					local button = self.Button(frame, bag, slot)
+					local button = self.Button(frame, bag, slot, info)
 					button:ClearAllPoints()
 					button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
 					button:SetScale(scale)

@@ -27,7 +27,6 @@ function Frame:OnShow()
 	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
 	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
-	self:RegisterSignal('RULES_LOADED', 'FindRules')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterEvents()
 	self:Update()
@@ -128,34 +127,16 @@ end
 
 --[[ Filtering ]]--
 
-function Frame:FindRules()
-	for id, rule in Addon.Rules:Iterate() do
-		if not tContains(self.profile.rules, id) then
-			self:Delay(0.01, 'SendFrameSignal', 'RULES_UPDATED')
-			tinsert(self.profile.rules, id)
-		end
-	end
-end
-
 function Frame:IsShowingBag(bag)
 	return not self:GetProfile().hiddenBags[bag]
 end
 
-function Frame:IsShowingItem(bag, slot)
-	local info = self:GetItemInfo(bag, slot)
-	local rule = Addon.Rules:Get(self.subrule or self.rule)
-
-	if rule and rule.func then
-		if not rule.func(self.owner, bag, slot, self:GetBagInfo(bag), info) then
-			return
-		end
-	end
-
-	return self:IsShowingQuality(info.quality)
-end
-
-function Frame:IsShowingQuality(quality)
-	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
+function Frame:IsShowingItem(bag, slot, info, family)
+	if self.filter then
+        local ok, shown = pcall(self.filter, bag, slot, info, family)
+        return not ok or shown
+    end
+	return true
 end
 
 function Frame:SortItems()
