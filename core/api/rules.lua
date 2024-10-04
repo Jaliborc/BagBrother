@@ -6,54 +6,38 @@
 
 
 local ADDON, Addon = ...
-local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
-Rules.hierarchy = {}
+local Rules = Addon:NewModule('Rules')
 Rules.registry = {}
 
 
 --[[ Public API ]]--
 
-function Rules:New(id, name, icon, func)
-	assert(type(id) == 'string', 'Unique ID must be a string')
+function Rules:New(data)
+	assert(type(data) == 'table', 'data must be a table')
+	assert(type(data.id) == 'string', 'data.id must be a string')
 
-	local parent = self:ParentID(id)
-	local hierarchy = self.hierarchy
-
-	if parent then
-		parent = self:Get(parent)
-		assert(parent, 'Specified parent item ruleset is not know')
-		hierarchy = parent.children
+	for id in pairs(self.registry) do
+		assert(data.id ~= id, 'data.id must be unique, id already registered')
 	end
 
-	local rule = hierarchy[id] or {children = {}}
-	rule.name = name or id
-	rule.icon = icon
-	rule.func = func
-	rule.id = id
-	hierarchy[id] = rule
-
-	self.registry[id] = rule
-	self:Delay(0, 'SendSignal', 'RULES_LOADED')
+	self.registry[data.id] = data
 end
 
 function Rules:Get(id)
-	return type(id) == 'string' and self.registry[id]
+	return self.registry[id] or Addon.sets.customRules[id]
 end
 
 function Rules:Iterate()
 	return pairs(self.registry)
 end
 
-function Rules:IterateParents()
-	return pairs(self.hierarchy)
+function Rules:IterateCustom()
+	return pairs(Addon.sets.customRules)
 end
 
 
---[[ Additional Methods ]]--
+--[[ Default Rulesets ]]--
 
-function Rules:ParentID(id)
-	local parent = id:match('^(.+)/.-$')
-	if parent then
-		return parent
-	end
-end
+Addon.Rules:New {id = 'all', title = ALL, icon = 413587}
+Addon.Rules:New {id = 'player', title = PLAYER, icon = 895888, macro = 'return family >= 0'}
+Addon.Rules:New {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 629054, macro = 'return family < 0'}

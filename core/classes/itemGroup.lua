@@ -115,7 +115,7 @@ function Items:Layout()
 			end
 
 			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
-				local info = self:GetItemInfo(bag, slot)
+				local info = self.frame:GetItemInfo(bag, slot)
 				if self.frame:IsShowingItem(bag, slot, info, family) then
 					if x == columns then
 						y = y + 1

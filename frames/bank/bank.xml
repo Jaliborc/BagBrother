@@ -5,6 +5,6 @@
 
 	<Script file="bank.lua"/>
 
-	<Script file="tempFilters.lua"/>
-	<Include file="filterEdit.xml"/>
+	<Script file="ruleGroup.lua"/>
+	<!--<Include file="ruleEdit.xml"/>-->
 </Ui>

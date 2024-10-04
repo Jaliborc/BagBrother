@@ -1,5 +1,5 @@
 <Ui>
-    <Frame name="selfYo" parent="UIParent" inherits="IconSelectorPopupFrameTemplate">
+    <Frame name="YoYoYo" parent="UIParent" inherits="IconSelectorPopupFrameTemplate">
         <Size x="525" y="594"/>
         <Layers>
 			<Layer level="ARTWORK">

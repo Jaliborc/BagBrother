@@ -5,6 +5,7 @@
 
 local ADDON, Addon =  ...
 local C = LibStub('C_Everywhere').Container
+
 local Items = Addon.ItemGroup:NewClass('ContainerItemGroup')
 Items.Button = Addon.ContainerItem
 
@@ -38,12 +39,11 @@ function Items:BAG_UPDATE_CONTENT(_, bag)
 end
 
 function Items:ITEM_LOCK_CHANGED(_, bag, slot)
-	if not self:Delaying('Layout') then
-		bag = self.buttons[bag]
-		slot = bag and bag[slot]
-		if slot then
-			slot:UpdateLocked()
-		end
+	bag = self.buttons[bag]
+	slot = bag and bag[slot]
+
+	if slot then
+		slot:UpdateLocked()
 	end
 end
 

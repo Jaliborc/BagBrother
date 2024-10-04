@@ -22,9 +22,7 @@ local FrameDefaults = {
 
 	hiddenBags = {}, lockedSlots = {},
 	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
-
 	brokerObject = ADDON .. 'Launcher',
-	rules = AsArray({}),
 }
 
 local ProfileDefaults = {
@@ -40,6 +38,7 @@ local ProfileDefaults = {
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
+		filters = AsArray({'all', 'player', 'account'}),
 		currency = true, serverSort = true,
 		point = 'LEFT',
 		columns = 14,
@@ -69,7 +68,7 @@ function Settings:OnEnable()
 	BrotherBags = BrotherBags or {}
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
 		global = self:SetDefaults({}, ProfileDefaults),
-		profiles = {},
+		profiles = {}, customRules = {},
 
 		resetPlayer = true, flashFind = true,
 		countItems = true, countGuild = true, countCurrency = true, 
