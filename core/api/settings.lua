@@ -38,7 +38,7 @@ local ProfileDefaults = {
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
-		filters = AsArray({'all', 'player', 'account'}),
+		filters = AsArray({'all', 'player', 'account', 'questitem', 'miscellaneous', 'scrap'}),
 		currency = true, serverSort = true,
 		point = 'LEFT',
 		columns = 14,

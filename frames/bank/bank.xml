@@ -5,6 +5,7 @@
 
 	<Script file="bank.lua"/>
 
-	<Script file="ruleGroup.lua"/>
-	<!--<Include file="ruleEdit.xml"/>-->
+	<Script file="sideFilter.lua"/>
+	<Script file="filterGroup.lua"/>
+	<!--<Script file="filterEdit.lua"/>-->
 </Ui>

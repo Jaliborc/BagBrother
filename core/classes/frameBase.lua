@@ -133,7 +133,7 @@ end
 
 function Frame:IsShowingItem(bag, slot, info, family)
 	if self.filter then
-        local ok, shown = pcall(self.filter, bag, slot, info, family)
+        local ok, shown = pcall(self.filter, self, bag, slot, family, info)
         return not ok or shown
     end
 	return true

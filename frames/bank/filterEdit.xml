@@ -1,5 +1,5 @@
 <Ui>
-    <Frame name="YoYoYo" parent="UIParent" inherits="IconSelectorPopupFrameTemplate">
+    <Frame name="YoYoYo" parent="UIParent" inherits="IconSelectorPopupFrameTemplate" hidden="true">
         <Size x="525" y="594"/>
         <Layers>
 			<Layer level="ARTWORK">
@@ -48,13 +48,16 @@
             </OnLoad>
             <OnShow>
                 IconSelectorPopupFrameTemplateMixin.OnShow(self)
-
                 self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.None)
                 self.IconSelector:SetSelectionsDataProvider(GenerateClosure(self.GetIconByIndex, self), GenerateClosure(self.GetNumIcons, self))
 
                 self.IconSelector:SetSelectedIndex(120)
                 self.IconSelector:ScrollToSelectedIndex()
                 self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(self:GetIconByIndex(120))
+
+                self.BorderBox.IconSelectorEditBox:SetText(self.rule.title)
+                self.Macro.EditBox:SetText(gsub(self.rule.macro or '', '\t', '  '))
+                self.BorderBox.OkayButton:SetEnabled(not self.rule.id)
             </OnShow>
         </Scripts>
     </Frame>

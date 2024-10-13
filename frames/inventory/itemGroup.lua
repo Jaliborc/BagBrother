@@ -13,8 +13,9 @@ function Items:RegisterEvents()
 	self:Super(Items):RegisterEvents()
 
 	if not self:IsCached() then
-		self:RegisterSignal('BAG_UPDATE_SIZE')
-		self:RegisterSignal('BAG_UPDATE_CONTENT')
+		--self:RegisterSignal('BAG_UPDATE_SIZE')
+		--self:RegisterSignal('BAG_UPDATE_CONTENT')
+		self:RegisterEvent('BAG_UPDATE_DELAYED', 'Layout') -- unoptimized for now
 		self:RegisterEvent('ITEM_LOCK_CHANGED')
         self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
 
