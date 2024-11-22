@@ -88,9 +88,13 @@ function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
-function Cacher:CURRENCY_DISPLAY_UPDATE(_, id, quantity)
-	if id and quantity and not C.CurrencyInfo.IsAccountWideCurrency(id) then
-		self.player.currency[id] = quantity > 0 and quantity or nil
+function Cacher:CURRENCY_DISPLAY_UPDATE(_, id)
+	if id and not C.CurrencyInfo.IsAccountWideCurrency(id) then
+		local data = C.CurrencyInfo.GetCurrencyInfo(id)
+		local quantity = data and data.quantity
+		if quantity then
+			self.player.currency[id] = quantity > 0 and quantity or nil
+		end
 	end
 end
 
