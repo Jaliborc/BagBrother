@@ -49,11 +49,8 @@ function CurrencyTracker:Layout()
 
 	local x,y,w = 0,0,2
 	local function addButton(i, data)
-		data.iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
-		data.index = i
-	
 		local b = self:GetButton(i)
-		b:Set(data)
+		b:Set(data, i)
 
 		if (x + b:GetWidth() + 20) > self.frame.ItemGroup:GetWidth() then
 			w = max(w, x)

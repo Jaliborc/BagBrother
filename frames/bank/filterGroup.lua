@@ -11,7 +11,7 @@ local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Filters = Addon.Parented:NewClass('FilterGroup', 'Frame')
 Filters.Button = Addon.SideFilter
 
-local TempPreset = {'all', 'player', 'account', 'consumable', 'trade', 'questitem'}
+local TempPreset = {'all', 'player', 'account'}--, 'consumable', 'trade', 'questitem'}
 
 
 --[[ Constuct ]]--
