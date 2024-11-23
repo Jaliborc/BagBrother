@@ -90,10 +90,9 @@ end
 
 function Cacher:CURRENCY_DISPLAY_UPDATE(_, id)
 	if id and not C.CurrencyInfo.IsAccountWideCurrency(id) then
-		local data = C.CurrencyInfo.GetCurrencyInfo(id)
-		local quantity = data and data.quantity
-		if quantity then
-			self.player.currency[id] = quantity > 0 and quantity or nil
+		local info = C.CurrencyInfo.GetCurrencyInfo(id)
+		if info then
+			self.player.currency[id] = (info.quantity or 0) > 0 and info.quantity or nil
 		end
 	end
 end
