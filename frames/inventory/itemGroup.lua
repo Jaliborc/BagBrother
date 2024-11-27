@@ -13,11 +13,9 @@ function Items:RegisterEvents()
 	self:Super(Items):RegisterEvents()
 
 	if not self:IsCached() then
-		--self:RegisterSignal('BAG_UPDATE_SIZE')
-		--self:RegisterSignal('BAG_UPDATE_CONTENT')
-		self:RegisterEvent('BAG_UPDATE_DELAYED', 'Layout') -- unoptimized for now
 		self:RegisterEvent('ITEM_LOCK_CHANGED')
         self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
+		self:RegisterSignal('BAGS_UPDATED')
 
 		self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'ForAll', 'UpdateCooldown')
 		self:RegisterEvent('BAG_NEW_ITEMS_UPDATED', 'ForAll', 'UpdateBorder')
@@ -27,22 +25,26 @@ function Items:RegisterEvents()
 	end
 end
 
-function Items:BAG_UPDATE_SIZE(_, bag)
-	for i, frame in ipairs(self.bags) do
-		if frame.id == bag then
+function Items:BAGS_UPDATED(_, queue)
+	local dynamic = self.frame.dynamic
+
+	for i, bag in ipairs(self.bags) do
+		local updated = queue[bag.id]
+		if updated and dynamic or updated == false then
 			return self:Layout()
+		end
+	end
+
+	for i, bag in ipairs(self.bags) do
+		if queue[bag.id] then
+			self:ForBag(bag.id, 'Update')
 		end
 	end
 end
 
-function Items:BAG_UPDATE_CONTENT(_, bag)
-	self:ForBag(bag, 'Update')
-end
-
 function Items:ITEM_LOCK_CHANGED(_, bag, slot)
-	bag = self.buttons[bag]
-	slot = bag and bag[slot]
-
+	local bag = self.buttons[bag]
+	local slot = bag and bag[slot]
 	if slot then
 		slot:UpdateLocked()
 	end

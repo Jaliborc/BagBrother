@@ -108,16 +108,16 @@ function Bag:RegisterEvents()
 			end
 
 			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
-			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATE')
-			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATE')
-			self:RegisterSignal('BAG_UPDATE')
+			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATED')
+			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATED')
+			self:RegisterSignal('BAG_UPDATED')
 		end
 	elseif self.slot then
 		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
 	end
 end
 
-function Bag:BAG_UPDATE(_, bag)
+function Bag:BAG_UPDATED(_, bag)
 	if bag == self:GetID() then
 		self:Update()
 	end
