@@ -22,7 +22,7 @@ function Item:New(parent, bag, slot, info)
 	b:SetID(slot)
 
 	if b:IsVisible() then
-		b:Update()
+		b:UpdatePrimary()
 	else
 		b:Show()
 	end
@@ -68,7 +68,7 @@ function Item:Construct()
 	end
 
 	b:SetScript('OnEvent', nil)
-	b:SetScript('OnShow', b.Update)
+	b:SetScript('OnShow', b.UpdatePrimary)
 	return b
 end
 
@@ -120,6 +120,11 @@ end
 --[[ Update ]]--
 
 function Item:Update()
+	self.info = self.frame:GetItemInfo(self:GetSlot())
+	self:UpdatePrimary()
+end
+
+function Item:UpdatePrimary()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
