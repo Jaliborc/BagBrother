@@ -11,8 +11,6 @@ local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Filters = Addon.Parented:NewClass('FilterGroup', 'Frame')
 Filters.Button = Addon.SideFilter
 
-local TempPreset = {'all', 'player', 'account'}--, 'consumable', 'trade', 'questitem'}
-
 
 --[[ Constuct ]]--
 
@@ -32,8 +30,7 @@ end
 
 function Filters:Update()
 	local i = 1
-	for _,id in ipairs(TempPreset) do -- temporary
-	--for id in pairs(Addon.Rules.registry) do -- temporary
+	for _,id in ipairs(self.frame.profile.filters) do
 		local rule = Addon.Rules:Get(id)
 		if rule then
 			local button = GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(self.Button, self))
@@ -42,6 +39,10 @@ function Filters:Update()
 
 			i = i + 1
 		end
+	end
+
+	for i = i, #self.buttons do
+		self.buttons[i]:Hide()
 	end
 end
 
@@ -54,16 +55,25 @@ function Filters:ShowMenu()
 		drop:CreateTitle('Installed Filters')
 
 		for id, rule in pairs(Addon.Rules.registry) do 
+			local filters = self.frame.profile.filters
 			local check = drop:CreateCheckbox(rule.title,
-				function() return tContains(TempPreset, rule.id) end,
-				function() end)
+				function() return tContains(filters, rule.id) end,
+				function()
+					if tContains(filters, rule.id) then
+						tDeleteItem(filters, rule.id)
+					else
+						tinsert(filters, rule.id)
+					end
+
+					self:Update()
+				end)
 
 			check:AddInitializer(function(check, _, menu)
 				local edit = MenuTemplates.AttachAutoHideGearButton(check)
 				edit:SetPoint('RIGHT')
 				edit:SetScript('OnClick', function()
-					--Addon.FilterEdit:Display(self.frame, rule)
-					--menu:Close()
+					Addon.FilterEdit:Display(self.frame, rule)
+					menu:Close()
 				end)
 			
 				MenuUtil.HookTooltipScripts(edit, function(tip)

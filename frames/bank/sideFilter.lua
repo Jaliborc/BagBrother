@@ -21,7 +21,6 @@ function Filter:Construct()
 	b.IconBorder:SetColorTexture(0,0,0)
 	b.IconBorder:SetSize(35,35)
 	b.IconBorder:Show()
-	b:Show()
 	return b
 end
 
@@ -32,6 +31,7 @@ function Filter:SetRule(rule)
 	self.IconOverlay:SetShown(rule == self.frame.rule)
 	self.icon[setIcon](self.icon, icon)
 	self.rule = rule
+	self:Show()
 end
 
 

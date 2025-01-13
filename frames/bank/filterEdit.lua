@@ -1,9 +1,29 @@
 local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Frame = CreateFrame('Frame', nil, nil, 'IconSelectorPopupFrameTemplate')
 
+--[[ API ]]--
+
+function Frame:Display(parent, rule)
+	self:Startup()
+	self:SetParent(parent)
+	self:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 38,0)
+	self:Show()
+
+	self.rule = rule
+	self.BorderBox.IconSelectorEditBox:SetText(rule.title)
+	self.Macro.EditBox:SetText(gsub(rule.macro or '', '\t', '  '))
+
+	self.IconSelector:SetSelectedIndex(self:GetIndexOfIcon(rule.icon))
+	self.IconSelector:ScrollToSelectedIndex()
+	self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(rule.icon)
+end
+
+--[[ Internal ]]--
+
 function Frame:Startup()
 	self.BorderBox.IconSelectionText:ClearAllPoints()
 	self.BorderBox.IconSelectionText:SetPoint('BOTTOMLEFT', self.IconSelector, 'TOPLEFT', 0, 10)
+	self.BorderBox.IconSelectorEditBox:SetScript('OnTextChanged', GenerateClosure(self.Refresh, self))
 
 	self.BorderBox.IconTypeDropdown:ClearAllPoints()
 	self.BorderBox.IconTypeDropdown:SetPoint('BOTTOMRIGHT', self.IconSelector, 'TOPRIGHT', -33, 0)
@@ -17,9 +37,11 @@ function Frame:Startup()
 	self.MacroHeader:SetPoint('TOPLEFT', 21, -78)
 
 	self.Macro = CreateFrame('ScrollFrame', nil, self, 'InputScrollFrameTemplate')
+	self.Macro.EditBox:SetScript('OnTextChanged', GenerateClosure(self.Refresh, self))
 	self.Macro:SetPoint('TOPLEFT', self.MacroHeader, 'BOTTOMLEFT', 7, -10)
 	self.Macro:SetSize(470, 55)
-	self.Macro.CharCount:Hide()
+	self.Macro.hideCharCount = true
+	InputScrollFrame_OnLoad(self.Macro)
 
 	self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.None)
 	self.IconSelector:SetSelectionsDataProvider(GenerateClosure(self.GetIconByIndex, self), GenerateClosure(self.GetNumIcons, self))
@@ -33,21 +55,14 @@ function Frame:Startup()
 	self.Startup = nop
 end
 
-function Frame:Display(parent, rule)
-	self:Startup()
-	self:SetParent(parent)
-	self:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 38,0)
-	self:Show()
+function Frame:Refresh()
+	local function hasContent(box)
+		return box:GetText():match('^%s*$') == nil
+	end
 
-	self.IconSelector:SetSelectedIndex(self:GetIndexOfIcon(rule.icon))
-	self.IconSelector:ScrollToSelectedIndex()
-	self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(rule.icon)
-
-	self.BorderBox.IconSelectorEditBox:SetText(rule.title)
-	self.Macro.EditBox:SetText(gsub(rule.macro or '', '\t', '  '))
-
-	--self.BorderBox.IconSelectorEditBox.OnTextChanged
-	--self.BorderBox.OkayButton:SetEnabled(not rule.id)
+	self.BorderBox.OkayButton:SetEnabled(not self.rule.id
+		and hasContent(self.BorderBox.IconSelectorEditBox)
+		and hasContent(self.Macro.EditBox))
 end
 
 function Frame:OkayButton_OnClick()
@@ -58,4 +73,3 @@ function Frame:OkayButton_OnClick()
 end
 
 Addon.FilterEdit = Frame
---Frame:Hide()
