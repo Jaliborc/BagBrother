@@ -6,8 +6,8 @@
 
 
 local ADDON, Addon = ...
-local Rules = Addon:NewModule('Rules')
-Rules.registry = {}
+local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
+Rules.Registry = {}
 
 
 --[[ Public API ]]--
@@ -16,15 +16,16 @@ function Rules:New(data)
 	assert(type(data) == 'table', 'data must be a table')
 	assert(type(data.id) == 'string', 'data.id must be a string')
 
-	for id in pairs(self.registry) do
+	for id in pairs(self.Registry) do
 		assert(data.id ~= id, 'data.id must be unique, id already registered')
 	end
 
-	self.registry[data.id] = data
+	self.Registry[data.id] = data
+	self:Delay(0, 'SendSignal', 'RULES_LOADED')
 end
 
 function Rules:Get(id)
-	return self.registry[id] or Addon.sets.customRules[id]
+	return self.Registry[id] or Addon.sets.customRules[id]
 end
 
 

@@ -41,10 +41,10 @@ function Filter:OnClick(mouse)
 	if mouse == 'RightButton' then
 		self:GetParent():ShowMenu()
 	else
-		self.frame.rule = self.rule
-		self.frame.filter = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))() or
-							self.rule.filter or self.rule.search and function(_,_,info) return Search:Matches(info.itemID, self.rule.search) end
+		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
 
+		self.frame.rule = self.rule
+		self.frame.filter = macro and macro() or self.rule.filter or self.rule.search and function(_,_,info) return Search:Matches(info.itemID, self.rule.search) end
 		self:SendFrameSignal('FILTERS_CHANGED')
 	end
 end
