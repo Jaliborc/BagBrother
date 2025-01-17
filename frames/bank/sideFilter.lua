@@ -25,7 +25,7 @@ function Filter:Construct()
 end
 
 function Filter:SetRule(rule)
-	local icon = GetValueOrCallFunction(rule, 'icon', self.frame)
+	local icon = GetValueOrCallFunction(rule, 'icon', self.frame) or QUESTION_MARK_ICON
 	local setIcon = C_Texture.GetAtlasID(icon) ~= 0 and 'SetAtlas' or 'SetTexture'
 
 	self.IconOverlay:SetShown(rule == self.frame.rule)

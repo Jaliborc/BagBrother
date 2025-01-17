@@ -86,7 +86,7 @@ function Frame:Refresh()
 end
 
 function Frame:OkayButton_OnClick()
-	self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture() or QUESTION_MARK_ICON
+	self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
 	self.rule.title = self.BorderBox.IconSelectorEditBox:GetText()
 	self.rule.macro = self.Macro.EditBox:GetText()
 	self:Hide()
