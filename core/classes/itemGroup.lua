@@ -109,7 +109,7 @@ function Items:Layout()
 			local family = self.frame:GetBagFamily(bag)
 			local slots = {}
 
-			if x > 0 and profile.bagBreak > 0 and family ~= group and family * group <= 0 then
+			if x > 0 and profile.bagBreak and family ~= group and family * group <= 0 then
 				y = y + space
 				x = 0
 			end
