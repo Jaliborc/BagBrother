@@ -40,9 +40,9 @@ local ProfileDefaults = {
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
+		columns = Addon.IsRetail and 22 or 14,
 		currency = true, serverSort = true,
 		point = 'LEFT',
-		columns = 14,
 		width = 600,
 		height = 500,
 		x = 95
@@ -103,6 +103,11 @@ function Settings:OnEnable()
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
+			--- upgrade settings
+			if type(profile.bagBreak) ~= 'number' then
+				profile.bagBreak = nil
+			end
+
 			self:SetDefaults(profile, ProfileDefaults)
 		end
 	end
