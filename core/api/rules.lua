@@ -46,11 +46,13 @@ end
 Rules:New {id = 'all', title = ALL, icon = 413587}
 Rules:New {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0'}
 Rules:New {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0'}
-Rules:New {id = 'trade', title = TRADE_SKILLS, icon = 236573, macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
+Rules:New {id = 'normal', title = 'Normal Bags', icon = 133628, macro = 'return family == 0'}
+Rules:New {id = 'trade', title = 'Trade Bags', icon = 133669, macro = 'return family > 0'}
+Rules:New {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894, macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
 
 do
 	local classes = {
-		[135650] = {'Armor', 'Weapon', 'Gem'},
+		[133126] = {'Armor', 'Weapon', 'Gem'},
 		[236669] = {'Questitem'},
 		[134414] = {'Miscellaneous'},
 		[134756] = {'Consumable'},
