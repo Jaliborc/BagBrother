@@ -73,8 +73,13 @@ end
 
 function Filters:CreateCheckboxes(drop, rules)
 	local filters = self.frame.profile.filters
+	local sorted = GetPairsArray(rules)
 
-	for id, rule in pairs(rules) do 
+	sort(sorted, function(a, b)
+		return a.value.title < b.value.title end)
+
+	for i, entry in pairs(sorted) do 
+		local id, rule = entry.key, entry.value
 		local check = drop:CreateCheckbox(rule.title,
 		function() return tContains(filters, id) end,
 		function()
