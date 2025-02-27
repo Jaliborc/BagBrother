@@ -10,9 +10,18 @@ local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
 Rules.Registry = {}
 
 
---[[ Public API ]]--
+--[[ Static API ]]--
 
-function Rules:New(data)
+function Rules:OnEnable()
+	for i, rule in ipairs(Addon.sets.customRules) do
+		setmetatable(rule, self)
+	end
+
+	self.GetValue = GetValueOrCallFunction
+	self.__index = self
+end
+
+function Rules:Register(data)
 	assert(type(data) == 'table', 'data must be a table')
 	assert(type(data.id) == 'string', 'data.id must be a string')
 
@@ -20,7 +29,7 @@ function Rules:New(data)
 		assert(data.id ~= id, 'data.id must be unique, id already registered')
 	end
 
-	self.Registry[data.id] = data
+	self.Registry[data.id] = setmetatable(data, self)
 	self:Delay(0, 'SendSignal', 'RULES_LOADED')
 end
 
@@ -28,37 +37,20 @@ function Rules:Get(id)
 	return self.Registry[id] or Addon.sets.customRules[id]
 end
 
-
---[[ Default Rulesets ]]--
-
-local function belongsToClass(classes)
-	local condition = ''
-	for i, class in ipairs(classes) do
-		condition = condition .. format(' or class == Enum.ItemClass.%s', class)
-	end
-
-	return format([[if info.itemID then
-		local _,_,_,_,_, class = C_Item.GetItemInfoInstant(info.itemID)
-		return %s
-	end]], condition:sub(5))
+function Rules:Iterate()
+	return pairs(self.Registry)
 end
 
-Rules:New {id = 'all', title = ALL, icon = 413587}
-Rules:New {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0'}
-Rules:New {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0'}
-Rules:New {id = 'normal', title = 'Normal Bags', icon = 133628, macro = 'return family == 0'}
-Rules:New {id = 'trade', title = 'Trade Bags', icon = 133669, macro = 'return family > 0'}
-Rules:New {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894, macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
 
-do
-	local classes = {
-		[133126] = {'Armor', 'Weapon', 'Gem'},
-		[236669] = {'Questitem'},
-		[134414] = {'Miscellaneous'},
-		[134756] = {'Consumable'},
-	}
+--[[ Object API ]]--
 
-	for icon, ids in pairs(classes) do
-		Rules:New {id = ids[1]:lower(), title = GetItemClassInfo(Enum.ItemClass[ids[1]]), icon = icon, macro = belongsToClass(ids)}
-	end
+function Rules:GetIconMarkup(frame, size)
+	local icon, isAtlas = self:GetIcon(frame)
+	return isAtlas and CreateAtlasMarkup(icon, size,size) or
+			icon and CreateSimpleTextureMarkup(icon, size)
+end
+
+function Rules:GetIcon(...)
+	local icon = self:GetValue('icon', ...) or QUESTION_MARK_ICON
+	return icon, C_Texture.GetAtlasID(icon) ~= 0
 end

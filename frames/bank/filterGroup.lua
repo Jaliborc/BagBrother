@@ -64,7 +64,7 @@ function Filters:ShowMenu()
 
 		drop:CreateDivider()
 		drop:CreateButton(format('%s |cnPURE_GREEN_COLOR:New Filter|r', CreateAtlasMarkup('editmode-new-layout-plus')), function()
-			local rule = {title = 'New Filter'}
+			local rule = setmetatable({title = 'New Filter'}, Addon.Rules)
 			tinsert(Addon.sets.customRules, rule)
 			Addon.FilterEdit:Display(self.frame, rule)
 		end)
@@ -79,14 +79,18 @@ function Filters:CreateCheckboxes(drop, rules)
 		return a.value.title < b.value.title end)
 
 	for i, entry in pairs(sorted) do 
-		local id, rule = entry.key, entry.value
-		local check = drop:CreateCheckbox(rule.title,
-		function() return tContains(filters, id) end,
-		function()
-			(tContains(filters, id) and tDeleteItem or tinsert)(filters, id)
-			self:Update()
-		end)
+		local rule, id = entry.value, entry.key
+		local icon = rule:GetIconMarkup(self.frame, 16)
+		local title = rule:GetValue('title', self.frame)
 
+		local isEnabled = function() return tContains(filters, id) end
+		local toggle = function()
+			(isEnabled() and tDeleteItem or tinsert)(filters, id)
+			self:Update()
+		end
+
+		local check = drop:CreateCheckbox(icon ..' '.. title, isEnabled, toggle)
+		check:SetCanSelect(function() return #filters > 1 or not isEnabled() end)
 		check:AddInitializer(function(check, _, menu)
 			local edit = MenuTemplates.AttachAutoHideGearButton(check)
 			edit:SetPoint('RIGHT')

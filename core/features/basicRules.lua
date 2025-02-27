@@ -1,83 +1,40 @@
 --[[
-	Basic item filters based on item classes.
+	Standard item filters included with the addon.
 	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
-local Key, Quiver, Weapon, Armor, Projectile, Container, Consumable, Enhance, Trade, Recipe, Gem, Glyph, Quest, Misc =
-	Enum.ItemClass.Key, Enum.ItemClass.Quiver, Enum.ItemClass.Weapon, Enum.ItemClass.Armor, Enum.ItemClass.Projectile,
-	Enum.ItemClass.Container, Enum.ItemClass.Consumable, Enum.ItemClass.ItemEnhancement, Enum.ItemClass.Tradegoods,
-	Enum.ItemClass.Recipe, Enum.ItemClass.Gem, Enum.ItemClass.Glyph, Enum.ItemClass.Questitem, Enum.ItemClass.Miscellaneous
+local Rules = Addon.Rules
 
-local function ClassRule(id, name, icon, classes)
-	local filter = function(_,_,_,_, item)
-		if item.class then
-			for i, class in ipairs(classes) do
-				if class == item.class then
-					return true
-				end
-			end
-		end
+local function belongsToClass(classes)
+	local condition = ''
+	for i, class in ipairs(classes) do
+		condition = condition .. format(' or class == Enum.ItemClass.%s', class)
 	end
 
-	Addon.Rules:New(id, name, icon, filter)
+	return format([[if info.itemID then
+		local _,_,_,_,_, class = C_Item.GetItemInfoInstant(info.itemID)
+		return %s
+	end]], condition:sub(5))
 end
 
-local function ClassSubrule(id, class)
-	Addon.Rules:New(id, GetItemClassInfo(class), nil, function(_,_,_,_, item)
-		return item.class and item.class == class
-	end)
-end
+Rules:Register {id = 'all', title = ALL, icon = 413587}
+Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0'}
+Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0'}
+Rules:Register {id = 'normal', title = 'Normal Bags', icon = 133628, macro = 'return family == 0'}
+Rules:Register {id = 'trade', title = 'Trade Bags', icon = 133669, macro = 'return family > 0'}
+Rules:Register {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894,
+				macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
 
+do
+	local classes = {
+		[133126] = {'Armor', 'Weapon', 'Gem'},
+		[236669] = {'Questitem'},
+		[134414] = {'Miscellaneous'},
+		[134756] = {'Consumable'},
+	}
 
---[[ Bag Types ]]--
-
-Addon.Rules:New('all', ALL, 'Interface/Icons/INV_Misc_EngGizmos_17')
-Addon.Rules:New('all/normal', VOICE_CHAT_NORMAL, nil, function(_,_,_, bag) return bag.family == 0 end)
-Addon.Rules:New('all/trade', TRADE_SKILLS, nil, function(_,_,_, bag) return bag.family > 3 end)
-
-if Addon.IsRetail then
-	Addon.Rules:New('all/reagent', MINIMAP_TRACKING_VENDOR_REAGENT, nil, function(_,_,_, bag) return bag.family == -3 end)
-else
-	Addon.Rules:New('all/quiver', GetItemClassInfo(Quiver), nil, function(_,_,_, bag) return bag.family == 1 or bag.family == 2 end)
-	Addon.Rules:New('all/souls', SOUL_SHARDS, nil, function(_,_,_, bag) return bag.family == 3 end)
-	Addon.Rules:New('all/keys', KEYRING, nil, function(_,_,_, bag) return bag.family == 9 end)
-end
-
-
---[[ Simple Categories ]]--
-
-ClassRule('contain', GetItemClassInfo(Container), 'Interface/Icons/inv_misc_bag_19', {Container})
-ClassRule('quest', GetItemClassInfo(Quest), 'Interface/QuestFrame/UI-QuestLog-BookIcon', {Quest})
-ClassRule('misc', GetItemClassInfo(Misc), 'Interface/Icons/INV_Misc_Rune_01', {Misc})
-
-ClassRule('use', USABLE_ITEMS, 'Interface/Icons/INV_Potion_93', {Consumable, Enhance})
-ClassSubrule('use/consume', Consumable)
-
-ClassRule('trade', TRADE_SKILLS, 'Interface/Icons/INV_Fabric_Silk_02', {Trade, Recipe, Gem, Glyph})
-ClassSubrule('trade/goods', Trade)
-ClassSubrule('trade/recipe', Recipe)
-
-if Addon.IsRetail then
-	ClassSubrule('trade/glyph', Glyph)
-	ClassSubrule('trade/gem', Gem)
-	ClassSubrule('use/enhance', Enhance)
-end
-
-
---[[ Equipment ]]--
-
-ClassRule('equip', BAG_FILTER_EQUIPMENT, 'Interface/Icons/INV_Chest_Chain_04', {Armor, Weapon, Projectile})
-ClassSubrule('equip/weapon', Weapon)
-
-Addon.Rules:New('equip/armor', GetItemClassInfo(Armor), nil, function(_,_,_,_, item)
-	return item.class == Armor and item.equip ~= 'INVTYPE_TRINKET'
-end)
-
-Addon.Rules:New('equip/trinket', INVTYPE_TRINKET, nil, function(_,_,_,_, item)
-	return item.equip == 'INVTYPE_TRINKET'
-end)
-
-if not Addon.IsRetail then
-	ClassSubrule('equip/ammo', Projectile)
+	for icon, ids in pairs(classes) do
+		Rules:Register {id = ids[1]:lower(), title = GetItemClassInfo(Enum.ItemClass[ids[1]]), icon = icon, macro = belongsToClass(ids)}
+	end
 end

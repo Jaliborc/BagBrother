@@ -11,14 +11,14 @@ Addon.FilterEdit:Hide()
 
 --[[ API ]]--
 
-function Frame:Display(parent, rule, index)
+function Frame:Display(parent, rule)
 	self:Startup()
 	self:SetParent(parent)
 	self:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 38,0)
 	self:Show()
 
-	self.rule, self.index = rule, index
-	self.BorderBox.IconSelectorEditBox:SetText(rule.title)
+	self.rule = rule
+	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', parent))
 	self.Macro.EditBox:SetText(gsub(rule.macro or '', '\t', '  '))
 
 	self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(rule.icon)
@@ -87,24 +87,18 @@ function Frame:Refresh()
 end
 
 function Frame:OkayButton_OnClick()
-	if self.rule then
-		self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
-		self.rule.title = self.BorderBox.IconSelectorEditBox:GetText()
-		self.rule.macro = self.Macro.EditBox:GetText()
-		self:Hide()
-	end
+	self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
+	self.rule.title = self.BorderBox.IconSelectorEditBox:GetText()
+	self.rule.macro = self.Macro.EditBox:GetText()
+	self:Hide()
 end
 
 function Frame:OnDelete()
-	tremove(Addon.sets.customRules, self.index)
+	tDeleteItem(Addon.sets.customRules, self.rule)
 	Addon:SendSignal('RULES_LOADED')
 	self:Hide()
 end
 
 function Frame:OnShare()
 	-- TO DO
-end
-
-function Frame:OnHide()
-	print('hello')
 end

@@ -25,11 +25,10 @@ function Filter:Construct()
 end
 
 function Filter:SetRule(rule)
-	local icon = GetValueOrCallFunction(rule, 'icon', self.frame) or QUESTION_MARK_ICON
-	local setIcon = C_Texture.GetAtlasID(icon) ~= 0 and 'SetAtlas' or 'SetTexture'
+	local icon, isAtlas = rule:GetIcon(self.frame)
 
 	self.IconOverlay:SetShown(rule == self.frame.rule)
-	self.icon[setIcon](self.icon, icon)
+	self.icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.icon, icon)
 	self.rule = rule
 	self:Show()
 end
@@ -50,5 +49,5 @@ function Filter:OnClick(mouse)
 end
 
 function Filter:OnEnter()
-	self:ShowTooltip(GetValueOrCallFunction(self.rule, 'title', self.frame))
+	self:ShowTooltip(self.rule:GetValue('title', self.frame))
 end
