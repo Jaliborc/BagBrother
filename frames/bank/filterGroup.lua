@@ -67,9 +67,9 @@ function Filters:ShowMenu()
 		local new = drop:CreateButton(format('%s |cnPURE_GREEN_COLOR:%s|r', CreateAtlasMarkup('editmode-new-layout-plus'), 'New Filter'))
 		new:CreateButton(' ' .. SEARCH, function() Addon.FilterEdit:Create(self.frame, {title = 'New Search', search = ''}) end)
 		new:CreateButton(' ' .. MACRO, function() Addon.FilterEdit:Create(self.frame, {title = 'New Macro'}) end)
-		new:CreateButton(' ' .. HUD_EDIT_MODE_IMPORT_LAYOUT, function()
+		new:CreateButton(' ' .. 'Import', function()
 			LibStub('Sushi-3.2').Popup:New {
-				id = ADDON .. 'ImportFilter',
+				id = ADDON .. 'ImportRule',
 				button1 = OKAY, button2 = CANCEL,
 				text = 'Paste data to import:',
 				editBox = '',

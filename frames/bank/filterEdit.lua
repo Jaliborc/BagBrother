@@ -12,9 +12,7 @@ Addon.FilterEdit:Hide()
 --[[ API ]]--
 
 function Frame:Create(parent, rule)
-	tinsert(Addon.sets.customRules, rule)
-	setmetatable(rule, Addon.Rules)
-
+	tinsert(Addon.sets.customRules, setmetatable(rule, Addon.Rules))
 	Addon.FilterEdit:Display(parent, rule)
 end
 
@@ -67,7 +65,7 @@ function Frame:Startup()
 	self.CodeHeader = self:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
 	self.CodeHeader:SetPoint('TOPLEFT', 21, -78)
 	self.CodeHeader:SetJustifyH('LEFT')
-	self.CodeHeader:SetSize(100, 0)
+	self.CodeHeader:SetSize(200, 0)
 	self.CodeHeader:SetMaxLines(1)
 
 	self.Code = CreateFrame('ScrollFrame', nil, self, 'InputScrollFrameTemplate')
@@ -117,7 +115,7 @@ function Frame:OnShare()
 	end
 
 	LibStub('Sushi-3.2').Popup:New {
-		id = ADDON .. 'FilterEdit',
+		id = ADDON .. 'ShareRule',
 		text = 'Copy this data and share:',
 		editBox = '{' .. encoded:sub(2) .. '}',
 		button1 = OKAY

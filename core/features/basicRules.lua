@@ -18,13 +18,16 @@ local function belongsToClass(classes)
 	end]], condition:sub(5))
 end
 
-Rules:Register {id = 'all', title = ALL, icon = 413587}
-Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0'}
-Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0'}
+Rules:Register {id = 'all', title = ALL, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking'}
 Rules:Register {id = 'normal', title = 'Normal Bags', icon = 133628, macro = 'return family == 0'}
 Rules:Register {id = 'trade', title = 'Trade Bags', icon = 133669, macro = 'return family > 0'}
 Rules:Register {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894,
 				macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
+
+if Addon.IsRetail then
+	Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0'}
+	Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0'}
+end
 
 do
 	local classes = {
