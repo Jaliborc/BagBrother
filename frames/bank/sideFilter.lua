@@ -9,6 +9,7 @@ end
 
 local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Filter = Addon.Tipped:NewClass('SideFilter', 'ItemButton')
+local Search = LibStub('ItemSearch-1.3')
 
 
 --[[ Startup ]]--
@@ -41,9 +42,10 @@ function Filter:OnClick(mouse)
 		self:GetParent():ShowMenu()
 	else
 		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
+		local search = self.rule.search and function(_,_,_,_, info) return info.itemID and Search:Matches(info.hyperlink, self.rule.search) end
 
 		self.frame.rule = self.rule
-		self.frame.filter = macro and macro() or self.rule.filter or self.rule.search and function(_,_,info) return Search:Matches(info.itemID, self.rule.search) end
+		self.frame.filter = search or macro and macro() or self.rule.filter
 		self:SendFrameSignal('FILTERS_CHANGED')
 	end
 end
