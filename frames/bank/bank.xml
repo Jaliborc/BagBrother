@@ -4,7 +4,4 @@
 	<Script file="depositButton.lua"/>
 
 	<Script file="bank.lua"/>
-
-	<Script file="sideFilter.lua"/>
-	<Script file="filterGroup.lua"/>
 </Ui>

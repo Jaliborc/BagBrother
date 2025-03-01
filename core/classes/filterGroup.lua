@@ -1,11 +1,11 @@
 --[[
-	A in-progress implementation of customizable tabs.
+	A container frame for customizable tabs.
 	All Rights Reserved
 --]]
 
-local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
+local ADDON, Addon = ...
 local Filters = Addon.Parented:NewClass('FilterGroup', 'Frame')
-Filters.Button = Addon.SideFilter
+Filters.Button = Addon.Filter
 
 function Filters:New(parent)
 	local f = self:Super(Filters):New(parent)
@@ -13,10 +13,7 @@ function Filters:New(parent)
 	f:RegisterSignal('RULES_CHANGED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
-	f:SetPoint('BOTTOMLEFT', parent, 'BOTTOMRIGHT')
 	f:SetPoint('TOPLEFT', parent, 'TOPRIGHT')
-	f:SetWidth(38)
-	f:SetScale(.8)
 	f:Update()
 	f:Show()
 	return f
@@ -28,21 +25,16 @@ function Filters:Update()
 		local rule = Addon.Rules:Get(id)
 		if rule then
 			local button = GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(self.Button, self))
-            button:SetPoint('TOP', 0, -i * 42)
+            button:SetPoint('TOPLEFT', 0, -i * 42)
             button:SetRule(rule)
 
 			i = i + 1
 		end
 	end
 
-	for i = i, #self.buttons do
-		self.buttons[i]:Hide()
+	for k = i, #self.buttons do
+		self.buttons[k]:Hide()
 	end
-end
 
--- temp hack
-function Addon.Bank:New(...)
-	local f = self:Super(Addon.Bank):New(...)
-	f.FilterGroup = Filters(f)
-	return f
+	self:SetSize(33, i * 33)
 end

@@ -43,6 +43,7 @@ function Frames:Populate()
 				self:AddCheck('sort')
 				self:AddCheck('search')
 				self:AddCheck('options')
+				self:AddCheck('sidebar')
 
 				if self.frame ~= 'vault' then
 					self:AddCheck('money')

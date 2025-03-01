@@ -33,9 +33,10 @@ itself as the standard ones do, such as the |cffffffffSpellbook|r
 or the |cffffffffDungeon Finder|r, and will not be movable.]]
 
 L.BagToggle = 'Bags Toggle'
-L.Broker = 'Databroker Plugins'
+L.Broker = 'Databroker Carrousel'
 L.Currency = CURRENCY
 L.Money = MONEY
+L.Sidebar = 'Side Filters'
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'

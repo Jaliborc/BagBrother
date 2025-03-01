@@ -42,6 +42,7 @@ local ProfileDefaults = {
 		filters = AsArray({'all', 'player', 'account'}),
 		columns = Addon.IsRetail and 22 or 14,
 		currency = true,
+		sidebar = true,
 		point = 'LEFT',
 		width = 600,
 		height = 500,

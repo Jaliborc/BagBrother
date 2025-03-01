@@ -24,12 +24,17 @@ local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
+	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
 	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
 	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterEvents()
 	self:Update()
+end
+
+function Frame:OnLayout()
+	Addon.Skins:Call('layout', self.bg)
 end
 
 function Frame:OnHide()
@@ -60,8 +65,6 @@ function Frame:UpdateSkin()
 		Addon.Skins:Release(self.bg)
 	end
 
-	local center = self.profile.color
-	local border = self.profile.borderColor
 	local bg = Addon.Skins:Acquire(self.profile.skin)
 	bg:SetParent(self)
 	bg:SetFrameLevel(self:GetFrameLevel())
@@ -69,10 +72,13 @@ function Frame:UpdateSkin()
 	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
 	bg:EnableMouse(true)
 
+	self.bg, self.inset = bg, bg.skin.inset or 0
 	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
 	self.Title:SetHighlightFontObject(bg.skin.fontH or self.FontH)
 	self.Title:SetNormalFontObject(bg.skin.font or self.Font)
-	self.bg = bg
+
+	local center = self.profile.color
+	local border = self.profile.borderColor
 
 	Addon.Skins:Call('load', bg)
 	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
@@ -132,7 +138,7 @@ function Frame:IsShowingBag(bag)
 end
 
 function Frame:IsShowingItem(bag, slot, info, family)
-	if self.filter then
+	if self.profile.sidebar and self.filter then
         local ok, shown = pcall(self.filter, self, bag, slot, family, info)
         return not ok or shown
     end

@@ -3,8 +3,8 @@
 	All Rights Reserved
 --]]
 
-local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
-local Filter = Addon.Tipped:NewClass('SideFilter', 'ItemButton')
+local ADDON, Addon = ...
+local Filter = Addon.Tipped:NewClass('Filter', 'ItemButton')
 local Search = LibStub('ItemSearch-1.3')
 
 
@@ -18,6 +18,7 @@ function Filter:Construct()
 	b.IconBorder:SetColorTexture(0,0,0)
 	b.IconBorder:SetSize(35,35)
 	b.IconBorder:Show()
+	b:SetScale(.8)
 	return b
 end
 
