@@ -7,5 +7,4 @@
 
 	<Script file="sideFilter.lua"/>
 	<Script file="filterGroup.lua"/>
-	<Script file="filterEdit.lua"/>
 </Ui>

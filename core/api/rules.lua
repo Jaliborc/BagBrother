@@ -30,7 +30,7 @@ function Rules:Register(data)
 	end
 
 	self.Registry[data.id] = setmetatable(data, self)
-	self:Delay(0, 'SendSignal', 'RULES_LOADED')
+	self:Delay(0, 'SendSignal', 'RULES_CHANGED')
 end
 
 function Rules:Get(id)

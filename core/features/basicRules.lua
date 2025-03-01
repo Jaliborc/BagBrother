@@ -5,6 +5,7 @@
 
 local ADDON, Addon = ...
 local Rules = Addon.Rules
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local function belongsToClass(classes)
 	local condition = ''
@@ -19,8 +20,8 @@ local function belongsToClass(classes)
 end
 
 Rules:Register {id = 'all', title = ALL, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking'}
-Rules:Register {id = 'normal', title = 'Normal Bags', icon = 133628, macro = 'return family == 0'}
-Rules:Register {id = 'trade', title = 'Trade Bags', icon = 133669, macro = 'return family > 0'}
+Rules:Register {id = 'normal', title = L.NormalBags, icon = 133628, macro = 'return family == 0'}
+Rules:Register {id = 'trade', title = L.TradeBags, icon = 133669, macro = 'return family > 0'}
 Rules:Register {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894,
 				macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
 

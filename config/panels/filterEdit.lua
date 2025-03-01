@@ -3,27 +3,102 @@
 	All Rights Reserved
 --]]
 
-local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
+local L, ADDON, Addon, Config = select(2, ...).Addon()
 local Frame = CreateFrame('Frame', nil, nil, 'IconSelectorPopupFrameTemplate')
 Addon.FilterEdit = Frame
 Addon.FilterEdit:Hide()
 
 
---[[ API ]]--
+--[[ Menu ]]--
 
-function Frame:Create(parent, rule)
-	tinsert(Addon.sets.customRules, setmetatable(rule, Addon.Rules))
-	Addon.FilterEdit:Display(parent, rule)
+function Frame:OpenMenu(anchor)
+	MenuUtil.CreateContextMenu(anchor, function(_, drop)
+		drop:SetTag(ADDON .. 'AddFilter')
+		drop:CreateTitle(L.InstalledFilters)
+
+		self:SetParent(anchor)
+		self:CreateCheckboxes(drop, Addon.Rules.Registry)
+
+		if #Addon.sets.customRules > 0 then
+			drop:CreateDivider()
+			drop:CreateTitle(L.CustomFilters)
+			self:CreateCheckboxes(drop, Addon.sets.customRules)
+		end
+
+		drop:CreateDivider()
+		
+		local new = drop:CreateButton(format('%s |cnPURE_GREEN_COLOR:%s|r', CreateAtlasMarkup('editmode-new-layout-plus'), L.NewFilter))
+		new:CreateButton(' ' .. SEARCH, function() self:Create {title = 'New Search', search = ''} end)
+		new:CreateButton(' ' .. MACRO, function() self:Create {title = 'New Macro'} end)
+		new:CreateButton(' ' .. L.Import, function()
+			LibStub('Sushi-3.2').Popup:New {
+				id = ADDON .. 'ImportFilter',
+				button1 = OKAY, button2 = CANCEL,
+				text = L.ImportFilter,
+				editBox = '',
+
+				OnAccept = function(_, encoded)
+					local ok, rule = pcall(loadstring('return ' .. encoded))
+					if ok and rule then
+						self:Create(rule)
+					end
+				end
+			}
+		end)
+	end)
 end
 
-function Frame:Display(parent, rule)
+function Frame:CreateCheckboxes(drop, rules)
+	local frame = self:GetParent().frame
+	local filters = frame.profile.filters
+	local sorted = GetPairsArray(rules)
+
+	sort(sorted, function(a, b)
+		return a.value.title < b.value.title end)
+
+	for i, entry in pairs(sorted) do 
+		local rule, id = entry.value, entry.key
+		local icon = rule:GetIconMarkup(frame, 16)
+		local title = rule:GetValue('title', frame)
+
+		local isEnabled = function() return tContains(filters, id) end
+		local toggle = function()
+			(isEnabled() and tDeleteItem or tinsert)(filters, id)
+			frame:SendFrameSignal('FILTERS_CHANGED')
+		end
+
+		local check = drop:CreateCheckbox(icon ..' '.. title, isEnabled, toggle)
+		check:SetCanSelect(function() return #filters > 1 or not isEnabled() end)
+		check:AddInitializer(function(check, _, menu)
+			local edit = MenuTemplates.AttachAutoHideGearButton(check)
+			edit:SetPoint('RIGHT')
+			edit:SetScript('OnClick', function()
+				self:Display(rule)
+				menu:Close()
+			end)
+
+			MenuUtil.HookTooltipScripts(edit, function(tip)
+				GameTooltip_SetTitle(tip, EDIT)
+			end)
+		end)
+	end
+end
+
+
+--[[ Editing ]]--
+
+function Frame:Create(rule)
+	tinsert(Addon.sets.customRules, setmetatable(rule, Addon.Rules))
+	self:Display(rule)
+end
+
+function Frame:Display(rule)
 	self:Startup()
-	self:SetParent(parent)
-	self:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 38,0)
+	self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', 38,0)
 	self:Show()
 
 	self.rule = rule
-	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', parent))
+	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', self:GetParent()))
 	self.CodeHeader:SetText(rule.search and 'Enter Search Query:' or ENTER_MACRO_LABEL)
 	self.Code.EditBox:SetText(gsub(rule.macro or rule.search or '', '\t', '  '))
 
@@ -36,12 +111,12 @@ function Frame:Display(parent, rule)
 end
 
 function Frame:Done()
-	Addon:SendSignal('RULES_LOADED')
+	Addon:SendSignal('RULES_CHANGED')
 	self:Hide()
 end
 
 
---[[ Internal ]]--
+--[[ Editing Events ]]--
 
 function Frame:Startup()
 	self.BorderBox.IconSelectionText:ClearAllPoints()
@@ -111,11 +186,11 @@ end
 function Frame:OnShare()
 	local encoded = ''
 	for key, value in pairs(self.rule) do
-		encoded = encoded .. format(',%s=%s', key, (type(value) == 'string' and '"' .. value .. '"' or tostring(value)))
+		encoded = encoded .. format(',%s=%s', key, (type(value) == 'string' and '"' .. value:gsub('"', '\\"') .. '"' or tostring(value)))
 	end
 
 	LibStub('Sushi-3.2').Popup:New {
-		id = ADDON .. 'ShareRule',
+		id = ADDON .. 'ShareFilter',
 		text = 'Copy this data and share:',
 		editBox = '{' .. encoded:sub(2) .. '}',
 		button1 = OKAY

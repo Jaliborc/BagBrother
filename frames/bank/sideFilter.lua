@@ -3,10 +3,6 @@
 	All Rights Reserved
 --]]
 
-if not (C_Bank and C_Bank.FetchPurchasedBankTabData) then
-	return
-end
-
 local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Filter = Addon.Tipped:NewClass('SideFilter', 'ItemButton')
 local Search = LibStub('ItemSearch-1.3')
@@ -39,7 +35,9 @@ end
 
 function Filter:OnClick(mouse)
 	if mouse == 'RightButton' then
-		self:GetParent():ShowMenu()
+		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
+			Addon.FilterEdit:OpenMenu(self:GetParent())
+		end
 	else
 		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
 		local search = self.rule.search and function(_,_,_,_, info) return info.itemID and Search:Matches(info.hyperlink, self.rule.search) end

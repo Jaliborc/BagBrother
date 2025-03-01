@@ -13,21 +13,22 @@ end
 
 local FrameDefaults = {
 	enabled = true,
-	bagToggle = true, sort = true, search = true, options = true, 
-	money = true, broker = true,
-	brokerObject = ADDON .. 'Launcher',
-
 	strata = 'HIGH', alpha = 1, scale = Addon.FrameScale or 1,
 	color = {0, 0, 0, 0.5},
 	x = 0, y = 0,
 
-	hiddenBags = {}, lockedSlots = {}, serverSort = true,
+	bagToggle = true, sort = true, search = true, options = true, money = true, broker = true,
+	filters = AsArray({'all', 'reagent', 'consumable', 'armor', 'questitem', 'miscellaneous'}),
+	brokerObject = ADDON .. 'Launcher',
+
 	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
+	hiddenBags = {}, lockedSlots = {}, serverSort = true,
 }
 
 local ProfileDefaults = {
 	inventory = Addon:SetDefaults({
 		borderColor = {1, 1, 1, 1},
+		filters = AsArray({'all', 'normal', 'trade'}),
 		deposit = true, currency = true,
 		point = 'BOTTOMRIGHT',
 		x = -50, y = 100,
