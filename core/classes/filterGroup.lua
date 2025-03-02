@@ -13,7 +13,6 @@ function Filters:New(parent)
 	f:RegisterSignal('RULES_CHANGED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
-	f:SetPoint('TOPLEFT', parent, 'TOPRIGHT')
 	f:Update()
 	f:Show()
 	return f

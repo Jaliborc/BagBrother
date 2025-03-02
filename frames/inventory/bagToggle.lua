@@ -25,7 +25,7 @@ end
 
 function BagToggle:OnEnter()
 	self:ShowTooltip(L.Bags,
-		'|L ' .. (self:IsBagGroupShown() and L.HideSlots or L.ViewSlots),
+		'|L ' .. (self:AreBagsShown() and L.HideSlots or L.ViewSlots),
 		'|R ' .. (self:IsFocusingTrade() and L.FocusNormal or L.FocusTrade))
 end
 
@@ -50,10 +50,10 @@ end
 --[[ API ]]--
 
 function BagToggle:Update()
-	self:SetChecked(self:IsBagGroupShown())
+	self:SetChecked(self:AreBagsShown())
 end
 
-function BagToggle:IsBagGroupShown()
+function BagToggle:AreBagsShown()
 	return self:GetProfile().showBags
 end
 

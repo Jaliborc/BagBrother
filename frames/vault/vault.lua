@@ -133,4 +133,4 @@ function Vault:NumSlots(bag)
 end
 
 function Vault:HasMoney() return true end
-function Vault:IsBagGroupShown() end
+function Vault:AreBagsShown() end

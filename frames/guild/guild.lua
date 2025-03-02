@@ -92,5 +92,5 @@ function Guild:IsShowingBag(bag)
 end
 
 function Guild:GetExtraButtons() return self.LogToggles end
-function Guild:IsBagGroupShown() return true end
+function Guild:AreBagsShown() return true end
 function Guild:HasOwnerSelector() end
