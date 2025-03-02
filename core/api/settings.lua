@@ -20,7 +20,6 @@ local FrameDefaults = {
 	bagToggle = true, sort = true, search = true, options = true, money = true, broker = true,
 	filters = AsArray({'all', 'reagent', 'consumable', 'armor', 'questitem', 'miscellaneous'}),
 	brokerObject = ADDON .. 'Launcher',
-	skin = Addon.DefaultSkin,
 
 	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
 	hiddenBags = {}, lockedSlots = {}, serverSort = true,

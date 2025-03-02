@@ -34,7 +34,7 @@ function Frame:OpenMenu(anchor)
 			LibStub('Sushi-3.2').Popup:New {
 				id = ADDON .. 'ImportFilter',
 				button1 = OKAY, button2 = CANCEL,
-				text = L.ImportFilter,
+				text = L.ImportPopup,
 				editBox = '',
 
 				OnAccept = function(_, encoded)
@@ -191,8 +191,7 @@ function Frame:OnShare()
 
 	LibStub('Sushi-3.2').Popup:New {
 		id = ADDON .. 'ShareFilter',
-		text = 'Copy this data and share:',
-		editBox = '{' .. encoded:sub(2) .. '}',
-		button1 = OKAY
+		text = L.SharePopup, button1 = OKAY,
+		editBox = '{' .. encoded:sub(2) .. '}'
 	}
 end

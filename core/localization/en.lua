@@ -57,4 +57,3 @@ L.PurchaseVault = 'Would you like to unlock the Void Storage service?|n|n|cffffd
 L.ConfigurationMode = 'You are now in the client-side sorting configuration mode.|n|nClick item slots to toggle if they should be locked while sorting.'
 L.OutOfDate = 'Your |cffffd200%s|r version might be outdated!|n%s reported having|n|cff82c5ff%s|r, please update if true.'
 L.InvalidVersion = 'Your copy of |cffffd200%s|r is either corrupted or illegal.|nPlease download an official build for free.'
-L.ImportFilter = 'Paste data to import:|n|cnERROR_COLOR:Warning:|r Only import filters from sources you trust.'

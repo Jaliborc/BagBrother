@@ -64,21 +64,19 @@ function Frames:Populate()
 		-- Appearance
 		self:Add('Header', L.Appearance, 'GameFontHighlight', true)
 		self:AddRow(300, function()
-			if Config.skins then
-				local skins = {arg = 'skin'}
-				for i, skin in Addon.Skins:Iterate() do
-					skins[i] = {key = skin.id, text = skin.title, tip = skin.tooltip}
-				end
-				self:AddChoice(skins).bottom = 5
+			local skins = {arg = 'skin'}
+			for i, skin in Addon.Skins:Iterate() do
+				skins[i] = {key = skin.id, text = skin.title, tip = skin.tooltip}
+			end
+			self:AddChoice(skins).bottom = 5
 
-				local current = Addon.Skins:Get(self.sets.skin)
-				if current then
-					if current.centerColor then
-						self:AddColor('color'):SetKeys{left = 25, top = -5}
-					end
-					if current.borderColor then
-						self:AddColor('borderColor'):SetKeys{left = 25, top = -5}
-					end
+			local current = Addon.Skins:Get(self.sets.skin)
+			if current then
+				if current.centerColor then
+					self:AddColor('color'):SetKeys{left = 25, top = -5}
+				end
+				if current.borderColor then
+					self:AddColor('borderColor'):SetKeys{left = 25, top = -5}
 				end
 			end
 

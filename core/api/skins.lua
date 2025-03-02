@@ -34,7 +34,7 @@ end
 --[[ Additional Methods ]]--
 
 function Skins:Acquire(id)
-	local skin = self:Get(id) or self:Get(Addon.DefaultSkin)
+	local skin = self:Get(id) or self:Get(self.Default)
 	skin.pool = skin.pool or CreateFramePool('Frame', UIParent, skin.template)
 
 	local frame = skin.pool:Acquire()
