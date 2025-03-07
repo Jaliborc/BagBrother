@@ -19,14 +19,11 @@ function BagToggle:New(...)
 end
 
 function BagToggle:OnShow()
-	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	self:Update()
 end
 
 function BagToggle:OnEnter()
-	self:ShowTooltip(L.Bags,
-		'|L ' .. (self:AreBagsShown() and L.HideSlots or L.ViewSlots),
-		'|R ' .. (self:IsFocusingTrade() and L.FocusNormal or L.FocusTrade))
+	self:ShowTooltip(L.Bags)
 end
 
 function BagToggle:OnClick(button)
@@ -34,15 +31,9 @@ function BagToggle:OnClick(button)
 		self:GetProfile().showBags = not self:GetProfile().showBags or nil
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
 		
-		PlaySound(self:GetProfile().showBags and 857 or 856)
+		PlaySound(self:AreBagsShown() and 857 or 856)
 	else
-		local profile = self:GetProfile()
-		local focus = not self:IsFocusingTrade()
-
-		for i, bag in ipairs(self.frame.Bags) do
-			profile.hiddenBags[bag] = self:IsStandardBag(bag) == focus
-			self:SendFrameSignal('FILTERS_CHANGED')
-		end
+		Addon.Frames:Toggle('bank')
 	end
 end
 
@@ -55,19 +46,4 @@ end
 
 function BagToggle:AreBagsShown()
 	return self:GetProfile().showBags
-end
-
-function BagToggle:IsFocusingTrade()
-	local profile = self:GetProfile()
-	for i, bag in ipairs(self.frame.Bags) do
-		if self:IsStandardBag(bag) and not profile.hiddenBags[bag] then
-			return false
-		end
-	end
-	return true
-end
-
-function BagToggle:IsStandardBag(bag)
-	local family = self.frame:GetBagFamily(bag)
-	return family == 0 or family == 9
 end
