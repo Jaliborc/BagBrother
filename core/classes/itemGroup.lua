@@ -21,13 +21,12 @@ function Items:New(parent, bags)
 	end
 
 	f:SetScript('OnHide', f.UnregisterAll)
-	f:SetScript('OnShow', f.Update)
 	f:SetSize(1,1)
 	f:Show()
 	return f
 end
 
-function Items:Update()
+function Items:OnShow()
 	self:RegisterEvents()
 	self:Layout()
 end
@@ -38,7 +37,7 @@ end
 function Items:RegisterEvents()
 	self:UnregisterAll()
 	self:RegisterSignal('UPDATE_ALL', 'Layout')
-	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
+	self:RegisterFrameSignal('OWNER_CHANGED', 'OnShow')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'Layout')
 	self:RegisterFrameSignal('FOCUS_BAG', 'ForAll', 'UpdateFocus')
 	self:RegisterSignal('SEARCH_CHANGED', 'ForAll', 'UpdateSearch')
@@ -87,6 +86,14 @@ end
 
 
 --[[ Management ]]--
+
+function Items:Update()
+	if self:IsStatic() then
+		self:ForAll('Update')
+	else
+		self:Layout()
+	end
+end
 
 function Items:Layout()
 	self:ForAll('Release')
@@ -148,16 +155,20 @@ function Items:Layout()
 	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
-function Items:ForAll(method, ...)
+function Items:ForAll(method)
 	for i, button in ipairs(self.order) do
-		button[method](button, ...)
+		button[method](button)
 	end
 end
 
-function Items:ForBag(bag, method, ...)
+function Items:ForBag(bag, method)
 	if self.buttons[bag] then
 		for slot, button in pairs(self.buttons[bag]) do
-			button[method](button, ...)
+			button[method](button)
 		end
 	end
+end
+
+function Items:IsStatic()
+	return not self.frame.rule or self.frame.rule.static
 end

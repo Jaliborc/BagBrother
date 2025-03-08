@@ -14,12 +14,12 @@ function Items:RegisterEvents()
 
 	if self:IsCached() then
 		self:RegisterSignal('GUILD_OPEN', 'RegisterEvents')
-		self:RegisterSignal('GUILD_TAB_CHANGED', 'ForAll', 'Update')
+		self:RegisterSignal('GUILD_TAB_CHANGED', 'Update')
   	else
 		self:QueryServer()
 		self:RegisterSignal('GUILD_CLOSE', 'RegisterEvents')
 		self:RegisterSignal('GUILD_TAB_CHANGED', 'QueryServer')
-		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED', 'ForAll', 'Update')
+		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED', 'Update')
 		self:RegisterEvent('GUILDBANK_ITEM_LOCK_CHANGED', 'ForAll', 'UpdateLocked')
 	end
 end
