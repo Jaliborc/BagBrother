@@ -26,19 +26,16 @@ function Items:RegisterEvents()
 end
 
 function Items:BAGS_UPDATED(_, queue)
-	local dynamic = self.frame.dynamic
-
+	local static = self:IsStatic()
 	for i, bag in ipairs(self.bags) do
 		local updated = queue[bag.id]
-		if updated and dynamic or updated == false then
+		if not static and updated or updated == false then
 			return self:Layout()
 		end
 	end
 
-	for i, bag in ipairs(self.bags) do
-		if queue[bag.id] then
-			self:ForBag(bag.id, 'Update')
-		end
+	for bag in pairs(queue) do
+		self:ForBag(bag, 'Update')
 	end
 end
 

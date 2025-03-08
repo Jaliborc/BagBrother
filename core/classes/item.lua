@@ -18,14 +18,10 @@ Item.Backgrounds = {
 
 function Item:New(parent, bag, slot, info)
 	local b = self:Super(Item):New(parent)
-	b.bag, b.info = bag, info
+	b.bag = bag
 	b:SetID(slot)
-
-	if b:IsVisible() then
-		b:UpdatePrimary()
-	else
-		b:Show()
-	end
+	b:Update(info)
+	b:Show()
 	return b
 end
 
@@ -68,7 +64,7 @@ function Item:Construct()
 	end
 
 	b:SetScript('OnEvent', nil)
-	b:SetScript('OnShow', b.UpdatePrimary)
+	b:SetScript('OnShow', nil)
 	return b
 end
 
@@ -119,12 +115,8 @@ end
 
 --[[ Update ]]--
 
-function Item:Update()
-	self.info = self.frame:GetItemInfo(self:GetSlot())
-	self:UpdatePrimary()
-end
-
-function Item:UpdatePrimary()
+function Item:Update(info)
+	self.info = info or self:GetInfo()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
