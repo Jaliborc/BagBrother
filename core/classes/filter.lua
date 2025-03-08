@@ -50,5 +50,5 @@ function Filter:OnClick(mouse)
 end
 
 function Filter:OnEnter()
-	self:ShowTooltip(self.rule:GetValue('title', self.frame))
+	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS)
 end
