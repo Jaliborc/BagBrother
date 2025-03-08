@@ -120,10 +120,10 @@ function Settings:OnEnable()
 
 	--- move old data
 	local function clean(data)
-		for _, value in pairs(data) do
+		for key, value in pairs(data) do
 			if type(value) == 'table' then
-				if (value.size or value.name) and not value.items then
-					local items = Mixin({}, value)
+				if (value.size or value.name or key == 'vault') and not value.items then
+					local items = {}
 
 					for k,v in pairs(value) do
 						if type(k) ~= 'string' then
@@ -132,7 +132,9 @@ function Settings:OnEnable()
 						end
 					end
 
-					value.items = items
+					if next(items) then
+						value.items = items
+					end
 				else
 					clean(value)
 				end
