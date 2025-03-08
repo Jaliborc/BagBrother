@@ -120,7 +120,7 @@ function Vault:GetItemInfo(bag, slot)
 	end
 end
 
-function Vault:GetBagInfo()
+function Vault:GetBagInfo(bag)
 	return bag == 1 and self:Super(Vault):GetBagInfo('vault')
 end
 
