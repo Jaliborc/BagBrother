@@ -148,10 +148,12 @@ function Frame:IsShowingItem(bag, slot, info, family)
 end
 
 function Frame:SortItems()
-	if self.profile.serverSort and self.ServerSort then
-		self:ServerSort()
-	else
-		Addon.Sorting:Start(self)
+	if not self:IsCached() then
+		if self.profile.serverSort and self.ServerSort then
+			self:ServerSort()
+		else
+			Addon.Sorting:Start(self)
+		end
 	end
 end
 
