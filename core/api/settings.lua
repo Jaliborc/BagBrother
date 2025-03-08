@@ -104,11 +104,15 @@ function Settings:OnEnable()
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
-			--- upgrade settings
-			if type(profile.bagBreak) ~= 'number' then
-				profile.bagBreak = nil
+			for frame, sets in pairs(profile) do
+				--- upgrade settings
+				if type(frame.bagBreak) ~= 'number' then
+					frame.bagBreak = nil
+				end
+
+				frame.hiddenBags, frame.lockedSlots = nil
+				---
 			end
-			---
 
 			self:SetDefaults(profile, ProfileDefaults)
 		end
@@ -120,7 +124,14 @@ function Settings:OnEnable()
 			if type(value) == 'table' then
 				if (value.size or value.name) and not value.items then
 					local items = Mixin({}, value)
-					wipe(value)
+
+					for k,v in pairs(value) do
+						if type(k) ~= 'string' then
+							items[k] = v
+							value[k] = nil
+						end
+					end
+
 					value.items = items
 				else
 					clean(value)
