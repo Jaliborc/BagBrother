@@ -37,8 +37,8 @@ end
 
 function Items:RegisterEvents()
 	self:UnregisterAll()
-	self:RegisterSignal('UPDATE_ALL', 'Layout')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
+	self:RegisterSignal('UPDATE_ALL', 'Layout')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'Layout')
 	self:RegisterFrameSignal('FOCUS_BAG', 'ForAll', 'UpdateFocus')
 	self:RegisterSignal('SEARCH_CHANGED', 'ForAll', 'UpdateSearch')

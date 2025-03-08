@@ -154,6 +154,7 @@ function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 		local tab = GetCurrentGuildBankTab()
 		local data = guild[tab]
 		if data and select(3, GetGuildBankTabInfo(tab)) then
+			local items = {}
 			for i = 1, 98 do
 				local link = GetGuildBankItemLink(tab, i)
 				local _, count = GetGuildBankItemInfo(tab, i)

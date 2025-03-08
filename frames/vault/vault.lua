@@ -116,8 +116,12 @@ function Vault:GetItemInfo(bag, slot)
 		end
 		return item
 	elseif bag == 1 then
-		return self:Super(Vault):GetItemInfo('vault', slot)
+		return self:Super(Vault):GetItemInfo(bag, slot)
 	end
+end
+
+function Vault:GetBagInfo()
+	return bag == 1 and self:Super(Vault):GetBagInfo('vault')
 end
 
 function Vault:IsCached()

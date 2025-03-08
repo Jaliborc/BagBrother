@@ -8,25 +8,14 @@ local Sushi = LibStub('Sushi-3.2')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local BagToggle = Addon.Tipped:NewClass('BagToggle', 'CheckButton', true)
 
-
---[[ Construct ]]--
-
 function BagToggle:New(...)
 	local b = self:Super(BagToggle):New(...)
-	b:SetScript('OnHide', b.UnregisterAll)
 	b:RegisterForClicks('anyUp')
 	return b
 end
 
-function BagToggle:Update()
-	self:SetChecked(self.frame:AreBagsShown())
-end
-
-
---[[ Events ]]--
-
 function BagToggle:OnShow()
-	self:Update()
+	self:SetChecked(self.frame:AreBagsShown())
 end
 
 function BagToggle:OnEnter()
