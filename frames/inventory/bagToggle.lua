@@ -9,7 +9,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local BagToggle = Addon.Tipped:NewClass('BagToggle', 'CheckButton', true)
 
 
---[[ Events ]]--
+--[[ Construct ]]--
 
 function BagToggle:New(...)
 	local b = self:Super(BagToggle):New(...)
@@ -17,6 +17,13 @@ function BagToggle:New(...)
 	b:RegisterForClicks('anyUp')
 	return b
 end
+
+function BagToggle:Update()
+	self:SetChecked(self.frame:AreBagsShown())
+end
+
+
+--[[ Events ]]--
 
 function BagToggle:OnShow()
 	self:Update()
@@ -31,19 +38,8 @@ function BagToggle:OnClick(button)
 		self:GetProfile().showBags = not self:GetProfile().showBags or nil
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
 		
-		PlaySound(self:AreBagsShown() and 857 or 856)
+		PlaySound(self.frame:AreBagsShown() and 857 or 856)
 	else
 		Addon.Frames:Toggle('bank')
 	end
-end
-
-
---[[ API ]]--
-
-function BagToggle:Update()
-	self:SetChecked(self:AreBagsShown())
-end
-
-function BagToggle:AreBagsShown()
-	return self:GetProfile().showBags
 end

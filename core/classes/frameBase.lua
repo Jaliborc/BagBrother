@@ -49,7 +49,6 @@ end
 --[[ UI ]]--
 
 function Frame:Update()
-	self.profile = self:GetBaseProfile()
 	self:ClearAllPoints()
 	self:SetFrameStrata(self.profile.strata)
 	self:SetAlpha(self.profile.alpha)
@@ -136,7 +135,8 @@ end
 --[[ Filtering ]]--
 
 function Frame:IsShowingBag(bag)
-	return not self:GetProfile().hiddenBags[bag]
+	local bag = self:GetBagInfo(bag)
+	return not bag or not bag.hidden
 end
 
 function Frame:IsShowingItem(bag, slot, info, family)
@@ -160,7 +160,7 @@ end
 
 function Frame:GetItemInfo(bag, slot)
 	local bag = self:GetBagInfo(bag)
-	local data = bag and bag[slot]
+	local data = bag and bag.items and bag.items[slot]
 	if data then
 		if data:find(PET_FORMAT) then
 			local id, _, quality = data:match('(%d+):(%d+):(%d+)')
@@ -195,6 +195,10 @@ end
 
 function Frame:IsCached()
 	return self:GetOwner().offline
+end
+
+function Frame:AreBagsShown()
+	return self:GetProfile().showBags
 end
 
 function Frame:GetProfile()

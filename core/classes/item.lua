@@ -95,8 +95,8 @@ end
 
 function Item:PostClick(button)
 	if Addon.lockMode then
-		local locks = GetOrCreateTableEntry(self:GetProfile().lockedSlots, self:GetBag())
-		locks[self:GetID()] = not locks[self:GetID()] or nil
+		local locked = GetOrCreateTableEntry(self.frame:GetBagInfo(self:GetBag()), 'locked')
+		locked[self:GetID()] = not locked[self:GetID()] or nil
 		self:SendSignal('LOCKING_TOGGLED')
 	elseif Addon.sets.flashFind and self.hasItem and IsAltKeyDown() and button == 'LeftButton' then
 		self:SendSignal('FLASH_ITEM', self.info.itemID)

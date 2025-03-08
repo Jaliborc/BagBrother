@@ -14,17 +14,11 @@ function Bags:New(parent)
 		button:SetPoint('LEFT', 36*(i-1) + (off or 0), 0)
 	end
 
-	f:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'UpdateShown')
 	f:SetSize(36 * #parent.Bags, 32)
-	f:UpdateShown()
 	return f
 end
 
 function Bags:CreateButton(bag)
 	local class = bag > Addon.LastBankBag and Addon.BankTab or Addon.Bag
 	return class(self, bag), bag > Addon.LastBankBag and 10
-end
-
-function Bags:UpdateShown()
-	self:SetShown(self:GetProfile().showBags)
 end

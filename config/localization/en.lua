@@ -25,7 +25,7 @@ L.FrameOptionsDescription = 'These are configuration settings specific to a %s f
 
 L.Frame = 'Frame'
 L.Enabled = 'Enable Frame'
-L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919Requires UI reload.|r'
+L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919May require UI reload.|r'
 L.ActPanel = 'Act as Standard Panel'
 L.ActPanelTip = [[
 If enabled, this panel will automatically position

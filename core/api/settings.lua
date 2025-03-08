@@ -65,7 +65,7 @@ local ProfileDefaults = {
 --[[ Methods ]]--
 
 function Settings:OnEnable()
-	BrotherBags = BrotherBags or {}
+	BrotherBags = self:SetDefaults(BrotherBags or {}, {account = {}})
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
 		global = self:SetDefaults({}, ProfileDefaults),
 		profiles = {}, customRules = {},
@@ -106,10 +106,29 @@ function Settings:OnEnable()
 			if type(profile.bagBreak) ~= 'number' then
 				profile.bagBreak = nil
 			end
+			---
 
 			self:SetDefaults(profile, ProfileDefaults)
 		end
 	end
+
+	--- move old data
+	local function clean(data)
+		for _, value in pairs(data) do
+			if type(value) == 'table' then
+				if (value.size or value.name) and not value.items then
+					local items = Mixin({}, value)
+					wipe(value)
+					value.items = items
+				else
+					clean(value)
+				end
+			end
+		end
+	end
+
+	clean(BrotherBags)
+	---
 
 	_G[VAR] = Addon.sets
 end

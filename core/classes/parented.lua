@@ -28,10 +28,6 @@ function Parented:GetProfile()
 	return self.frame:GetProfile()
 end
 
-function Parented:GetBaseProfile()
-	return self.frame.profile
-end
-
 function Parented:GetFrameID()
 	return self.frame.id
 end

@@ -178,11 +178,10 @@ function Bag:SetFocus(focus)
 end
 
 function Bag:Toggle()
-	local slot = self:GetID()
-	local profile = self:GetProfile()
-	profile.hiddenBags[slot] = not profile.hiddenBags[slot]
+	local data = self.frame:GetBagInfo(self:GetID())
+	data.hidden = not data.hidden
 
-	PlaySound(profile.hiddenBags and 856 or 857)
+	PlaySound(data.hidden and 856 or 857)
 	self:SendFrameSignal('FILTERS_CHANGED')
 	self:SetFocus(true)
 end

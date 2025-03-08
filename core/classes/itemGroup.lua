@@ -77,10 +77,10 @@ function Items:FLASH_ITEM(_,itemID)
 end
 
 function Items:LOCKING_TOGGLED()
-	local locks = self:GetProfile().lockedSlots
 	for bag, slots in pairs(self.buttons) do
+		local locked = self.frame:GetBagInfo(bag).locked
 		for slot, button in pairs(self.buttons[bag]) do
-			button.IgnoredOverlay:SetShown(Addon.lockMode and locks[bag] and locks[bag][slot])
+			button.IgnoredOverlay:SetShown(Addon.lockMode and locked and locked[slot])
 		end
 	end
 end

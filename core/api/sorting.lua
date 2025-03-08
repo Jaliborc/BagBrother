@@ -103,12 +103,11 @@ end
 --[[ Data Structures ]]--
 
 function Sort:GetSpaces()
-	local profile = self.target:GetProfile()
 	local spaces = {}
 
 	for _, bag in pairs(self.target.Bags) do
+		local locked = self.target:GetBagInfo(bag).locked
 		local family = self.target:GetBagFamily(bag)
-		local locked = profile.lockedSlots[bag]
 		
 		for slot = 1, self.target:NumSlots(bag) do
 			if not locked or not locked[slot] then
