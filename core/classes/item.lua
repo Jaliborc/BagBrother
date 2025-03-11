@@ -178,6 +178,7 @@ function Item:UpdateSecondary()
 	if self.frame then
 		self:UpdateFocus()
 		self:UpdateSearch()
+		self:UpdateIgnored()
 		self:UpdateUpgradeIcon()
 
 		if self.hasItem and GameTooltip:IsOwned(self) then
@@ -196,6 +197,11 @@ function Item:UpdateSearch()
 
 	self:SetAlpha(matches and 1 or 0.3)
 	self:SetDesaturated(not matches or self.info.isLocked)
+end
+
+function Item:UpdateIgnored()
+	local locks = Addon.lockMode and self.frame:GetBagInfo(self:GetBag()).locked
+	self.IgnoredOverlay:SetShown(locks and locks[self:GetID()])
 end
 
 function Item:UpdateUpgradeIcon()
