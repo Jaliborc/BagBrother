@@ -38,9 +38,9 @@ function Items:RegisterEvents()
 		elseif bag == WITHDRAW then
 			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Layout')
 		else
-			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'ForAll', 'Update')
-			self:RegisterEvent('VOID_STORAGE_UPDATE', 'ForAll', 'Update')
-			self:RegisterEvent('VOID_TRANSFER_DONE', 'ForAll', 'Update')
+			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Update')
+			self:RegisterEvent('VOID_STORAGE_UPDATE', 'Update')
+			self:RegisterEvent('VOID_TRANSFER_DONE', 'Update')
 		end
 	end
 end

@@ -120,20 +120,21 @@ function Cacher:BANK_CLOSE()
 	end
 
 	if C.Bank.CanViewBank(2) then
-		BrotherBags.account = C.Bank.FetchPurchasedBankTabData(2)
-		for _, bag in pairs(BrotherBags.account) do
-			Mixin(bag, self:ParseBag(bag.ID))
+		local data = C.Bank.FetchPurchasedBankTabData(2)
+		for i, bag in pairs(data) do
+			Mixin(self:PopulateBag(BrotherBags.account, i, bag.ID), bag)
 		end
 	end
 end
 
 function Cacher:VAULT_CLOSE()
-	self.player.vault = {}
-
+	local items = {}
 	for i = 1, NUM_VAULT_ITEMS do
 		local id = GetVoidItemInfo(1, i)
-		self.player.vault[i] = id and tostring(id) or nil
+		items[i] = id and tostring(id) or nil
 	end
+
+	GetOrCreateTableEntry(self.player, 'vault').items = items
 end
 
 function Cacher:GUILD_ROSTER_UPDATE()
@@ -151,14 +152,17 @@ function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 		end
 
 		local tab = GetCurrentGuildBankTab()
-		local items = guild[tab]
-		if items and select(3, GetGuildBankTabInfo(tab)) then
+		local data = guild[tab]
+		if data and select(3, GetGuildBankTabInfo(tab)) then
+			local items = {}
 			for i = 1, 98 do
 				local link = GetGuildBankItemLink(tab, i)
 				local _, count = GetGuildBankItemInfo(tab, i)
 
 				items[i] = self:ParseItem(link, count)
 			end
+
+			data.items = items
 		end
 	end
 end
@@ -171,30 +175,28 @@ function Cacher:SaveEquip(slot)
 end
 
 function Cacher:SaveBag(bag)
-	self.player[bag] = self:ParseBag(bag)
+	self:PopulateBag(self.player, bag, bag)
 end
 
-function Cacher:ParseBag(bag)
+function Cacher:PopulateBag(data, key, bag)
 	local size = C.Container.GetContainerNumSlots(bag)
+	local data = GetOrCreateTableEntry(data, key)
 	if size > 0 then
-		local items = {}
+		data.link = bag > BACKPACK_CONTAINER and self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag))) or nil
+		data.size = (bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER) and size or nil
+		data.items = {}
+
 		for slot = 1, size do
-			local data = C.Container.GetContainerItemInfo(bag, slot)
-			if data then
-				items[slot] = self:ParseItem(data.hyperlink, data.stackCount)
+			local item = C.Container.GetContainerItemInfo(bag, slot)
+			if item then
+				data.items[slot] = self:ParseItem(item.hyperlink, item.stackCount)
 			end
 		end
-
-		if bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER then
-			items.size = size
-		end
-
-		if bag > BACKPACK_CONTAINER then
-			items.link = self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag)))
-		end
-
-		return items
+	else
+		data.items, data.link, data.size = nil
 	end
+
+	return data
 end
 
 function Cacher:ParseItem(link, count)

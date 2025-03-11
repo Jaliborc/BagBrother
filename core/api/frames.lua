@@ -8,13 +8,13 @@ local C = LibStub('C_Everywhere').AddOns
 local Frames = Addon:NewModule('Frames')
 Frames.Registry = {
 	{id = 'inventory', name = INVENTORY_TOOLTIP, icon = 130716},
-	{id = 'bank', name = BANK, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking'},
-	{id = 'vault', name = VOID_STORAGE, icon = 1711338, addon = VoidStorage_LoadUI and ADDON..'_VoidStorage' or false},
+	{id = 'bank', name = BANK, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking', addon = ADDON..'_Bank'},
 	{id = 'guild', name = GUILD_BANK, icon = 'Interface/Addons/BagBrother/art/vas-guildfactionchange', addon = GuildBankFrame_LoadUI and ADDON..'_GuildBank' or false},
+	{id = 'vault', name = VOID_STORAGE, icon = 1711338, addon = VoidStorage_LoadUI and ADDON..'_VoidStorage' or false},
 }
 
 
---[[ Control ]]--
+--[[ Frame Control ]]--
 
 function Frames:Update()
 	self:SendSignal('UPDATE_ALL')
@@ -35,8 +35,8 @@ function Frames:Show(id, owner, manual)
 end
 
 function Frames:Hide(id, manual)
-	local frame = self:Get(id).object
-	if frame and (manual or not frame.manualShown) then
+	local frame = self:Get(id)
+	if frame[0] and (manual or not frame.manualShown) then
 		frame.manualShown = nil
 		frame:Hide()
 	end
@@ -44,8 +44,8 @@ function Frames:Hide(id, manual)
 end
 
 function Frames:IsShown(id)
-	local frame = self:Get(id).object
-	return frame and frame:IsShown()
+	local frame = self:Get(id)
+	return frame[0] and frame:IsShown()
 end
 
 
@@ -78,16 +78,20 @@ end
 
 function Frames:New(id)
 	if self:IsEnabled(id) then
-		local info = self:Get(id)
-		if not info.addon or C.LoadAddOn(info.addon) then
-	 		info.object = info.object or Addon[id:gsub('^.', id.upper)]:New(id)
-	 		return info.object
+		local frame, i = self:Get(id)
+		if not frame[0] and (not frame.addon or C.LoadAddOn(frame.addon)) then
+			frame = Addon[id:gsub('^.', id.upper)]:New(frame)
+	 		self.Registry[i] = frame
+			return frame
 		end
+
+		return frame
  	end
 end
 
 function Frames:Get(id)
-	return tFilter(self.Registry, function(info) return info.id == id end, true)[1]
+	local i, frame = FindInTableIf(self.Registry, function(frame) return frame.id == id end)
+	return frame, i
 end
 
 function Frames:Iterate()

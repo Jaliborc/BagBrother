@@ -9,23 +9,23 @@ local L, ADDON, Addon, Config = select(2, ...).Addon()
 local Frames = Addon.GeneralOptions:New('FrameOptions', CreateAtlasMarkup('Vehicle-HammerGold-2'))
 
 function Frames:Populate()
+	local enabled = Addon.Frames:IsEnabled(self.frame)
+
 	-- Selection
 	self.sets = Addon.player.profile[self.frame]
 	self:AddFrameChoice()
-
-	local enabled = Addon.Frames:IsEnabled(self.frame)
-	local enable = self:AddCheck('enabled')
-	enable:SetValue(enabled)
-	enable:SetCall('OnInput', function()
-		local addon = Addon.Frames:Get(self.frame).addon
-		if addon then
-			if enabled then
-				C.DisableAddOn(addon)
-			else
-				C.EnableAddOn(addon)
+	self:AddCheck('enabled')
+		:SetValue(enabled)
+		:SetCall('OnInput', function()
+			local addon = Addon.Frames:Get(self.frame).addon
+			if addon then
+				if enabled then
+					C.DisableAddOn(addon)
+				else
+					C.EnableAddOn(addon)
+				end
 			end
-		end
-	end)
+		end)
 
 	if enabled then
 		-- Display
@@ -43,6 +43,7 @@ function Frames:Populate()
 				self:AddCheck('sort')
 				self:AddCheck('search')
 				self:AddCheck('options')
+				self:AddCheck('sidebar')
 
 				if self.frame ~= 'vault' then
 					self:AddCheck('money')
@@ -63,21 +64,19 @@ function Frames:Populate()
 		-- Appearance
 		self:Add('Header', L.Appearance, 'GameFontHighlight', true)
 		self:AddRow(300, function()
-			if Config.skins then
-				local skins = {arg = 'skin'}
-				for i, skin in Addon.Skins:Iterate() do
-					skins[i] = {key = skin.id, text = skin.title, tip = skin.tooltip}
-				end
-				self:AddChoice(skins).bottom = 5
+			local skins = {arg = 'skin'}
+			for i, skin in Addon.Skins:Iterate() do
+				skins[i] = {key = skin.id, text = skin.title, tip = skin.tooltip}
+			end
+			self:AddChoice(skins).bottom = 5
 
-				local current = Addon.Skins:Get(self.sets.skin)
-				if current then
-					if current.centerColor then
-						self:AddColor('color'):SetKeys{left = 25, top = -5}
-					end
-					if current.borderColor then
-						self:AddColor('borderColor'):SetKeys{left = 25, top = -5}
-					end
+			local current = Addon.Skins:Get(self.sets.skin)
+			if current then
+				if current.centerColor then
+					self:AddColor('color'):SetKeys{left = 25, top = -5}
+				end
+				if current.borderColor then
+					self:AddColor('borderColor'):SetKeys{left = 25, top = -5}
 				end
 			end
 

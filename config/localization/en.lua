@@ -25,7 +25,7 @@ L.FrameOptionsDescription = 'These are configuration settings specific to a %s f
 
 L.Frame = 'Frame'
 L.Enabled = 'Enable Frame'
-L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919Requires UI reload.|r'
+L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919May require UI reload.|r'
 L.ActPanel = 'Act as Standard Panel'
 L.ActPanelTip = [[
 If enabled, this panel will automatically position
@@ -33,17 +33,14 @@ itself as the standard ones do, such as the |cffffffffSpellbook|r
 or the |cffffffffDungeon Finder|r, and will not be movable.]]
 
 L.BagToggle = 'Bags Toggle'
-L.Broker = 'Databroker Plugins'
+L.Broker = 'Databroker Carrousel'
 L.Currency = CURRENCY
 L.Money = MONEY
+L.Sidebar = 'Side Filters'
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'
 L.Deposit = 'Deposit Button'
-L.LeftTabs = 'Rulesets on Left'
-L.LeftTabsTip = [[
-If enabled, the side tabs will be
-displayed on the left side of the panel.]]
 
 L.Appearance = 'Appearance'
 L.Layer = 'Layer'
@@ -117,10 +114,6 @@ L.Socketing = 'Socketing Equipment'
 L.TradePartner = 'Trading'
 L.Vehicle = 'Entering a Vehicle'
 
--- rulesets
-L.RuleOptions = 'Item Rulesets'
-L.RuleOptionsDescription = 'These settings allow you to choose which item rulesets to display and in which order.'
-
 -- info
 L.Help = HELP_LABEL
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
@@ -148,3 +141,13 @@ L.FAQ = {
   'How to toggle ADDON for Bank, VoidStorage, etc?',
   'Go to ADDON -> Frame Settings. You are looking for the two options at the very top of the panel. Choose the "Frame" you wish to toggle and then click "Enable Frame"'
 }
+
+-- filters
+L.InstalledFilters = 'Installed Filters'
+L.CustomFilters = 'Custom Filters'
+L.NewFilter = 'New Filter'
+L.NewSearch = 'New Search'
+L.NewMacro = 'New Macro'
+L.Import = 'Import'
+L.SharePopup = 'Copy this data and share:'
+L.ImportPopup = 'Paste data to import:|n|cnERROR_COLOR:(Warning - only import filters from sources you trust)|r'

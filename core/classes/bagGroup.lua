@@ -7,27 +7,18 @@ local ADDON, Addon = ...
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Bags = Addon.Parented:NewClass('BagGroup', 'Frame')
 
-function Bags:New(parent, from, x, y)
+function Bags:New(parent)
 	local f = self:Super(Bags):New(parent)
-	local button, off, k
-
 	for i, bag in ipairs(parent.Bags) do
-		k = i-1
-		button, off = f:CreateButton(bag)
-		button:SetPoint(from, x*k + (off or 0), y*k)
+		local button, off = f:CreateButton(bag)
+		button:SetPoint('LEFT', 36*(i-1) + (off or 0), 0)
 	end
 
-	f:SetSize(k * abs(x) + button:GetWidth(), k * abs(y) + button:GetHeight())
-	f:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'UpdateShown')
-	f:UpdateShown()
+	f:SetSize(36 * #parent.Bags, 32)
 	return f
 end
 
 function Bags:CreateButton(bag)
 	local class = bag > Addon.LastBankBag and Addon.BankTab or Addon.Bag
 	return class(self, bag), bag > Addon.LastBankBag and 10
-end
-
-function Bags:UpdateShown()
-	self:SetShown(self:GetProfile().showBags)
 end

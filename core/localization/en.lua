@@ -11,10 +11,12 @@ L.OpenBank = 'Open Bank'
 L.OpenGuild = 'Open Guild Bank'
 L.OpenVault = 'Open Void Storage'
 
---frame titles
+--titles
 L.TitleBags = '%s\'s Inventory'
 L.TitleBank = '%s\'s Bank'
 L.TitleVault = '%s\'s Void Storage'
+L.NormalBags = 'Normal Bags'
+L.TradeBags = 'Trade Bags'
 
 --actions
 L.Bags = 'Bags'
@@ -26,10 +28,6 @@ L.BrowseItems = 'Browse Items'
 L.EnterDescription = 'Enter Description:'
 L.HideBag = 'Click to hide this bag.'
 L.ShowBag = 'Click to show this bag.'
-L.HideSlots = 'Hide Slots'
-L.ViewSlots = 'View Slots'
-L.FocusNormal = 'Focus Normal'
-L.FocusTrade = 'Focus Trade'
 L.GuildFunds = 'Guild Funds'
 L.NumAllowed = '%s Allowed'
 L.NumWithdraw = '%d Withdraw'

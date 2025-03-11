@@ -7,7 +7,7 @@ if not REAGENTBANK_CONTAINER then
 	return
 end
 
-local ADDON, Addon = ...
+local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local DepositButton = Addon.Tipped:NewClass('DepositButton', 'Button', true)
 

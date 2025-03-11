@@ -8,8 +8,9 @@ if not (C_Bank and C_Bank.FetchPurchasedBankTabData) then
 	return
 end
 
-local ADDON, Addon = ...
+local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+
 local Tab = Addon.Bag:NewClass('BankTab', 'CheckButton')
 Tab.Settings = CreateFrame('Frame', nil, nil, 'BankPanelTabSettingsMenuTemplate')
 Tab.Settings:Hide()

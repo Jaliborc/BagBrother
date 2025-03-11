@@ -42,7 +42,7 @@ else
 end
 
 
---[[ Static ]]--
+--[[ Static API ]]--
 
 function Owners:OnEnable()
 	self.registry, self.ordered = {}, {}

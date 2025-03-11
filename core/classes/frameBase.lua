@@ -9,7 +9,6 @@ local C = LibStub('C_Everywhere').Item
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local Frame = Addon.Base:NewClass('Frame', 'Frame', nil, true)
-Frame.Get = GetOrCreateTableEntryByCallback
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.PlayerMoney
@@ -24,13 +23,17 @@ local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
+	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
 	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
 	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
-	self:RegisterSignal('RULES_LOADED', 'FindRules')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterEvents()
 	self:Update()
+end
+
+function Frame:OnLayout()
+	Addon.Skins:Call('layout', self.bg)
 end
 
 function Frame:OnHide()
@@ -46,7 +49,6 @@ end
 --[[ UI ]]--
 
 function Frame:Update()
-	self.profile = self:GetBaseProfile()
 	self:ClearAllPoints()
 	self:SetFrameStrata(self.profile.strata)
 	self:SetAlpha(self.profile.alpha)
@@ -61,8 +63,6 @@ function Frame:UpdateSkin()
 		Addon.Skins:Release(self.bg)
 	end
 
-	local center = self.profile.color
-	local border = self.profile.borderColor
 	local bg = Addon.Skins:Acquire(self.profile.skin)
 	bg:SetParent(self)
 	bg:SetFrameLevel(self:GetFrameLevel())
@@ -70,10 +70,13 @@ function Frame:UpdateSkin()
 	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
 	bg:EnableMouse(true)
 
+	self.bg, self.inset = bg, bg.skin.inset or 0
 	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
 	self.Title:SetHighlightFontObject(bg.skin.fontH or self.FontH)
 	self.Title:SetNormalFontObject(bg.skin.font or self.Font)
-	self.bg = bg
+
+	local center = self.profile.color
+	local border = self.profile.borderColor
 
 	Addon.Skins:Call('load', bg)
 	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
@@ -117,8 +120,11 @@ function Frame:GetPosition()
 	return self.profile.point or 'CENTER', self.profile.x, self.profile.y
 end
 
-function Frame:GetWidget(key)
-	return self:Get(key, function() return Addon[key](self) end)
+function Frame:GetWidget(key, ...)
+	if not rawget(self, key) then
+		self[key] = (self[key] or Addon[key])(self, ...)
+	end
+	return self[key]
 end
 
 function Frame:GetExtraButtons()
@@ -128,41 +134,26 @@ end
 
 --[[ Filtering ]]--
 
-function Frame:FindRules()
-	for id, rule in Addon.Rules:Iterate() do
-		if not tContains(self.profile.rules, id) then
-			self:Delay(0.01, 'SendFrameSignal', 'RULES_UPDATED')
-			tinsert(self.profile.rules, id)
-		end
-	end
-end
-
 function Frame:IsShowingBag(bag)
-	return not self:GetProfile().hiddenBags[bag]
+	local bag = self:GetBagInfo(bag)
+	return not bag or not bag.hidden
 end
 
-function Frame:IsShowingItem(bag, slot)
-	local info = self:GetItemInfo(bag, slot)
-	local rule = Addon.Rules:Get(self.subrule or self.rule)
-
-	if rule and rule.func then
-		if not rule.func(self.owner, bag, slot, self:GetBagInfo(bag), info) then
-			return
-		end
-	end
-
-	return self:IsShowingQuality(info.quality)
-end
-
-function Frame:IsShowingQuality(quality)
-	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
+function Frame:IsShowingItem(bag, slot, info, family)
+	if self.profile.sidebar and self.filter then
+        local ok, shown = pcall(self.filter, self, bag, slot, family, info)
+        return not ok or shown
+    end
+	return true
 end
 
 function Frame:SortItems()
-	if self.profile.serverSort and self.ServerSort then
-		self:ServerSort()
-	else
-		Addon.Sorting:Start(self)
+	if not self:IsCached() then
+		if self.profile.serverSort and self.ServerSort then
+			self:ServerSort()
+		else
+			Addon.Sorting:Start(self)
+		end
 	end
 end
 
@@ -171,7 +162,7 @@ end
 
 function Frame:GetItemInfo(bag, slot)
 	local bag = self:GetBagInfo(bag)
-	local data = bag and bag[slot]
+	local data = bag and bag.items and bag.items[slot]
 	if data then
 		if data:find(PET_FORMAT) then
 			local id, _, quality = data:match('(%d+):(%d+):(%d+)')
@@ -206,6 +197,10 @@ end
 
 function Frame:IsCached()
 	return self:GetOwner().offline
+end
+
+function Frame:AreBagsShown()
+	return self:GetProfile().showBags
 end
 
 function Frame:GetProfile()

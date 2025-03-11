@@ -13,38 +13,39 @@ end
 
 local FrameDefaults = {
 	enabled = true,
-	bagToggle = true, sort = true, search = true, options = true, 
-	money = true, broker = true,
-
+	
 	strata = 'HIGH', alpha = 1, scale = Addon.FrameScale or 1,
 	color = {0, 0, 0, 0.5},
 	x = 0, y = 0,
 
-	hiddenBags = {}, lockedSlots = {},
-	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
+	itemScale = 1, spacing = 2,
+	bagBreak = 1, breakSpace = 1.3,
 
+	bagToggle = true, sort = true, search = true, options = true, money = true, broker = true,
+	filters = AsArray({'all', 'reagent', 'consumable', 'armor', 'questitem', 'miscellaneous'}),
 	brokerObject = ADDON .. 'Launcher',
-	rules = AsArray({}),
+	serverSort = true,
 }
 
 local ProfileDefaults = {
 	inventory = Addon:SetDefaults({
 		borderColor = {1, 1, 1, 1},
-		deposit = true, currency = true,
+		filters = AsArray({'all', 'normal', 'trade'}),
+		currency = true,
 		point = 'BOTTOMRIGHT',
 		x = -50, y = 100,
+		width = 384, height = 200,
 		columns = 10,
-		width = 384,
-		height = 200,
 	}, FrameDefaults),
 
 	bank = Addon:SetDefaults({
 		borderColor = {1, 1, 0, 1},
+		filters = Addon.IsRetail and AsArray({'all', 'player', 'account'}),
 		columns = Addon.IsRetail and 22 or 14,
-		currency = true, serverSort = true,
+		deposit = true, currency = true,
+		sidebar = Addon.IsRetail,
+		width = 600, height = 500,
 		point = 'LEFT',
-		width = 600,
-		height = 500,
 		x = 95
 	}, FrameDefaults),
 
@@ -66,10 +67,10 @@ local ProfileDefaults = {
 --[[ Methods ]]--
 
 function Settings:OnEnable()
-	BrotherBags = BrotherBags or {}
+	BrotherBags = self:SetDefaults(BrotherBags or {}, {account = {}})
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
 		global = self:SetDefaults({}, ProfileDefaults),
-		profiles = {},
+		profiles = {}, customRules = {},
 
 		resetPlayer = true, flashFind = true,
 		countItems = true, countGuild = true, countCurrency = true, 
@@ -103,14 +104,46 @@ function Settings:OnEnable()
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
-			--- upgrade settings
-			if type(profile.bagBreak) ~= 'number' then
-				profile.bagBreak = nil
+			for frame, sets in pairs(profile) do
+				--- upgrade settings
+				if type(frame.bagBreak) ~= 'number' then
+					frame.bagBreak = nil
+				end
+
+				frame.hiddenBags, frame.lockedSlots = nil
+				---
 			end
 
 			self:SetDefaults(profile, ProfileDefaults)
 		end
 	end
+
+	--- move old data
+	local function clean(data)
+		for key, value in pairs(data) do
+			if type(value) == 'table' then
+				if (value.size or value.name or key == 'vault') and not value.items then
+					local items = {}
+
+					for k,v in pairs(value) do
+						if type(k) ~= 'string' then
+							items[k] = v
+							value[k] = nil
+						end
+					end
+
+					if next(items) then
+						value.items = items
+					end
+				else
+					clean(value)
+				end
+			end
+		end
+	end
+
+	clean(BrotherBags)
+	---
 
 	_G[VAR] = Addon.sets
 end

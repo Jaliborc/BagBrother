@@ -21,13 +21,12 @@ function Items:New(parent, bags)
 	end
 
 	f:SetScript('OnHide', f.UnregisterAll)
-	f:SetScript('OnShow', f.Update)
 	f:SetSize(1,1)
 	f:Show()
 	return f
 end
 
-function Items:Update()
+function Items:OnShow()
 	self:RegisterEvents()
 	self:Layout()
 end
@@ -38,13 +37,13 @@ end
 function Items:RegisterEvents()
 	self:UnregisterAll()
 	self:RegisterSignal('UPDATE_ALL', 'Layout')
-	self:RegisterFrameSignal('OWNER_CHANGED', 'Update')
+	self:RegisterFrameSignal('OWNER_CHANGED', 'OnShow')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'Layout')
 	self:RegisterFrameSignal('FOCUS_BAG', 'ForAll', 'UpdateFocus')
 	self:RegisterSignal('SEARCH_CHANGED', 'ForAll', 'UpdateSearch')
 	self:RegisterSignal('SEARCH_TOGGLED', 'ForAll', 'UpdateSearch')
+	self:RegisterSignal('LOCKING_TOGGLED', 'ForAll', 'UpdateIgnored')
 	self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
-	self:RegisterSignal('LOCKING_TOGGLED')
 	self:RegisterSignal('FLASH_ITEM')
 
 	if not self:IsCached() then
@@ -76,17 +75,16 @@ function Items:FLASH_ITEM(_,itemID)
 	end
 end
 
-function Items:LOCKING_TOGGLED()
-	local locks = self:GetProfile().lockedSlots
-	for bag, slots in pairs(self.buttons) do
-		for slot, button in pairs(self.buttons[bag]) do
-			button.IgnoredOverlay:SetShown(Addon.lockMode and locks[bag] and locks[bag][slot])
-		end
-	end
-end
-
 
 --[[ Management ]]--
+
+function Items:Update()
+	if self:IsStatic() then
+		self:ForAll('Update')
+	else
+		self:Layout()
+	end
+end
 
 function Items:Layout()
 	self:ForAll('Release')
@@ -115,13 +113,14 @@ function Items:Layout()
 			end
 
 			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
-				if self.frame:IsShowingItem(bag, slot) then
+				local info = self.frame:GetItemInfo(bag, slot)
+				if self.frame:IsShowingItem(bag, slot, info, family) then
 					if x == columns then
 						y = y + 1
 						x = 0
 					end
 
-					local button = self.Button(frame, bag, slot)
+					local button = self.Button(frame, bag, slot, info)
 					button:ClearAllPoints()
 					button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
 					button:SetScale(scale)
@@ -147,16 +146,20 @@ function Items:Layout()
 	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
-function Items:ForAll(method, ...)
+function Items:ForAll(method)
 	for i, button in ipairs(self.order) do
-		button[method](button, ...)
+		button[method](button)
 	end
 end
 
-function Items:ForBag(bag, method, ...)
+function Items:ForBag(bag, method)
 	if self.buttons[bag] then
 		for slot, button in pairs(self.buttons[bag]) do
-			button[method](button, ...)
+			button[method](button)
 		end
 	end
+end
+
+function Items:IsStatic()
+	return not self.frame.rule or self.frame.rule.static
 end

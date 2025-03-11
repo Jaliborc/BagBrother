@@ -34,7 +34,7 @@ function Carrousel:New(parent)
 	f.objects = {}
 	f.Icon, f.Text = icon, text
 	f.Left, f.Right = left, right
-	f:SetHeight(26)
+	f:SetHeight(24)
 	f:Update()
 	return f
 end

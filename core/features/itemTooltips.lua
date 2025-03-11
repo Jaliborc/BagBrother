@@ -13,7 +13,7 @@ local EQUIP_ICON = '%d|Tinterface/addons/bagbrother/art/garrison_building_salvag
 local DELIMITER = ' +'
 
 local function aggregate(counts, bag)
-	for slot, data in pairs(bag or NONE) do
+	for slot, data in pairs(bag and bag.items or NONE) do
 		if tonumber(slot) then
 			local singleton = tonumber(data)
 			local count = not singleton and tonumber(data:match(';(%d+)$')) or 1
@@ -27,7 +27,7 @@ end
 local function find(bag, item)
 	local count = 0
 	
-	for slot, data in pairs(bag or NONE) do
+	for slot, data in pairs(bag and bag.items or NONE) do
 		if tonumber(slot) then
 			local singleton = tonumber(data)
 			local id = singleton or tonumber(data:match('^(%d+)'))
@@ -38,6 +38,10 @@ local function find(bag, item)
 	end
 	
 	return count
+end
+
+local function frameIcon(id)
+	return '%d|T' .. Addon.Frames:Get(id).icon .. ':12:12:6:0|t'
 end
 
 
@@ -100,10 +104,6 @@ end
 
 --[[ API ]]--
 
-local function makeIcon(id)
-	return '%d|T' .. Addon.Frames:Get(id).icon .. ':12:12:6:0|t'
-end
-
 function TipCounts:AddOwners(tip, link)
 	if not tip.__hasCounters and Addon.sets.countItems then
 		local id = tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
@@ -133,7 +133,7 @@ function TipCounts:AddOwners(tip, link)
 					end
 
 					count, locations = self:Format(color, EQUIP_ICON, equip,
-						makeIcon('inventory'), bags, makeIcon('bank'), bank, makeIcon('vault'), vault)
+						frameIcon('inventory'), bags, frameIcon('bank'), bank, frameIcon('vault'), vault)
 
 				elseif Addon.sets.countGuild then
 					if not owner.offline then
@@ -142,9 +142,9 @@ function TipCounts:AddOwners(tip, link)
 							guild = guild + find(owner[tab], id)
 						end
 
-						count, locations = self:Format(color, makeIcon('guild'), guild)
+						count, locations = self:Format(color, frameIcon('guild'), guild)
 					else
-						count, locations = self:Format(color, makeIcon('guild'), owner.counts[id])
+						count, locations = self:Format(color, frameIcon('guild'), owner.counts[id])
 					end
 				end
 

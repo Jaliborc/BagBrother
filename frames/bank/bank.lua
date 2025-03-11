@@ -3,7 +3,7 @@
 	All Rights Reserved
 --]]
 
-local ADDON, Addon = ...
+local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Sushi = LibStub('Sushi-3.2')
 local C = LibStub('C_Everywhere')
 

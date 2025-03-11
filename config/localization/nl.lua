@@ -32,7 +32,7 @@ zoals de standaard doen, zoals het |cffffffffSpreukenboek|r
 of de |cffffffffDungeon Finder|r, en zal niet verplaatsbaar zijn.]]
 
 L.BagToggle = 'Tas Wisselen'
-L.Broker = 'Databroker Plugins'
+L.Broker = 'Databroker Carrousel'
 L.Currency = 'Valuta'
 L.ExclusiveReagent = 'Aparte Reagens Bank'
 L.Money = 'Geld'

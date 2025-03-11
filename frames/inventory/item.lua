@@ -86,8 +86,8 @@ end
 
 --[[ Update ]]--
 
-function Item:Update()
-	self:Super(Item):Update()
+function Item:Update(...)
+	self:Super(Item):Update(...)
 	self:UpdateCooldown()
 
 	local r,g,b = 1,1,1

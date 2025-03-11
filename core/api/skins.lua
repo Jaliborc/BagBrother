@@ -44,7 +44,7 @@ function Skins:Acquire(id)
 end
 
 function Skins:Call(method, frame, ...)
-	GetValueOrCallFunction(frame.skin, method, frame, ...)
+	return GetValueOrCallFunction(frame.skin, method, frame, ...)
 end
 
 function Skins:Release(frame)

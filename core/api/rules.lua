@@ -7,53 +7,50 @@
 
 local ADDON, Addon = ...
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
-Rules.hierarchy = {}
-Rules.registry = {}
+Rules.Registry = {}
 
 
---[[ Public API ]]--
+--[[ Static API ]]--
 
-function Rules:New(id, name, icon, func)
-	assert(type(id) == 'string', 'Unique ID must be a string')
-
-	local parent = self:ParentID(id)
-	local hierarchy = self.hierarchy
-
-	if parent then
-		parent = self:Get(parent)
-		assert(parent, 'Specified parent item ruleset is not know')
-		hierarchy = parent.children
+function Rules:OnEnable()
+	for i, rule in ipairs(Addon.sets.customRules) do
+		setmetatable(rule, self)
 	end
 
-	local rule = hierarchy[id] or {children = {}}
-	rule.name = name or id
-	rule.icon = icon
-	rule.func = func
-	rule.id = id
-	hierarchy[id] = rule
+	self.GetValue = GetValueOrCallFunction
+	self.__index = self
+end
 
-	self.registry[id] = rule
-	self:Delay(0, 'SendSignal', 'RULES_LOADED')
+function Rules:Register(data)
+	assert(type(data) == 'table', 'data must be a table')
+	assert(type(data.id) == 'string', 'data.id must be a string')
+
+	for id in pairs(self.Registry) do
+		assert(data.id ~= id, 'data.id must be unique, id already registered')
+	end
+
+	self.Registry[data.id] = setmetatable(data, self)
+	self:Delay(0, 'SendSignal', 'RULES_CHANGED')
 end
 
 function Rules:Get(id)
-	return type(id) == 'string' and self.registry[id]
+	return self.Registry[id] or Addon.sets.customRules[id]
 end
 
 function Rules:Iterate()
-	return pairs(self.registry)
-end
-
-function Rules:IterateParents()
-	return pairs(self.hierarchy)
+	return pairs(self.Registry)
 end
 
 
---[[ Additional Methods ]]--
+--[[ Object API ]]--
 
-function Rules:ParentID(id)
-	local parent = id:match('^(.+)/.-$')
-	if parent then
-		return parent
-	end
+function Rules:GetIconMarkup(frame, size)
+	local icon, isAtlas = self:GetIcon(frame)
+	return isAtlas and CreateAtlasMarkup(icon, size,size) or
+			icon and CreateSimpleTextureMarkup(icon, size)
+end
+
+function Rules:GetIcon(...)
+	local icon = self:GetValue('icon', ...) or QUESTION_MARK_ICON
+	return icon, C_Texture.GetAtlasID(icon) ~= 0
 end

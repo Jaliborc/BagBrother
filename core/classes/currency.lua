@@ -14,9 +14,11 @@ function Currency:Construct()
 	return b
 end
 
-function Currency:Set(data)
-	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', data.quantity or 0, data.iconFileID or 0, data.iconArgs or ''))
-	self.data = data
+function Currency:Set(data, index)
+	local iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
+
+	self.data, self.index = data, index
+	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', data.quantity or 0, data.iconFileID or 0, iconArgs or ''))
 	self:Show()
 	self:SetWidth(self:GetTextWidth() + 2)
 end
@@ -34,6 +36,6 @@ function Currency:OnEnter()
 	if self:IsCached() then
 		(GameTooltip.SetCurrencyByID or GameTooltip.SetCurrencyTokenByID)(GameTooltip, self.data.currencyTypesID)
 	else
-		GameTooltip:SetBackpackToken(self.data.index)
+		GameTooltip:SetBackpackToken(self.index)
 	end
 end

@@ -16,16 +16,12 @@ Item.Backgrounds = {
 
 --[[ Construct ]]--
 
-function Item:New(parent, bag, slot)
+function Item:New(parent, bag, slot, info)
 	local b = self:Super(Item):New(parent)
-	b:SetID(slot)
 	b.bag = bag
-
-	if b:IsVisible() then
-		b:Update()
-	else
-		b:Show()
-	end
+	b:SetID(slot)
+	b:Update(info)
+	b:Show()
 	return b
 end
 
@@ -68,7 +64,7 @@ function Item:Construct()
 	end
 
 	b:SetScript('OnEvent', nil)
-	b:SetScript('OnShow', b.Update)
+	b:SetScript('OnShow', nil)
 	return b
 end
 
@@ -95,8 +91,8 @@ end
 
 function Item:PostClick(button)
 	if Addon.lockMode then
-		local locks = GetOrCreateTableEntry(self:GetProfile().lockedSlots, self:GetBag())
-		locks[self:GetID()] = not locks[self:GetID()] or nil
+		local locked = GetOrCreateTableEntry(self.frame:GetBagInfo(self:GetBag()), 'locked')
+		locked[self:GetID()] = not locked[self:GetID()] or nil
 		self:SendSignal('LOCKING_TOGGLED')
 	elseif Addon.sets.flashFind and self.hasItem and IsAltKeyDown() and button == 'LeftButton' then
 		self:SendSignal('FLASH_ITEM', self.info.itemID)
@@ -119,8 +115,8 @@ end
 
 --[[ Update ]]--
 
-function Item:Update()
-	self.info = self:GetInfo()
+function Item:Update(info)
+	self.info = info or self:GetInfo()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 	self:Delay(0.05, 'UpdateSecondary')
@@ -182,6 +178,7 @@ function Item:UpdateSecondary()
 	if self.frame then
 		self:UpdateFocus()
 		self:UpdateSearch()
+		self:UpdateIgnored()
 		self:UpdateUpgradeIcon()
 
 		if self.hasItem and GameTooltip:IsOwned(self) then
@@ -200,6 +197,11 @@ function Item:UpdateSearch()
 
 	self:SetAlpha(matches and 1 or 0.3)
 	self:SetDesaturated(not matches or self.info.isLocked)
+end
+
+function Item:UpdateIgnored()
+	local locks = Addon.lockMode and self.frame:GetBagInfo(self:GetBag()).locked
+	self.IgnoredOverlay:SetShown(locks and locks[self:GetID()])
 end
 
 function Item:UpdateUpgradeIcon()
