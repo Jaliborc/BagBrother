@@ -104,46 +104,53 @@ function Settings:OnEnable()
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
-			for frame, sets in pairs(profile) do
-				--- upgrade settings
-				if type(frame.bagBreak) ~= 'number' then
-					frame.bagBreak = nil
-				end
-
-				frame.hiddenBags, frame.lockedSlots = nil
-				---
-			end
-
 			self:SetDefaults(profile, ProfileDefaults)
 		end
 	end
 
-	--- move old data
-	local function clean(data)
-		for key, value in pairs(data) do
-			if type(value) == 'table' then
-				if (value.size or value.name or key == 'vault') and not value.items then
-					local items = {}
-
-					for k,v in pairs(value) do
-						if type(k) ~= 'string' then
-							items[k] = v
-							value[k] = nil
-						end
+	--- upgrade settings ---
+	--[[pcall(function()
+		for realm, owners in pairs(Addon.sets.profiles) do
+			for id, profile in pairs(owners) do
+				for frame, sets in pairs(profile) do
+					if type(sets.bagBreak) ~= 'number' then
+						sets.bagBreak = nil
 					end
 
-					if next(items) then
-						value.items = items
-					end
-				else
-					clean(value)
+					sets.hiddenBags, sets.lockedSlots = nil
 				end
 			end
 		end
-	end
 
-	clean(BrotherBags)
-	---
+		if type(Addon.sets.global.bagBreak) ~= 'number' then
+			Addon.sets.global.bagBreak = nil
+		end
+
+		local function clean(data)
+			for key, value in pairs(data) do
+				if type(value) == 'table' then
+					if (value.size or value.name or key == 'vault') and not value.items then
+						local items = {}
+
+						for k,v in pairs(value) do
+							if type(k) ~= 'string' then
+								items[k] = v
+								value[k] = nil
+							end
+						end
+
+						if next(items) then
+							value.items = items
+						end
+					else
+						clean(value)
+					end
+				end
+			end
+		end
+
+		clean(BrotherBags)
+	end)]]--
 
 	_G[VAR] = Addon.sets
 end
