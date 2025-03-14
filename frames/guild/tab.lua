@@ -1,6 +1,6 @@
 --[[
-	tab.lua
-		A guild tab button object
+	A guild tab button object. Not to be confused with a rule tab.
+	All Rights Reserved.
 --]]
 
 local MODULE = ...

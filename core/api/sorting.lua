@@ -8,6 +8,7 @@ local Sort = Addon:NewModule('Sorting', 'MutexDelay-1.0')
 local Search = LibStub('ItemSearch-1.3')
 local C = LibStub('C_Everywhere').Item
 
+Sort.Empty = {}
 Sort.Proprieties = {
 	'set',
 	'class', 'subclass', 'equip',
@@ -106,11 +107,12 @@ function Sort:GetSpaces()
 	local spaces = {}
 
 	for _, bag in pairs(self.target.Bags) do
-		local locked = self.target:GetBagInfo(bag).locked
+		local cache = self.target:GetBagInfo(bag)
 		local family = self.target:GetBagFamily(bag)
+		local locked = cache and cache.locked or self.Empty
 		
 		for slot = 1, self.target:NumSlots(bag) do
-			if not locked or not locked[slot] then
+			if not locked[slot] then
 				local item = self.target:GetItemInfo(bag, slot)
 				local id = item.itemID
 				if id then

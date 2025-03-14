@@ -17,7 +17,6 @@ function General:Populate()
 	self:AddCheck('countCurrency')
 	self:AddCheck('flashFind')
 	self:AddCheck('displayBlizzard')
-	--self:AddCheck('serverSort')
 
 	self:Add('Check', L.CharacterSpecific)
 		:SetCall('OnInput', function() self:ToggleGlobals() end)

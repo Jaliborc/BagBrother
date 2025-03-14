@@ -200,8 +200,8 @@ function Item:UpdateSearch()
 end
 
 function Item:UpdateIgnored()
-	local locks = Addon.lockMode and self.frame:GetBagInfo(self:GetBag()).locked
-	self.IgnoredOverlay:SetShown(locks and locks[self:GetID()])
+	local cache = Addon.lockMode and self.frame:GetBagInfo(self:GetBag())
+	self.IgnoredOverlay:SetShown(cache and cache.locks and cache.locks[self:GetID()])
 end
 
 function Item:UpdateUpgradeIcon()

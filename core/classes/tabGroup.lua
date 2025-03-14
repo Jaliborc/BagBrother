@@ -4,13 +4,13 @@
 --]]
 
 local ADDON, Addon = ...
-local Filters = Addon.Parented:NewClass('FilterGroup', 'Frame')
-Filters.Button = Addon.Filter
+local Tabs = Addon.Parented:NewClass('TabGroup', 'Frame')
+Tabs.Button = Addon.SideTab
 
-function Filters:New(parent)
-	local f = self:Super(Filters):New(parent)
+function Tabs:New(parent)
+	local f = self:Super(Tabs):New(parent)
 	f.buttons = {}
-	f:RegisterSignal('RULES_CHANGED', 'Update')
+	f:RegisterSignal('RULES_LOADED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	f:Update()
@@ -18,7 +18,7 @@ function Filters:New(parent)
 	return f
 end
 
-function Filters:Update()
+function Tabs:Update()
 	local i = 1
 	for _,id in ipairs(self.frame.profile.filters) do
 		local rule = Addon.Rules:Get(id)

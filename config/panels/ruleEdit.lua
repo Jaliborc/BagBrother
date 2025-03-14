@@ -1,12 +1,12 @@
 --[[
-	Panel for editing custom rules. Work in-progress.
+	Panel for editing custom rules.
 	All Rights Reserved
 --]]
 
 local L, ADDON, Addon, Config = select(2, ...).Addon()
 local Frame = CreateFrame('Frame', nil, nil, 'IconSelectorPopupFrameTemplate')
-Addon.FilterEdit = Frame
-Addon.FilterEdit:Hide()
+Addon.RuleEdit = Frame
+Addon.RuleEdit:Hide()
 
 
 --[[ Menu ]]--
@@ -94,8 +94,13 @@ end
 
 function Frame:Display(rule)
 	self:Startup()
-	self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', 38,0)
 	self:Show()
+
+	if self:GetParent().frame.id == 'inventory' then
+		self:SetPoint('TOPRIGHT', self:GetParent(), 'TOPLEFT', -38,0)
+	else
+		self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', 38,0)
+	end
 
 	self.rule = rule
 	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', self:GetParent()))
@@ -111,7 +116,7 @@ function Frame:Display(rule)
 end
 
 function Frame:Done()
-	Addon:SendSignal('RULES_CHANGED')
+	Addon:SendSignal('RULES_LOADED')
 	self:Hide()
 end
 
@@ -150,6 +155,14 @@ function Frame:Startup()
 	self.Code.hideCharCount = true
 	InputScrollFrame_OnLoad(self.Code)
 
+	--[[self.Help = CreateFrame('Button', nil, self, 'UIPanelInfoButton') -- not ready
+	self.Help:SetScript('OnClick', GenerateClosure(self.OnHelp, self))
+	self.Help:SetPoint('BOTTOMRIGHT', self.Code, 'TOPRIGHT', 0, 10)--]]
+	
+	MenuUtil.HookTooltipScripts(self.Help, function(tip)
+		GameTooltip_SetTitle(tip, GAMEMENU_HELP)
+	end)
+
 	self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.None)
 	self.IconSelector:SetSelectionsDataProvider(GenerateClosure(self.GetIconByIndex, self), GenerateClosure(self.GetNumIcons, self))
 	self.IconSelector:SetPoint('TOPLEFT', self.BorderBox, 'TOPLEFT', 21, -196)
@@ -172,10 +185,14 @@ function Frame:Refresh()
 end
 
 function Frame:OkayButton_OnClick()
-	self.rule[self.rule.search and 'search' or 'macro'] = self.Code.EditBox:GetText()
-	self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
-	self.rule.title = self.BorderBox.IconSelectorEditBox:GetText()
-	self:Done()
+	if self.BorderBox.OkayButton:IsEnabled() then
+		self.rule[self.rule.search and 'search' or 'macro'] = self.Code.EditBox:GetText()
+		self.rule.icon = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
+		self.rule.title = self.BorderBox.IconSelectorEditBox:GetText()
+		self:Done()
+	else
+		self:Hide()
+	end
 end
 
 function Frame:OnDelete()
@@ -194,4 +211,8 @@ function Frame:OnShare()
 		text = L.SharePopup, button1 = OKAY,
 		editBox = '{' .. encoded:sub(2) .. '}'
 	}
+end
+
+function Frame:OnHelp()
+	--LibStub('Sushi-3.2').Popup:External(self.rule.search and 'https://github.com/Jaliborc/ItemSearch-1.3/wiki/Search-Syntax' or 'https://github.com/Jaliborc/BagBrother/wiki/Macros')
 end

@@ -1,17 +1,17 @@
 --[[
-	A in-porgress implementation of bank tabs for retail.
+	A side tab to activate a rule.
 	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
-local Filter = Addon.Tipped:NewClass('Filter', 'ItemButton')
+local Tab = Addon.Tipped:NewClass('SideTab', 'ItemButton')
 local Search = LibStub('ItemSearch-1.3')
 
 
 --[[ Startup ]]--
 
-function Filter:Construct()
-	local b = self:Super(Filter):Construct()
+function Tab:Construct()
+	local b = self:Super(Tab):Construct()
 	b.IconOverlay:SetTexture('Interface/Buttons/CheckButtonHilight')
 	b.IconOverlay:SetBlendMode('ADD')
 	b.IconBorder:SetDrawLayer('BACKGROUND')
@@ -22,7 +22,7 @@ function Filter:Construct()
 	return b
 end
 
-function Filter:SetRule(rule)
+function Tab:SetRule(rule)
 	local icon, isAtlas = rule:GetIcon(self.frame)
 
 	self.IconOverlay:SetShown(rule == self.frame.rule)
@@ -34,10 +34,10 @@ end
 
 --[[ Interaction ]]--
 
-function Filter:OnClick(mouse)
+function Tab:OnClick(mouse)
 	if mouse == 'RightButton' then
 		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
-			Addon.FilterEdit:OpenMenu(self:GetParent())
+			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
 	else
 		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
@@ -49,6 +49,6 @@ function Filter:OnClick(mouse)
 	end
 end
 
-function Filter:OnEnter()
+function Tab:OnEnter()
 	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS)
 end

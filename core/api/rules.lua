@@ -24,13 +24,14 @@ end
 function Rules:Register(data)
 	assert(type(data) == 'table', 'data must be a table')
 	assert(type(data.id) == 'string', 'data.id must be a string')
+	assert(type(data.title) == 'string', 'data.title must be a string')
 
 	for id in pairs(self.Registry) do
 		assert(data.id ~= id, 'data.id must be unique, id already registered')
 	end
 
 	self.Registry[data.id] = setmetatable(data, self)
-	self:Delay(0, 'SendSignal', 'RULES_CHANGED')
+	self:Delay(0, 'SendSignal', 'RULES_LOADED')
 end
 
 function Rules:Get(id)
