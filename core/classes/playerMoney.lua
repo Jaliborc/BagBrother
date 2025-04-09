@@ -45,7 +45,7 @@ function Money:Construct()
 	overlay:RegisterForClicks('anyUp')
 	overlay:SetAllPoints()
 
-	f.info = MoneyTypeInfo[f.Type]
+	f.updateFunc = GetMoneyTypeInfoField(f.Type, "UpdateFunc")
 	f.overlay = overlay
 	return f
 end
@@ -71,13 +71,13 @@ function Money:OnClick()
 
 	local name = self:GetName()
 	if MouseIsOver(_G[name .. 'GoldButton']) then
-		OpenCoinPickupFrame(COPPER_PER_GOLD, self.info.UpdateFunc(self), self)
+		OpenCoinPickupFrame(COPPER_PER_GOLD, self.updateFunc(self), self)
 		self.hasPickup = 1
 	elseif MouseIsOver(_G[name .. 'SilverButton']) then
-		OpenCoinPickupFrame(COPPER_PER_SILVER, self.info.UpdateFunc(self), self)
+		OpenCoinPickupFrame(COPPER_PER_SILVER, self.updateFunc(self), self)
 		self.hasPickup = 1
 	elseif MouseIsOver(_G[name .. 'CopperButton']) then
-		OpenCoinPickupFrame(1, self.info.UpdateFunc(self), self)
+		OpenCoinPickupFrame(1, self.updateFunc(self), self)
 		self.hasPickup = 1
 	end
 
