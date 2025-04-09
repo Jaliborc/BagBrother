@@ -45,7 +45,9 @@ function Money:Construct()
 	overlay:RegisterForClicks('anyUp')
 	overlay:SetAllPoints()
 
-	f.info = MoneyTypeInfo[f.Type]
+	if MoneyTypeInfo[f.Type] then
+		f.info = MoneyTypeInfo[f.Type]
+	end
 	f.overlay = overlay
 	return f
 end
