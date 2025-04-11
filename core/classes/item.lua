@@ -201,7 +201,7 @@ end
 
 function Item:UpdateIgnored()
 	local cache = Addon.lockMode and self.frame:GetBagInfo(self:GetBag())
-	self.IgnoredOverlay:SetShown(cache and cache.locks and cache.locks[self:GetID()])
+	self.IgnoredOverlay:SetShown(cache and cache.locked and cache.locked[self:GetID()])
 end
 
 function Item:UpdateUpgradeIcon()

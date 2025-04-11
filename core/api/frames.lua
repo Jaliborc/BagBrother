@@ -70,7 +70,7 @@ function Frames:HideBag(frame, bag)
 end
 
 function Frames:HasBag(frame, bag)
-	return not Addon.sets.displayBlizzard or self:IsEnabled(frame) and not Addon.player[bag].hidden
+	return self:IsEnabled(frame) and not (Addon.sets.displayBlizzard and Addon.player[bag].hidden)
 end
 
 

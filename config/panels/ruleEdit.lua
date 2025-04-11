@@ -155,9 +155,9 @@ function Frame:Startup()
 	self.Code.hideCharCount = true
 	InputScrollFrame_OnLoad(self.Code)
 
-	--[[self.Help = CreateFrame('Button', nil, self, 'UIPanelInfoButton') -- not ready
+	self.Help = CreateFrame('Button', nil, self, 'UIPanelInfoButton')
 	self.Help:SetScript('OnClick', GenerateClosure(self.OnHelp, self))
-	self.Help:SetPoint('BOTTOMRIGHT', self.Code, 'TOPRIGHT', 0, 10)--]]
+	self.Help:SetPoint('BOTTOMRIGHT', self.Code, 'TOPRIGHT', 0, 10)
 	
 	MenuUtil.HookTooltipScripts(self.Help, function(tip)
 		GameTooltip_SetTitle(tip, GAMEMENU_HELP)
@@ -214,5 +214,5 @@ function Frame:OnShare()
 end
 
 function Frame:OnHelp()
-	--LibStub('Sushi-3.2').Popup:External(self.rule.search and 'https://github.com/Jaliborc/ItemSearch-1.3/wiki/Search-Syntax' or 'https://github.com/Jaliborc/BagBrother/wiki/Macros')
+	LibStub('Sushi-3.2').Popup:External(self.rule.search and 'https://github.com/Jaliborc/ItemSearch-1.3/wiki/Search-Syntax' or 'https://github.com/Jaliborc/BagBrother/wiki/Macros')
 end

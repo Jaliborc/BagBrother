@@ -29,7 +29,7 @@ function Items:BAGS_UPDATED(_, queue)
 	local static = self:IsStatic()
 	for i, bag in ipairs(self.bags) do
 		local updated = queue[bag.id]
-		if not static and updated or updated == false then
+		if updated or not static and updated ~= nil then
 			return self:Layout()
 		end
 	end

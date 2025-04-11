@@ -45,7 +45,7 @@ function Money:Construct()
 	overlay:RegisterForClicks('anyUp')
 	overlay:SetAllPoints()
 
-	f.info = MoneyTypeInfo[f.Type]
+	MoneyFrame_SetType(f, f.Type)
 	f.overlay = overlay
 	return f
 end

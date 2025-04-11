@@ -3,13 +3,13 @@
 	All Rights Reserved
 
 	BAG_UPDATED
-	args: bag, consistent
-		called when the size of a bag changes, bag itself probably also has changed
+	args: bag, changed
+		called whenever a bag's content is modified, second argument tells whether the bag itself has changed
 
 	BAGS_UPDATED
 	args: bags
 		called after all other BAG_UPDATED events in the current render frame have been fired
-		includes the arguments of those events as [bag, consistent] pairs
+		includes the arguments of those events as [bag, changed] pairs table
 
 	BANK_OPEN, BANK_CLOSE, VAULT_OPEN, VAULT_CLOSE, GUILD_OPEN, GUILD_CLOSE
 		called when the player opens or closes the given storage location by interacting with the world
@@ -42,7 +42,7 @@ function Events:OnEnable()
 	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
 
 	for _, bag in ipairs(Addon.InventoryBags) do
-		self.queue[bag] = true
+		self.queue[bag] = false
 	end
 
 	self:Delay(0.08, 'UpdateBags')
@@ -60,7 +60,7 @@ function Events:BANKFRAME_OPENED()
 		self:QueueBank()
 
 		if REAGENTBANK_CONTAINER then
-			self.queue[REAGENTBANK_CONTAINER] = true
+			self.queue[REAGENTBANK_CONTAINER] = false
 		end
 	end
 end
@@ -107,12 +107,13 @@ end
 
 function Events:UpdateBags()
 	for bag in pairs(self.queue) do
-		local size, type = C.GetContainerNumSlots(bag) or 0
-		local changed = size ~= self.sizes[bag] or type ~= self.types[bag]
+		local size = C.GetContainerNumSlots(bag) or 0
+		local _, family = C.GetContainerNumFreeSlots(bag)
 
+		local changed = size ~= self.sizes[bag] or family ~= self.types[bag]
 		if changed then
-			self.queue[bag] = false
-			self.types[bag] = type
+			self.queue[bag] = true
+			self.types[bag] = family
 			self.sizes[bag] = size
 		end
 
@@ -125,13 +126,13 @@ end
 
 function Events:QueueBank()
 	for i = Addon.NumBags + 1, Addon.LastBankBag do
-		self.queue[i] = true
+		self.queue[i] = false
 	end
 
 	self:QueueBag(BANK_CONTAINER)
 end
 
 function Events:QueueBag(bag)
-	self.queue[bag] = true
+	self.queue[bag] = false
 	self:Delay(0.08, 'UpdateBags')
 end
