@@ -26,9 +26,9 @@ function Cacher:OnEnable()
 	self.player.level = UnitLevel('player')
 	self.player.sex = UnitSex('player')
 
-	self:RegisterSignal('BAG_UPDATE')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
+	self:RegisterSignal('BAG_UPDATED')
 	self:RegisterEvent('PLAYER_MONEY')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
@@ -70,7 +70,7 @@ end
 
 --[[ Events ]]--
 
-function Cacher:BAG_UPDATE(_,bag)
+function Cacher:BAG_UPDATED(_,bag)
 	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
   		self:SaveBag(bag)
 	end

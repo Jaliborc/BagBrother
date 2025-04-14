@@ -109,7 +109,7 @@ function Settings:OnEnable()
 	end
 
 	--- upgrade settings ---
-	--[[pcall(function()
+	pcall(function()
 		for realm, owners in pairs(Addon.sets.profiles) do
 			for id, profile in pairs(owners) do
 				for frame, sets in pairs(profile) do
@@ -150,7 +150,7 @@ function Settings:OnEnable()
 		end
 
 		clean(BrotherBags)
-	end)]]--
+	end)
 
 	_G[VAR] = Addon.sets
 end
