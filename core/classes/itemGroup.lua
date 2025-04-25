@@ -126,12 +126,14 @@ function Items:Layout()
 
 	-- Layout items
 	local columns, scale, size = self:LayoutTraits(breaks)
+	local breakpoint = (breaks[2] or #self.buttons) + 1
 	local stage, x,y = 2, 0,0
 
 	for i, button in ipairs(self.buttons) do
-		if (i-1) == breaks[stage] then
-			x, y = 0, y + profile.breakSpace
+		if i >= breakpoint then
 			stage = stage + 1
+			breakpoint = (breaks[stage] or #self.buttons) + 1
+			x, y = 0, y + profile.breakSpace
 		elseif x == columns then
 			x, y = 0, y + 1
 		end
