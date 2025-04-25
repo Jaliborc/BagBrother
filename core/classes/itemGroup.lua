@@ -129,19 +129,17 @@ function Items:Layout()
 	local stage, x,y = 2, 0,0
 
 	for i, button in ipairs(self.buttons) do
-		if x == columns then
+		if (i-1) == breaks[stage] then
+			x, y = 0, y + profile.breakSpace
+			stage = stage + 1
+		elseif x == columns then
 			x, y = 0, y + 1
 		end
 
 		button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
 		button:SetScale(scale)
 
-		if i == breaks[stage] then
-			x, y = 0, y + profile.breakSpace
-			stage = stage + 1
-		else
-			x = x + 1
-		end
+		x = x + 1
 	end
 
 	-- Resize grid
