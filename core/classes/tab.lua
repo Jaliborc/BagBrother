@@ -46,6 +46,8 @@ function Tab:OnClick(mouse)
 		self.frame.rule = self.rule
 		self.frame.filter = search or macro and macro() or self.rule.filter
 		self:SendFrameSignal('FILTERS_CHANGED')
+		
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 	end
 end
 
