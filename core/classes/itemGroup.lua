@@ -11,7 +11,7 @@ local Items = Addon.Parented:NewClass('ItemGroup', 'Frame')
 
 function Items:New(parent, bags)
 	local f = self:Super(Items):New(parent)
-	f.buttons, f.order = {}, {}
+	f.buttons, f.byBag = {}, {}
 	f.bags = {}
 
 	for i, bag in ipairs(bags) do
@@ -59,7 +59,7 @@ function Items:RegisterEvents()
 end
 
 function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
-	for i, button in ipairs(self.order) do
+	for i, button in ipairs(self.buttons) do
 		if button.info.itemID == itemID then
 			button:Update()
 		end
@@ -67,7 +67,7 @@ function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
 end
 
 function Items:FLASH_ITEM(_,itemID)
-	for i, button in ipairs(self.order) do
+	for i, button in ipairs(self.buttons) do
 		button.FlashFind:Stop()
 		if button.info.itemID == itemID then
 			button.FlashFind:Play()
@@ -89,16 +89,14 @@ end
 function Items:Layout()
 	self:ForAll('Release')
 	wipe(self.buttons)
-	wipe(self.order)
+	wipe(self.byBag)
 
+	-- Group slots
 	local profile = self:GetProfile()
-	local columns, scale, size, space = profile.columns, profile.itemScale, 37 + profile.spacing, profile.breakSpace
-	local revBags, revSlots = profile.reverseBags, profile.reverseSlots
+	local reverseBags, reverseSlots, bagBreak = profile.reverseBags, profile.reverseSlots, profile.bagBreak
+	local breaks, group = {0}, 0
 
-	local x, y = 0,0
-	local group = 0
-
-	for k = revBags and #self.bags or 1, revBags and 1 or #self.bags, revBags and -1 or 1 do
+	for k = reverseBags and #self.bags or 1, reverseBags and 1 or #self.bags, reverseBags and -1 or 1 do
 		local frame = self.bags[k]
 		local bag = frame.id
 		local numSlots = self.frame:NumSlots(bag)
@@ -107,56 +105,60 @@ function Items:Layout()
 			local family = self.frame:GetBagFamily(bag)
 			local slots = {}
 
-			if x > 0 and (profile.bagBreak > 1 or profile.bagBreak > 0 and family ~= group and family * group <= 0) then
-				y = y + space
-				x = 0
+			if (bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
+				tinsert(breaks, #self.buttons)
 			end
 
-			for slot = revSlots and numSlots or 1, revSlots and 1 or numSlots, revSlots and -1 or 1 do
+			for slot = reverseSlots and numSlots or 1, reverseSlots and 1 or numSlots, reverseSlots and -1 or 1 do
 				local info = self.frame:GetItemInfo(bag, slot)
+
 				if self.frame:IsShowingItem(bag, slot, info, family) then
-					if x == columns then
-						y = y + 1
-						x = 0
-					end
-
 					local button = self.Button(frame, bag, slot, info)
-					button:ClearAllPoints()
-					button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
-					button:SetScale(scale)
-
-					x = x + 1
 					slots[slot] = button
-					tinsert(self.order, button)
+					tinsert(self.buttons, button)
 				end
 			end
 
 			group = family
-			self.buttons[bag] = slots
+			self.byBag[bag] = slots
 		end
 	end
 
-	-- Resize frame
-	if x > 0 then
-		y = y + 1
+	-- Layout items
+	local columns, scale, size = self:LayoutTraits(breaks)
+	local stage, x,y = 2, 0,0
+
+	for i, button in ipairs(self.buttons) do
+		if x == columns then
+			x, y = 0, y + 1
+		end
+
+		button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
+		button:SetScale(scale)
+
+		if i == breaks[stage] then
+			x, y = 0, y + profile.breakSpace
+			stage = stage + 1
+		else
+			x = x + 1
+		end
 	end
 
-	local width, height = max(columns * size * scale, 1), max(y * size * scale, 1)
+	-- Resize grid
+	local width, height = max(columns * size * scale, 1), max((y+1) * size * scale, 1)
 	self:SetSize(self.Transposed and height or width, self.Transposed and width or height)
 	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
 function Items:ForAll(method)
-	for i, button in ipairs(self.order) do
+	for i, button in ipairs(self.buttons) do
 		button[method](button)
 	end
 end
 
 function Items:ForBag(bag, method)
-	if self.buttons[bag] then
-		for slot, button in pairs(self.buttons[bag]) do
-			button[method](button)
-		end
+	for slot, button in pairs(self.byBag[bag] or Addon.None) do
+		button[method](button)
 	end
 end
 
