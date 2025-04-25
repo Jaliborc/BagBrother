@@ -12,7 +12,7 @@ Base.Scripts = {
 	'OnDragStart', 'OnReceiveDrag',
 	'OnMouseDown', 'OnMouseUp', 'OnMouseWheel',
 	'OnClick', 'PostClick', 'PreClick', 'OnDoubleClick', 'OnHyperlinkClick',
-	'OnTextChanged', 'OnEscapePressed', 'OnEnterPressed',
+	'OnSizeChanged', 'OnTextChanged', 'OnEscapePressed', 'OnEnterPressed',
 }
 
 function Base:NewClass(name, type, template, global)

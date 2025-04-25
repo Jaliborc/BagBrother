@@ -15,6 +15,7 @@ local FrameDefaults = {
 	enabled = true,
 	
 	strata = 'HIGH', alpha = 1, scale = Addon.FrameScale or 1,
+	width = 600, height = 500,
 	color = {0, 0, 0, 0.5},
 	x = 0, y = 0,
 
@@ -33,8 +34,8 @@ local ProfileDefaults = {
 		filters = AsArray({'all', 'normal', 'trade'}),
 		currency = true,
 		point = 'BOTTOMRIGHT',
-		x = -50, y = 100,
 		width = 384, height = 200,
+		x = -50, y = 100,
 		columns = 10,
 	}, FrameDefaults),
 
@@ -44,7 +45,6 @@ local ProfileDefaults = {
 		columns = Addon.IsRetail and 22 or 14,
 		deposit = true, currency = true,
 		sidebar = Addon.IsRetail,
-		width = 600, height = 500,
 		point = 'LEFT',
 		x = 95
 	}, FrameDefaults),

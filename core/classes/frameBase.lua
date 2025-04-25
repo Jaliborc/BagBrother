@@ -8,7 +8,7 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Item
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
-local Frame = Addon.Base:NewClass('Frame', 'Frame', nil, true)
+local Frame = Addon.Base:NewClass('Frame', 'Frame', ADDON .. 'FrameTemplate', true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.PlayerMoney
