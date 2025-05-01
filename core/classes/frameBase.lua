@@ -83,35 +83,9 @@ function Frame:UpdateSkin()
 	Addon.Skins:Call('centerColor', bg, center[1], center[2], center[3], center[4])
 end
 
-function Frame:RecomputePosition()
-	local x, y = self:GetCenter()
-	if x and y then
-		local scale = self:GetScale()
-		local h = UIParent:GetHeight() / scale
-		local w = UIParent:GetWidth() / scale
-		local xPoint, yPoint
-
-		if x > w/2 then
-			x = self:GetRight() - w
-			xPoint = 'RIGHT'
-		else
-			x = self:GetLeft()
-			xPoint = 'LEFT'
-		end
-
-		if y > h/2 then
-			y = self:GetTop() - h
-			yPoint = 'TOP'
-		else
-			y = self:GetBottom()
-			yPoint = 'BOTTOM'
-		end
-
-		self:SetPosition(yPoint..xPoint, x, y)
-	end
-end
-
-function Frame:SetPosition(point, x, y)
+function Frame:SavePosition()
+	local point, _,_, x, y = self:GetPoint(1)
+	
 	self.profile.x, self.profile.y = x, y
 	self.profile.point = point
 end
