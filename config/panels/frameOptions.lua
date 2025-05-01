@@ -30,7 +30,13 @@ function Frames:Populate()
 	if enabled then
 		-- Display
 		self:Add('Header', DISPLAY, 'GameFontHighlight', true)
-		self:AddRow(Config.displayRowHeight, function()
+		self:AddRow(Config.componentMenuHeight, function()
+			self:AddCheck('sidebar')
+
+			if Config.tabs then
+				self:AddCheck('tabs')
+			end
+
 			if Config.components then
 				if self.frame == 'inventory' or self.frame == 'bank' then
 					self:AddCheck('bagToggle')
@@ -43,22 +49,17 @@ function Frames:Populate()
 				self:AddCheck('sort')
 				self:AddCheck('search')
 				self:AddCheck('options')
-				self:AddCheck('sidebar')
-
-				if self.frame ~= 'vault' then
-					self:AddCheck('money')
-
-					if not Addon.IsClassic and self.frame ~= 'guild' then
-						self:AddCheck('currency')
-					end
-				end
-
-				self:AddCheck('broker')
 			end
 
-			if Config.tabs then
-				self:AddCheck('leftTabs')
+			if Config.components and self.frame ~= 'vault' then
+				self:AddCheck('money')
 			end
+
+			if not Addon.IsClassic and self.frame ~= 'guild' then
+				self:AddCheck('currency')
+			end
+
+			self:AddCheck('broker')
 		end)
 
 		-- Appearance
