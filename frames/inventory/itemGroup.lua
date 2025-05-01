@@ -40,7 +40,7 @@ function Items:BAGS_UPDATED(_, queue)
 end
 
 function Items:ITEM_LOCK_CHANGED(_, bag, slot)
-	local bag = self.buttons[bag]
+	local bag = self.byBag[bag]
 	local slot = bag and bag[slot]
 	if slot then
 		slot:UpdateLocked()
