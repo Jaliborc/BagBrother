@@ -11,10 +11,9 @@ local SortButton = Addon.Tipped:NewClass('SortButton', 'CheckButton', true)
 
 --[[ Construct ]]--
 
-function SortButton:New(...)
-	local b = self:Super(SortButton):New(...)
+function SortButton:New(parent)
+	local b = self:Super(SortButton):New(parent)
 	b:RegisterSignal('SORTING_STATUS')
-	b:RegisterForClicks('anyUp')
 	return b
 end
 

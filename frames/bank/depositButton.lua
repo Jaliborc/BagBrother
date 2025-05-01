@@ -11,12 +11,6 @@ local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local DepositButton = Addon.Tipped:NewClass('DepositButton', 'Button', true)
 
-function DepositButton:New(...)
-	local b = self:Super(DepositButton):New(...)
-	b:RegisterForClicks('anyUp')
-	return b
-end
-
 function DepositButton:OnClick(button)
 	if button == 'RightButton' then
 		local toggle = function(var) Addon.sets[var] = not Addon.sets[var] end
