@@ -16,9 +16,9 @@ Addon.LastBankBag = Addon.NumBags + NUM_BANKBAGSLOTS
 Addon.LastAccountBag = Addon.LastBankBag + (Constants.InventoryConstants.NumAccountBankSlots or 0)
 Addon.CurrencyLimit = 30  -- safety tracking limit
 
-Addon.None = {}
-Addon.InventoryBags = {}
+Addon.None = setmetatable({}, {__newindex = function() error('None table must always be empty.', 2) end})
 Addon.BankBags = {BANK_CONTAINER}
+Addon.InventoryBags = {}
 
 for i = BACKPACK_CONTAINER, Addon.NumBags do
 	tinsert(Addon.InventoryBags, i)
