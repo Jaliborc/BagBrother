@@ -8,7 +8,7 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Item
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
-local Frame = Addon.Base:NewClass('Frame', 'Frame', ADDON .. 'FrameTemplate', true)
+local Frame = Addon.Base:NewClass('Frame', 'Frame', true, true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.PlayerMoney
@@ -121,10 +121,14 @@ function Frame:GetPosition()
 end
 
 function Frame:GetWidget(key, ...)
-	if not rawget(self, key) then
-		self[key] = (self[key] or Addon[key])(self, ...)
+	local widget = rawget(self, key)
+	if not widget then
+		widget = (self[key] or Addon[key])(self, ...)
+		self[key] = widget
 	end
-	return self[key]
+
+	widget:Show()
+	return widget
 end
 
 function Frame:GetExtraButtons()

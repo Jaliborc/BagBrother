@@ -5,11 +5,11 @@
 
 local ADDON, Addon = ...
 local Tabs = Addon.Parented:NewClass('TabGroup', 'Frame')
-Tabs.Button = Addon.SideTab
+Tabs.Button = Addon.Tab
 
-function Tabs:New(parent)
+function Tabs:New(parent, height)
 	local f = self:Super(Tabs):New(parent)
-	f.buttons = {}
+	f.buttons, f.height = {}, height
 	f:RegisterSignal('RULES_LOADED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
@@ -24,8 +24,9 @@ function Tabs:Update()
 		local rule = Addon.Rules:Get(id)
 		if rule then
 			local button = GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(self.Button, self))
-            button:SetPoint('TOPLEFT', 0, -i * 42)
+            button:SetPoint('TOPLEFT', 0, -i * self.height)
             button:SetRule(rule)
+			button:SetScale(.8)
 
 			i = i + 1
 		end
