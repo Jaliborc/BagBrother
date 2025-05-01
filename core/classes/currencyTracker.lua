@@ -14,11 +14,11 @@ end
 
 --[[ Construct ]]--
 
-function CurrencyTracker:New(parent)
+function CurrencyTracker:New(parent, font)
 	local f = self:Super(CurrencyTracker):New(parent)
 	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
-	f.buttons = {}
+	f.font, f.buttons = font, {}
 
 	C.hooksecurefunc('SetCurrencyBackpack', function()
 		if f:IsVisible() then
@@ -81,6 +81,6 @@ function CurrencyTracker:Layout()
 end
 
 function CurrencyTracker:GetButton(i)
-	self.buttons[i] = self.buttons[i] or Addon.Currency(self)
+	self.buttons[i] = self.buttons[i] or Addon.Currency(self, self.font)
 	return self.buttons[i]
 end

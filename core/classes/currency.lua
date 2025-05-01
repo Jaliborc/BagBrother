@@ -7,9 +7,9 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').CurrencyInfo
 local Currency = Addon.Tipped:NewClass('Currency', 'Button')
 
-function Currency:Construct()
-	local b = self:Super(Currency):Construct()
-	b:SetNormalFontObject('NumberFontNormalRight')
+function Currency:New(parent, font)
+	local b = self:Super(Currency):New(parent)
+	b:SetNormalFontObject(font)
 	b:SetHeight(24)
 	return b
 end
