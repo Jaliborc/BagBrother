@@ -125,7 +125,7 @@ function Items:Layout()
 	end
 
 	-- Layout items
-	local columns, scale, size = self:LayoutTraits(breaks)
+	local columns, scale, size, transposed = self:LayoutTraits(breaks)
 	local breakpoint = breaks[2] or #self.buttons
 	local stage, x,y = 2, 0,0
 
@@ -138,7 +138,7 @@ function Items:Layout()
 			x, y = 0, y + 1
 		end
 
-		button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (self.Transposed and y or x), -size * (self.Transposed and x or y))
+		button:SetPoint('TOPLEFT', self, 'TOPLEFT', size * (transposed and y or x), -size * (transposed and x or y))
 		button:SetScale(scale)
 
 		x = x + 1
