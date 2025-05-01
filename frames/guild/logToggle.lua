@@ -5,7 +5,7 @@
 
 local MODULE = ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', ADDON..'MenuCheckButtonTemplate')
+local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', true)
 
 Toggle.Icons = {
 	'Interface/Icons/INV_Crate_03',
