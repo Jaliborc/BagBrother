@@ -1,5 +1,5 @@
 --[[
-	A button for opening offline owners or locations.
+	A button for selecting offline owners or locations.
 	All Rights Reserved
 --]]
 
@@ -21,6 +21,8 @@ end
 
 function OfflineSelector:Update()
 	local owner = self:GetOwner()
+	local tabard = not owner.offline and owner.isguild
+
 	if owner.offline then
 		local icon, coords = owner:GetIcon()
 		if coords then
@@ -33,10 +35,21 @@ function OfflineSelector:Update()
 			self.Icon:SetTexCoord(0,1,0,1)
 			self.Icon:SetAtlas(icon)
 		end
+	elseif owner.isguild then
+		SetLargeGuildTabardTextures('player', self.Emblem, self.Tabard, self.Border)
 	else
 		SetPortraitTexture(self.Icon, 'player')
 		self.Icon:SetTexCoord(.05,.95,.05,.95)
 	end
+
+	if self.Emblem then
+		self.Emblem:SetShown(tabard)
+		self.Tabard:SetShown(tabard)
+		self.Border:SetShown(tabard)
+	end
+	
+	self.Icon:SetShown(not tabard)
+	self:SetEnabled(not owner.isguild)
 end
 
 

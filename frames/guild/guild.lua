@@ -93,4 +93,3 @@ end
 
 function Guild:GetExtraButtons() return self.LogToggles end
 function Guild:AreBagsShown() return true end
-function Guild:HasOwnerSelector() end
