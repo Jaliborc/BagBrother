@@ -110,21 +110,28 @@ function Settings:OnEnable()
 
 	--- upgrade settings ---
 	pcall(function()
-		for realm, owners in pairs(Addon.sets.profiles) do
-			for id, profile in pairs(owners) do
-				for frame, sets in pairs(profile) do
-					if type(sets.bagBreak) ~= 'number' then
-						sets.bagBreak = nil
-					end
-
-					sets.hiddenBags, sets.lockedSlots = nil
+		local function upgradeProfile(profile)
+			for frame, sets in pairs(profile) do
+				if type(sets.bagBreak) ~= 'number' then
+					sets.bagBreak = nil
 				end
+
+				if sets.skin == 'Panel - Flat' then
+					sets.skin = 'Bagnonium'
+				elseif sets.skin == 'Panel - Marble' then
+					sets.skin = 'Combuctor'
+				end
+
+				sets.hiddenBags, sets.lockedSlots = nil
 			end
 		end
 
-		if type(Addon.sets.global.bagBreak) ~= 'number' then
-			Addon.sets.global.bagBreak = nil
+		for realm, owners in pairs(Addon.sets.profiles) do
+			for id, profile in pairs(owners) do
+				upgradeProfile(profile)
+			end
 		end
+		upgradeProfile(Addon.sets.global)
 
 		local function clean(data)
 			for key, value in pairs(data) do
