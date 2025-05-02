@@ -49,10 +49,10 @@ function Frames:Populate()
 				self:AddCheck('sort')
 				self:AddCheck('search')
 				self:AddCheck('options')
-			end
 
-			if Config.components and self.frame ~= 'vault' then
-				self:AddCheck('money')
+				if self.frame ~= 'vault' then
+					self:AddCheck('money')
+				end
 			end
 
 			if not Addon.IsClassic and self.frame ~= 'guild' then
