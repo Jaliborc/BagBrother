@@ -33,21 +33,22 @@ end
 
 --[[ Additional Methods ]]--
 
-function Skins:Acquire(id)
+function Skins:Acquire(id, parent)
 	local skin = self:Get(id) or self:Get(self.Default)
-	skin.pool = skin.pool or CreateFramePool('Frame', UIParent, skin.template)
+	local bg = skin[parent] or CreateFrame('Frame', nil, parent, skin.template)
+	bg:EnableMouse(true)
+	bg:SetFrameLevel(0)
+	bg.skin = skin
+	bg:Show()
 
-	local frame = skin.pool:Acquire()
-	frame.skin = skin
-	frame:Show()
-	return frame
+	return bg
 end
 
-function Skins:Call(method, frame, ...)
-	return GetValueOrCallFunction(frame.skin, method, frame, ...)
+function Skins:Call(method, bg, ...)
+	return GetValueOrCallFunction(bg.skin, method, bg, ...)
 end
 
-function Skins:Release(frame)
-	self:Call('reset', frame)
-	frame.skin.pool:Release(frame)
+function Skins:Release(bg)
+	self:Call('reset', bg)
+	bg:Hide()
 end

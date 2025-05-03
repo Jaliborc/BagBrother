@@ -38,6 +38,7 @@ function Guild:New(id)
 end
 
 function Guild:RegisterEvents()
+	self:Super(Guild):RegisterEvents()
 	self:RegisterFrameSignal('LOG_SELECTED', 'OnLogSelected')
 end
 

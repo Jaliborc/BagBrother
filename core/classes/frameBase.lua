@@ -7,6 +7,7 @@
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Item
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local Search = LibStub('ItemSearch-1.3')
 
 local Frame = Addon.Base:NewClass('Frame', 'Frame', true, true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
@@ -60,12 +61,9 @@ function Frame:UpdateVisuals()
 		Addon.Skins:Release(self.bg)
 	end
 
-	local bg = Addon.Skins:Acquire(self.profile.skin)
-	bg:SetParent(self)
-	bg:SetFrameLevel(self:GetFrameLevel())
+	local bg = Addon.Skins:Acquire(self.profile.skin, self)
 	bg:SetPoint('BOTTOMLEFT', bg.skin.x or 0, bg.skin.y or 0)
 	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
-	bg:EnableMouse(true)
 
 	self.bg, self.inset = bg, bg.skin.inset or 0
 	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
@@ -117,10 +115,21 @@ function Frame:IsShowingBag(bag)
 end
 
 function Frame:IsShowingItem(bag, slot, info, family)
+	if not self:SearchItem(self.search, bag, slot, info) then
+		return false
+	end
 	if self.profile.sidebar and self.filter then
-        local ok, shown = pcall(self.filter, self, bag, slot, family, info)
-        return not ok or shown
-    end
+		local ok, shown = pcall(self.filter, self, bag, slot, family, info)
+		return not ok or shown
+	end
+	return true
+end
+
+function Frame:SearchItem(search, ...)
+	if search then
+		local query = self:GetItemQuery(...)
+		return query and Search:Matches(query, search)
+	end
 	return true
 end
 
@@ -162,6 +171,10 @@ function Frame:GetItemInfo(bag, slot)
 		end
 	end
 	return {}
+end
+
+function Frame:GetItemQuery(bag, slot, info)
+	return info.hyperlink
 end
 
 function Frame:GetBagInfo(bag)

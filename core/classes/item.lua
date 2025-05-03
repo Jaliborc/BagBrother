@@ -192,9 +192,9 @@ function Item:UpdateFocus()
 end
 
 function Item:UpdateSearch()
-	local search = Addon.canSearch and Addon.search or ''
-	local matches = search == '' or self.hasItem and Search:Matches(self:GetQuery(), search)
-
+	local search = Addon.canSearch and Addon.search
+	local matches = self.frame:SearchItem(search, self:GetBag(), self:GetID(), self.info)
+	
 	self:SetAlpha(matches and 1 or 0.3)
 	self:SetDesaturated(not matches or self.info.isLocked)
 end
@@ -277,10 +277,6 @@ end
 
 function Item:GetQuestInfo()
 	return self.hasItem and Search:IsQuestItem(self.info.itemID)
-end
-
-function Item:GetQuery()
-	return self.info.hyperlink
 end
 
 function Item:IsUpgrade()

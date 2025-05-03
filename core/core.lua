@@ -60,7 +60,7 @@ function Addon:OnLoad()
 		}
 	end
 
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+	self:ContinueOn('PLAYER_ENTERING_WORLD', function()
 		self:CheckForUpdates(ADDON, self.sets, 'interface/addons/bagbrother/art/'..ADDON..'-big')
 		self.Frames:New('inventory') -- prevent combat block
 	end)
