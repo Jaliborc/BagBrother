@@ -117,13 +117,13 @@ function Bag:RegisterEvents()
 	end
 end
 
-function Bag:BAG_UPDATED(_, bag)
+function Bag:BAG_UPDATED(bag)
 	if bag == self:GetID() then
 		self:Update()
 	end
 end
 
-function Bag:GET_ITEM_INFO_RECEIVED(_, item)
+function Bag:GET_ITEM_INFO_RECEIVED(item)
 	if item == self.itemID then
 		self:Update()
 	end

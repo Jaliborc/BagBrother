@@ -14,7 +14,7 @@ local MAXIMUM = CURRENCY_TOTAL_CAP:match('[^:]+')
 
 --[[ Startup ]]--
 
-function TipCounts:OnEnable()
+function TipCounts:OnLoad()
 	if Addon.sets.countCurrency then
 		if C_TooltipInfo then
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Currency,  self.OnCurrency)

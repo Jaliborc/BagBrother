@@ -6,7 +6,7 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').AddOns
-local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
+local Addon = LibStub('WildAddon-1.1'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -42,7 +42,7 @@ if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
 	end
 end
 
-function Addon:OnEnable()
+function Addon:OnLoad()
 	if NUM_TOTAL_EQUIPPED_BAG_SLOTS then
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_HUD_REVAMP_BAG_CHANGES, true)

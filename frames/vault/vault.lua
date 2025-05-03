@@ -66,7 +66,7 @@ function Vault:OnNPC()
 	end
 end
 
-function Vault:OnTransfer(_, transfering)
+function Vault:OnTransfer(transfering)
 	self.Deposit:SetShown(transfering)
 	self.Withdraw:SetShown(transfering)
 	self.ItemGroup:SetShown(not transfering)

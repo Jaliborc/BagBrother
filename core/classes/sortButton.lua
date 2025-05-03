@@ -17,7 +17,7 @@ function SortButton:New(parent)
 	return b
 end
 
-function SortButton:SORTING_STATUS(_, id)
+function SortButton:SORTING_STATUS(id)
 	self:SetChecked(id == self:GetFrameID())
 end
 

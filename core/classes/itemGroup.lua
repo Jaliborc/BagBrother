@@ -58,7 +58,7 @@ function Items:RegisterEvents()
 	end
 end
 
-function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
+function Items:GET_ITEM_INFO_RECEIVED(itemID)
 	for i, button in ipairs(self.buttons) do
 		if button.info.itemID == itemID then
 			button:Update()
@@ -66,7 +66,7 @@ function Items:GET_ITEM_INFO_RECEIVED(_,itemID)
 	end
 end
 
-function Items:FLASH_ITEM(_,itemID)
+function Items:FLASH_ITEM(itemID)
 	for i, button in ipairs(self.buttons) do
 		button.FlashFind:Stop()
 		if button.info.itemID == itemID then

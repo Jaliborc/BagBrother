@@ -46,7 +46,7 @@ function TransferButton:OnClick()
 	end
 end
 
-function TransferButton:OnToggle(_, checked)
+function TransferButton:OnToggle(checked)
 	self.Button:SetChecked(checked)
 end
 

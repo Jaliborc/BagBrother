@@ -39,7 +39,7 @@ end
 
 --[[ Events ]]--
 
-function Toggle:OnLogSelected(_, logID)
+function Toggle:OnLogSelected(logID)
 	self:SetChecked(logID == self.id)
 end
 

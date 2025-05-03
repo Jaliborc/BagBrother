@@ -44,7 +44,7 @@ end
 
 --[[ Static API ]]--
 
-function Owners:OnEnable()
+function Owners:OnLoad()
 	self.registry, self.ordered = {}, {}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 	Addon.player = self:New(UnitFullName('player'))

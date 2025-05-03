@@ -66,7 +66,7 @@ local ProfileDefaults = {
 
 --[[ Methods ]]--
 
-function Settings:OnEnable()
+function Settings:OnLoad()
 	BrotherBags = self:SetDefaults(BrotherBags or {}, {account = {}})
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
 		global = self:SetDefaults({}, ProfileDefaults),

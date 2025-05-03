@@ -44,8 +44,3 @@ end
 function Base:SendFrameSignal(event, ...)
 	self:SendSignal(self:GetFrameID() .. '.' .. event, ...)
 end
-
-function Base:UnregisterAll() -- remove on wildaddon 1.1
-	self:UnregisterAllMessages()
-	self:UnregisterAllEvents()
-end

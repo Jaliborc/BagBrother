@@ -47,7 +47,7 @@ end
 
 --[[ Startup ]]--
 
-function TipCounts:OnEnable()
+function TipCounts:OnLoad()
 	if Addon.sets.countItems then
 		if C_TooltipInfo then
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)

@@ -12,7 +12,7 @@ Rules.Registry = {}
 
 --[[ Static API ]]--
 
-function Rules:OnEnable()
+function Rules:OnLoad()
 	for i, rule in ipairs(Addon.sets.customRules) do
 		setmetatable(rule, self)
 	end

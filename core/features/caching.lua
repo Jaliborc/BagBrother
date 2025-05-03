@@ -16,7 +16,7 @@ local NUM_VAULT_ITEMS = 80 * 2
 
 --[[ Startup ]]--
 
-function Cacher:OnEnable()
+function Cacher:OnLoad()
 	self.player = Addon.player.cache
 	self.player.currency = {tracked = {}}
 	self.player.equip = self.player.equip or {}
@@ -26,14 +26,14 @@ function Cacher:OnEnable()
 	self.player.level = UnitLevel('player')
 	self.player.sex = UnitSex('player')
 
+	self:RegisterEvent('PLAYER_MONEY')
+	self:RegisterEvent('PLAYER_LEVEL_UP')
+	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'SaveEquip')
+	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
+	self:RegisterEvent('GUILD_ROSTER_UPDATE')
+	self:RegisterSignal('BAG_UPDATED')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
-	self:RegisterSignal('BAG_UPDATED')
-	self:RegisterEvent('PLAYER_MONEY')
-	self:RegisterEvent('GUILD_ROSTER_UPDATE')
-	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
-	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
-	self:RegisterEvent('PLAYER_LEVEL_UP')
 
 	if GetNumGuildBankTabs then
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
@@ -70,14 +70,10 @@ end
 
 --[[ Events ]]--
 
-function Cacher:BAG_UPDATED(_,bag)
+function Cacher:BAG_UPDATED(bag)
 	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
   		self:SaveBag(bag)
 	end
-end
-
-function Cacher:PLAYER_EQUIPMENT_CHANGED(_,slot)
-	self:SaveEquip(slot)
 end
 
 function Cacher:PLAYER_LEVEL_UP(_, level)
@@ -88,7 +84,7 @@ function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
-function Cacher:CURRENCY_DISPLAY_UPDATE(_, id)
+function Cacher:CURRENCY_DISPLAY_UPDATE(_,id)
 	if id and not C.CurrencyInfo.IsAccountWideCurrency(id) then
 		local info = C.CurrencyInfo.GetCurrencyInfo(id)
 		if info then

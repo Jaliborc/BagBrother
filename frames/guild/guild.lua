@@ -44,7 +44,7 @@ end
 
 --[[ Events ]]--
 
-function Guild:OnLogSelected(_, logID)
+function Guild:OnLogSelected(logID)
 	self.ItemGroup:SetShown(not logID)
 	self.Log:SetShown(logID)
 end

@@ -38,7 +38,7 @@ end
 
 --[[ Events ]]--
 
-function Log:OnLogSelected(_, logID)
+function Log:OnLogSelected(logID)
 	if logID == 1 or logID == 2 then
 		self.isMoney = logID == 2
 		self:RegisterSignal('GUILD_TAB_CHANGED', 'Update')

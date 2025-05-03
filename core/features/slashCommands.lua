@@ -23,7 +23,7 @@ end
 
 --[[ Slash Commands ]]--
 
-function Slash:OnEnable()
+function Slash:OnLoad()
 	for i, command in ipairs {ADDON, 'bgn'}  do
 		SlashCmdList[command] = self.OnSlashCommand
 		_G['SLASH_'..command..'1'] = '/' .. command

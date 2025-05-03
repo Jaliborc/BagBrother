@@ -22,7 +22,7 @@ local C = LibStub('C_Everywhere').Container
 
 --[[ Events ]]--
 
-function Events:OnEnable()
+function Events:OnLoad()
 	self.neverBanked = true
 	self.sizes, self.types, self.queue = {}, {}, {}
 
@@ -32,14 +32,14 @@ function Events:OnEnable()
 	end
 
 	if REAGENTBANK_CONTAINER then
-		self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED')
-		self:RegisterEvent('REAGENTBANK_PURCHASED')
+		self:RegisterEvent('PLAYERREAGENTBANKSLOTS_CHANGED', 'QueueBag', REAGENTBANK_CONTAINER)
+		self:RegisterEvent('REAGENTBANK_PURCHASED', 'QueueBag', REAGENTBANK_CONTAINER)
 	end
 
-	self:RegisterEvent('BAG_UPDATE')
 	self:RegisterEvent('BANKFRAME_OPENED')
-	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', {'Bank', false})
-	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED')
+	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', 'Bank', false)
+	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED', 'QueueBank')
+	self:RegisterEvent('BAG_UPDATE', 'QueueBag')
 
 	for _, bag in ipairs(Addon.InventoryBags) do
 		self.queue[bag] = false
@@ -48,12 +48,8 @@ function Events:OnEnable()
 	self:Delay(0.08, 'UpdateBags')
 end
 
-function Events:BAG_UPDATE(event, bag)
-	self:QueueBag(bag)
-end
-
 function Events:BANKFRAME_OPENED()
-	self:UpdateLocation {'Bank', true}
+	self:UpdateLocation('Bank', true)
 
 	if self.neverBanked then
 		self.neverBanked = nil
@@ -65,39 +61,26 @@ function Events:BANKFRAME_OPENED()
 	end
 end
 
-function Events:PLAYERBANKSLOTS_CHANGED()
-	self:QueueBank()
-end
-
-function Events:PLAYERREAGENTBANKSLOTS_CHANGED()
-	self:QueueBag(REAGENTBANK_CONTAINER)
-end
-
-function Events:REAGENTBANK_PURCHASED()
-	self:QueueBag(REAGENTBANK_CONTAINER)
-end
-
-function Events:PLAYER_INTERACTION_MANAGER_FRAME_SHOW(event, frame)
+function Events:PLAYER_INTERACTION_MANAGER_FRAME_SHOW(frame)
 	if frame == Enum.PlayerInteractionType.VoidStorageBanker then
-		self:UpdateLocation {'Vault', true}
+		self:UpdateLocation('Vault', true)
 	elseif frame == Enum.PlayerInteractionType.GuildBanker then
-		self:UpdateLocation {'Guild', true}
+		self:UpdateLocation('Guild', true)
 	end
 end
 
-function Events:PLAYER_INTERACTION_MANAGER_FRAME_HIDE(event, frame)
+function Events:PLAYER_INTERACTION_MANAGER_FRAME_HIDE(frame)
 	if frame == Enum.PlayerInteractionType.VoidStorageBanker then
-		self:UpdateLocation {'Vault', false}
+		self:UpdateLocation('Vault', false)
 	elseif frame == Enum.PlayerInteractionType.GuildBanker then
-		self:UpdateLocation {'Guild', false}
+		self:UpdateLocation('Guild', false)
 	end
 end
 
 
 --[[ API ]]--
 
-function Events:UpdateLocation(where)
-	local location, state = unpack(where)
+function Events:UpdateLocation(location, state)
 	local key = 'At' .. location
 	if self[key] ~= state then -- server can fire multiple times
 		self[key] = state

@@ -10,7 +10,7 @@ local Interactions = Enum.PlayerInteractionType
 
 --[[ Startup ]]--
 
-function AutoDisplay:OnEnable()
+function AutoDisplay:OnLoad()
 	setmetatable(self, {__index = function(t,k)
 		if Addon.Frames[k] then
 			t[k] = function(t, ...)
@@ -21,7 +21,7 @@ function AutoDisplay:OnEnable()
 		end
 	end})
 
-	self:RegisterMessage(ADDON .. 'UPDATE_ALL', 'RegisterGameEvents')
+	self:RegisterSignal('UPDATE_ALL', 'RegisterGameEvents')
 	self:RegisterGameEvents()
 	self:HookBaseUI()
 end
@@ -91,7 +91,7 @@ end
 --[[ Game Events ]]--
 
 function AutoDisplay:RegisterGameEvents()
-	self:UnregisterAllEvents()
+	self:UnregisterAll()
 
 	-- manager
 	if Interactions then
