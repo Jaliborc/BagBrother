@@ -24,9 +24,7 @@ local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
 	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
-	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
-	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
-	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
+	self:RegisterSignal('SKINS_LOADED', 'UpdateVisuals')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterEvents()
 	self:Update()
@@ -54,11 +52,10 @@ function Frame:Update()
 	self:SetAlpha(self.profile.alpha)
 	self:SetScale(self.profile.scale)
 	self:SetPoint(self:GetPosition())
-	self:UpdateSkin()
-	self:Layout()
+	self:UpdateVisuals()
 end
 
-function Frame:UpdateSkin()
+function Frame:UpdateVisuals()
 	if self.bg then
 		Addon.Skins:Release(self.bg)
 	end
@@ -81,6 +78,8 @@ function Frame:UpdateSkin()
 	Addon.Skins:Call('load', bg)
 	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
 	Addon.Skins:Call('centerColor', bg, center[1], center[2], center[3], center[4])
+
+	self:Layout()
 end
 
 function Frame:SavePosition()
@@ -106,7 +105,7 @@ function Frame:GetWidget(key, ...)
 end
 
 function Frame:GetExtraButtons()
-	return {}
+	return Addon.None
 end
 
 
