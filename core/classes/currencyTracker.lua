@@ -52,13 +52,14 @@ function CurrencyTracker:Layout()
 		local b = self:GetButton(i)
 		b:Set(data, i)
 
-		if (x + b:GetWidth() + 20) > self.frame.ItemGroup:GetWidth() then
+		local width = b:GetWidth()
+		if (x + width) > self:MaxWidth() then
 			w = max(w, x)
 			x,y = 0, y + 20
 		end
 
 		b:SetPoint('TOPRIGHT', self, -x,-y)
-		x = x + b:GetWidth()
+		x = x + width
 	end
 
 	if self:IsCached() then
