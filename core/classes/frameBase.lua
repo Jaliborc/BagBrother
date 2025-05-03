@@ -62,6 +62,7 @@ function Frame:UpdateVisuals()
 	end
 
 	local bg = Addon.Skins:Acquire(self.profile.skin, self)
+	bg:ClearAllPoints()
 	bg:SetPoint('BOTTOMLEFT', bg.skin.x or 0, bg.skin.y or 0)
 	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
 
