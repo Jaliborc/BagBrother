@@ -9,6 +9,12 @@ local Search = LibStub('ItemSearch-1.3')
 
 function Tab:SetRule(rule)
 	local icon, isAtlas = rule:GetIcon(self.frame)
+	local border = self.Border
+
+	if border and self.frame.id == 'inventory' then
+		border:SetPoint('TOP', -15,12)
+		border:SetTexCoord(1, 0, 0, 1)
+	end
 
 	self:SetChecked(rule == self.frame.rule)
 	self.Icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.Icon, icon)

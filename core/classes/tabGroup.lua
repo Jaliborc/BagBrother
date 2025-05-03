@@ -10,11 +10,10 @@ Tabs.Button = Addon.Tab
 function Tabs:New(parent, height)
 	local f = self:Super(Tabs):New(parent)
 	f.buttons, f.height = {}, height
-	f:RegisterSignal('RULES_LOADED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
+	f:RegisterSignal('RULES_LOADED', 'Update')
 	f:Update()
-	f:Show()
 	return f
 end
 
