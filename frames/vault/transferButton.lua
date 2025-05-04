@@ -15,7 +15,7 @@ TransferButton.Type = 'STATIC'
 
 function TransferButton:Construct()
 	local f = self:Super(TransferButton):Construct()
-	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON .. 'MenuCheckButtonTemplate')
+	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON .. 'CheckButtonTemplate')
 	b.Icon:SetTexture('Interface/Icons/ACHIEVEMENT_GUILDPERK_BARTERING')
 	b:SetScript('OnEnter', function() f:OnEnter() end)
 	b:SetScript('OnLeave', function() f:OnLeave() end)

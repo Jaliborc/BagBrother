@@ -35,7 +35,7 @@ function Vault:New(id)
 end
 
 function Vault:RegisterEvents()
-	self:Super(Guild):RegisterEvents()
+	self:Super(Vault):RegisterEvents()
 	self:RegisterFrameSignal('TRANFER_TOGGLED', 'OnTransfer')
 	self:RegisterSignal('VAULT_OPEN', 'OnNPC')
 end
