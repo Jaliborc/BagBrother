@@ -11,6 +11,16 @@ L.OpenBank = 'Open Bank'
 L.OpenGuild = 'Open Guild Bank'
 L.OpenVault = 'Open Void Storage'
 
+--terminal
+L.Commands = 'Command list'
+L.CmdShowInventory = 'Toggles your inventory'
+L.CmdShowBank = 'Toggles your bank'
+L.CmdShowGuild = 'Toggles your guild bank'
+L.CmdShowVault = 'Toggles your void storage'
+L.CmdShowVersion = 'Prints the current version'
+L.CmdShowOptions = 'Opens the configuration menu'
+L.UpgradeError = 'Issue upgrading settings. Some info might have been lost.'
+
 --titles
 L.TitleBags = '%s\'s Inventory'
 L.TitleBank = '%s\'s Bank'

@@ -5,6 +5,7 @@
 
 local ADDON, Addon = ...
 local VAR = ADDON .. '_Sets'
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Settings = Addon:NewModule('Settings')
 
 local function AsArray(table)
@@ -109,7 +110,7 @@ function Settings:OnLoad()
 	end
 
 	--- upgrade settings ---
-	pcall(function()
+	xpcall(function()
 		local function upgradeProfile(profile)
 			for frame, sets in pairs(profile) do
 				if type(sets.bagBreak) ~= 'number' then
@@ -157,6 +158,9 @@ function Settings:OnLoad()
 		end
 
 		clean(BrotherBags)
+	end, function(...)
+		print('|cff33ff99' .. ADDON .. '|r ' .. L.UpgradeError)
+		geterrorhandler()(...)
 	end)
 
 	_G[VAR] = Addon.sets
