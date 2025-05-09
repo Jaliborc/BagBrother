@@ -11,15 +11,15 @@ function Tab:SetRule(rule)
 	local icon, isAtlas = rule:GetIcon(self.frame)
 	local border = self.Border
 
-	if border and self.frame.id == 'inventory' then
+	if border and self.frame.id == 'inventory' then -- kinda dirty
 		border:SetPoint('TOP', -15,12)
 		border:SetTexCoord(1, 0, 0, 1)
 	end
 
+	self:SetScale(.8)
 	self:SetChecked(rule == self.frame.rule)
 	self.Icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.Icon, icon)
 	self.rule = rule
-	self:Show()
 end
 
 function Tab:OnClick(mouse)
@@ -27,8 +27,6 @@ function Tab:OnClick(mouse)
 		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
 			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
-		
-		self:SetChecked(self.rule == self.frame.rule)
 	else
 		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
 		local search = self.rule.search and function(_,_,_,_, info) return info.itemID and Search:Matches(info.hyperlink, self.rule.search) end

@@ -16,31 +16,25 @@ end
 
 function CurrencyTracker:New(parent, font)
 	local f = self:Super(CurrencyTracker):New(parent)
-	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f.font, f.buttons = font, {}
 
 	C.hooksecurefunc('SetCurrencyBackpack', function()
 		if f:IsVisible() then
-			f:Update()
+			f:Layout()
 		end
 	end)
 	return f
 end
 
-function CurrencyTracker:RegisterEvents()
-	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE', 'Update')
+function CurrencyTracker:OnShow()
+	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE', 'Layout')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Layout')
 	self:Layout()
 end
 
 
 --[[ Update ]]--
-
-function CurrencyTracker:Update()
-	self:Layout()
-	self:SendFrameSignal('ELEMENT_RESIZED')
-end
 
 function CurrencyTracker:Layout()
 	for _,button in ipairs(self.buttons) do
@@ -79,9 +73,9 @@ function CurrencyTracker:Layout()
 	end
 
 	self:SetSize(max(w, x), y+22)
+	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
 function CurrencyTracker:GetButton(i)
-	self.buttons[i] = self.buttons[i] or Addon.Currency(self, self.font)
-	return self.buttons[i]
+	return GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(Addon.Currency, self, self.font))
 end
