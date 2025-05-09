@@ -119,10 +119,17 @@ function Frame:IsShowingItem(bag, slot, info, family)
 	if not self:SearchItem(self.search, bag, slot, info) then
 		return false
 	end
-	if self.profile.sidebar and self.filter then
-		local ok, shown = pcall(self.filter, self, bag, slot, family, info)
-		return not ok or shown
+
+	if self.profile.sidebar and self.rule then
+		local ok, shown = pcall(self.rule, self, bag, slot, family, info)
+		if ok and not shown then return false end
 	end
+
+	if self.profile.tabs and self.subrule then
+		local ok, shown = pcall(self.subrule, self, bag, slot, family, info)
+		if ok and not shown then return false end
+	end
+	
 	return true
 end
 

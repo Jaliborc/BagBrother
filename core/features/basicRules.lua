@@ -22,8 +22,6 @@ end
 Rules:Register {id = 'all', title = ALL, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking', static = true}
 Rules:Register {id = 'normal', title = L.NormalBags, icon = 133628, macro = 'return family == 0', static = true}
 Rules:Register {id = 'trade', title = L.TradeBags, icon = 133669, macro = 'return family > 0', static = true}
-Rules:Register {id = 'reagent', title = GetItemClassInfo(Enum.ItemClass.Tradegoods), icon = 132894,
-				macro = format('if family > 0 then\n return true\nelse%s', belongsToClass{'Profession', 'Tradegoods', 'Reagent', 'Recipe'})}
 
 if Addon.IsRetail then
 	Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0', static = true}
@@ -32,6 +30,7 @@ end
 
 do
 	local classes = {
+		[132894] = {'Tradegoods', 'Profession', 'Reagent', 'Recipe'},
 		[133126] = {'Armor', 'Weapon', 'Gem'},
 		[236669] = {'Questitem'},
 		[134414] = {'Miscellaneous'},

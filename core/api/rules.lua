@@ -52,3 +52,12 @@ function Rules:GetIcon(frame)
 	local icon = self:GetValue('icon', frame) or QUESTION_MARK_ICON
 	return icon, C_Texture.GetAtlasID(icon) ~= 0
 end
+
+function Rules:Compile()
+	local macro = self.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.macro))
+	local search = self.search and function(_,_,_,_, info)
+		return info.itemID and Search:Matches(info.hyperlink, self.search)
+	end
+
+	return macro and macro() or search or self.filter
+end

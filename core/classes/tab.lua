@@ -17,7 +17,7 @@ function Tab:SetRule(rule)
 	end
 
 	self:SetScale(.8)
-	self:SetChecked(rule == self.frame.rule)
+	self:SetChecked(rule == self:GetParent().active)
 	self.Icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.Icon, icon)
 	self.rule = rule
 end
@@ -28,14 +28,9 @@ function Tab:OnClick(mouse)
 			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
 	else
-		local macro = self.rule.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.rule.macro))
-		local search = self.rule.search and function(_,_,_,_, info) return info.itemID and Search:Matches(info.hyperlink, self.rule.search) end
-
-		self.frame.rule = self.rule
-		self.frame.filter = search or macro and macro() or self.rule.filter
-		self:SendFrameSignal('FILTERS_CHANGED')
-		
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+		self:GetParent():SetActive(self.rule)
+		self:SendFrameSignal('FILTERS_CHANGED')
 	end
 end
 
