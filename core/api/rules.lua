@@ -25,10 +25,7 @@ function Rules:Register(data)
 	assert(type(data) == 'table', 'data must be a table')
 	assert(type(data.id) == 'string', 'data.id must be a string')
 	assert(type(data.title) == 'string', 'data.title must be a string')
-
-	for id in pairs(self.Registry) do
-		assert(data.id ~= id, 'data.id must be unique, id already registered')
-	end
+	assert(not self.Registry[data.id], 'data.id must be unique, id already registered')
 
 	self.Registry[data.id] = setmetatable(data, self)
 	self:Delay(0, 'SendSignal', 'RULES_LOADED')
@@ -45,13 +42,13 @@ end
 
 --[[ Object API ]]--
 
-function Rules:GetIconMarkup(frame, size)
+function Rules:GetIconMarkup(size, frame)
 	local icon, isAtlas = self:GetIcon(frame)
 	return isAtlas and CreateAtlasMarkup(icon, size,size) or
 			icon and CreateSimpleTextureMarkup(icon, size)
 end
 
-function Rules:GetIcon(...)
-	local icon = self:GetValue('icon', ...) or QUESTION_MARK_ICON
+function Rules:GetIcon(frame)
+	local icon = self:GetValue('icon', frame) or QUESTION_MARK_ICON
 	return icon, C_Texture.GetAtlasID(icon) ~= 0
 end

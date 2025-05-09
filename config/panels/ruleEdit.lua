@@ -49,26 +49,26 @@ function Frame:OpenMenu(anchor)
 end
 
 function Frame:CreateCheckboxes(drop, rules)
-	local frame = self:GetParent().frame
-	local filters = frame.profile.filters
-	local sorted = GetPairsArray(rules)
+	local parent = self:GetParent()
+	local filters, frame = parent:GetFilters(), parent.frame
 
+	local sorted = GetPairsArray(rules)
 	sort(sorted, function(a, b)
 		return a.value.title < b.value.title end)
 
 	for i, entry in pairs(sorted) do 
 		local rule, id = entry.value, entry.key
-		local icon = rule:GetIconMarkup(frame, 16)
 		local title = rule:GetValue('title', frame)
+		local icon = rule:GetIconMarkup(16, frame)
 
-		local isEnabled = function() return tContains(filters, id) end
+		local isEnabled = GenerateClosure(tContains, filters, id)
 		local toggle = function()
 			(isEnabled() and tDeleteItem or tinsert)(filters, id)
 			frame:SendFrameSignal('FILTERS_CHANGED')
 		end
 
 		local check = drop:CreateCheckbox(icon ..' '.. title, isEnabled, toggle)
-		check:SetCanSelect(function() return #filters > 1 or not isEnabled() end)
+		check:SetCanSelect(id ~= filters[1])
 		check:AddInitializer(function(check, _, menu)
 			local edit = MenuTemplates.AttachAutoHideGearButton(check)
 			edit:SetPoint('RIGHT')
