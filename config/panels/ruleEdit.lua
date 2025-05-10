@@ -50,7 +50,7 @@ end
 
 function Frame:CreateCheckboxes(drop, rules)
 	local parent = self:GetParent()
-	local filters, frame = parent:GetRules(), parent.frame
+	local enabled, frame = parent.rules, parent.frame
 
 	local sorted = GetPairsArray(rules)
 	sort(sorted, function(a, b)
@@ -61,14 +61,14 @@ function Frame:CreateCheckboxes(drop, rules)
 		local title = rule:GetValue('title', frame)
 		local icon = rule:GetIconMarkup(16, frame)
 
-		local isEnabled = GenerateClosure(tContains, filters, id)
+		local isEnabled = GenerateClosure(tContains, enabled, id)
 		local toggle = function()
-			(isEnabled() and tDeleteItem or tinsert)(filters, id)
+			(isEnabled() and tDeleteItem or tinsert)(enabled, id)
 			frame:SendFrameSignal('FILTERS_CHANGED')
 		end
 
 		local check = drop:CreateCheckbox(icon ..' '.. title, isEnabled, toggle)
-		check:SetCanSelect(function() return #filters > 1 or not isEnabled() end)
+		check:SetCanSelect(function() return #enabled > 1 or not isEnabled() end)
 		check:AddInitializer(function(check, _, menu)
 			local edit = MenuTemplates.AttachAutoHideGearButton(check)
 			edit:SetPoint('RIGHT')

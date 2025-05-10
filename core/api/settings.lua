@@ -60,7 +60,7 @@ end
 function Settings:Upgrade()
 	xpcall(function()
 		local function upgradeProfile(profile)
-			for frame, sets in pairs(profile) do
+			for id, sets in pairs(profile) do
 				if type(sets.bagBreak) ~= 'number' then
 					sets.bagBreak = nil
 				end
@@ -69,6 +69,10 @@ function Settings:Upgrade()
 					sets.skin = 'Bagnonium'
 				elseif sets.skin == 'Panel - Marble' then
 					sets.skin = 'Combuctor'
+				end
+
+				if sets.filters then
+					sets.rules, sets.filters = {sidebar = sets.filters}
 				end
 
 				sets.hiddenBags, sets.lockedSlots = nil

@@ -120,14 +120,11 @@ function Frame:IsShowingItem(bag, slot, info, family)
 		return false
 	end
 
-	if self.profile.sidebar and self.rule then
-		local ok, shown = pcall(self.rule, self, bag, slot, family, info)
-		if ok and not shown then return false end
-	end
-
-	if self.profile.tabs and self.subrule then
-		local ok, shown = pcall(self.subrule, self, bag, slot, family, info)
-		if ok and not shown then return false end
+	for set, rule in pairs(self.rules) do
+		if self.profile[set] then
+			local ok, shown = pcall(rule, self, bag, slot, family, info)
+			if ok and not shown then return false end
+		end
 	end
 	
 	return true

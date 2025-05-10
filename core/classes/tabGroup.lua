@@ -10,14 +10,17 @@ Tabs.Button = Addon.Tab
 
 --[[ Construct ]]--
 
-function Tabs:New(parent)
+function Tabs:New(parent, id)
 	local f = self:Super(Tabs):New(parent)
-	f.buttons = {}
+	f.rules = f.frame.profile.rules[id]
+	f.id, f.buttons = id, {}
+
 	f:SetActive(Addon.Rules:Get('all'))
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	f:RegisterSignal('RULES_LOADED', 'Update')
 	f:Update()
+
 	return f
 end
 
@@ -25,7 +28,7 @@ function Tabs:Update()
 	local sx, sy, ox, oy = self:LayoutTraits()
 	local i, x,y = 1, 0,0
 
-	for _,id in ipairs(self:GetRules()) do
+	for _,id in ipairs(self.rules) do
 		local rule = Addon.Rules:Get(id)
 		if rule then
 			local button = GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(self.Button, self))
@@ -51,9 +54,5 @@ end
 
 function Tabs:SetActive(rule)
 	self.active = rule
-	self.frame.rule = rule:Compile()
-end
-
-function Tabs:GetRules()
-	return self.frame.profile.filters
+	self.frame.rules[self.id] = rule:Compile()
 end
