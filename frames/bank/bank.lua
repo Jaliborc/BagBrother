@@ -15,7 +15,7 @@ Bank.Bags = Addon.BankBags
 
 --[[ General API  ]]--
 
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'GetBagFamily', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
 end
 
