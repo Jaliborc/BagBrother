@@ -26,8 +26,9 @@ function Base:Construct()
 	f:Hide()
 	
 	for i, script in ipairs(self.Scripts) do
-		if f.__index[script] then
-			f:SetScript(script, f[script])
+		local func = self[script]
+		if func then
+			f:SetScript(script, func)
 		end
 	end
 	return f
