@@ -52,7 +52,7 @@ function Frame:Update()
 	self:SetFrameStrata(self.profile.strata)
 	self:SetAlpha(self.profile.alpha)
 	self:SetScale(self.profile.scale)
-	self:SetPoint(self:GetPosition())
+	self:UpdatePosition()
 	self:UpdateVisuals()
 end
 
@@ -81,15 +81,39 @@ function Frame:UpdateVisuals()
 	self:Layout()
 end
 
-function Frame:SavePosition()
-	local point, _,_, x, y = self:GetPoint(1)
-	
-	self.profile.x, self.profile.y = x, y
-	self.profile.point = point
+function Frame:UpdatePosition()
+	self:ClearAllPoints()
+	self:SetPoint(self.profile.point, self.profile.x, self.profile.y)
 end
 
-function Frame:GetPosition()
-	return self.profile.point or 'CENTER', self.profile.x, self.profile.y
+function Frame:SavePosition()
+	local x, y = self:GetCenter()
+	if x and y then
+		local scale = self:GetScale()
+		local h = UIParent:GetHeight() / scale
+		local w = UIParent:GetWidth() / scale
+		local xPoint, yPoint
+
+		if x > w/2 then
+			x = self:GetRight() - w
+			xPoint = 'RIGHT'
+		else
+			x = self:GetLeft()
+			xPoint = 'LEFT'
+		end
+
+		if y > h/2 then
+			y = self:GetTop() - h
+			yPoint = 'TOP'
+		else
+			y = self:GetBottom()
+			yPoint = 'BOTTOM'
+		end
+
+		self.profile.x, self.profile.y = x, y
+		self.profile.point = yPoint..xPoint
+		self:UpdatePosition()
+	end
 end
 
 function Frame:GetWidget(key, ...)
