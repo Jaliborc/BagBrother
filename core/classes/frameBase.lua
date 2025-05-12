@@ -90,8 +90,8 @@ function Frame:SavePosition()
 	local x, y = self:GetCenter()
 	if x and y then
 		local scale = self:GetScale()
-		local h = UIParent:GetHeight() / scale
-		local w = UIParent:GetWidth() / scale
+		local h = GetScreenHeight() / scale
+		local w = GetScreenWidth() / scale
 		local xPoint, yPoint
 
 		if x > w/2 then
@@ -214,12 +214,16 @@ function Frame:GetBagFamily()
 	return 0
 end
 
-function Frame:IsCached()
-	return self:GetOwner().offline
+function Frame:CanDrag()
+	return not self.profile.managed and (not Addon.sets.locked or IsAltKeyDown())
 end
 
 function Frame:AreBagsShown()
 	return self:GetProfile().showBags
+end
+
+function Frame:IsCached()
+	return self:GetOwner().offline
 end
 
 function Frame:GetProfile()

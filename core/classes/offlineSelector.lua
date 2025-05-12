@@ -61,7 +61,7 @@ end
 
 function OfflineSelector:OnClick(button)
 	if button == 'LeftButton' then
-		local left = self:IsFarLeft()
+		local left = self:IsFarRight()
 		local drop = Sushi.Dropdown:Toggle(self)
 		if drop then
 			drop:SetPoint(left and 'TOPRIGHT' or 'TOPLEFT', self, left and 'BOTTOMRIGHT' or 'BOTTOMLEFT', 0, -11)

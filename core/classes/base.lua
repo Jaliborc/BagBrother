@@ -45,3 +45,7 @@ end
 function Base:SendFrameSignal(event, ...)
 	self:SendSignal(self:GetFrameID() .. '.' .. event, ...)
 end
+
+function Base:IsFarRight()
+	return self:GetRight() > (GetScreenWidth() / self:GetEffectiveScale() / 2)
+end

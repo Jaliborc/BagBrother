@@ -93,10 +93,11 @@ function Frame:Create(rule)
 end
 
 function Frame:Display(rule)
+	self:ClearAllPoints()
 	self:Startup()
 	self:Show()
 
-	if self:GetParent().frame.id == 'inventory' then
+	if self:GetParent():IsFarRight() then
 		self:SetPoint('TOPRIGHT', self:GetParent(), 'TOPLEFT', -38,0)
 	else
 		self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', 38,0)
@@ -171,7 +172,6 @@ function Frame:Startup()
 	end)
 
 	self:SetSize(525, 594)
-	self:ClearAllPoints()
 	self.Startup = nop
 end
 

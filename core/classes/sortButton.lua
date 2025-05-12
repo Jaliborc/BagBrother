@@ -60,7 +60,7 @@ end
 
 function SortButton:OnLocking()
 	if not Addon.lockMode then
-		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarLeft() and 'RIGHT' or 'LEFT', self:IsFarLeft() and -23 or 23,0)
+		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarRight() and 'RIGHT' or 'LEFT', self:IsFarRight() and -23 or 23,0)
 							:SetCall('OnClose', function() self:OnLocking() end)
 	else
 		Addon.lockMode:Release()
