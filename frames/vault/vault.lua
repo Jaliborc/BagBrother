@@ -3,8 +3,7 @@
 		A specialized version of the window frame for void storage
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Vault = Addon.Frame:NewClass('Vault')
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)

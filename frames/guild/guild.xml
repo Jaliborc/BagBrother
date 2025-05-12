@@ -1,9 +1,9 @@
 <Ui>
 	<Include file="editPopup.xml"/>
 
-	<Script file="tab.lua"/>
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>
+	<Script file="guildTab.lua"/>
 	<Script file="guildMoney.lua"/>
 
 	<Script file="logFrame.lua"/>

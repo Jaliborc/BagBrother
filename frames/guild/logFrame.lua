@@ -3,8 +3,7 @@
 		A guild bank tab log messages scrollframe
 --]]
 
-local MODULE = ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Log = Addon.Parented:NewClass('LogFrame', 'ScrollingMessageFrame')
 
 local MESSAGE_PREFIX, _ = '|cff009999   '

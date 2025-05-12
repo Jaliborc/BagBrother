@@ -3,8 +3,7 @@
 		A specialized version of the window frame for the guild bank
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Guild = Addon.Frame:NewClass('Guild')
 local Sushi = LibStub('Sushi-3.2')
 

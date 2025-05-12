@@ -6,8 +6,7 @@
 			nil -> deposited items
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Items = Addon.ItemGroup:NewClass('VaultItemGroup')
 Items.Button = Addon.VaultItem
 

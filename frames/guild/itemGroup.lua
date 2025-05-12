@@ -3,8 +3,7 @@
 		A grid of guild bank items
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Items = Addon.ItemGroup:NewClass('GuildItemGroup')
 Items.Button = Addon.GuildItem
 Items.Transposed = true

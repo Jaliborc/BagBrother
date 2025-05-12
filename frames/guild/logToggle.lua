@@ -3,8 +3,7 @@
 		A guild log toggle widget
 --]]
 
-local MODULE = ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', true)
 
 Toggle.Icons = {
