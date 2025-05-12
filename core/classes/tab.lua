@@ -17,7 +17,7 @@ function Tab:SetRule(rule)
 	end
 
 	self:SetScale(.8)
-	self:SetChecked(rule == self:GetParent().active)
+	self:SetChecked(rule == self:GetParent():GetActive())
 	self.Icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.Icon, icon)
 	self.rule = rule
 end

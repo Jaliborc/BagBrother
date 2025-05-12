@@ -53,6 +53,10 @@ end
 --[[ API ]]--
 
 function Tabs:SetActive(rule)
-	self.active = rule
-	self.frame.rules[self.id] = rule:Compile()
+	self.frame.compiled[self.id] = rule:Compile()
+	self.frame.rules[self.id] = rule
+end
+
+function Tabs:GetActive()
+	return self.frame.rules[self.id]
 end

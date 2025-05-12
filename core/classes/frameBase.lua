@@ -144,7 +144,7 @@ function Frame:IsShowingItem(bag, slot, info, family)
 		return false
 	end
 
-	for set, rule in pairs(self.rules) do
+	for set, rule in pairs(self.compiled) do
 		if self.profile[set] then
 			local ok, shown = pcall(rule, self, bag, slot, family, info)
 			if ok and not shown then return false end
