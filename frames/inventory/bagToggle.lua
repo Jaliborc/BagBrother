@@ -17,11 +17,11 @@ end
 
 function BagToggle:OnClick(button)
 	if button == 'LeftButton' then
-		self:GetProfile().showBags = not self:GetProfile().showBags or nil
+		PlaySound(self:GetChecked() and 857 or 856)
+		self:GetProfile().showBags = self:GetChecked() or nil
 		self:SendFrameSignal('BAG_FRAME_TOGGLED')
-		
-		PlaySound(self.frame:AreBagsShown() and 857 or 856)
 	else
 		Addon.Frames:Toggle('bank')
+		self:OnShow()
 	end
 end

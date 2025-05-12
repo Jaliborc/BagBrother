@@ -24,6 +24,8 @@ end
 
 function Tab:OnClick(mouse)
 	if mouse == 'RightButton' then
+		self:SetChecked(not self:GetChecked())
+
 		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
 			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
