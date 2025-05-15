@@ -60,22 +60,28 @@ end
 function Settings:Upgrade()
 	xpcall(function()
 		local function upgradeProfile(profile)
-			for id, sets in pairs(profile) do
-				if type(sets.bagBreak) ~= 'number' then
-					sets.bagBreak = nil
-				end
+			local ids = GetKeysArray(profile)
+			for _,id in ipairs(ids) do
+				local sets = profile[id]
+				if type(sets) == 'table' then
+					if type(sets.bagBreak) ~= 'number' then
+						sets.bagBreak = nil
+					end
 
-				if sets.skin == 'Panel - Flat' then
-					sets.skin = 'Bagnonium'
-				elseif sets.skin == 'Panel - Marble' then
-					sets.skin = 'Combuctor'
-				end
+					if sets.skin == 'Panel - Flat' then
+						sets.skin = 'Bagnonium'
+					elseif sets.skin == 'Panel - Marble' then
+						sets.skin = 'Combuctor'
+					end
 
-				if sets.filters then
-					sets.rules, sets.filters = {sidebar = sets.filters}
-				end
+					if sets.filters then
+						sets.rules, sets.filters = {sidebar = sets.filters}
+					end
 
-				sets.hiddenBags, sets.lockedSlots = nil
+					sets.hiddenBags, sets.lockedSlots = nil
+				else
+					sets[id] = nil -- old/corrupted entry? some users had this in their settings
+				end
 			end
 		end
 

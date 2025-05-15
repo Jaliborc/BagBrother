@@ -26,9 +26,8 @@ local LOG_TYPES = {
 function Log:New(parent)
 	local f = self:Super(Log):New(parent)
 	f:RegisterFrameSignal('LOG_SELECTED', 'OnLogSelected')
-	f:SetScript('OnHyperlinkClick', f.OnHyperlink)
-	f:SetMaxLines(MAX_TRANSACTIONS)
 	f:SetFontObject(GameFontHighlight)
+	f:SetMaxLines(MAX_TRANSACTIONS)
 	f:SetJustifyH('LEFT')
 	f:SetFading(false)
 	return f
@@ -40,16 +39,16 @@ end
 function Log:OnLogSelected(logID)
 	if logID == 1 or logID == 2 then
 		self.isMoney = logID == 2
-		self:RegisterSignal('GUILD_TAB_CHANGED', 'Update')
 		self:RegisterEvent('GUILDBANKLOG_UPDATE', 'UpdateContent')
+		self:RegisterSignal('GUILD_TAB_CHANGED', 'Update')
 		self:Update()
 	else
-		self:UnregisterSignal('GUILD_TAB_CHANGED')
 		self:UnregisterEvent('GUILDBANKLOG_UPDATE')
+		self:UnregisterSignal('GUILD_TAB_CHANGED')
 	end
 end
 
-function Log:OnHyperlink(...)
+function Log:OnHyperlinkClick(...)
 	SetItemRef(...)
 end
 

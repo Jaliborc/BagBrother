@@ -1,6 +1,6 @@
 --[[
 	Methods for creating and browsing item rulesets.
-	See https://github.com/jaliborc/BagBrother/wiki/Ruleset-API for details.
+	See https://github.com/Jaliborc/BagBrother/wiki/Rules-API for details.
 	All Rights Reserved
 --]]
 

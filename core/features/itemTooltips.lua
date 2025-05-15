@@ -67,7 +67,7 @@ function TipCounts:OnLoad()
 		
 		self:UnregisterSignal('UPDATE_ALL')
 	else
-		self:RegisterSignal('UPDATE_ALL', 'OnEnable')
+		self:RegisterSignal('UPDATE_ALL', 'OnLoad')
 	end
 end
 

@@ -49,8 +49,9 @@ function Owners:OnLoad()
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 	Addon.player = self:New(UnitFullName('player'))
 
-	for i, realm in ipairs {Addon.player.realm, unpack(GetAutoCompleteRealms())} do
-		for id, cache in pairs(BrotherBags[realm] or Addon.None) do
+	local realms = Addon.IsRetail and GetKeysArray(BrotherBags) or {Addon.player.realm, unpack(GetAutoCompleteRealms())}
+	for i, realm in ipairs(realms) do
+		for id, cache in pairs(realm ~= 'account' and BrotherBags[realm] or Addon.None) do
 			self:New(id, realm)
 		end
 	end

@@ -19,7 +19,8 @@ L.CmdShowGuild = 'Toggles your guild bank'
 L.CmdShowVault = 'Toggles your void storage'
 L.CmdShowVersion = 'Prints the current version'
 L.CmdShowOptions = 'Opens the configuration menu'
-L.UpgradeError = 'Issue upgrading settings. Some info might have been lost.'
+L.SkinError = 'Error applying skin.'
+L.UpgradeError = 'Issue upgrading settings. If you run into issues, try resetting your settings.'
 
 --titles
 L.TitleBags = '%s\'s Inventory'

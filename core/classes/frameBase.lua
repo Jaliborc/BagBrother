@@ -32,7 +32,7 @@ function Frame:OnShow()
 end
 
 function Frame:OnLayout()
-	Addon.Skins:Call('layout', self.bg)
+	self.skin('layout')
 end
 
 function Frame:OnHide()
@@ -57,27 +57,21 @@ function Frame:Update()
 end
 
 function Frame:UpdateVisuals()
-	if self.bg then
-		Addon.Skins:Release(self.bg)
+	if self.skin then
+		self.skin:Release()
 	end
 
-	local bg = Addon.Skins:Acquire(self.profile.skin, self)
-	bg:ClearAllPoints()
-	bg:SetPoint('BOTTOMLEFT', bg.skin.x or 0, bg.skin.y or 0)
-	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
-
-	self.bg, self.inset = bg, bg.skin.inset or 0
-	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
-	self.Title:SetHighlightFontObject(bg.skin.fontH or self.FontH)
-	self.Title:SetNormalFontObject(bg.skin.font or self.Font)
-
-	local center = self.profile.color
 	local border = self.profile.borderColor
+	local center = self.profile.color
 
-	Addon.Skins:Call('load', bg)
-	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
-	Addon.Skins:Call('centerColor', bg, center[1], center[2], center[3], center[4])
+	self.skin = Addon.Skins:Acquire(self.profile.skin, self)
+	self.skin('load')
+	self.skin('borderColor', border[1], border[2], border[3], border[4])
+	self.skin('centerColor', center[1], center[2], center[3], center[4])
 
+	self.CloseButton:SetPoint('TOPRIGHT', (self.skin.closeX or 0)-2, (self.skin.closeY or 0)-2)
+	self.Title:SetHighlightFontObject(self.skin.fontH or self.FontH)
+	self.Title:SetNormalFontObject(self.skin.font or self.Font)
 	self:Layout()
 end
 

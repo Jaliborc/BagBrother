@@ -42,7 +42,7 @@ if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
 end
 
 function Addon:OnLoad()
-	if NUM_TOTAL_EQUIPPED_BAG_SLOTS then
+	if LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG then
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_HUD_REVAMP_BAG_CHANGES, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_BAG_SLOTS_AUTHENTICATOR, true)

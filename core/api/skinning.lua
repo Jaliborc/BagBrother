@@ -8,6 +8,13 @@ local ADDON, Addon = ...
 local Skins = Addon:NewModule('Skins', 'MutexDelay-1.0')
 Skins.Registry = {}
 
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local Meta = getmetatable(UIParent).__index
+local function Error(...)
+	print('|cff33ff99' .. ADDON .. '|r ' .. L.SkinError)
+	geterrorhandler()(...)
+end
+
 
 --[[ Public API ]]--
 
@@ -31,24 +38,36 @@ function Skins:Iterate()
 end
 
 
---[[ Additional Methods ]]--
+--[[ Object API ]]--
 
 function Skins:Acquire(id, parent)
 	local skin = self:Get(id) or self:Get(self.Default)
-	local bg = skin[parent] or CreateFrame('Frame', nil, parent, skin.template)
+	if not skin[parent] then
+		local _,bg = xpcall(CreateFrame, Error, 'Frame', nil, parent, skin.template)
+		skin[parent] = setmetatable(bg or CreateFrame('Frame', nil, parent), self)
+	end
+
+	local bg = skin[parent]
+	bg.skin = skin
 	bg:EnableMouse(true)
 	bg:SetFrameLevel(0)
-	bg.skin = skin
+	bg:ClearAllPoints()
+	bg:SetPoint('BOTTOMLEFT', bg.x or 0, bg.y or 0)
+	bg:SetPoint('TOPRIGHT', bg.x1 or 0, bg.y1 or 0)
 	bg:Show()
 
 	return bg
 end
 
-function Skins:Call(method, bg, ...)
-	return GetValueOrCallFunction(bg.skin, method, bg, ...)
+function Skins:__call(key, ...)
+	xpcall(GetValueOrCallFunction, Error, self.skin, key, self, ...)
 end
 
-function Skins:Release(bg)
-	self:Call('reset', bg)
-	bg:Hide()
+function Skins:__index(key)
+	return self.skin[key] or Skins[key] or Meta[key]
+end
+
+function Skins:Release()
+	self('reset')
+	self:Hide()
 end
