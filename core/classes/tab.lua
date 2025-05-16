@@ -5,7 +5,6 @@
 
 local ADDON, Addon = ...
 local Tab = Addon.Tipped:NewClass('Tab', 'CheckButton', true)
-local Search = LibStub('ItemSearch-1.3')
 
 function Tab:SetRule(rule)
 	local icon, isAtlas = rule:GetIcon(self.frame)

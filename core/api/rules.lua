@@ -6,6 +6,7 @@
 
 
 local ADDON, Addon = ...
+local Search = LibStub('ItemSearch-1.3')
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
 Rules.Registry = {}
 

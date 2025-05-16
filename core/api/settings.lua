@@ -57,36 +57,39 @@ function Settings:OnLoad()
 	self:Upgrade()
 end
 
-function Settings:Upgrade()
+function Settings:Upgrade() -- all code temporary, will be removed eventually
 	xpcall(function()
-		local function upgradeProfile(profile)
-			local ids = GetKeysArray(profile)
-			for _,id in ipairs(ids) do
-				local sets = profile[id]
-				if type(sets) == 'table' then
-					if type(sets.bagBreak) ~= 'number' then
-						sets.bagBreak = nil
-					end
-
-					if sets.skin == 'Panel - Flat' then
-						sets.skin = 'Bagnonium'
-					elseif sets.skin == 'Panel - Marble' then
-						sets.skin = 'Combuctor'
-					end
-
-					if sets.filters then
-						sets.rules, sets.filters = {sidebar = sets.filters}
-					end
-
-					sets.hiddenBags, sets.lockedSlots = nil
-				else
-					sets[id] = nil -- old/corrupted entry? some users had this in their settings
+		local function ensureTables(table)
+			for _,key in ipairs(GetKeysArray(table)) do
+				if type(table[key]) ~= 'table' then
+					table[key] = nil -- old/corrupted entry? some users had invalid stuff in their saved variables
 				end
+			end
+			return table
+		end
+
+		local function upgradeProfile(profile)
+			for id, sets in pairs(ensureTables(profile)) do
+				if type(sets.bagBreak) ~= 'number' then
+					sets.bagBreak = nil
+				end
+
+				if sets.skin == 'Panel - Flat' then
+					sets.skin = 'Bagnonium'
+				elseif sets.skin == 'Panel - Marble' then
+					sets.skin = 'Combuctor'
+				end
+
+				if sets.filters then
+					sets.rules, sets.filters = {sidebar = sets.filters}
+				end
+
+				sets.hiddenBags, sets.lockedSlots = nil
 			end
 		end
 
-		for realm, owners in pairs(Addon.sets.profiles) do
-			for id, profile in pairs(owners) do
+		for realm, owners in pairs(ensureTables(Addon.sets.profiles)) do
+			for id, profile in pairs(ensureTables(owners)) do
 				upgradeProfile(profile)
 			end
 		end
@@ -115,7 +118,7 @@ function Settings:Upgrade()
 			end
 		end
 
-		clean(BrotherBags)
+		clean(ensureTables(BrotherBags))
 	end, function(...)
 		print('|cff33ff99' .. ADDON .. '|r ' .. L.UpgradeError)
 		geterrorhandler()(...)
