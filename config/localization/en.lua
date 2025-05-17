@@ -132,7 +132,7 @@ L.FAQ = {
   'Click on the "Offline Viewing" button in the top left of your inventory. It looks like a portrait of the character you are currently playing.',
 
   'How to make ADDON forget a deleted/renamed character?',
-  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name will have a red cross next to it. Click on the cross for the character you wish to delete.',
+  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name has a delete button next to it, which looks like a red cross. Click on the cross for the character you wish to delete.',
 
   'Something is wrong! Item levels aren\'t showing over the slots.',
   'ADDON does not natively display item levels. You must be using a third party plugin, such as |cffffd200Bagnon ItemLevel|r or |cffffd200Bagnon ItemInfo|r. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.',

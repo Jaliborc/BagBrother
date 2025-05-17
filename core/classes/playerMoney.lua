@@ -5,6 +5,7 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere')
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTemplate', true)
 Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
@@ -88,18 +89,24 @@ function Money:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(MONEY, 1,1,1)
 
-	local total = 0
+	local total, overflow = 0, 0
 	for i, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
-		if money then
+		if money and i <= 8 then
 			local coins = GetMoneyString(money, true)
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)
 
 			GameTooltip:AddDoubleLine(icon .. ' ' .. owner.name, coins, color.r, color.g, color.b, color.r, color.g, color.b)
+		else
+			overflow = overflow + (money or 0)
 		end
 
 		total = total + (money or 0)
+	end
+
+	if overflow > 0 then
+		GameTooltip:AddDoubleLine('|TInterface/Icons/INV_Misc_QuestionMark:0:0|t '..L.Others, GetMoneyString(overflow, true))
 	end
 
 	local account = (C.Bank.FetchDepositedMoney or nop)(2) or 0

@@ -29,14 +29,10 @@ L.TitleVault = '%s\'s Void Storage'
 L.NormalBags = 'Normal Bags'
 L.TradeBags = 'Trade Bags'
 
---actions
+--tooltips
 L.Bags = 'Bags'
 L.Drag = 'Drag'
-L.Guilds = 'Guilds'
-L.Locations = 'Locations'
-L.Characters = 'Characters'
 L.BrowseItems = 'Browse Items'
-L.EnterDescription = 'Enter Description:'
 L.HideBag = 'Click to hide this bag.'
 L.ShowBag = 'Click to show this bag.'
 L.GuildFunds = 'Guild Funds'
@@ -45,15 +41,19 @@ L.NumWithdraw = '%d Withdraw'
 L.NumDeposit = '%d Deposit'
 L.NumRemaining = '%d Remaining'
 L.WarbandMoney = 'Warband Money'
-
---dropdowns
 L.OfflineViewing = 'Offline Viewing'
+L.Others = 'Others'
+
+--menus
+L.Characters = 'Characters'
+L.Guilds = 'Guilds'
+L.Locations = 'Locations'
+L.EnterDescription = 'Enter Description:'
 L.ServerSorting = 'Server-Side Sorting'
 L.ServerSortingTip = 'Enable to let the game server sort items, instead of the addon doing it.'
 L.CleanupOptions = 'Cleanup Options'
 L.IncludeReagents = 'Include Reagents'
 L.LockItems = 'Lock Item Slots'
-L.RequiresClientSorting = 'Requires client-side sorting!'
 
 --dialogs
 L.AskMafia = 'Ask Mafia'
