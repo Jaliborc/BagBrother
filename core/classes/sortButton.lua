@@ -39,7 +39,7 @@ function SortButton:OnClick(button)
 			drop:SetChildren {
 				{text = L.CleanupOptions, isTitle = true},
 				{
-					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSortingTip,
+					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSorting, tooltipText = L.ServerSortingTip,
 					func = function() self.frame.profile.serverSort = not self.frame.profile.serverSort end,
 					checked = serverSort, disabled = not hasServer, isNotRadio = true
 				},

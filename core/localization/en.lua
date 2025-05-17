@@ -49,7 +49,7 @@ L.WarbandMoney = 'Warband Money'
 --dropdowns
 L.OfflineViewing = 'Offline Viewing'
 L.ServerSorting = 'Server-Side Sorting'
-L.ServerSortingTip = 'Whether to let the game server sort items, where available.'
+L.ServerSortingTip = 'Enable to let the game server sort items, instead of the addon doing it.'
 L.CleanupOptions = 'Cleanup Options'
 L.IncludeReagents = 'Include Reagents'
 L.LockItems = 'Lock Item Slots'

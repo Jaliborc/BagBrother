@@ -46,11 +46,11 @@ end
 
 function Owners:OnLoad()
 	self.registry, self.ordered = {}, {}
+	self.realms = {GetNormalizedRealmName(), unpack(GetAutoCompleteRealms())}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
-	Addon.player = self:New(UnitFullName('player'))
 
-	local realms = Addon.IsRetail and GetKeysArray(BrotherBags) or {Addon.player.realm, unpack(GetAutoCompleteRealms())}
-	for i, realm in ipairs(realms) do
+	Addon.player = self:New(UnitFullName('player'))
+	for i, realm in ipairs(Addon.IsRetail and GetKeysArray(BrotherBags) or self.realms) do
 		for id, cache in pairs(realm ~= 'account' and BrotherBags[realm] or Addon.None) do
 			self:New(id, realm)
 		end
@@ -76,6 +76,8 @@ function Owners:Sort()
 	sort(self.ordered, function(a, b)
 		if a.isguild ~= b.isguild then
 			return b.isguild
+		elseif a.remote ~= b.remote then
+			return b.remote
 		elseif a.level == b.level or not (a.level and b.level) then
 			return a.name < b.name
 		end
@@ -101,6 +103,7 @@ function Owners:New(id, realm)
 		local name = isguild and id:sub(1,-2) or id
 		local owner = setmetatable({
 			id = id, realm = realm, name = name,
+			owner.remote = not FindInTable(self.realms, owner.realm),
 			address = (isguild and '®' or '')..name..'-'..realm, -- needed for backwards support
 			profile = Addon.Settings:GetProfile(realm, id),
 			cache = cache, isguild = isguild,
