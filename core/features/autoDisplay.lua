@@ -44,16 +44,34 @@ function AutoDisplay:HookBaseUI()
 	self:StopIf(_G, 'VoidStorage_LoadUI', self:Show('vault'))
 	self:StopIf(_G, 'BankFrame_Open', self:Show('bank'))
 
-	self:StopIf(PlayerInteractionFrameManager, 'ShowFrame', function(manager, type)
-		return type == Interactions.Banker and Addon.Frames:Show('bank') or
-				type == Interactions.GuildBanker and Addon.Frames:Show('guild') or
-				type == Interactions.VoidStorageBanker and Addon.Frames:Show('vault')
+	local function NeutralizeFrame(frame)
+		if not frame then return end
+		frame:UnregisterAllEvents()
+		frame:SetScript("OnEvent", nil)
+		frame:SetScript("OnShow", nil)
+		frame:SetScript("OnHide", nil)
+		HideUIPanel(frame)
+		frame:ClearAllPoints()
+		frame:Hide()
+	end
+
+	hooksecurefunc(PlayerInteractionFrameManager, 'ShowFrame', function(manager, type)
+		if type == Interactions.Banker then
+			NeutralizeFrame(BankFrame)
+			NeutralizeFrame(ReagentBankFrame)
+			Addon.Frames:Show('bank')
+		elseif type == Interactions.GuildBanker then
+			Addon.Frames:Show('guild')
+		elseif type == Interactions.VoidStorageBanker then
+			Addon.Frames:Show('vault')
+		end
 	end)
 
-	self:StopIf(PlayerInteractionFrameManager, 'HideFrame', function(manager, type)
-		return type == Interactions.Banker and Addon.Frames:Hide('bank') or
-				type == Interactions.GuildBanker and Addon.Frames:Hide('guild') or
-				type == Interactions.VoidStorageBanker and Addon.Frames:Hide('vault')
+	hooksecurefunc(PlayerInteractionFrameManager, 'HideFrame', function(manager, type)
+		if type == Interactions.Banker then Addon.Frames:Hide('bank')
+		elseif type == Interactions.GuildBanker then Addon.Frames:Hide('guild')
+		elseif type == Interactions.VoidStorageBanker then Addon.Frames:Hide('vault')
+		end
 	end)
 
 	BankFrame:SetScript('OnEvent', function(frame, event, ...) -- only way in classic
