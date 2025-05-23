@@ -48,8 +48,8 @@ L.Tabs = '底部篩選'
 
 L.Appearance = '外觀'
 L.Layer = '階層'
-L.BagBreak = '根據背包顯示'
-L.BreakSpace = '分隔間距'
+L.BagBreak = '根據背包顯示' .. NEW
+L.BreakSpace = '分隔間距' .. NEW
 L.ByType = '根據類型'
 L.ReverseBags = '反轉背包順序'
 L.ReverseSlots = '反轉欄位順序'
