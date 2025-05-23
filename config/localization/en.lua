@@ -3,10 +3,12 @@
 --]]
 
 local CONFIG = ...
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 
 -- general
 L.GeneralOptionsDescription = 'These are general features that can be toggled depending on your preferences.'
+L.NewFeature = NEW -- do not translate
 
 L.CountItems = 'Item Tooltip Counts'
 L.CountGuild = 'Include Guild Banks'
@@ -22,7 +24,7 @@ L.Tooltips = 'Tooltips'
 
 -- frame
 L.FrameOptions = 'Frame Settings'
-L.FrameOptionsDescription = 'These are configuration settings specific to a %s frame.'
+L.FrameOptionsDescription = 'Individual configuration settings specific to each %s frame.'
 
 L.Frame = 'Frame'
 L.Enabled = 'Enable Frame'
@@ -37,17 +39,17 @@ L.BagToggle = 'Bags Toggle'
 L.Broker = 'Databroker Carrousel'
 L.Currency = 'Currency Tracker'
 L.Deposit = 'Deposit Button'
-L.Money = MONEY
-L.Sidebar = 'Side Filters'
+L.Money = MONEY -- do not translate
+L.Sidebar = 'Side Filters' .. NEW
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'
-L.Tabs = 'Bottom Filters'
+L.Tabs = 'Bottom Filters' .. NEW
 
 L.Appearance = 'Appearance'
 L.Layer = 'Layer'
-L.BagBreak = 'Bag Break'
-L.BreakSpace = 'Break Spacing'
+L.BagBreak = 'Bag Break' .. NEW
+L.BreakSpace = 'Break Spacing'  .. NEW
 L.ByType = 'By Type'
 L.ReverseBags = 'Reverse Bag Order'
 L.ReverseSlots = 'Reverse Slot Order'
@@ -56,7 +58,7 @@ L.Color = 'Background Color'
 L.BorderColor = 'Border Color'
 
 L.Strata = 'Layer'
-L.Skin = 'Skin'
+L.Skin = 'Skin' .. NEW
 L.Columns = 'Columns'
 L.Scale = 'Scale'
 L.ItemScale = 'Item Scale'
@@ -65,7 +67,7 @@ L.Alpha = 'Opacity'
 
 -- slots
 L.SlotOptions = 'Slot Settings'
-L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
+L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on all %s frames for easier identification.'
 
 L.GlowQuality = 'Color by Quality'
 L.GlowQuest = 'Color Quest Items'
@@ -117,7 +119,7 @@ L.TradePartner = 'Trading'
 L.Vehicle = 'Entering a Vehicle'
 
 -- info
-L.Help = HELP_LABEL
+L.Help = HELP_LABEL -- do not translate
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
 L.Patrons = 'Patrons'
 L.PatronsDescription = '%s is distributed for free and supported trough donations. A massive thank you to all the supporters on Patreon and Paypal who keep development alive. You can become a patron too at |cFFF96854patreon.com/jaliborc|r.'

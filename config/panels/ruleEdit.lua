@@ -13,7 +13,7 @@ Addon.RuleEdit:Hide()
 
 function Frame:OpenMenu(anchor)
 	MenuUtil.CreateContextMenu(anchor, function(_, drop)
-		drop:SetScrollMode(500)
+		drop:SetScrollMode(600)
 		drop:SetTag(ADDON .. 'RuleEdit')
 		drop:CreateTitle(L.InstalledFilters)
 

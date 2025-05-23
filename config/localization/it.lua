@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'itIT')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = 'Impostazioni generali di configurazioni per %s.'
@@ -30,7 +31,6 @@ Se abilitato, questa finestra si posizionerà automaticamente come quelle standa
 
 
 L.BagToggle = 'Attiva Riquadro Borse'
-L.Money = 'Soldi'
 L.Broker = 'Plugins Databroker'
 L.Sort = "Pulsante per l'Ordinamento"
 L.Search = 'Pulsante di Ricerca'
@@ -43,7 +43,7 @@ Se abilitato, i pannelli laterali verranno mostrati a sinistra della finestra]]
 
 L.Appearance = 'Aspetto'
 L.Layer = 'Livello'
-L.BagBreak = 'Separazione tra Borse'
+L.BagBreak = 'Separazione tra Borse' .. NEW
 L.ReverseBags = 'Inverti le Borse'
 L.ReverseSlots = 'Inverti gli Scomparti'
 

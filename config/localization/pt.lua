@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'ptBR')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDescription = 'Estas são características gerais que podem ser ativadas ou desativadas de acordo com suas preferências.'
@@ -40,14 +41,14 @@ L.LeftTabsTip = 'Se ativado, os separadores laterais serão exibidos no lado esq
 
 L.Appearance = 'Aparência'
 L.Layer = 'Camada'
-L.BagBreak = 'Separação de Bolsas'
+L.BagBreak = 'Separação de Bolsas' .. NEW
 L.ByType = 'Por Tipo'
 L.ReverseBags = 'Inverter Ordem das Bolsas'
 L.ReverseSlots = 'Inverter Ordem dos Espaços'
 L.Color = 'Cor de Fundo'
 L.BorderColor = 'Cor da Borda'
 L.Strata = 'Camada'
-L.Skin = 'Tema'
+L.Skin = 'Tema'  .. NEW
 L.Columns = 'Colunas'
 L.Scale = 'Escala da Janela'
 L.ItemScale = 'Escala dos Itens'

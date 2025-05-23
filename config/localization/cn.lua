@@ -6,6 +6,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'zhCN')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = '这些通用功能可以依据配置切换。'
@@ -34,7 +35,6 @@ L.BagToggle = '背包切换'
 L.Broker = 'Databroker 插件'
 L.Currency = '货币'
 L.ExclusiveReagent = '分离材料银行'
-L.Money = '金钱'
 L.Sort = '整理按钮'
 L.Search = '切换搜索'
 L.Options = '选项按钮'

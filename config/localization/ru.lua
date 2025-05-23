@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'ruRU')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = 'Общие функции, которые вы можете настроить в соответствии со своими предпочтениями.'
@@ -32,7 +33,6 @@ L.BagToggle = 'Кнопка сумок'
 L.Broker = 'DataBroker'
 L.Currency = 'Валюта'
 L.ExclusiveReagent = 'Банк материалов отдельно'
-L.Money = 'Золото'
 L.Sort = 'Кнопка сортировки'
 L.Search = 'Кнопка поиска'
 L.Options = 'Кнопка настроек'
@@ -42,7 +42,7 @@ L.LeftTabsTip = [[
 
 L.Appearance = 'Внешний вид'
 L.Layer = 'Слой'
-L.BagBreak = 'Каждая сумка с новой строки'
+L.BagBreak = 'Каждая сумка с новой строки' .. NEW
 L.ReverseBags = 'Обратный порядок сумок'
 L.ReverseSlots = 'Обратный порядок ячеек'
 

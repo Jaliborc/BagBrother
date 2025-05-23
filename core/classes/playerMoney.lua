@@ -92,7 +92,7 @@ function Money:OnEnter()
 	local total, overflow = 0, 0
 	for i, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
-		if money and i <= 8 then
+		if money and i <= 10 then
 			local coins = GetMoneyString(money, true)
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)

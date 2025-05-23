@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'koKR')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = '환경 설정에 따라 설정을 전환 할 수 있는 일반적인 기능입니다.'
@@ -30,7 +31,6 @@ L.ActPanelTip = [[
 자동으로 배치되며 움직일 수 없습니다.]]
 
 L.BagToggle = '가방 표시'
-L.Money = '소지금 표시'
 L.Broker = 'Databroker 플러그인 표시'
 L.Sort = '정리 버튼 표시'
 L.Search = '검색 버튼 표시'
@@ -43,7 +43,7 @@ L.LeftTabsTip = [[
 
 L.Appearance = '모양'
 L.Layer = '레이어'
-L.BagBreak = '가방 별로 구분하여 표시'
+L.BagBreak = '가방 별로 구분하여 표시' .. NEW
 L.ReverseBags = '가방 순서 반대로'
 L.ReverseSlots = '칸 순서 반대로'
 

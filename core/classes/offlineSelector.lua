@@ -75,15 +75,19 @@ function OfflineSelector:OnClick(button)
 			drop:CreateDivider()
 			drop:CreateTitle(L.Characters)
 
-			local guilds, more = false, false
+			local start, more = 1, false
 			for i, owner in Addon.Owners:Iterate() do
-				local overflow = i > 8 and not owner.isguild and not owner.fav
-				if overflow and not more then
-					more = drop:CreateButton('    '..FRIENDS_WOW_NAME_COLOR:WrapTextInColorCode(LFG_LIST_MORE))
-					more:SetScrollMode(400)
-				elseif owner.isguild and not guilds then
+				local overflow
+				if owner.isguild and start == 1 then
 					drop:CreateDivider()
-					guilds = drop:CreateTitle(L.Guilds)
+					drop:CreateTitle(L.Guilds)
+					start, more = i, false
+				else
+					overflow = (i-start) >= 10 and not owner.fav
+					if overflow and not more then
+						more = drop:CreateButton('    '..FRIENDS_WOW_NAME_COLOR:WrapTextInColorCode(LFG_LIST_MORE))
+						more:SetScrollMode(500)
+					end
 				end
 
 				self:AddOwner(overflow and more or drop, owner)

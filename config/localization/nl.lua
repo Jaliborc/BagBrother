@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'nlNL')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = 'Dit zijn algemene functies die kunnen worden in- of uitgeschakeld, afhankelijk van je voorkeuren.'
@@ -35,7 +36,6 @@ L.BagToggle = 'Tas Wisselen'
 L.Broker = 'Databroker Carrousel'
 L.Currency = 'Valuta'
 L.ExclusiveReagent = 'Aparte Reagens Bank'
-L.Money = 'Geld'
 L.Sort = 'Sorteer Knop'
 L.Search = 'Zoek Wisselen'
 L.Options = 'Opties Knop'
@@ -46,7 +46,7 @@ weergegeven aan de linkerkant van het paneel.]]
 
 L.Appearance = 'Uiterlijk'
 L.Layer = 'Laag'
-L.BagBreak = 'Tas Onderbreken'
+L.BagBreak = 'Tas Onderbreken' .. NEW
 L.ReverseBags = 'Omgekeerde Tasvolgorde'
 L.ReverseSlots = 'Omgekeerde Slotvolgorde'
 

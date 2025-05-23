@@ -6,6 +6,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'esES') or LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'esMX')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDescription = 'Funciones generales que puedes aplicar según tus preferencias.'
@@ -47,7 +48,7 @@ se mostrarán en el lado izquierdo del panel.]]
 
 L.Appearance = 'Apariencia'
 L.Layer = 'Capa'
-L.BagBreak = 'Espaciado entre bolsas'
+L.BagBreak = 'Espaciado entre bolsas' .. NEW
 L.ByType = 'Por tipo'
 L.ReverseBags = 'Invertir bolsas'
 L.ReverseSlots = 'Invertir ranuras'
@@ -56,7 +57,7 @@ L.Color = 'Color del fondo'
 L.BorderColor = 'Color del borde'
 
 L.Strata = 'Capa'
-L.Skin = 'Estilo'
+L.Skin = 'Estilo' .. NEW
 L.Columns = 'Columnas'
 L.Scale = 'Escala'
 L.ItemScale = 'Escala de objeto'

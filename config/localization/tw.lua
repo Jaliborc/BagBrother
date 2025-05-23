@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'zhTW')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDescription = '這些是一般功能，可以根據您的喜好進行切換。'
@@ -37,7 +38,6 @@ L.BagToggle = '背包列表'
 L.Broker = 'Databroker外掛'
 L.Currency = '通貨'
 L.ExclusiveReagent = '分離材料銀行'
-L.Money = '金錢'
 L.Sort = '排序按鈕'
 L.Search = '切換搜尋'
 L.Options = '設定按鈕'
@@ -48,7 +48,7 @@ L.LeftTabsTip = [[
 
 L.Appearance = '外觀'
 L.Layer = '階層'
-L.BagBreak = '根據背包顯示'
+L.BagBreak = '根據背包顯示' .. NEW
 L.ByType = '根據類型'
 L.ReverseBags = '反轉背包順序'
 L.ReverseSlots = '反轉欄位順序'
@@ -57,7 +57,7 @@ L.Color = '背景顏色'
 L.BorderColor = '邊框顏色'
 
 L.Strata = '框架層級'
-L.Skin = '樣式'
+L.Skin = '樣式'  .. NEW
 L.Columns = '列'
 L.Scale = '縮放'
 L.ItemScale = '物品縮放'
@@ -121,7 +121,6 @@ L.RuleOptions = '物品規則集'
 L.RuleOptionsDescription = '這些設置允許您選擇顯示哪些物品規則集以及它們的順序。'
 
 -- info
-L.Help = HELP_LABEL
 L.HelpDescription = '在這裡，我們提供對最常見問題的回答。如果這兩者都不能解決您的問題，您可以考慮在 Discord 上的 %s 使用者社群尋求幫助。'
 L.Patrons = '贊助者'
 L.PatronsDescription = '%s是通過贊助來提供免費使用和更新的。衷心感謝在 Patreon 和 Paypal 上支持開發的所有支持者。您也可以在 |cFFF96854patreon.com/jaliborc|r 成為贊助者。'

@@ -12,8 +12,9 @@ Addon:NewModule('LDB', LDB:NewDataObject(ADDON .. 'Launcher', {
 	type = 'launcher', label = ADDON,
 	icon = 'Interface/Addons/BagBrother/Art/' .. ADDON .. '-Big',
 
-	OnEnable = function(self)
+	OnLoad = function(self)
 		self:RegisterSignal('BAGS_UPDATED', 'OnUpdate')
+		self:OnUpdate()
 	end,
 
 	OnClick = function(self, button)
