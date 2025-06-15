@@ -6,6 +6,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'deDE')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDesc = 'Allgemeine Einstellungen für %s anpassen'
@@ -24,7 +25,6 @@ L.CharacterSpecific = 'Charakterspezifische Einstellungen'
 L.ExclusiveReagent = 'Getrenntes Materiallager'
 
 L.BagToggle = 'Taschenschaltflächen'
-L.Money = 'Gold'
 L.Broker = 'Databroker'
 L.Sort = 'Sortierschaltfläche'
 L.Search = 'Suchsschaltfläche'
@@ -32,7 +32,7 @@ L.Options = 'Optionenschaltfläche'
 
 L.Appearance = 'Erscheinung'
 L.Layer = 'Ebene'
-L.BagBreak = 'Trennen der Taschen aktivieren'
+L.BagBreak = 'Trennen der Taschen aktivieren' .. NEW
 L.ReverseBags = 'Taschen umkehren'
 L.ReverseSlots = 'Slots umkehren'
 

@@ -5,20 +5,22 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'zhTW')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- general
 L.GeneralOptionsDescription = '這些是一般功能，可以根據您的喜好進行切換。'
 
-L.Locked = '鎖定框架'
 L.CountItems = '物品統計提示'
 L.CountGuild = '包含公會銀行'
 L.CountCurrency = '包含通貨'
-L.FlashFind = '閃爍尋找'
-L.FlashFindTip = '如果啟用，按住Alt鍵並點擊物品將在所有框架中閃爍具有相同物品的所有欄位。'
-L.DisplayBlizzard = '使用暴雪內建框架顯示隱藏的背包'
-L.DisplayBlizzardTip = '如果啟用，將使用暴雪內建框架來顯示隱藏的背包或銀行欄位。\n\n|cffff1919ESC->選項->控制，需取消勾選『合併背包』選項。|r\n\n|cffff1919需要重新載入UI。|r'
 L.ConfirmGlobals = '您確定要取消此角色的角色專屬設定嗎？所有的角色專屬設定將被清除。'
 L.CharacterSpecific = '角色專屬設定'
+L.DisplayBlizzard = '使用暴雪內建框架顯示隱藏的背包'
+L.DisplayBlizzardTip = '如果啟用，將使用暴雪內建框架來顯示隱藏的背包或銀行欄位。\n\n|cffff1919ESC->選項->控制，需取消勾選『合併背包』選項。|r\n\n|cffff1919需要重新載入UI。|r'
+L.Locked = '鎖定框架'
+L.FlashFind = '閃爍尋找'
+L.FlashFindTip = '如果啟用，按住Alt鍵並點擊物品將在所有框架中閃爍具有相同物品的所有欄位。'
+L.Tooltips = '提示資訊'
 
 -- frame
 L.FrameOptions = '框架設定'
@@ -36,19 +38,18 @@ L.ActPanelTip = [[
 L.BagToggle = '背包列表'
 L.Broker = 'Databroker外掛'
 L.Currency = '通貨'
-L.ExclusiveReagent = '分離材料銀行'
+L.Deposit = '存放按鈕'
 L.Money = '金錢'
+L.Sidebar = '側邊篩選'
 L.Sort = '排序按鈕'
 L.Search = '切換搜尋'
 L.Options = '設定按鈕'
-L.LeftTabs = '左側的規則集'
-L.LeftTabsTip = [[
-如果啟用，側邊標籤將顯示在
-面板的左側。]]
+L.Tabs = '底部篩選'
 
 L.Appearance = '外觀'
 L.Layer = '階層'
-L.BagBreak = '根據背包顯示'
+L.BagBreak = '根據背包顯示' .. NEW
+L.BreakSpace = '分隔間距' .. NEW
 L.ByType = '根據類型'
 L.ReverseBags = '反轉背包順序'
 L.ReverseSlots = '反轉欄位順序'
@@ -57,12 +58,43 @@ L.Color = '背景顏色'
 L.BorderColor = '邊框顏色'
 
 L.Strata = '框架層級'
-L.Skin = '樣式'
+L.Skin = '樣式'  .. NEW
 L.Columns = '列'
 L.Scale = '縮放'
 L.ItemScale = '物品縮放'
 L.Spacing = '間距'
 L.Alpha = '透明度'
+
+-- slots
+L.SlotOptions = '欄位設定'
+L.SlotOptionsDescription = '這些設置允許您更改在 %s 框架上呈現物品欄位的方式，使其更容易識別。'
+
+L.GlowQuality = '根據品質高亮物品'
+L.GlowQuest = '高亮任務物品'
+L.GlowUnusable = '高亮無法使用的物品'
+L.GlowSets = '高亮裝備管理員設定物品'
+L.GlowNew = '高亮新物品'
+L.GlowPoor = '標記垃圾物品'
+L.GlowAlpha = '高亮亮度'
+
+L.EmptySlots = '在空的欄位顯示背景顏色'
+L.SlotBackground = '欄位背景樣式'
+L.ColorSlots = '根據背包類型高亮空的欄位'
+L.AccountColor = '戰團顏色'
+L.NormalColor = '一般背包欄位顏色'
+L.KeyColor = '鑰匙顏色'
+L.QuiverColor = '箭袋顏色'
+L.SoulColor = '靈魂碎片包顏色'
+L.ReagentColor = '材料銀行顏色'
+L.LeatherColor = '製皮包欄位顏色'
+L.InscribeColor = '銘文包欄位顏色'
+L.HerbColor = '草藥包欄位顏色'
+L.EnchantColor = '附魔包欄位顏色'
+L.EngineerColor = '工程箱欄位顏色'
+L.GemColor = '寶石包顏色'
+L.MineColor = '礦石包顏色'
+L.TackleColor = '釣餌箱顏色'
+L.FridgeColor = '烹飪包顏色'
 
 -- auto display
 L.DisplayOptions = '自動開關'
@@ -86,42 +118,7 @@ L.Socketing = '鑲崁寶石'
 L.TradePartner = '交易物品'
 L.Vehicle = '進入載具'
 
--- slots
-L.SlotOptions = '欄位設定'
-L.SlotOptionsDescription = '這些設置允許您更改在 %s 框架上呈現物品欄位的方式，使其更容易識別。'
-
-L.GlowQuality = '根據品質高亮物品'
-L.GlowQuest = '高亮任務物品'
-L.GlowUnusable = '高亮無法使用的物品'
-L.GlowSets = '高亮裝備管理員設定物品'
-L.GlowNew = '高亮新物品'
-L.GlowPoor = '標記垃圾物品'
-L.GlowAlpha = '高亮亮度'
-
-L.EmptySlots = '在空的欄位顯示背景顏色'
-L.SlotBackground = '欄位背景樣式'
-L.ColorSlots = '根據背包類型高亮空的欄位'
-L.NormalColor = '一般背包欄位顏色'
-L.KeyColor = '鑰匙顏色'
-L.QuiverColor = '箭袋顏色'
-L.SoulColor = '靈魂碎片包顏色'
-L.ReagentColor = '材料銀行顏色'
-L.LeatherColor = '製皮包欄位顏色'
-L.InscribeColor = '銘文包欄位顏色'
-L.HerbColor = '草藥包欄位顏色'
-L.EnchantColor = '附魔包欄位顏色'
-L.EngineerColor = '工程箱欄位顏色'
-L.GemColor = '寶石包顏色'
-L.MineColor = '礦石包顏色'
-L.TackleColor = '釣餌箱顏色'
-L.FridgeColor = '烹飪包顏色'
-
--- rulesets
-L.RuleOptions = '物品規則集'
-L.RuleOptionsDescription = '這些設置允許您選擇顯示哪些物品規則集以及它們的順序。'
-
 -- info
-L.Help = HELP_LABEL
 L.HelpDescription = '在這裡，我們提供對最常見問題的回答。如果這兩者都不能解決您的問題，您可以考慮在 Discord 上的 %s 使用者社群尋求幫助。'
 L.Patrons = '贊助者'
 L.PatronsDescription = '%s是通過贊助來提供免費使用和更新的。衷心感謝在 Patreon 和 Paypal 上支持開發的所有支持者。您也可以在 |cFFF96854patreon.com/jaliborc|r 成為贊助者。'
@@ -129,6 +126,9 @@ L.AskCommunity = '向社群尋求幫助'
 L.JoinUs = '加入我們'
 
 L.FAQ = {
+  '如何將物品直接存入戰團銀行？',
+  '在物品欄位上按住 Shift 並右鍵點擊，物品就會被放入戰團背包，而不是一般背包。',
+
   '如何查看銀行、公會或其他離線角色？',
   '點擊您背包左上角的"離線瀏覽"按鈕。它看起來像是您目前遊玩角色的頭像。',
 
@@ -144,3 +144,13 @@ L.FAQ = {
   '如何切換插件的銀行、虛空倉庫等？',
   '前往插件 -> 框架設定。您需要找到面板頂部的兩個選項。選擇您想要切換的"框架"，然後點擊"啟用框架"。'
 }
+
+-- filters
+L.InstalledFilters = '已安裝的篩選器'
+L.CustomFilters = '自訂篩選器'
+L.NewFilter = '新增篩選器'
+L.NewSearch = '新增搜尋'
+L.NewMacro = '新增巨集'
+L.Import = '匯入'
+L.SharePopup = '複製此資料並分享：'
+L.ImportPopup = '請貼上要匯入的資料：|n|cnERROR_COLOR:(警告 - 僅從您信任的來源匯入篩選器)|r'

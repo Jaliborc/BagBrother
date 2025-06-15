@@ -7,7 +7,16 @@ local L, ADDON, Addon, Config = select(2, ...).Addon()
 local General = Addon.OptionsPanel('GeneralOptions', '|TInterface/Addons/BagBrother/Art/'..ADDON..'-Small:16:16|t')
 
 function General:Populate()
+	self:Add('Header', GENERAL, 'GameFontHighlight', true)
 	self:AddCheck('locked')
+	self:AddCheck('displayBlizzard')
+	self:AddCheck('flashFind')
+
+	self:Add('Check', L.CharacterSpecific)
+		:SetCall('OnInput', function() self:ToggleGlobals() end)
+		:SetChecked(Addon.player.profile ~= Addon.sets.global)
+
+	self:Add('Header', L.Tooltips, 'GameFontHighlight', true)
 	self:AddCheck('countItems')
 
 	if CanGuildBankRepair and self.sets.countItems then
@@ -15,13 +24,6 @@ function General:Populate()
 	end
 
 	self:AddCheck('countCurrency')
-	self:AddCheck('flashFind')
-	self:AddCheck('displayBlizzard')
-	--self:AddCheck('serverSort')
-
-	self:Add('Check', L.CharacterSpecific)
-		:SetCall('OnInput', function() self:ToggleGlobals() end)
-		:SetChecked(Addon.player.profile ~= Addon.sets.global)
 end
 
 function General:ToggleGlobals()

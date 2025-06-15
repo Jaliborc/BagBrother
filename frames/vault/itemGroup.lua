@@ -6,8 +6,7 @@
 			nil -> deposited items
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Items = Addon.ItemGroup:NewClass('VaultItemGroup')
 Items.Button = Addon.VaultItem
 
@@ -38,9 +37,9 @@ function Items:RegisterEvents()
 		elseif bag == WITHDRAW then
 			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Layout')
 		else
-			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'ForAll', 'Update')
-			self:RegisterEvent('VOID_STORAGE_UPDATE', 'ForAll', 'Update')
-			self:RegisterEvent('VOID_TRANSFER_DONE', 'ForAll', 'Update')
+			self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Update')
+			self:RegisterEvent('VOID_STORAGE_UPDATE', 'Update')
+			self:RegisterEvent('VOID_TRANSFER_DONE', 'Update')
 		end
 	end
 end

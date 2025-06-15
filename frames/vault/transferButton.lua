@@ -3,8 +3,7 @@
 		A void storage transfer button
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local TransferButton = Addon.PlayerMoney:NewClass('TransferButton', 'Button')
@@ -15,7 +14,7 @@ TransferButton.Type = 'STATIC'
 
 function TransferButton:Construct()
 	local f = self:Super(TransferButton):Construct()
-	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON .. 'MenuCheckButtonTemplate')
+	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON .. 'CheckButtonTemplate')
 	b.Icon:SetTexture('Interface/Icons/ACHIEVEMENT_GUILDPERK_BARTERING')
 	b:SetScript('OnEnter', function() f:OnEnter() end)
 	b:SetScript('OnLeave', function() f:OnLeave() end)
@@ -46,7 +45,7 @@ function TransferButton:OnClick()
 	end
 end
 
-function TransferButton:OnToggle(_, checked)
+function TransferButton:OnToggle(checked)
 	self.Button:SetChecked(checked)
 end
 

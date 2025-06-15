@@ -1,59 +1,64 @@
 --[[
 	Methods for creating and browsing item rulesets.
-	See https://github.com/jaliborc/BagBrother/wiki/Ruleset-API for details.
+	See https://github.com/Jaliborc/BagBrother/wiki/Rules-API for details.
 	All Rights Reserved
 --]]
 
 
 local ADDON, Addon = ...
+local Search = LibStub('ItemSearch-1.3')
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
-Rules.hierarchy = {}
-Rules.registry = {}
+Rules.Registry = {}
 
 
---[[ Public API ]]--
+--[[ Static API ]]--
 
-function Rules:New(id, name, icon, func)
-	assert(type(id) == 'string', 'Unique ID must be a string')
-
-	local parent = self:ParentID(id)
-	local hierarchy = self.hierarchy
-
-	if parent then
-		parent = self:Get(parent)
-		assert(parent, 'Specified parent item ruleset is not know')
-		hierarchy = parent.children
+function Rules:OnLoad()
+	for i, rule in ipairs(Addon.sets.customRules) do
+		setmetatable(rule, self)
 	end
 
-	local rule = hierarchy[id] or {children = {}}
-	rule.name = name or id
-	rule.icon = icon
-	rule.func = func
-	rule.id = id
-	hierarchy[id] = rule
+	self.GetValue = GetValueOrCallFunction
+	self.__index = self
+end
 
-	self.registry[id] = rule
+function Rules:Register(data)
+	assert(type(data) == 'table', 'data must be a table')
+	assert(type(data.id) == 'string', 'data.id must be a string')
+	assert(type(data.title) == 'string', 'data.title must be a string')
+	assert(not self.Registry[data.id], 'data.id must be unique, id already registered')
+
+	self.Registry[data.id] = setmetatable(data, self)
 	self:Delay(0, 'SendSignal', 'RULES_LOADED')
 end
 
 function Rules:Get(id)
-	return type(id) == 'string' and self.registry[id]
+	return self.Registry[id] or Addon.sets.customRules[id]
 end
 
 function Rules:Iterate()
-	return pairs(self.registry)
-end
-
-function Rules:IterateParents()
-	return pairs(self.hierarchy)
+	return pairs(self.Registry)
 end
 
 
---[[ Additional Methods ]]--
+--[[ Object API ]]--
 
-function Rules:ParentID(id)
-	local parent = id:match('^(.+)/.-$')
-	if parent then
-		return parent
+function Rules:GetIconMarkup(size, frame)
+	local icon, isAtlas = self:GetIcon(frame)
+	return isAtlas and CreateAtlasMarkup(icon, size,size) or
+			icon and CreateSimpleTextureMarkup(icon, size)
+end
+
+function Rules:GetIcon(frame)
+	local icon = self:GetValue('icon', frame) or QUESTION_MARK_ICON
+	return icon, C_Texture.GetAtlasID(icon) ~= 0
+end
+
+function Rules:Compile()
+	local macro = self.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.macro))
+	local search = self.search and function(_,_,_,_, info)
+		return info.itemID and Search:Matches(info.hyperlink, self.search)
 	end
+
+	return macro and macro() or search or self.filter
 end

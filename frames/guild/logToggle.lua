@@ -3,9 +3,8 @@
 		A guild log toggle widget
 --]]
 
-local MODULE = ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', ADDON..'MenuCheckButtonTemplate')
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
+local Toggle = Addon.Tipped:NewClass('LogToggle', 'CheckButton', true)
 
 Toggle.Icons = {
 	'Interface/Icons/INV_Crate_03',
@@ -39,7 +38,7 @@ end
 
 --[[ Events ]]--
 
-function Toggle:OnLogSelected(_, logID)
+function Toggle:OnLogSelected(logID)
 	self:SetChecked(logID == self.id)
 end
 

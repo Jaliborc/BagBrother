@@ -86,8 +86,8 @@ end
 
 --[[ Update ]]--
 
-function Item:Update()
-	self:Super(Item):Update()
+function Item:Update(...)
+	self:Super(Item):Update(...)
 	self:UpdateCooldown()
 
 	local r,g,b = 1,1,1
@@ -154,10 +154,6 @@ function Item:GetQuestInfo()
 			return self:Super(Item):GetQuestInfo()
 		end
 	end
-end
-
-function Item:GetQuery()
-	return self:IsCached() and self.info.hyperlink or {bagID = self:GetBag(), slotIndex = self:GetID()}
 end
 
 function Item:IsCached()

@@ -7,16 +7,18 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').CurrencyInfo
 local Currency = Addon.Tipped:NewClass('Currency', 'Button')
 
-function Currency:Construct()
-	local b = self:Super(Currency):Construct()
-	b:SetNormalFontObject('NumberFontNormalRight')
+function Currency:New(parent, font)
+	local b = self:Super(Currency):New(parent)
+	b:SetNormalFontObject(font)
 	b:SetHeight(24)
 	return b
 end
 
-function Currency:Set(data)
-	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', data.quantity or 0, data.iconFileID or 0, data.iconArgs or ''))
-	self.data = data
+function Currency:Set(data, index)
+	local iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
+
+	self.data, self.index = data, index
+	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', data.quantity or 0, data.iconFileID or 0, iconArgs or ''))
 	self:Show()
 	self:SetWidth(self:GetTextWidth() + 2)
 end
@@ -34,6 +36,6 @@ function Currency:OnEnter()
 	if self:IsCached() then
 		(GameTooltip.SetCurrencyByID or GameTooltip.SetCurrencyTokenByID)(GameTooltip, self.data.currencyTypesID)
 	else
-		GameTooltip:SetBackpackToken(self.data.index)
+		GameTooltip:SetBackpackToken(self.index)
 	end
 end

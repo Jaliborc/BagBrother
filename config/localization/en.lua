@@ -3,29 +3,32 @@
 --]]
 
 local CONFIG = ...
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 
 -- general
 L.GeneralOptionsDescription = 'These are general features that can be toggled depending on your preferences.'
+L.NewFeature = NEW -- do not translate
 
-L.Locked = 'Lock Frames'
 L.CountItems = 'Item Tooltip Counts'
 L.CountGuild = 'Include Guild Banks'
 L.CountCurrency = 'Currency Tooltip Counts'
-L.FlashFind = 'Flash Find'
-L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with that same item across frames.'
-L.DisplayBlizzard = 'Fallback Hidden Bags'
-L.DisplayBlizzardTip = 'If enabled, the default Blizzard UI bag panels will be displayed for hidden inventory or bank containers.\n\n|cffff1919Requires UI reload.|r'
 L.ConfirmGlobals = 'Are you sure you want to disable specific settings for this character? All specific settings will be lost.'
 L.CharacterSpecific = 'Character Specific Settings'
+L.DisplayBlizzard = 'Fallback Hidden Bags'
+L.DisplayBlizzardTip = 'If enabled, the default Blizzard UI bag panels will be displayed for hidden inventory or bank containers.\n\n|cffff1919May require UI reload.|r'
+L.Locked = 'Lock Frames'
+L.FlashFind = 'Flash Find'
+L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with that same item across frames.'
+L.Tooltips = 'Tooltips'
 
 -- frame
 L.FrameOptions = 'Frame Settings'
-L.FrameOptionsDescription = 'These are configuration settings specific to a %s frame.'
+L.FrameOptionsDescription = 'Individual configuration settings specific to each %s frame.'
 
 L.Frame = 'Frame'
 L.Enabled = 'Enable Frame'
-L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919Requires UI reload.|r'
+L.EnabledTip = 'If disabled, the default Blizzard UI will not be replaced for this frame.\n\n|cffff1919May require UI reload.|r'
 L.ActPanel = 'Act as Standard Panel'
 L.ActPanelTip = [[
 If enabled, this panel will automatically position
@@ -33,22 +36,20 @@ itself as the standard ones do, such as the |cffffffffSpellbook|r
 or the |cffffffffDungeon Finder|r, and will not be movable.]]
 
 L.BagToggle = 'Bags Toggle'
-L.Broker = 'Databroker Plugins'
-L.Currency = CURRENCY
-L.Money = MONEY
+L.Broker = 'Databroker Carrousel'
+L.Currency = 'Currency Tracker'
+L.Deposit = 'Deposit Button'
+L.Money = MONEY -- do not translate
+L.Sidebar = 'Side Filters' .. NEW
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
 L.Options = 'Options Button'
-L.Deposit = 'Deposit Button'
-L.LeftTabs = 'Rulesets on Left'
-L.LeftTabsTip = [[
-If enabled, the side tabs will be
-displayed on the left side of the panel.]]
+L.Tabs = 'Bottom Filters' .. NEW
 
 L.Appearance = 'Appearance'
 L.Layer = 'Layer'
-L.BagBreak = 'Bag Break'
-L.BreakSpace = 'Break Spacing'
+L.BagBreak = 'Bag Break' .. NEW
+L.BreakSpace = 'Break Spacing'  .. NEW
 L.ByType = 'By Type'
 L.ReverseBags = 'Reverse Bag Order'
 L.ReverseSlots = 'Reverse Slot Order'
@@ -57,7 +58,7 @@ L.Color = 'Background Color'
 L.BorderColor = 'Border Color'
 
 L.Strata = 'Layer'
-L.Skin = 'Skin'
+L.Skin = 'Skin' .. NEW
 L.Columns = 'Columns'
 L.Scale = 'Scale'
 L.ItemScale = 'Item Scale'
@@ -66,7 +67,7 @@ L.Alpha = 'Opacity'
 
 -- slots
 L.SlotOptions = 'Slot Settings'
-L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on %s frames for easier identification.'
+L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on all %s frames for easier identification.'
 
 L.GlowQuality = 'Color by Quality'
 L.GlowQuest = 'Color Quest Items'
@@ -117,12 +118,8 @@ L.Socketing = 'Socketing Equipment'
 L.TradePartner = 'Trading'
 L.Vehicle = 'Entering a Vehicle'
 
--- rulesets
-L.RuleOptions = 'Item Rulesets'
-L.RuleOptionsDescription = 'These settings allow you to choose which item rulesets to display and in which order.'
-
 -- info
-L.Help = HELP_LABEL
+L.Help = HELP_LABEL -- do not translate
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
 L.Patrons = 'Patrons'
 L.PatronsDescription = '%s is distributed for free and supported trough donations. A massive thank you to all the supporters on Patreon and Paypal who keep development alive. You can become a patron too at |cFFF96854patreon.com/jaliborc|r.'
@@ -137,7 +134,7 @@ L.FAQ = {
   'Click on the "Offline Viewing" button in the top left of your inventory. It looks like a portrait of the character you are currently playing.',
 
   'How to make ADDON forget a deleted/renamed character?',
-  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name will have a red cross next to it. Click on the cross for the character you wish to delete.',
+  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name has a delete button next to it, which looks like a red cross. Click on the cross for the character you wish to delete.',
 
   'Something is wrong! Item levels aren\'t showing over the slots.',
   'ADDON does not natively display item levels. You must be using a third party plugin, such as |cffffd200Bagnon ItemLevel|r or |cffffd200Bagnon ItemInfo|r. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.',
@@ -148,3 +145,13 @@ L.FAQ = {
   'How to toggle ADDON for Bank, VoidStorage, etc?',
   'Go to ADDON -> Frame Settings. You are looking for the two options at the very top of the panel. Choose the "Frame" you wish to toggle and then click "Enable Frame"'
 }
+
+-- filters
+L.InstalledFilters = 'Installed Filters'
+L.CustomFilters = 'Custom Filters'
+L.NewFilter = 'New Filter'
+L.NewSearch = 'New Search'
+L.NewMacro = 'New Macro'
+L.Import = 'Import'
+L.SharePopup = 'Copy this data and share:'
+L.ImportPopup = 'Paste data to import:|n|cnERROR_COLOR:(Warning - only import filters from sources you trust)|r'

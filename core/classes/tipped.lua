@@ -31,9 +31,5 @@ function Tipped.MarkupTooltip(text)
 end
 
 function Tipped:GetTipAnchor()
-	return self, self:IsFarLeft() and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
-end
-
-function Tipped:IsFarLeft()
-	return self:GetRight() > (GetScreenWidth() / 2)
+	return self, self:IsFarRight() and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
 end

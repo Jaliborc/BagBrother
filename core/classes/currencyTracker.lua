@@ -14,33 +14,27 @@ end
 
 --[[ Construct ]]--
 
-function CurrencyTracker:New(parent)
+function CurrencyTracker:New(parent, font)
 	local f = self:Super(CurrencyTracker):New(parent)
-	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
-	f.buttons = {}
+	f.font, f.buttons = font, {}
 
 	C.hooksecurefunc('SetCurrencyBackpack', function()
 		if f:IsVisible() then
-			f:Update()
+			f:Layout()
 		end
 	end)
 	return f
 end
 
-function CurrencyTracker:RegisterEvents()
-	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE', 'Update')
+function CurrencyTracker:OnShow()
+	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE', 'Layout')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Layout')
 	self:Layout()
 end
 
 
 --[[ Update ]]--
-
-function CurrencyTracker:Update()
-	self:Layout()
-	self:SendFrameSignal('ELEMENT_RESIZED')
-end
 
 function CurrencyTracker:Layout()
 	for _,button in ipairs(self.buttons) do
@@ -49,19 +43,17 @@ function CurrencyTracker:Layout()
 
 	local x,y,w = 0,0,2
 	local function addButton(i, data)
-		data.iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
-		data.index = i
-	
 		local b = self:GetButton(i)
-		b:Set(data)
+		b:Set(data, i)
 
-		if (x + b:GetWidth() + 20) > self.frame.ItemGroup:GetWidth() then
+		local width = b:GetWidth()
+		if (x + width) > self:MaxWidth() then
 			w = max(w, x)
 			x,y = 0, y + 20
 		end
 
 		b:SetPoint('TOPRIGHT', self, -x,-y)
-		x = x + b:GetWidth()
+		x = x + width
 	end
 
 	if self:IsCached() then
@@ -81,9 +73,9 @@ function CurrencyTracker:Layout()
 	end
 
 	self:SetSize(max(w, x), y+22)
+	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
 function CurrencyTracker:GetButton(i)
-	self.buttons[i] = self.buttons[i] or Addon.Currency(self)
-	return self.buttons[i]
+	return GetOrCreateTableEntryByCallback(self.buttons, i, GenerateClosure(Addon.Currency, self, self.font))
 end

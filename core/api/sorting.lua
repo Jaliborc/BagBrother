@@ -103,15 +103,15 @@ end
 --[[ Data Structures ]]--
 
 function Sort:GetSpaces()
-	local profile = self.target:GetProfile()
 	local spaces = {}
 
 	for _, bag in pairs(self.target.Bags) do
+		local cache = self.target:GetBagInfo(bag)
 		local family = self.target:GetBagFamily(bag)
-		local locked = profile.lockedSlots[bag]
+		local locked = cache and cache.locked or Addon.None
 		
 		for slot = 1, self.target:NumSlots(bag) do
-			if not locked or not locked[slot] then
+			if not locked[slot] then
 				local item = self.target:GetItemInfo(bag, slot)
 				local id = item.itemID
 				if id then
@@ -121,6 +121,8 @@ function Sort:GetSpaces()
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
 					item.subclass, item.equip, item.level, item.stackSize = subclass or -1, equip, level, stack
 					item.family = C.GetItemFamily(id) or 0
+				elseif item == Addon.None then
+					item = {}
 				end
 
 				tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})

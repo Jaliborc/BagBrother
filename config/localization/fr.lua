@@ -5,6 +5,7 @@
 local CONFIG = ...
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'frFR')
 if not L then return end
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
 -- global
 L.ConfirmGlobals = 'Êtes-vous sûr de vouloir désactiver les paramètres spécifiques à ce personnage ? Tous les paramètres spécifiques seront perdus.'
@@ -35,7 +36,6 @@ le font, tels que le |cffffffffGrimoire|r ou la |cffffffffRecherche de groupe|r,
 et ne pourra pas être déplacé.]]
 
 L.BagToggle = 'Fenêtre du sac'
-L.Money = 'Affichage des revenus'
 L.Broker = 'Activer le DataBroker'
 L.Sort = 'Bouton de tri'
 L.Search = 'Champ de recherche'
@@ -44,7 +44,7 @@ L.ExclusiveReagent = 'Séparer la banque des composants'
 
 L.Appearance = 'Apparence'
 L.Layer = 'Couche'
-L.BagBreak = 'Séparation entre les sacs'
+L.BagBreak = 'Séparation entre les sacs' .. NEW
 L.ReverseBags = 'Inverser ordre des sacs'
 L.ReverseSlots = 'Inverser ordre de tri'
 

@@ -5,71 +5,17 @@
 
 local ADDON, Addon = ...
 local VAR = ADDON .. '_Sets'
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Settings = Addon:NewModule('Settings')
 
-local function AsArray(table)
-	return setmetatable(table, {__metatable = false})
-end
 
-local FrameDefaults = {
-	enabled = true,
-	bagToggle = true, sort = true, search = true, options = true, 
-	money = true, broker = true,
+--[[ Startup ]]--
 
-	strata = 'HIGH', alpha = 1, scale = Addon.FrameScale or 1,
-	color = {0, 0, 0, 0.5},
-	x = 0, y = 0,
-
-	hiddenBags = {}, lockedSlots = {},
-	itemScale = 1, spacing = 2, bagBreak = 1, breakSpace = 1.3,
-
-	brokerObject = ADDON .. 'Launcher',
-	rules = AsArray({}),
-}
-
-local ProfileDefaults = {
-	inventory = Addon:SetDefaults({
-		borderColor = {1, 1, 1, 1},
-		deposit = true, currency = true,
-		point = 'BOTTOMRIGHT',
-		x = -50, y = 100,
-		columns = 10,
-		width = 384,
-		height = 200,
-	}, FrameDefaults),
-
-	bank = Addon:SetDefaults({
-		borderColor = {1, 1, 0, 1},
-		columns = Addon.IsRetail and 22 or 14,
-		currency = true, serverSort = true,
-		point = 'LEFT',
-		width = 600,
-		height = 500,
-		x = 95
-	}, FrameDefaults),
-
-	vault = Addon:SetDefaults({
-		borderColor = {1, 0, 0.98, 1},
-		point = 'LEFT',
-		columns = 16,
-		x = 95
-	}, FrameDefaults),
-
-	guild = Addon:SetDefaults({
-		borderColor = {0, 1, 0, 1},
-		point = 'CENTER',
-		columns = 7,
-	}, FrameDefaults)
-}
-
-
---[[ Methods ]]--
-
-function Settings:OnEnable()
-	BrotherBags = BrotherBags or {}
+function Settings:OnLoad()
+	BrotherBags = self:SetDefaults(BrotherBags or {}, {account = {}})
 	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
-		global = self:SetDefaults({}, ProfileDefaults),
-		profiles = {},
+		global = self:SetDefaults({}, self.ProfileDefaults),
+		profiles = {}, customRules = {},
 
 		resetPlayer = true, flashFind = true,
 		countItems = true, countGuild = true, countCurrency = true, 
@@ -103,21 +49,88 @@ function Settings:OnEnable()
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do
-			--- upgrade settings
-			if type(profile.bagBreak) ~= 'number' then
-				profile.bagBreak = nil
-			end
-
-			self:SetDefaults(profile, ProfileDefaults)
+			self:SetDefaults(profile, self.ProfileDefaults)
 		end
 	end
-
+	
 	_G[VAR] = Addon.sets
+	self:Upgrade()
 end
+
+function Settings:Upgrade() -- all code temporary, will be removed eventually
+	xpcall(function()
+		local function ensureTables(table)
+			for _,key in ipairs(GetKeysArray(table)) do
+				if type(table[key]) ~= 'table' then
+					table[key] = nil -- old/corrupted entry? some users had invalid stuff in their saved variables
+				end
+			end
+			return table
+		end
+
+		local function upgradeProfile(profile)
+			for id, sets in pairs(ensureTables(profile)) do
+				if type(sets.bagBreak) ~= 'number' then
+					sets.bagBreak = nil
+				end
+
+				if sets.skin == 'Panel - Flat' then
+					sets.skin = 'Bagnonium'
+				elseif sets.skin == 'Panel - Marble' then
+					sets.skin = 'Combuctor'
+				end
+
+				if sets.filters then
+					sets.rules, sets.filters = {sidebar = sets.filters}
+				end
+
+				sets.hiddenBags, sets.lockedSlots = nil
+			end
+		end
+
+		for realm, owners in pairs(ensureTables(Addon.sets.profiles)) do
+			for id, profile in pairs(ensureTables(owners)) do
+				upgradeProfile(profile)
+			end
+		end
+		upgradeProfile(Addon.sets.global)
+
+		local function clean(data)
+			for key, value in pairs(data) do
+				if type(value) == 'table' then
+					if (value.size or value.name or key == 'vault') and not value.items then
+						local items = {}
+
+						for k,v in pairs(value) do
+							if type(k) ~= 'string' then
+								items[k] = v
+								value[k] = nil
+							end
+						end
+
+						if next(items) then
+							value.items = items
+						end
+					else
+						clean(value)
+					end
+				end
+			end
+		end
+
+		clean(ensureTables(BrotherBags))
+	end, function(...)
+		print('|cff33ff99' .. ADDON .. '|r ' .. L.UpgradeError)
+		geterrorhandler()(...)
+	end)
+end
+
+
+--[[ API ]]--
 
 function Settings:SetProfile(realm, id, profile)
 	realm = GetOrCreateTableEntry(Addon.sets.profiles, realm)
-	realm[id] = profile and self:SetDefaults(profile, ProfileDefaults)
+	realm[id] = profile and self:SetDefaults(profile, self.ProfileDefaults)
 end
 
 function Settings:GetProfile(realm, id)

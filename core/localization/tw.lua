@@ -12,40 +12,52 @@ L.OpenBank = '打開銀行'
 L.OpenGuild = '打開公會銀行'
 L.OpenVault = '打開虛空倉庫'
 
---frame titles
+--terminal
+L.Commands = '指令列表'
+L.CmdShowInventory = '切換顯示背包'
+L.CmdShowBank = '切換顯示銀行'
+L.CmdShowGuild = '切換顯示公會銀行'
+L.CmdShowVault = '切換顯示虛空倉庫'
+L.CmdShowVersion = '顯示目前版本'
+L.CmdShowOptions = '開啟設定選單'
+L.SkinError = '套用外觀時發生錯誤。'
+L.UpgradeError = '升級設定時發生問題。如遇問題，請嘗試重設設定。'
+
+--titles
 L.TitleBags = '%s的背包'
 L.TitleBank = '%s的銀行'
 L.TitleVault = '%s的虛空倉庫'
+L.NormalBags = '普通背包'
+L.TradeBags = '交易背包'
 
 --actions
 L.Bags = '背包欄位'
 L.Drag = '拖曳'
-L.Guilds = '公會銀行'
-L.Locations = '位置'
-L.Characters = '角色'
 L.BrowseItems = '查看其他'
 L.HideBag = '點擊隱藏這個背包'
 L.ShowBag = '點擊顯示這個背包'
-L.HideSlots = '隱藏背包欄位'
-L.ViewSlots = '顯示背包欄位'
-L.FocusNormal = '只顯示一般背包'
-L.FocusTrade = '只顯示材料袋'
 L.GuildFunds = '公會資金'
 L.NumAllowed = '%s允許'
 L.NumWithdraw = '%d提領'
 L.NumDeposit = '%d存入'
 L.NumRemaining = '%d餘的'
-
---dropdowns
+L.WarbandMoney = '戰團金錢'
 L.OfflineViewing = '離線瀏覽'
+L.Others = '其他'
+
+--menus
+L.Characters = '角色'
+L.Guilds = '公會銀行'
+L.Locations = '位置'
+L.EnterDescription = '輸入描述：'
 L.ServerSorting = '伺服器端排序'
 L.ServerSortingTip = '是否讓遊戲伺服器對可用的項目進行排序'
 L.CleanupOptions = '清理選項'
+L.IncludeReagents = '包含材料'
 L.LockItems = '鎖定物品欄位'
-L.RequiresClientSorting = '需要客戶端排序！'
 
 --dialogs
-L.AskMafia = 'Ask Mafia'
+L.AskMafia = '詢問黑手黨'
 L.ConfirmDelete = '您確定您要刪除%s的快取資料?'
 L.ConfirmTransfer = '存放任何物品都將移除所有修改，使它們無法交易和無法退還。|n|n您是否要繼續？'
 L.CannotPurchaseVault = '您沒有足夠的金錢解鎖虛空倉庫服務|n|n|cffff2020花費：%s|r'

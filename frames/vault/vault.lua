@@ -3,8 +3,7 @@
 		A specialized version of the window frame for void storage
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Vault = Addon.Frame:NewClass('Vault')
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
@@ -17,8 +16,7 @@ Vault.PickupItem = ClickVoidStorageSlot
 Vault.ItemGroup = Addon.VaultItemGroup
 Vault.MoneyFrame = Addon.TransferButton
 Vault.PurchasePrice = 100 * 100 * 100
-Vault.MoneySpacing = -24
-Vault.BrokerSpacing = -6
+Vault.MoneySpacing = -28
 Vault.Bags = {1}
 
 
@@ -36,6 +34,7 @@ function Vault:New(id)
 end
 
 function Vault:RegisterEvents()
+	self:Super(Vault):RegisterEvents()
 	self:RegisterFrameSignal('TRANFER_TOGGLED', 'OnTransfer')
 	self:RegisterSignal('VAULT_OPEN', 'OnNPC')
 end
@@ -67,7 +66,7 @@ function Vault:OnNPC()
 	end
 end
 
-function Vault:OnTransfer(_, transfering)
+function Vault:OnTransfer(transfering)
 	self.Deposit:SetShown(transfering)
 	self.Withdraw:SetShown(transfering)
 	self.ItemGroup:SetShown(not transfering)
@@ -117,8 +116,12 @@ function Vault:GetItemInfo(bag, slot)
 		end
 		return item
 	elseif bag == 1 then
-		return self:Super(Vault):GetItemInfo('vault', slot)
+		return self:Super(Vault):GetItemInfo(bag, slot)
 	end
+end
+
+function Vault:GetBagInfo(bag)
+	return bag == 1 and self:Super(Vault):GetBagInfo('vault')
 end
 
 function Vault:IsCached()
@@ -134,4 +137,4 @@ function Vault:NumSlots(bag)
 end
 
 function Vault:HasMoney() return true end
-function Vault:IsBagGroupShown() end
+function Vault:AreBagsShown() end

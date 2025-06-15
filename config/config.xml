@@ -1,7 +1,7 @@
 <Ui>
-  <Include file="localization\localization.xml"/>
+	<Include file="localization\localization.xml"/>
 
-  <Script file="config.lua"/>
-  <Script file="classes\optionsPanel.lua"/>
-  <Include file="panels\panels.xml"/>
+	<Script file="config.lua"/>
+	<Script file="classes\optionsPanel.lua"/>
+	<Include file="panels\panels.xml"/>
 </Ui>

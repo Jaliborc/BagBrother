@@ -1,7 +1,9 @@
 <Ui>
-  <Script file="general.lua"/>
-  <Script file="frame.lua"/>
-  <Script file="slots.lua"/>
-  <Script file="display.lua"/>
-  <Script file="info.lua"/>
+  <Script file="generalOptions.lua"/>
+  <Script file="frameOptions.lua"/>
+  <Script file="slotOptions.lua"/>
+  <Script file="displayOptions.lua"/>
+  <Script file="infoPanels.lua"/>
+  
+  <Script file="ruleEdit.lua"/>
 </Ui>

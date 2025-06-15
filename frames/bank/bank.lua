@@ -3,7 +3,7 @@
 	All Rights Reserved
 --]]
 
-local ADDON, Addon = ...
+local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Sushi = LibStub('Sushi-3.2')
 local C = LibStub('C_Everywhere')
 
@@ -15,7 +15,7 @@ Bank.Bags = Addon.BankBags
 
 --[[ General API  ]]--
 
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetBagFamily', 'NumSlots'} do
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'GetBagFamily', 'NumSlots'} do
 	Bank[k] = Addon.Inventory[k]
 end
 

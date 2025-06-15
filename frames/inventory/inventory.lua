@@ -63,6 +63,14 @@ function Frame:GetItemInfo(bag, slot)
 	end
 end
 
+function Frame:GetItemQuery(bag, slot, info)
+	if self:IsCached() then
+		return info.hyperlink
+	elseif info.itemID then
+		return {bagID = bag, slotIndex = slot}
+	end
+end
+
 function Frame:GetBagFamily(bag)
 	local family
 	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then

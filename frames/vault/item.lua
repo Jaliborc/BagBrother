@@ -3,8 +3,7 @@
 		A void storage item slot button
 --]]
 
-local MODULE =  ...
-local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
+local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Item = Addon.Item:NewClass('VaultItem')
 local C = LibStub('C_Everywhere').Container
 

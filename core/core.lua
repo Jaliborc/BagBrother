@@ -6,7 +6,7 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').AddOns
-local Addon = LibStub('WildAddon-1.0'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
+local Addon = LibStub('WildAddon-1.1'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -16,9 +16,8 @@ Addon.LastBankBag = Addon.NumBags + NUM_BANKBAGSLOTS
 Addon.LastAccountBag = Addon.LastBankBag + (Constants.InventoryConstants.NumAccountBankSlots or 0)
 Addon.CurrencyLimit = 30  -- safety tracking limit
 
-Addon.None = {}
-Addon.InventoryBags = {}
 Addon.BankBags = {BANK_CONTAINER}
+Addon.InventoryBags = {}
 
 for i = BACKPACK_CONTAINER, Addon.NumBags do
 	tinsert(Addon.InventoryBags, i)
@@ -42,8 +41,8 @@ if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
 	end
 end
 
-function Addon:OnEnable()
-	if NUM_TOTAL_EQUIPPED_BAG_SLOTS then
+function Addon:OnLoad()
+	if LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG then
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_HUD_REVAMP_BAG_CHANGES, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_BAG_SLOTS_AUTHENTICATOR, true)
@@ -60,7 +59,7 @@ function Addon:OnEnable()
 		}
 	end
 
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+	self:ContinueOn('PLAYER_ENTERING_WORLD', function()
 		self:CheckForUpdates(ADDON, self.sets, 'interface/addons/bagbrother/art/'..ADDON..'-big')
 		self.Frames:New('inventory') -- prevent combat block
 	end)

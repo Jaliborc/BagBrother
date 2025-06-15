@@ -7,8 +7,9 @@
 	<Script file="itemGroup.lua"/>
 	<Script file="bag.lua"/>
 	<Script file="bagGroup.lua"/>
+	<Script file="tab.lua"/>
+	<Script file="tabGroup.lua"/>
 
-	<Script file="dropButton.lua"/>
 	<Script file="offlineSelector.lua"/>
 	<Script file="sortButton.lua"/>
 

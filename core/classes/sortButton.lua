@@ -11,14 +11,13 @@ local SortButton = Addon.Tipped:NewClass('SortButton', 'CheckButton', true)
 
 --[[ Construct ]]--
 
-function SortButton:New(...)
-	local b = self:Super(SortButton):New(...)
+function SortButton:New(parent)
+	local b = self:Super(SortButton):New(parent)
 	b:RegisterSignal('SORTING_STATUS')
-	b:RegisterForClicks('anyUp')
 	return b
 end
 
-function SortButton:SORTING_STATUS(_, id)
+function SortButton:SORTING_STATUS(id)
 	self:SetChecked(id == self:GetFrameID())
 end
 
@@ -40,7 +39,7 @@ function SortButton:OnClick(button)
 			drop:SetChildren {
 				{text = L.CleanupOptions, isTitle = true},
 				{
-					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSortingTip,
+					text =  '|A:gmchat-icon-blizz:14:14|a ' .. L.ServerSorting, tooltipTitle = L.ServerSorting, tooltipText = L.ServerSortingTip,
 					func = function() self.frame.profile.serverSort = not self.frame.profile.serverSort end,
 					checked = serverSort, disabled = not hasServer, isNotRadio = true
 				},
@@ -61,7 +60,7 @@ end
 
 function SortButton:OnLocking()
 	if not Addon.lockMode then
-		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarLeft() and 'RIGHT' or 'LEFT', self:IsFarLeft() and -23 or 23,0)
+		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarRight() and 'RIGHT' or 'LEFT', self:IsFarRight() and -23 or 23,0)
 							:SetCall('OnClose', function() self:OnLocking() end)
 	else
 		Addon.lockMode:Release()

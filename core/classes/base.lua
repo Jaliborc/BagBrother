@@ -12,7 +12,7 @@ Base.Scripts = {
 	'OnDragStart', 'OnReceiveDrag',
 	'OnMouseDown', 'OnMouseUp', 'OnMouseWheel',
 	'OnClick', 'PostClick', 'PreClick', 'OnDoubleClick', 'OnHyperlinkClick',
-	'OnTextChanged', 'OnEscapePressed', 'OnEnterPressed',
+	'OnSizeChanged', 'OnTextChanged', 'OnEscapePressed', 'OnEnterPressed',
 }
 
 function Base:NewClass(name, type, template, global)
@@ -26,8 +26,9 @@ function Base:Construct()
 	f:Hide()
 	
 	for i, script in ipairs(self.Scripts) do
-		if f.__index[script] then
-			f:SetScript(script, f[script])
+		local func = self[script]
+		if func then
+			f:SetScript(script, func)
 		end
 	end
 	return f
@@ -45,7 +46,6 @@ function Base:SendFrameSignal(event, ...)
 	self:SendSignal(self:GetFrameID() .. '.' .. event, ...)
 end
 
-function Base:UnregisterAll() -- remove on wildaddon 1.1
-	self:UnregisterAllMessages()
-	self:UnregisterAllEvents()
+function Base:IsFarRight()
+	return self:GetRight() > (GetScreenWidth() / self:GetEffectiveScale() / 2)
 end

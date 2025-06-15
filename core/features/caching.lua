@@ -16,7 +16,7 @@ local NUM_VAULT_ITEMS = 80 * 2
 
 --[[ Startup ]]--
 
-function Cacher:OnEnable()
+function Cacher:OnLoad()
 	self.player = Addon.player.cache
 	self.player.currency = {tracked = {}}
 	self.player.equip = self.player.equip or {}
@@ -26,14 +26,14 @@ function Cacher:OnEnable()
 	self.player.level = UnitLevel('player')
 	self.player.sex = UnitSex('player')
 
-	self:RegisterSignal('BAG_UPDATE')
+	self:RegisterEvent('PLAYER_MONEY')
+	self:RegisterEvent('PLAYER_LEVEL_UP')
+	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'SaveEquip')
+	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
+	self:RegisterEvent('GUILD_ROSTER_UPDATE')
+	self:RegisterSignal('BAG_UPDATED')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
-	self:RegisterEvent('PLAYER_MONEY')
-	self:RegisterEvent('GUILD_ROSTER_UPDATE')
-	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
-	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
-	self:RegisterEvent('PLAYER_LEVEL_UP')
 
 	if GetNumGuildBankTabs then
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
@@ -70,14 +70,10 @@ end
 
 --[[ Events ]]--
 
-function Cacher:BAG_UPDATE(_,bag)
+function Cacher:BAG_UPDATED(bag)
 	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
   		self:SaveBag(bag)
 	end
-end
-
-function Cacher:PLAYER_EQUIPMENT_CHANGED(_,slot)
-	self:SaveEquip(slot)
 end
 
 function Cacher:PLAYER_LEVEL_UP(_, level)
@@ -88,7 +84,7 @@ function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
-function Cacher:CURRENCY_DISPLAY_UPDATE(_, id)
+function Cacher:CURRENCY_DISPLAY_UPDATE(_,id)
 	if id and not C.CurrencyInfo.IsAccountWideCurrency(id) then
 		local info = C.CurrencyInfo.GetCurrencyInfo(id)
 		if info then
@@ -120,20 +116,21 @@ function Cacher:BANK_CLOSE()
 	end
 
 	if C.Bank.CanViewBank(2) then
-		BrotherBags.account = C.Bank.FetchPurchasedBankTabData(2)
-		for _, bag in pairs(BrotherBags.account) do
-			Mixin(bag, self:ParseBag(bag.ID))
+		local data = C.Bank.FetchPurchasedBankTabData(2)
+		for i, bag in pairs(data) do
+			Mixin(self:PopulateBag(BrotherBags.account, i, bag.ID), bag)
 		end
 	end
 end
 
 function Cacher:VAULT_CLOSE()
-	self.player.vault = {}
-
+	local items = {}
 	for i = 1, NUM_VAULT_ITEMS do
 		local id = GetVoidItemInfo(1, i)
-		self.player.vault[i] = id and tostring(id) or nil
+		items[i] = id and tostring(id) or nil
 	end
+
+	GetOrCreateTableEntry(self.player, 'vault').items = items
 end
 
 function Cacher:GUILD_ROSTER_UPDATE()
@@ -151,14 +148,17 @@ function Cacher:GUILDBANKBAGSLOTS_CHANGED()
 		end
 
 		local tab = GetCurrentGuildBankTab()
-		local items = guild[tab]
-		if items and select(3, GetGuildBankTabInfo(tab)) then
+		local data = guild[tab]
+		if data and select(3, GetGuildBankTabInfo(tab)) then
+			local items = {}
 			for i = 1, 98 do
 				local link = GetGuildBankItemLink(tab, i)
 				local _, count = GetGuildBankItemInfo(tab, i)
 
 				items[i] = self:ParseItem(link, count)
 			end
+
+			data.items = items
 		end
 	end
 end
@@ -171,30 +171,28 @@ function Cacher:SaveEquip(slot)
 end
 
 function Cacher:SaveBag(bag)
-	self.player[bag] = self:ParseBag(bag)
+	self:PopulateBag(self.player, bag, bag)
 end
 
-function Cacher:ParseBag(bag)
+function Cacher:PopulateBag(data, key, bag)
 	local size = C.Container.GetContainerNumSlots(bag)
+	local data = GetOrCreateTableEntry(data, key)
 	if size > 0 then
-		local items = {}
+		data.link = bag > BACKPACK_CONTAINER and self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag))) or nil
+		data.size = (bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER) and size or nil
+		data.items = {}
+
 		for slot = 1, size do
-			local data = C.Container.GetContainerItemInfo(bag, slot)
-			if data then
-				items[slot] = self:ParseItem(data.hyperlink, data.stackCount)
+			local item = C.Container.GetContainerItemInfo(bag, slot)
+			if item then
+				data.items[slot] = self:ParseItem(item.hyperlink, item.stackCount)
 			end
 		end
-
-		if bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER then
-			items.size = size
-		end
-
-		if bag > BACKPACK_CONTAINER then
-			items.link = self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag)))
-		end
-
-		return items
+	else
+		data.items, data.link, data.size = nil
 	end
+
+	return data
 end
 
 function Cacher:ParseItem(link, count)

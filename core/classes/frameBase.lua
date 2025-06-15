@@ -7,9 +7,9 @@
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Item
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local Search = LibStub('ItemSearch-1.3')
 
-local Frame = Addon.Base:NewClass('Frame', 'Frame', nil, true)
-Frame.Get = GetOrCreateTableEntryByCallback
+local Frame = Addon.Base:NewClass('Frame', 'Frame', true, true)
 Frame.OpenSound = SOUNDKIT.IG_BACKPACK_OPEN
 Frame.CloseSound = SOUNDKIT.IG_BACKPACK_CLOSE
 Frame.MoneyFrame = Addon.PlayerMoney
@@ -24,13 +24,15 @@ local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
-	self:RegisterFrameSignal('BAG_FRAME_TOGGLED', 'Layout')
-	self:RegisterFrameSignal('ELEMENT_RESIZED', 'Layout')
-	self:RegisterSignal('SKINS_LOADED', 'UpdateSkin')
-	self:RegisterSignal('RULES_LOADED', 'FindRules')
+	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
+	self:RegisterSignal('SKINS_LOADED', 'UpdateVisuals')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterEvents()
 	self:Update()
+end
+
+function Frame:OnLayout()
+	self.skin('layout')
 end
 
 function Frame:OnHide()
@@ -46,46 +48,44 @@ end
 --[[ UI ]]--
 
 function Frame:Update()
-	self.profile = self:GetBaseProfile()
 	self:ClearAllPoints()
 	self:SetFrameStrata(self.profile.strata)
 	self:SetAlpha(self.profile.alpha)
 	self:SetScale(self.profile.scale)
-	self:SetPoint(self:GetPosition())
-	self:UpdateSkin()
+	self:UpdatePosition()
+	self:UpdateVisuals()
+end
+
+function Frame:UpdateVisuals()
+	if self.skin then
+		self.skin:Release()
+	end
+
+	local border = self.profile.borderColor
+	local center = self.profile.color
+
+	self.skin = Addon.Skins:Acquire(self.profile.skin, self)
+	self.skin('load')
+	self.skin('borderColor', border[1], border[2], border[3], border[4])
+	self.skin('centerColor', center[1], center[2], center[3], center[4])
+
+	self.CloseButton:SetPoint('TOPRIGHT', (self.skin.closeX or 0)-2, (self.skin.closeY or 0)-2)
+	self.Title:SetHighlightFontObject(self.skin.fontH or self.FontH)
+	self.Title:SetNormalFontObject(self.skin.font or self.Font)
 	self:Layout()
 end
 
-function Frame:UpdateSkin()
-	if self.bg then
-		Addon.Skins:Release(self.bg)
-	end
-
-	local center = self.profile.color
-	local border = self.profile.borderColor
-	local bg = Addon.Skins:Acquire(self.profile.skin)
-	bg:SetParent(self)
-	bg:SetFrameLevel(self:GetFrameLevel())
-	bg:SetPoint('BOTTOMLEFT', bg.skin.x or 0, bg.skin.y or 0)
-	bg:SetPoint('TOPRIGHT', bg.skin.x1 or 0, bg.skin.y1 or 0)
-	bg:EnableMouse(true)
-
-	self.CloseButton:SetPoint('TOPRIGHT', (bg.skin.closeX or 0)-2, (bg.skin.closeY or 0)-2)
-	self.Title:SetHighlightFontObject(bg.skin.fontH or self.FontH)
-	self.Title:SetNormalFontObject(bg.skin.font or self.Font)
-	self.bg = bg
-
-	Addon.Skins:Call('load', bg)
-	Addon.Skins:Call('borderColor', bg, border[1], border[2], border[3], border[4])
-	Addon.Skins:Call('centerColor', bg, center[1], center[2], center[3], center[4])
+function Frame:UpdatePosition()
+	self:ClearAllPoints()
+	self:SetPoint(self.profile.point, self.profile.x, self.profile.y)
 end
 
-function Frame:RecomputePosition()
+function Frame:SavePosition()
 	local x, y = self:GetCenter()
 	if x and y then
 		local scale = self:GetScale()
-		local h = UIParent:GetHeight() / scale
-		local w = UIParent:GetWidth() / scale
+		local h = GetScreenHeight() / scale
+		local w = GetScreenWidth() / scale
 		local xPoint, yPoint
 
 		if x > w/2 then
@@ -104,65 +104,65 @@ function Frame:RecomputePosition()
 			yPoint = 'BOTTOM'
 		end
 
-		self:SetPosition(yPoint..xPoint, x, y)
+		self.profile.x, self.profile.y = x, y
+		self.profile.point = yPoint..xPoint
+		self:UpdatePosition()
 	end
 end
 
-function Frame:SetPosition(point, x, y)
-	self.profile.x, self.profile.y = x, y
-	self.profile.point = point
-end
+function Frame:GetWidget(key, ...)
+	local widget = rawget(self, key)
+	if not widget then
+		widget = (self[key] or Addon[key])(self, ...)
+		self[key] = widget
+	end
 
-function Frame:GetPosition()
-	return self.profile.point or 'CENTER', self.profile.x, self.profile.y
-end
-
-function Frame:GetWidget(key)
-	return self:Get(key, function() return Addon[key](self) end)
+	widget:Show()
+	return widget
 end
 
 function Frame:GetExtraButtons()
-	return {}
+	return Addon.None
 end
 
 
 --[[ Filtering ]]--
 
-function Frame:FindRules()
-	for id, rule in Addon.Rules:Iterate() do
-		if not tContains(self.profile.rules, id) then
-			self:Delay(0.01, 'SendFrameSignal', 'RULES_UPDATED')
-			tinsert(self.profile.rules, id)
-		end
-	end
-end
-
 function Frame:IsShowingBag(bag)
-	return not self:GetProfile().hiddenBags[bag]
+	local bag = self:GetBagInfo(bag)
+	return not bag or not bag.hidden
 end
 
-function Frame:IsShowingItem(bag, slot)
-	local info = self:GetItemInfo(bag, slot)
-	local rule = Addon.Rules:Get(self.subrule or self.rule)
-
-	if rule and rule.func then
-		if not rule.func(self.owner, bag, slot, self:GetBagInfo(bag), info) then
-			return
-		end
+function Frame:IsShowingItem(bag, slot, info, family)
+	if not self:SearchItem(self.search, bag, slot, info) then
+		return false
 	end
 
-	return self:IsShowingQuality(info.quality)
+	for set, rule in pairs(self.compiled) do
+		if self.profile[set] then
+			local ok, shown = pcall(rule, self, bag, slot, family, info)
+			if ok and not shown then return false end
+		end
+	end
+	
+	return true
 end
 
-function Frame:IsShowingQuality(quality)
-	return self.quality == 0 or (quality and bit.band(self.quality, bit.lshift(1, quality)) > 0)
+function Frame:SearchItem(search, ...)
+	if search then
+		local query = self:GetItemQuery(...)
+		return query and Search:Matches(query, search)
+	end
+	return true
 end
 
 function Frame:SortItems()
-	if self.profile.serverSort and self.ServerSort then
-		self:ServerSort()
-	else
-		Addon.Sorting:Start(self)
+	if not self:IsCached() then
+		if self.profile.serverSort and self.ServerSort then
+			self:ServerSort()
+		else
+			Addon.Sorting:Start(self)
+		end
 	end
 end
 
@@ -171,11 +171,11 @@ end
 
 function Frame:GetItemInfo(bag, slot)
 	local bag = self:GetBagInfo(bag)
-	local data = bag and bag[slot]
+	local data = bag and bag.items and bag.items[slot]
 	if data then
 		if data:find(PET_FORMAT) then
 			local id, _, quality = data:match('(%d+):(%d+):(%d+)')
-			local item = {itemID = tonumber(id), quality = tonumber(quality)}
+			local item = {itemID = tonumber(id), quality = tonumber(quality) or 1}
 			item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
 			item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, GetItemQualityColor(item.quality)), data, item.name)
 			return item
@@ -196,12 +196,24 @@ function Frame:GetItemInfo(bag, slot)
 	return {}
 end
 
+function Frame:GetItemQuery(bag, slot, info)
+	return info.hyperlink
+end
+
 function Frame:GetBagInfo(bag)
 	return self:GetOwner()[bag]
 end
 
 function Frame:GetBagFamily()
 	return 0
+end
+
+function Frame:CanDrag()
+	return not self.profile.managed and (not Addon.sets.locked or IsAltKeyDown())
+end
+
+function Frame:AreBagsShown()
+	return self:GetProfile().showBags
 end
 
 function Frame:IsCached()
