@@ -6,9 +6,23 @@ local CONFIG = ...
 local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'enUS', true, 'raw')
 
--- general
+-- filters
+L.InstalledFilters = 'Installed Filters'
+L.CustomFilters = 'Custom Filters'
+L.NewFilter = 'New Filter'
+L.NewSearch = 'New Search'
+L.NewMacro = 'New Macro'
+L.Import = 'Import'
+L.SharePopup = 'Copy this data and share:'
+L.ImportPopup = 'Paste data to import:|n|cnERROR_COLOR:(Warning - only import filters from sources you trust)|r'
+
+-- automatic. do not translate unless necessary
+L.Help = HELP_LABEL
+L.Money = MONEY
+L.NewFeature = NEW
+
+-- general options
 L.GeneralOptionsDescription = 'These are general features that can be toggled depending on your preferences.'
-L.NewFeature = NEW -- do not translate
 
 L.CountItems = 'Item Tooltip Counts'
 L.CountGuild = 'Include Guild Banks'
@@ -22,7 +36,7 @@ L.FlashFind = 'Flash Find'
 L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with that same item across frames.'
 L.Tooltips = 'Tooltips'
 
--- frame
+-- frame options
 L.FrameOptions = 'Frame Settings'
 L.FrameOptionsDescription = 'Individual configuration settings specific to each %s frame.'
 
@@ -39,7 +53,6 @@ L.BagToggle = 'Bags Toggle'
 L.Broker = 'Databroker Carrousel'
 L.Currency = 'Currency Tracker'
 L.Deposit = 'Deposit Button'
-L.Money = MONEY -- do not translate
 L.Sidebar = 'Side Filters' .. NEW
 L.Sort = 'Sort Button'
 L.Search = 'Search Toggle'
@@ -65,7 +78,7 @@ L.ItemScale = 'Item Scale'
 L.Spacing = 'Spacing'
 L.Alpha = 'Opacity'
 
--- slots
+-- slot options
 L.SlotOptions = 'Slot Settings'
 L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on all %s frames for easier identification.'
 
@@ -119,7 +132,6 @@ L.TradePartner = 'Trading'
 L.Vehicle = 'Entering a Vehicle'
 
 -- info
-L.Help = HELP_LABEL -- do not translate
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'
 L.Patrons = 'Patrons'
 L.PatronsDescription = '%s is distributed for free and supported trough donations. A massive thank you to all the supporters on Patreon and Paypal who keep development alive. You can become a patron too at |cFFF96854patreon.com/jaliborc|r.'
@@ -145,13 +157,3 @@ L.FAQ = {
   'How to toggle ADDON for Bank, VoidStorage, etc?',
   'Go to ADDON -> Frame Settings. You are looking for the two options at the very top of the panel. Choose the "Frame" you wish to toggle and then click "Enable Frame"'
 }
-
--- filters
-L.InstalledFilters = 'Installed Filters'
-L.CustomFilters = 'Custom Filters'
-L.NewFilter = 'New Filter'
-L.NewSearch = 'New Search'
-L.NewMacro = 'New Macro'
-L.Import = 'Import'
-L.SharePopup = 'Copy this data and share:'
-L.ImportPopup = 'Paste data to import:|n|cnERROR_COLOR:(Warning - only import filters from sources you trust)|r'

@@ -83,7 +83,7 @@ function OfflineSelector:OnClick(button)
 					drop:CreateTitle(L.Guilds)
 					start, more = i, false
 				else
-					overflow = (i-start) >= 10 and not owner.fav
+					overflow = (i-start) >= 8 and not owner.favorite
 					if overflow and not more then
 						more = drop:CreateButton('    '..FRIENDS_WOW_NAME_COLOR:WrapTextInColorCode(LFG_LIST_MORE))
 						more:SetScrollMode(500)

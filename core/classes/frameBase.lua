@@ -177,7 +177,7 @@ function Frame:GetItemInfo(bag, slot)
 			local id, _, quality = data:match('(%d+):(%d+):(%d+)')
 			local item = {itemID = tonumber(id), quality = tonumber(quality) or 1}
 			item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
-			item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, GetItemQualityColor(item.quality)), data, item.name)
+			item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, C.GetItemQualityColor(item.quality)), data, item.name)
 			return item
 		elseif data:find(KEYSTONE_FORMAT) then
 			local item = {itemID = tonumber(data:match('(%d+)'))}

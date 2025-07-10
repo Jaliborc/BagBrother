@@ -141,7 +141,7 @@ function Item:UpdateBorder()
 		elseif Addon.sets.glowSets and Search:BelongsToSet(id) then
 	  		r,g,b = .2, 1, .8
 		elseif Addon.sets.glowQuality and quality and quality > 1 then
-			r,g,b = GetItemQualityColor(quality)
+			r,g,b = C.Item.GetItemQualityColor(quality)
 		end
 
 		if r then

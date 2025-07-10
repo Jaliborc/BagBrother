@@ -6,6 +6,7 @@
 local ADDON, Addon = ...
 local Rules = Addon.Rules
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local C = LibStub('C_Everywhere')
 
 local function belongsToClass(classes)
 	local condition = ''
@@ -38,6 +39,6 @@ do
 	}
 
 	for icon, ids in pairs(classes) do
-		Rules:Register {id = ids[1]:lower(), title = GetItemClassInfo(Enum.ItemClass[ids[1]]), icon = icon, macro = belongsToClass(ids)}
+		Rules:Register {id = ids[1]:lower(), title = C.Item.GetItemClassInfo(Enum.ItemClass[ids[1]]), icon = icon, macro = belongsToClass(ids)}
 	end
 end

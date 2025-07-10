@@ -30,6 +30,7 @@ function Log:New(parent)
 	f:SetMaxLines(MAX_TRANSACTIONS)
 	f:SetJustifyH('LEFT')
 	f:SetFading(false)
+	f:EnableMouse(true)
 	return f
 end
 
@@ -45,6 +46,14 @@ function Log:OnLogSelected(logID)
 	else
 		self:UnregisterEvent('GUILDBANKLOG_UPDATE')
 		self:UnregisterSignal('GUILD_TAB_CHANGED')
+	end
+end
+
+function Log:OnMouseWheel(delta)
+	if delta > 0 then
+		self:ScrollUp()
+	else
+		self:ScrollDown()
 	end
 end
 
@@ -67,7 +76,6 @@ end
 
 function Log:UpdateContent()
 	self.numTransactions = self.isMoney and GetNumGuildBankMoneyTransactions() or GetNumGuildBankTransactions(GetCurrentGuildBankTab())
-	self.oldestTransaction = max(self.numTransactions - MAX_TRANSACTIONS, 1)
 	self:Clear()
 
 	if self.isMoney then
@@ -76,16 +84,14 @@ function Log:UpdateContent()
 		self:PrintTransactions()
 	end
 
-	for i = self.numTransactions, MAX_TRANSACTIONS do
-		self:AddMessage(' ')
-	end
+	self:ScrollToBottom()
 end
 
 
 --[[ Write ]]--
 
 function Log:PrintTransactions()
-	for i = self.numTransactions, self.oldestTransaction, -1 do
+	for i = 1, self.numTransactions do 
 		local type, name, itemLink, count, tab1, tab2, year, month, day, hour = self:ProcessLine(GetGuildBankTransaction(GetCurrentGuildBankTab(), i))
 		local msg
 
@@ -108,7 +114,7 @@ function Log:PrintTransactions()
 end
 
 function Log:PrintMoney()
-	for i = self.numTransactions, self.oldestTransaction, -1 do
+	for i = 1, self.numTransactions do
 		local type, name, amount, year, month, day, hour = self:ProcessLine(GetGuildBankMoneyTransaction(i))
 		local money = GetDenominationsFromCopper(amount)
 
