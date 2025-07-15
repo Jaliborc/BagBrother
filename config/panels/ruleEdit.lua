@@ -215,5 +215,5 @@ function Frame:OnShare()
 end
 
 function Frame:OnHelp()
-	LibStub('Sushi-3.2').Popup:External(self.rule.search and 'https://github.com/Jaliborc/ItemSearch-1.3/wiki/Search-Syntax' or 'https://github.com/Jaliborc/BagBrother/wiki/Macros')
+	LibStub('Sushi-3.2').Popup:External('https://youtu.be/sie39ZW8uZo')
 end
