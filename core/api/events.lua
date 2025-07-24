@@ -112,7 +112,9 @@ function Events:QueueBank()
 		self.queue[i] = false
 	end
 
-	self:QueueBag(BANK_CONTAINER)
+	if BANK_CONTAINER then
+		self:QueueBag(BANK_CONTAINER)
+	end
 end
 
 function Events:QueueBag(bag)

@@ -9,8 +9,8 @@ local ADDON, Addon = ...
 local Cacher = Addon:NewModule('Cacher')
 local C = LibStub('C_Everywhere')
 
-local LAST_BANK_SLOT = NUM_BANKBAGSLOTS + Addon.NumBags
 local FIRST_BANK_SLOT = 1 + Addon.NumBags
+local LAST_BANK_SLOT = Addon.LastBankBag
 local NUM_VAULT_ITEMS = 80 * 2
 
 
@@ -70,7 +70,7 @@ end
 
 --[[ Events ]]--
 
-function Cacher:BAG_UPDATED(bag)
+function Cacher:BAG_UPDATED(bag, ...)
 	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
   		self:SaveBag(bag)
 	end
@@ -106,20 +106,21 @@ end
 
 function Cacher:BANK_CLOSE()
 	if C.Bank.CanViewBank(0) then
-		for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
-			self:SaveBag(i)
+		if NUM_BANKBAGSLOTS then
+			for i = FIRST_BANK_SLOT, LAST_BANK_SLOT do
+				self:SaveBag(i)
+			end
+			if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
+				self:SaveBag(REAGENTBANK_CONTAINER)
+			end
+			self:SaveBag(BANK_CONTAINER)
+		else
+			self:SaveBank(self.player, 0)
 		end
-		if REAGENTBANK_CONTAINER and IsReagentBankUnlocked() then
-			self:SaveBag(REAGENTBANK_CONTAINER)
-		end
-		self:SaveBag(BANK_CONTAINER)
 	end
 
 	if C.Bank.CanViewBank(2) then
-		local data = C.Bank.FetchPurchasedBankTabData(2)
-		for i, bag in pairs(data) do
-			Mixin(self:PopulateBag(BrotherBags.account, i, bag.ID), bag)
-		end
+		self:SaveBank(BrotherBags.account, 2)
 	end
 end
 
@@ -166,17 +167,23 @@ end
 
 --[[ API ]]--
 
+function Cacher:SaveBank(domain, type)
+	for i, bag in pairs(C.Bank.FetchPurchasedBankTabData(type)) do
+		Mixin(self:PopulateBag(domain, bag.ID), bag)
+	end
+end
+
 function Cacher:SaveEquip(slot)
 	self.player.equip[slot] = self:ParseItem(GetInventoryItemLink('player', slot), GetInventoryItemCount('player', slot))
 end
 
 function Cacher:SaveBag(bag)
-	self:PopulateBag(self.player, bag, bag)
+	self:PopulateBag(self.player, bag)
 end
 
-function Cacher:PopulateBag(data, key, bag)
+function Cacher:PopulateBag(data, bag)
 	local size = C.Container.GetContainerNumSlots(bag)
-	local data = GetOrCreateTableEntry(data, key)
+	local data = GetOrCreateTableEntry(data, bag)
 	if size > 0 then
 		data.link = bag > BACKPACK_CONTAINER and self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag))) or nil
 		data.size = (bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER) and size or nil

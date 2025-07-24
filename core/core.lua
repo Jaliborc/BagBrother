@@ -12,12 +12,11 @@ Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
-Addon.LastBankBag = Addon.NumBags + NUM_BANKBAGSLOTS
+Addon.LastBankBag = Addon.NumBags + (NUM_BANKBAGSLOTS or Constants.InventoryConstants.NumCharacterBankSlots)
 Addon.LastAccountBag = Addon.LastBankBag + (Constants.InventoryConstants.NumAccountBankSlots or 0)
 Addon.CurrencyLimit = 30  -- safety tracking limit
-
-Addon.BankBags = {BANK_CONTAINER}
 Addon.InventoryBags = {}
+Addon.BankBags = {}
 
 for i = BACKPACK_CONTAINER, Addon.NumBags do
 	tinsert(Addon.InventoryBags, i)
@@ -25,6 +24,10 @@ end
 
 if HasKey then
 	tinsert(Addon.InventoryBags, KEYRING_CONTAINER)
+end
+
+if BANK_CONTAINER then
+	tinsert(Addon.BankBags, BANK_CONTAINER)
 end
 
 for i = Addon.NumBags + 1, Addon.LastBankBag do

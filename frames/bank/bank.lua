@@ -10,6 +10,7 @@ local C = LibStub('C_Everywhere')
 local Bank = Addon.Frame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
 Bank.MoneyFrame = Addon.AccountMoney
+Bank.BagButton = Addon.BankBag
 Bank.Bags = Addon.BankBags
 
 
@@ -25,7 +26,7 @@ if C.Container.SortBankBags then
 		local function queue()
 			local sort = C_Container[tremove(api)]
 			if sort then
-				EventUtil.RegisterOnceFrameEventAndCallback('ITEM_UNLOCKED', function() C_Timer.After(0, queue) end)
+				self:ContinueOn('ITEM_UNLOCKED', function() C_Timer.After(0, queue) end)
 				sort()
 			else
 				self:SendSignal('SORTING_STATUS')
@@ -61,20 +62,18 @@ end
 --[[ Warband Support ]]--
 
 function Bank:GetBagInfo(bag)
-	if bag > Addon.LastBankBag then
-		return BrotherBags.account[bag - Addon.LastBankBag]
-	end
-	return self:GetOwner()[bag]
+	local owner = bag > Addon.LastBankBag and BrotherBags.account or self:GetOwner()
+	return owner[bag]
 end
 
 function Bank:IsCached(bag)
 	if not Addon.Events.AtBank then
 		return true
 	elseif bag then
-		if bag > Addon.LastBankBag then
-			return not C.Bank.CanViewBank(2)
-		else
+		if bag <= Addon.LastBankBag then
 			return self:GetOwner().offline or not C.Bank.CanViewBank(0)
+		else
+			return not C.Bank.CanViewBank(2)
 		end
 	end
 end

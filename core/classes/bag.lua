@@ -4,11 +4,10 @@
 --]]
 
 local ADDON, Addon = ...
-local Sushi = LibStub('Sushi-3.2')
 local C = LibStub('C_Everywhere').Container
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
-local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
 
+local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
 Bag.Size = 32
 Bag.TextureSize = 64 * (Bag.Size/36)
 Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
@@ -16,14 +15,14 @@ Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tr
 
 Bag.StaticIcons = {
 	[BACKPACK_CONTAINER] = 130716,
-	[BANK_CONTAINER] = 'interface/addons/bagBrother/art/achievement-guildperk-mobilebanking',
+	[BANK_CONTAINER or false] = 'interface/addons/bagBrother/art/achievement-guildperk-mobilebanking',
 	[KEYRING_CONTAINER or false] = 'interface/containerframe/keyring-bag-icon',
 	[REAGENTBANK_CONTAINER or false] = 'interface/icons/achievement_guildperk_bountifulbags',
 }
 
 Bag.StaticNames = {
 	[BACKPACK_CONTAINER] = BACKPACK_TOOLTIP,
-	[BANK_CONTAINER] = BANK,
+	[BANK_CONTAINER or false] = BANK,
 	[KEYRING_CONTAINER or false] = KEYRING,
 	[REAGENTBANK_CONTAINER or false] = REAGENT_BANK,
 }
@@ -94,19 +93,8 @@ function Bag:RegisterEvents()
 	self:RegisterFrameSignal('OWNER_CHANGED', 'RegisterEvents')
 	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateToggle')
 
-	if self:GetID() == BANK_CONTAINER or self:IsBankBag() or self:GetID() == REAGENTBANK_CONTAINER then
-		self:RegisterSignal('BANK_CLOSE', 'RegisterEvents')
-		self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
-	end
-
 	if not self:IsCached() then
-		if self:GetID() == REAGENTBANK_CONTAINER then
-			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
-		elseif self.slot then
-			if self:IsBankBag() then
-				self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
-			end
-
+		if self.slot then
 			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
 			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATED')
 			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATED')
@@ -187,25 +175,9 @@ function Bag:Toggle()
 end
 
 function Bag:ShowMenu()
-	if ContainerFrame13.SetBagID then
-		ContainerFrame13:SetBagID(self:GetID()) -- how I met your local function, now streaming on jali+
-		MenuUtil.CreateContextMenu(self, ContainerFrame13.PortraitButton.menuGenerator)
-	end
-end
-
-function Bag:Purchase()
-	if self:GetID() == REAGENTBANK_CONTAINER then
-		Sushi.Popup {
-			text = CONFIRM_BUY_REAGNETBANK_TAB, button1 = YES, button2 = NO,
-			money = GetReagentBankCost(),
-			OnAccept = BuyReagentBank
-		}
-	else
-		Sushi.Popup {
-			text = CONFIRM_BUY_BANK_SLOT, button1 = YES, button2 = NO,
-			money = GetBankSlotCost(GetNumBankSlots()),
-			OnAccept = PurchaseSlot
-		}
+	if ContainerFrame2.SetBagID then
+		ContainerFrame2:SetBagID(self:GetID()) -- how I met your local function, now streaming on jali+
+		MenuUtil.CreateContextMenu(self, ContainerFrame2.PortraitButton.menuGenerator)
 	end
 end
 
@@ -213,44 +185,21 @@ end
 --[[ Update ]]--
 
 function Bag:Update()
-	local bag, cached = self:GetID(), self:IsCached()
-	local icon = self.StaticIcons[bag]
-
-	if not icon then
-		if cached then
-			local data = self.frame:GetBagInfo(bag)
-			if data and data.link then
-				self.link, self.owned = 'item:' .. data.link, true
-				self.itemID, _,_,_, icon = GetItemInfoInstant(self.link)
-			else
-				self.link, self.itemID, self.owned = nil
-			end
-		else
-			self.owned = bag <= Addon.NumBags or (bag - Addon.NumBags) <= GetNumBankSlots()
-			self.link = GetInventoryItemLink('player', self.slot)
-			icon = GetInventoryItemTexture('player', self.slot)
-		end
-	elseif bag == REAGENTBANK_CONTAINER then
-		if cached then
-			self.owned = self.frame:GetBagInfo(bag) and true
-		else
-			self.owned = IsReagentBankUnlocked()
-		end
-	end
-
-	local color = self.owned and 1 or 0.1
-	SetItemButtonTexture(self, icon or 'interface/paperdoll/ui-paperdoll-slot-bag')
-	SetItemButtonTextureVertexColor(self, 1, color, color)
-
-	local free = not cached and self.owned and C.GetContainerNumFreeSlots(bag)
-	self.Count:SetText((free or 0) > 0 and free or '')
+	self:UpdateInfo()
 	self:UpdateToggle()
 	self:UpdateLock()
 
+	local id, cached = self:GetID(), self:IsCached()
+	local free = not cached and self.owned and C.GetContainerNumFreeSlots(id)
+	self.Count:SetText((free or 0) > 0 and free or '')
+
+	local color = self.owned and 1 or 0.1
+	SetItemButtonTexture(self, self.icon or 'interface/paperdoll/ui-paperdoll-slot-bag')
+	SetItemButtonTextureVertexColor(self, 1, color, color)
+
 	if not cached then
-		local id = self:GetID()
 		for i, atlas in ipairs(self.FilterIcons) do
-			local active = C_Container and (id > 0 and C_Container.GetBagSlotFlag(id, 2^i)) or
+			local active = C_Container and (id > 0 and C.GetBagSlotFlag(id, 2^i)) or
 						   GetBagSlotFlag and (self:IsBankBag() and GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) or GetBagSlotFlag(id, i))
 			if active then
 				return self.FilterIcon.Icon:SetAtlas(atlas)
@@ -259,6 +208,28 @@ function Bag:Update()
 	end
 
 	self.FilterIcon.Icon:SetAtlas(nil)
+end
+
+function Bag:UpdateInfo()
+	local id = self:GetID()
+	local icon = self.StaticIcons[id]
+	if not icon then
+		if self:IsCached() then
+			local data = self.frame:GetBagInfo(id)
+			if data and data.link then
+				self.link, self.owned = 'item:' .. data.link, true
+				self.itemID, _,_,_, self.icon = GetItemInfoInstant(self.link)
+			else
+				self.link, self.itemID, self.owned = nil
+			end
+		else
+			self.owned = id <= Addon.NumBags or (id - Addon.NumBags) <= GetNumBankSlots()
+			self.icon = GetInventoryItemTexture('player', self.slot)
+			self.link = GetInventoryItemLink('player', self.slot)
+		end
+	else
+		self.icon = icon
+	end
 end
 
 function Bag:UpdateToggle()
@@ -273,8 +244,8 @@ function Bag:UpdateTooltip()
 	GameTooltip:ClearLines()
 
 	-- title/item
-	local bag = self:GetID()
-	local name = self.StaticNames[bag]
+	local id = self:GetID()
+	local name = self.StaticNames[id]
 
 	if name then
 		GameTooltip:SetText(name, 1, 1, 1)
@@ -287,9 +258,9 @@ function Bag:UpdateTooltip()
 			GameTooltip:SetText(BANK_BAG, 1, 1, 1)
 		else
 			GameTooltip:AddLine(BANK_BAG_PURCHASE, 1,1,1)
-			SetTooltipMoney(GameTooltip, bag == REAGENTBANK_CONTAINER and GetReagentBankCost() or GetBankSlotCost())
+			SetTooltipMoney(GameTooltip, self:GetCost())
 		end
-	elseif bag > NUM_BAG_SLOTS then
+	elseif id > NUM_BAG_SLOTS then
 		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)
 	else
 		GameTooltip:SetText(EQUIP_CONTAINER, 1, 1, 1)
@@ -306,6 +277,6 @@ end
 
 --[[ Properties ]]--
 
+function Bag:IsBankBag() end
 function Bag:IsCached() return self.frame:IsCached(self:GetID()) end
-function Bag:IsBankBag() return self:GetID() > Addon.NumBags end
 function Bag:IsCombinedBagContainer() end -- delicious hack

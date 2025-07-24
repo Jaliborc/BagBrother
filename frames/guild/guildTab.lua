@@ -10,7 +10,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local TabGroup = Addon.BagGroup:NewClass('GuildTabGroup')
 local Tab = Addon.Bag:NewClass('GuildTab')
 Tab.QuestionMark = 'Interface\\Icons\\INV_Misc_QuestionMark'
-TabGroup.CreateButton = Tab
+TabGroup.Button = Tab
 
 do
 	local popup = BagBrotherGuildTabEditPopup
