@@ -37,6 +37,10 @@ function Cacher:OnLoad()
 
 	if GetNumGuildBankTabs then
 		self:RegisterEvent('GUILDBANKBAGSLOTS_CHANGED')
+
+		if C.Bank.CanPurchaseBankTab then
+			self:RegisterEvent('BANK_TABS_CHANGED', 'BANK_CLOSE')
+		end
 	end
 
 	C.CurrencyInfo.hooksecurefunc('SetCurrencyBackpack', function()

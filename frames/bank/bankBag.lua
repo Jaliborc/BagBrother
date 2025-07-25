@@ -9,7 +9,7 @@ local C = LibStub('C_Everywhere').Bank
 local Sushi = LibStub('Sushi-3.2')
 
 local Bag = Addon.Bag:NewClass('BankBag', 'CheckButton')
-Bag.Settings = CreateFrame('Frame', nil, nil, C.WithdrawMoney and 'BankPanelTabSettingsMenuTemplate')
+Bag.Settings = CreateFrame('Frame', nil, nil, C.CanPurchaseBankTab and 'BankPanelTabSettingsMenuTemplate')
 Bag.Settings:Hide()
 Bag.Proxies = {
 	generic = BankPanel and BankPanel.PurchasePrompt.TabCostFrame.PurchaseButton,
@@ -20,7 +20,7 @@ Bag.Proxies = {
 for name, frame in pairs(Bag.Proxies) do
 	if frame then
 		frame:SetScript('OnEnter', function(self) self:GetParent():Super(Bag):OnEnter() end)
-		frame:SetScript('OnLeave', function(self) self:GetParent():OnLeave() end)
+		frame:SetScript('OnLeave', function(self) self:GetParent():OnLeave(); self:Hide() end)
 		frame:SetAlpha(0)
 	end
 end
@@ -39,20 +39,21 @@ function Bag:RegisterEvents()
 	if not self:IsCached() then
 		if NUM_BANKBAGSLOTS and self.slot then
 			self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
+			self:RegisterSignal('BAG_UPDATED')
 		elseif self:GetID() == REAGENTBANK_CONTAINER then
 			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
 		elseif C.FetchPurchasedBankTabData then
+			self:RegisterEvent('BANK_TABS_CHANGED', 'Delay', 0.05, 'Update')
 			self:RegisterEvent('BANK_TAB_SETTINGS_UPDATED', 'Update')
-			self:RegisterEvent('BANK_TABS_CHANGED', 'Update')
 		end
 	end
 end
 
 function Bag:UpdateInfo()
-	local id, type = self:GetID(), self:GetType()
-	if NUM_BANKBAGSLOTS and type == 0 then
+	if NUM_BANKBAGSLOTS and self:GetType() == 0 then
 		self:Super(Bag):UpdateInfo()
 
+		local id = self:GetID()
 		if id == REAGENTBANK_CONTAINER then
 			if self:IsCached() then
 				self.owned = self.frame:GetBagInfo(id) and true
@@ -61,10 +62,7 @@ function Bag:UpdateInfo()
 			end
 		end
 	else
-		local info = (not self:IsCached() and
-			FindValueInTableIf(C.FetchPurchasedBankTabData(type), function(data) return data.ID == id end) or
-			self.frame:GetBagInfo(id)) or Addon.None
-
+		local info = self:GetInfo()
 		self.icon, self.name, self.flags = info.icon, info.name, info.depositFlags
 		self.owned = info.name ~= nil
 	end
@@ -84,6 +82,7 @@ function Bag:OnEnter()
 		secure:SetAttribute('overrideBankType', self:GetType())
 		secure:SetAllPoints(self)
 		secure:SetParent(self)
+		secure:Show()
 
 		if BankFrame then
 			BankFrame.nextSlotCost = self:GetCost()
@@ -123,14 +122,12 @@ function Bag:ShowMenu()
 	else
 		self.Settings:SetParent(self.frame)
 		self.Settings:SetPoint('TOPLEFT', self.frame, 'TOPRIGHT')
-		self.Settings:TriggerEvent(BankPanelTabSettingsMenuMixin.Event.OpenTabSettingsRequested, self:GetID())
+		self.Settings:TriggerEvent(BankPanelTabSettingsMenuMixin.Event.OpenTabSettingsRequested, self:GetInfo())
 	end
 end
 
-function Bag.Settings:SetSelectedTab(id)
-	local data = C.FetchPurchasedBankTabData(2)
-	self.selectedTabData = data[id - Addon.LastBankBag]
-
+function Bag.Settings:SetSelectedTab(data)
+	self.selectedTabData = data
 	if self:IsShown() then
 		self:Update()
 	end
@@ -138,6 +135,12 @@ end
 
 
 --[[ API ]]--
+
+function Bag:GetInfo()
+	return (not self:IsCached() and
+		FindValueInTableIf(C.FetchPurchasedBankTabData(self:GetType()), function(data) return data.ID == self:GetID() end) or
+		self.frame:GetBagInfo(self:GetID())) or Addon.None
+end
 
 function Bag:GetCost()
 	if self:GetID() ~= REAGENTBANK_CONTAINER then
