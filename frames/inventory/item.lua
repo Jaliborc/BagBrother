@@ -40,11 +40,11 @@ function Item:Construct()
 end
 
 function Item:PreClick(button)
-	if self.hasItem and button == 'RightButton' and REAGENTBANK_CONTAINER then
+	if self.hasItem and button == 'RightButton' then
 		if (IsShiftKeyDown() or not C.Bank.CanUseBank(0)) and C.Bank.CanUseBank(2) then
 			S.UseContainerItem(self:GetBag(), self:GetID(), nil, 2)
 
-		elseif tContains(Addon.InventoryBags, self:GetBag()) and not IsModifiedClick() and C.Bank.CanUseBank(0) then
+		elseif REAGENTBANK_CONTAINER and not IsModifiedClick() and C.Bank.CanUseBank(0) then
 			local stackSize, _,_,_,_,_,_,_,_, isReagent = select(8, C.Item.GetItemInfo(self.info.itemID))
 			if isReagent and self.frame:NumSlots(REAGENTBANK_CONTAINER) > 0 then
 				for _, bag in ipairs(Addon.BankBags) do

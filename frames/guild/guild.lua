@@ -13,7 +13,7 @@ Guild.CloseSound = SOUNDKIT.GUILD_VAULT_CLOSE
 Guild.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
 Guild.MoneyFrame = Addon.GuildMoney
 Guild.ItemGroup = Addon.GuildItemGroup
-Guild.BagGroup = Addon.GuildTabGroup
+Guild.BagButton = Addon.GuildTab
 Guild.Title = '%s'
 Guild.Bags = {}
 

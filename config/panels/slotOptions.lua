@@ -39,16 +39,27 @@ end
 
 function Slots:SlotTypes()
 	local types = {}
-	for name in pairs(Addon.sets.color) do
-		tinsert(types, name)
+	local ignore = {'normal'}
+
+	if Addon.IsClassic then
+		tAppendAll(ignore, {'inscribe', 'tackle', 'fridge', 'gem'})
 	end
 
-	for i, name in ipairs(Addon.IsRetail and {'key', 'soul', 'quiver'} or {'account', 'reagent', 'inscribe', 'tackle', 'fridge', 'gem'}) do
-		tremove(types, tIndexOf(types, name))
+	if Addon.IsModern then
+		tAppendAll(ignore, {'key', 'soul', 'quiver'})
+	end
+
+	if not Addon.IsRetail then
+		tAppendAll(ignore, {'account', 'reagent'})
+	end
+
+	for name in pairs(Addon.sets.color) do
+		if not tContains(ignore, name) then
+			tinsert(types, name)
+		end
 	end
 
 	sort(types)
-	tremove(types, tIndexOf(types, 'normal'))
 	tinsert(types, 1, 'normal')
 	return types
 end

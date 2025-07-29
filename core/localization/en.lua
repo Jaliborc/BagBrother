@@ -28,6 +28,7 @@ L.TitleBank = '%s\'s Bank'
 L.TitleVault = '%s\'s Void Storage'
 L.NormalBags = 'Normal Bags'
 L.TradeBags = 'Trade Bags'
+L.AmmoBags = 'Ammo Bags'
 
 --tooltips
 L.Bags = 'Bags'

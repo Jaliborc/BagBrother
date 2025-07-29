@@ -22,11 +22,20 @@ end
 
 Rules:Register {id = 'all', title = ALL, icon = 'Interface/Addons/BagBrother/art/achievement-guildperk-mobilebanking', static = true}
 Rules:Register {id = 'normal', title = L.NormalBags, icon = 133628, macro = 'return family == 0', static = true}
-Rules:Register {id = 'trade', title = L.TradeBags, icon = 133669, macro = 'return family > 0', static = true}
+Rules:Register {id = 'trade', title = L.TradeBags, icon = 133669, macro = 'return family > 4 and family ~= 9', static = true}
 
 if Addon.IsRetail then
 	Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0', static = true}
 	Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0', static = true}
+elseif not Addon.IsModern then
+	local function ammoIcon()
+		local equipped = GetInventoryItemID('player', INVSLOT_AMMO)
+		return equipped and select(5, C.Item.GetItemInfoInstant(equipped)) or 133581
+	end
+
+	Rules:Register {id = 'keys', title = KEYRING, icon = 134238, macro = 'return family == 9', static = true}
+	Rules:Register {id = 'souls', title = SOUL_SHARDS, icon = 134075, macro = 'return family == 3 or family == 4', static = true}
+	Rules:Register {id = 'ammo', title = L.AmmoBags, icon = ammoIcon, macro = 'return family == 1 or family == 2', static = true}
 end
 
 do
