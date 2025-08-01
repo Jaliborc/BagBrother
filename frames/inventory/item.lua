@@ -40,7 +40,7 @@ function Item:Construct()
 end
 
 function Item:PreClick(button)
-	if self.hasItem and button == 'RightButton' then
+	if self.hasItem and Addon.Events.AtBank and button == 'RightButton' then
 		if (IsShiftKeyDown() or not C.Bank.CanUseBank(0)) and C.Bank.CanUseBank(2) then
 			S.UseContainerItem(self:GetBag(), self:GetID(), nil, 2)
 
