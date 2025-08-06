@@ -45,6 +45,12 @@ if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
 	end
 end
 
+if not GameFontNormalCenter then
+	local font = CreateFont('GameFontNormalCenter')
+	font:SetFontObject(GameFontNormal)
+	font:SetJustifyH('CENTER')
+end
+
 function Addon:OnLoad()
 	if LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG then
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
