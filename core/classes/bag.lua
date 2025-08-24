@@ -167,6 +167,11 @@ end
 
 function Bag:Toggle()
 	local data = self.frame:GetBagInfo(self:GetID())
+
+	if not data then
+		return
+	end
+
 	data.hidden = not data.hidden
 
 	PlaySound(data.hidden and 856 or 857)
