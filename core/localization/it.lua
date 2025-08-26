@@ -20,6 +20,10 @@ L.CmdShowGuild = 'Mostra la tua Banca di Gilda'
 L.CmdShowVault = 'Mostra la tua Banca Eterea'
 L.CmdShowVersion = 'Mostra la versione attuale'
 L.CmdShowOptions = 'Apri il menù di configurazione'
+ L.CmdReset = 'Cancella impostazioni e dati memorizzati nella cache'
+L.ResetConfirm = 'Sei sicuro di voler reimpostare %s?|nTutte le impostazioni e i dati memorizzati nella cache andranno persi.'
+L.SkinError = 'Errore durante l’applicazione della skin.'
+L.UpgradeError = 'Problema durante l’aggiornamento delle impostazioni. Se riscontri problemi, prova a reimpostare le tue impostazioni.'
 
 --frame titles
 L.TitleBags = 'Inventario di %s'

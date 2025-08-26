@@ -19,6 +19,8 @@ L.CmdShowGuild = 'Toggles your guild bank'
 L.CmdShowVault = 'Toggles your void storage'
 L.CmdShowVersion = 'Prints the current version'
 L.CmdShowOptions = 'Opens the configuration menu'
+L.CmdReset = 'Wipe settings and cached data'
+L.ResetConfirm = 'Are you sure you want to reset %s?|nAll settings and cached data will be lost.'
 L.SkinError = 'Error applying skin.'
 L.UpgradeError = 'Issue upgrading settings. If you run into issues, try resetting your settings.'
 

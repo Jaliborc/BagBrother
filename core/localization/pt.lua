@@ -12,6 +12,19 @@ L.OpenBank = 'Abrir Banco'
 L.OpenGuild = 'Abrir Banco da Guilda'
 L.OpenVault = 'Abrir Cofre'
 
+-- terminal
+L.Commands = 'Lista de comandos'
+L.CmdShowInventory = 'Mostra ou oculta o inventário'
+L.CmdShowBank = 'Mostra ou oculta o banco'
+L.CmdShowGuild = 'Mostra ou oculta o banco da guilda'
+L.CmdShowVault = 'Mostra ou oculta o cofre do vazio'
+L.CmdShowVersion = 'Mostra a versão atual'
+L.CmdShowOptions = 'Abre o menu de configuração'
+L.CmdReset = 'Apagar definições e dados em cache'
+L.ResetConfirm = 'Tem a certeza de que deseja repor %s?|nTodas as definições e dados em cache serão perdidos.'
+L.SkinError = 'Erro ao aplicar o tema.'
+L.UpgradeError = 'Problema ao atualizar as definições. Se encontrar problemas, tente repor as suas definições.'
+
 --frame titles
 L.TitleBags = 'Mochila de %s'
 L.TitleBank = 'Banco de %s'

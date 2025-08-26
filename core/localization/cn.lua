@@ -20,6 +20,10 @@ L.CmdShowGuild = '切换公会银行'
 L.CmdShowVault = '切换虚空仓库'
 L.CmdShowVersion = '列出当前版本'
 L.CmdShowOptions = '打开配置菜单'
+L.CmdReset = '清除設定和快取資料'
+L.ResetConfirm = '你確定要重置 %s 嗎？|n所有設定和快取資料都將遺失。'
+L.SkinError = '套用外觀時發生錯誤。'
+L.UpgradeError = '升級設定時發生問題。如果遇到問題，請嘗試重置設定。'
 
 --frame titles
 L.TitleBags = '%s的背包'

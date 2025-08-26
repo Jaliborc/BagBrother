@@ -20,6 +20,10 @@ L.CmdShowGuild = 'Affiche ou cache votre banque de guilde'
 L.CmdShowVault = 'Affiche ou cache votre chambre du Vide'
 L.CmdShowVersion = 'Affiche la version actuelle'
 L.CmdShowOptions = 'Ouvre le menu de configuration'
+L.CmdReset = 'Effacer les paramètres et les données en cache'
+L.ResetConfirm = 'Êtes-vous sûr de vouloir réinitialiser %s ?|nTous les paramètres et données en cache seront perdus.'
+L.SkinError = 'Erreur lors de l’application du thème.'
+L.UpgradeError = 'Problème lors de la mise à jour des paramètres. En cas de problème, essayez de réinitialiser vos paramètres.'
 
 --frame titles
 L.TitleBags = 'Inventaire |2 %s'

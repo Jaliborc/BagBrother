@@ -20,6 +20,8 @@ L.CmdShowGuild = '切換顯示公會銀行'
 L.CmdShowVault = '切換顯示虛空倉庫'
 L.CmdShowVersion = '顯示目前版本'
 L.CmdShowOptions = '開啟設定選單'
+L.CmdReset = '清除设置和缓存数据'
+L.ResetConfirm = '你確定要重置 %s 嗎？|n所有設定和快取資料都將遺失。'
 L.SkinError = '套用外觀時發生錯誤。'
 L.UpgradeError = '升級設定時發生問題。如遇問題，請嘗試重設設定。'
 

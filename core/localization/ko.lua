@@ -20,6 +20,10 @@ L.CmdShowGuild = '길드 금고 온/오프'
 L.CmdShowVault = '공허 보관 온/오프'
 L.CmdShowVersion = '현재 버전 정보 출력'
 L.CmdShowOptions = '설정메뉴 열기'
+L.CmdReset = '설정 및 캐시 데이터 삭제'
+L.ResetConfirm = '정말 %s을(를) 초기화하시겠습니까?|n모든 설정과 캐시 데이터가 손실됩니다.'
+L.SkinError = '스킨 적용 오류.'
+L.UpgradeError = '설정을 업그레이드하는 중 문제가 발생했습니다. 문제가 계속되면 설정을 초기화해 보세요.'
 
 --frame titles
 L.TitleBags = '%s의 소지품'

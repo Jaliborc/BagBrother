@@ -1,5 +1,5 @@
 --[[
-    Spanish Localization (Credits/Blame: Phanx, Woopy)
+    Spanish Localization (Credits/Blame: Phanx, Woopy, Jaliborc)
 --]]
 
 local ADDON = ...
@@ -11,6 +11,19 @@ L.OpenBags = 'Mostrar inventario'
 L.OpenBank = 'Mostrar banco'
 L.OpenGuild = 'Mostrar banco de hermandad'
 L.OpenVault = 'Mostrar depósito del vacío'
+
+-- terminal
+L.Commands = 'Lista de comandos'
+L.CmdShowInventory = 'Muestra u oculta tu inventario'
+L.CmdShowBank = 'Muestra u oculta tu banco'
+L.CmdShowGuild = 'Muestra u oculta el banco de hermandad'
+L.CmdShowVault = 'Muestra u oculta la cámara del vacío'
+L.CmdShowVersion = 'Muestra la versión actual'
+L.CmdShowOptions = 'Abre el menú de configuración'
+L.CmdReset = 'Borrar la configuración y los datos en caché'
+L.ResetConfirm = '¿Seguro que quieres restablecer %s?|nSe perderán todos los ajustes y datos en caché.'
+L.SkinError = 'Error al aplicar la apariencia.'
+L.UpgradeError = 'Problema al actualizar la configuración. Si tienes problemas, intenta restablecer la configuración.'
 
 --frame titles
 L.TitleBags = 'Inventario de %s'

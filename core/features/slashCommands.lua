@@ -31,7 +31,7 @@ function Slash:OnLoad()
 end
 
 function Slash.OnSlashCommand(cmd)
-	local cmd = cmd and cmd:lower() or ''
+	local cmd = cmd and cmd:lower()
 	if cmd == 'bags' or cmd == 'inventory' then
 		Addon.Frames:Toggle('inventory')
 	elseif cmd == 'bank' then
@@ -42,11 +42,26 @@ function Slash.OnSlashCommand(cmd)
 		Addon.Frames:Toggle('vault')
 	elseif cmd == 'version' then
 		print('|cff33ff99' .. ADDON .. '|r version ' .. LibStub('C_Everywhere').AddOns.GetAddOnMetadata(ADDON, 'version'))
-	elseif cmd == 'config' or cmd == 'options' or cmd == '' then
+	elseif cmd == 'config' or cmd == 'options' then
 		Addon:ShowOptions()
+	elseif cmd == 'reset' then
+		Slash:ResetSettings()
 	else
 		Slash:PrintHelp()
 	end
+end
+
+function Slash:ResetSettings()
+	LibStub('Sushi-3.2').Popup {
+		icon = 'Interface/Addons/BagBrother/Art/' .. ADDON .. '-big',
+		text = format(L.ResetConfirm, ADDON), button1 = OKAY, button2 = CANCEL,
+		whileDead = 1, exclusive = 1, hideOnEscape = 1,
+		OnAccept = function()
+			wipe(BrotherBags)
+			wipe(Addon.sets)
+			ReloadUI()
+		end
+	}
 end
 
 function Slash:PrintHelp()
@@ -56,6 +71,7 @@ function Slash:PrintHelp()
 	self:Print('guild', L.CmdShowGuild, Addon.LoadGuild)
 	self:Print('vault', L.CmdShowVault, Addon.LoadVault)
 	self:Print('config/options', L.CmdShowOptions)
+	self:Print('reset', L.CmdReset)
 	self:Print('version', L.CmdShowVersion)
 end
 

@@ -20,6 +20,10 @@ L.CmdShowGuild = 'Schaltet die Gildenbank um'
 L.CmdShowVault = 'Schaltet das Leerenlager um'
 L.CmdShowVersion = 'Zeigt die aktuelle Version an'
 L.CmdShowOptions = 'Öffnet das Konfigurationsmenü'
+L.CmdReset = 'Einstellungen und zwischengespeicherte Daten löschen'
+L.ResetConfirm = 'Bist du sicher, dass du %s zurücksetzen möchtest?|nAlle Einstellungen und zwischengespeicherten Daten gehen verloren.'
+L.SkinError = 'Fehler beim Anwenden des Skins.'
+L.UpgradeError = 'Problem beim Aktualisieren der Einstellungen. Falls Probleme auftreten, versuche, deine Einstellungen zurückzusetzen.'
 
 --frame titles
 L.TitleBags = 'Inventar von %s'
