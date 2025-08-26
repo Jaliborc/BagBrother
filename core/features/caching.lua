@@ -51,8 +51,8 @@ function Cacher:OnLoad()
 		self:SaveBag(i)
 	end
 
-	if HasKey and HasKey() then
-		self:SaveBag(KEYRING_CONTAINER)
+	if KEYRING_CONTAINER and HasKey then
+		self:SaveBag(KEYRING_CONTAINER, not HasKey())
 	end
 
 	for i = 1, INVSLOT_LAST_EQUIPPED do
@@ -171,24 +171,24 @@ end
 
 --[[ API ]]--
 
+function Cacher:SaveEquip(slot)
+	self.player.equip[slot] = self:ParseItem(GetInventoryItemLink('player', slot), GetInventoryItemCount('player', slot))
+end
+
 function Cacher:SaveBank(domain, type)
 	for i, bag in pairs(C.Bank.FetchPurchasedBankTabData(type)) do
 		Mixin(self:PopulateBag(domain, bag.ID), bag)
 	end
 end
 
-function Cacher:SaveEquip(slot)
-	self.player.equip[slot] = self:ParseItem(GetInventoryItemLink('player', slot), GetInventoryItemCount('player', slot))
+function Cacher:SaveBag(bag, ignore)
+	self:PopulateBag(self.player, bag, ignore)
 end
 
-function Cacher:SaveBag(bag)
-	self:PopulateBag(self.player, bag)
-end
-
-function Cacher:PopulateBag(data, bag)
+function Cacher:PopulateBag(data, bag, ignore)
 	local size = C.Container.GetContainerNumSlots(bag)
 	local data = GetOrCreateTableEntry(data, bag)
-	if size > 0 then
+	if not ignore and size > 0 then
 		data.link = bag > BACKPACK_CONTAINER and self:ParseItem(GetInventoryItemLink('player', C.Container.ContainerIDToInventoryID(bag))) or nil
 		data.size = (bag >= BACKPACK_CONTAINER or bag == KEYRING_CONTAINER) and size or nil
 		data.items = {}
