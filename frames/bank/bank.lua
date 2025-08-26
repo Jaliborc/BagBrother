@@ -20,21 +20,26 @@ for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'Ge
 	Bank[k] = Addon.Inventory[k]
 end
 
-if C.Container.SortBankBags then
-	function Bank:ServerSort()
-		local api = {'SortAccountBankBags', 'SortReagentBankBags', 'SortBankBags'}
-		local function queue()
-			local sort = C_Container[tremove(api)]
-			if sort then
-				self:ContinueOn('ITEM_UNLOCKED', function() C_Timer.After(0, queue) end)
-				sort()
-			else
-				self:SendSignal('SORTING_STATUS')
-			end
-		end
+do
+	local sortAPI = C.Container.SortReagentBankBags and {C.Container.SortReagentBankBags, C.Container.SortBankBags} or 
+					C.Container.SortBank and {GenerateClosure(C.Container.SortBank, 2), GenerateClosure(C.Container.SortBank, 0)}
 
-		PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
-		queue() -- callback chain
+	if sortAPI then
+		function Bank:ServerSort()
+			local calls = CopyTable(sortAPI)
+			local function queue()
+				local sort = tremove(calls)
+				if sort then
+					self:ContinueOn('ITEM_UNLOCKED', function() RunNextFrame(queue) end)
+					sort()
+				else
+					self:SendSignal('SORTING_STATUS')
+				end
+			end
+
+			PlaySound(SOUNDKIT.UI_BAG_SORTING_01)
+			queue() -- callback chain
+		end
 	end
 end
 
@@ -54,7 +59,7 @@ end
 function Bank:GetExtraButtons()
 	return {
 		self.profile.bagToggle and self:GetWidget('BagToggle'),
-		DepositReagentBank and self.profile.deposit and self:GetWidget('DepositButton')
+		Addon.DepositButton and self.profile.deposit and self:GetWidget('DepositButton')
 	}
 end
 
