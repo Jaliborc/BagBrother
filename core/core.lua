@@ -5,7 +5,7 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere').AddOns
+local C = LibStub('C_Everywhere')
 local Addon = LibStub('WildAddon-1.1'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
 Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
@@ -39,7 +39,7 @@ if REAGENTBANK_CONTAINER then
 	tinsert(Addon.BankBags, REAGENTBANK_CONTAINER)
 end
 
-if C_Bank and C_Bank.FetchPurchasedBankTabIDs then
+if C.Bank.FetchPurchasedBankTabIDs then
 	for i = Addon.LastBankBag + 1, Addon.LastAccountBag do
 		tinsert(Addon.BankBags, i)
 	end
@@ -52,15 +52,7 @@ if not GameFontNormalCenter then
 end
 
 function Addon:OnLoad()
-	if LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG then
-		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
-		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_HUD_REVAMP_BAG_CHANGES, true)
-		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_BAG_SLOTS_AUTHENTICATOR, true)
-		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_MOUNT_EQUIPMENT_SLOT_FRAME, true)
-		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_UPGRADEABLE_ITEM_IN_SLOT, true)
-	end
-
-	SettingsPanel.CategoryList:HookScript('OnShow', function() C.LoadAddOn(ADDON .. '_Config') end)
+	SettingsPanel.CategoryList:HookScript('OnShow', function() C.AddOns.LoadAddOn(ADDON .. '_Config') end)
 	if AddonCompartmentFrame then
 		AddonCompartmentFrame:RegisterAddon {
 			text = ADDON, keepShownOnClick = true, notCheckable = true,
@@ -76,7 +68,7 @@ function Addon:OnLoad()
 end
 
 function Addon:ShowOptions()
-	if C.LoadAddOn(ADDON .. '_Config') then
+	if C.AddOns.LoadAddOn(ADDON .. '_Config') then
 		Addon.GeneralOptions:Open()
 	end
 end

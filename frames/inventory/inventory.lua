@@ -26,12 +26,12 @@ end
 
 function Frame:OnShow()
 	self:Super(Frame):OnShow()
-	self:Delay(0, 'HighlightMainMenu', true)
+	self:Delay('HighlightMainMenu', true)
 end
 
 function Frame:OnHide()
 	self:Super(Frame):OnHide()
-	self:Delay(0, 'HighlightMainMenu', false)
+	self:Delay('HighlightMainMenu', false)
 end
 
 function Frame:HighlightMainMenu(checked)
@@ -103,7 +103,7 @@ function Frame:NumSlots(bag)
 			size = (bag > Addon.LastBankBag or bag == REAGENTBANK_CONTAINER) and 98 or data.size
 		end
 	elseif bag == KEYRING_CONTAINER then
-		size = HasKey and HasKey() and C.GetContainerNumSlots(bag)
+		size = HasKey and HasKey() and GetKeyRingSize()
 	elseif bag == REAGENTBANK_CONTAINER then
 		size = IsReagentBankUnlocked() and C.GetContainerNumSlots(bag)
 	else

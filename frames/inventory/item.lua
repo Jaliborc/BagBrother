@@ -7,7 +7,6 @@
 local ADDON, Addon = ...
 local Item = Addon.Item:NewClass('ContainerItem')
 local C = LibStub('C_Everywhere')
-local S = C.Container
 
 Item.BagFamilies = {
 	[-1] = 'account',
@@ -39,41 +38,12 @@ function Item:Construct()
 	return b
 end
 
-function Item:PreClick(button)
-	if self.hasItem and Addon.Events.AtBank and button == 'RightButton' then
-		if (IsShiftKeyDown() or not C.Bank.CanUseBank(0)) and C.Bank.CanUseBank(2) then
-			S.UseContainerItem(self:GetBag(), self:GetID(), nil, 2)
-
-		elseif REAGENTBANK_CONTAINER and not IsModifiedClick() and C.Bank.CanUseBank(0) then
-			local stackSize, _,_,_,_,_,_,_,_, isReagent = select(8, C.Item.GetItemInfo(self.info.itemID))
-			if isReagent and self.frame:NumSlots(REAGENTBANK_CONTAINER) > 0 then
-				for _, bag in ipairs(Addon.BankBags) do
-					for slot = 1, S.GetContainerNumSlots(bag) do
-						if S.GetContainerItemID(bag, slot) == self.info.itemID then
-							local free = stackSize - S.GetContainerItemInfo(bag, slot).stackCount
-							if free > 0 then
-								S.SplitContainerItem(self:GetBag(), self:GetID(), min(self.info.stackCount, free))
-								S.PickupContainerItem(bag, slot)
-							end
-						end
-					end
-				end
-
-				S.UseContainerItem(self:GetBag(), self:GetID(), nil, nil, true)
-			end
-		end
-	end
-
-	self.wasLocked = self.info.isLocked
-end
-
-function Item:PostClick(button)
-	self:Super(Item):PostClick(button)
-
-	if Addon.Events.AtVault and self.wasLocked and not IsModifiedClick() and button == 'RightButton' then
-		for i = 10, 1, -1 do
-			if GetVoidTransferDepositInfo(i) == self.info.itemID then
-				ClickVoidTransferDepositSlot(i, true)
+if C.Bank.AreAnyBankTypesViewable then
+	function Item:PreClick(button)
+		if C.Bank.AreAnyBankTypesViewable() and self.hasItem then
+			if button == 'RightButton' then
+				local bankType = C.Bank.CanUseBank(2) and (IsShiftKeyDown() or not C.Bank.CanUseBank(0)) and 2 or 0
+				C.Container.UseContainerItem(self:GetBag(), self:GetID(), nil, bankType)
 			end
 		end
 	end
@@ -105,7 +75,7 @@ end
 
 function Item:UpdateCooldown()
 	if self.hasItem and not self:IsCached() then
-		CooldownFrame_Set(self.Cooldown, S.GetContainerItemCooldown(self:GetBag(), self:GetID()))
+		CooldownFrame_Set(self.Cooldown, C.Container.GetContainerItemCooldown(self:GetBag(), self:GetID()))
 		local fade = self.Cooldown:IsShown() and 0.4 or 1
 		SetItemButtonTextureVertexColor(self, fade,fade,fade)
 	else
@@ -146,8 +116,8 @@ end
 
 function Item:GetQuestInfo()
 	if self.hasItem then
-		if not self.info.cached and S.GetContainerItemQuestInfo then
-			local info = S.GetContainerItemQuestInfo(self:GetBag(), self:GetID())
+		if not self.info.cached and C.Container.GetContainerItemQuestInfo then
+			local info = C.Container.GetContainerItemQuestInfo(self:GetBag(), self:GetID())
 			if info then
 				return info.isQuestItem, (info.questID and not info.isActive)
 			end
