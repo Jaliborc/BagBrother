@@ -29,7 +29,7 @@ function Rules:Register(data)
 	assert(not self.Registry[data.id], 'data.id must be unique, id already registered')
 
 	self.Registry[data.id] = setmetatable(data, self)
-	self:Delay(0, 'SendSignal', 'RULES_LOADED')
+	self:Delay('SendSignal', 'RULES_LOADED')
 end
 
 function Rules:Get(id)

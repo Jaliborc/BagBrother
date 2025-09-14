@@ -131,6 +131,15 @@ function Sort:GetSpaces()
 		end
 	end
 
+	if self.target.profile.reverseSort then
+		local n, k = #spaces
+		for i = 1, math.floor(n / 2) do
+			k = n - i + 1
+			spaces[i], spaces[k] = spaces[k], spaces[i]
+			spaces[i].index, spaces[k].index = i, k
+		end
+	end
+
 	return spaces
 end
 

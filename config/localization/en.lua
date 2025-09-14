@@ -37,7 +37,7 @@ L.FlashFindTip = 'If enabled, alt-clicking an item will flash all slots with tha
 L.Tooltips = 'Tooltips'
 
 -- frame options
-L.FrameOptions = 'Frame Settings'
+L.FrameOptions = 'Frames'
 L.FrameOptionsDescription = 'Individual configuration settings specific to each %s frame.'
 
 L.Frame = 'Frame'
@@ -79,7 +79,7 @@ L.Spacing = 'Spacing'
 L.Alpha = 'Opacity'
 
 -- slot options
-L.SlotOptions = 'Slot Settings'
+L.SlotOptions = 'Item Slots'
 L.SlotOptionsDescription = 'These settings allow you to change how item slots are presented on all %s frames for easier identification.'
 
 L.GlowQuality = 'Color by Quality'
@@ -114,22 +114,21 @@ L.DisplayOptions = 'Display Events'
 L.DisplayOptionsDescription = 'These settings allow you to configure when your inventory automatically opens or closes due to game events.'
 
 L.DisplayInventory = 'Display Inventory'
-L.CloseInventory = 'Close Inventory'
-
 L.Auctioneer = 'At the Auction House'
 L.Banker = 'At the Bank'
-L.Combat = 'Entering Combat'
 L.Crafting = 'Crafting'
 L.GuildBanker = 'At the Guild Bank'
 L.VoidStorageBanker = 'At Void Storage'
 L.MailInfo = 'At a Mailbox'
-L.MapFrame = 'Opening the World Map'
-L.Merchant = 'Talking to Merchant'
-L.PlayerFrame = 'Opening the Character Info'
-L.ScrappingMachine = 'Scrapping Equipment'
-L.Socketing = 'Socketing Equipment'
+L.Merchant = 'At a Merchant'
+L.Character = 'Opening the Character Info'
 L.TradePartner = 'Trading'
+L.Transmogrifier = 'Modding Items'
+
+L.CloseInventory = 'Close Inventory'
+L.Combat = 'Entering Combat'
 L.Vehicle = 'Entering a Vehicle'
+L.World = 'Opening the World Map'
 
 -- info
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'

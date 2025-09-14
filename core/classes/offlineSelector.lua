@@ -61,7 +61,7 @@ end
 
 function OfflineSelector:OnClick(button)
 	if button == 'LeftButton' then
-		MenuUtil.CreateContextMenu(anchor, function(_, drop)
+		MenuUtil.CreateContextMenu(self, function(_, drop)
 			drop:SetTag(ADDON .. 'OfflineView')
 			drop:CreateTitle(L.Locations)
 

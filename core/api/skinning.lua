@@ -24,7 +24,7 @@ function Skins:Register(skin)
 	assert(type(skin.template) == 'string', 'skin.template must be a string')
 
 	self.Registry[skin.id] = skin
-	self:Delay(0, 'SendSignal', 'SKINS_LOADED')
+	self:Delay('SendSignal', 'SKINS_LOADED')
 end
 
 function Skins:Get(id)

@@ -27,6 +27,7 @@ function Frame:OnShow()
 	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateVisuals')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
+	self:RegisterSignal('HIDE_ALL', 'Hide')
 	self:RegisterEvents()
 	self:Update()
 end
@@ -209,7 +210,7 @@ function Frame:GetBagFamily()
 end
 
 function Frame:CanDrag()
-	return not self.profile.managed and (not Addon.sets.locked or IsAltKeyDown())
+	return not Addon.sets.locked or IsAltKeyDown()
 end
 
 function Frame:AreBagsShown()

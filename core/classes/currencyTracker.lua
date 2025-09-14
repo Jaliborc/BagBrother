@@ -7,10 +7,6 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').CurrencyInfo
 local CurrencyTracker = Addon.Parented:NewClass('CurrencyTracker', 'Frame')
 
-if BackpackTokenFrame then
-	function BackpackTokenFrame:GetMaxTokensWatched() return Addon.CurrencyLimit end
-end
-
 
 --[[ Construct ]]--
 

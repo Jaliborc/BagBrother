@@ -30,9 +30,14 @@ end
 
 --[[ Singletons ]]--
 
-function Panel:AddCheck(arg)
+function Panel:AddCheck(arg,...)
+	local args = {arg, ...}
 	local b = self:AddLabeled('Check', arg)
-	b:SetCall('OnClick', function(_,_, v) self.sets[arg] = v end)
+	b:SetCall('OnClick', function(_,_, v)
+		for _, arg in ipairs(args) do
+			self.sets[arg] = v
+		end
+	end)
 	b:SetValue(self.sets[arg])
 	return b
 end

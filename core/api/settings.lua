@@ -21,8 +21,13 @@ function Settings:OnLoad()
 		countItems = true, countGuild = true, countCurrency = true, 
 		depositAccount = true, depositReagents = true,
 		display = {
-			banker = true, guildBanker = true, voidStorageBanker = true, crafting = true, tradePartner = true, socketing = true,
-			auctioneer = true, merchant = true, mailInfo = true, scrappingMachine = true},
+			banker = true, accountBanker = true, characterBanker = true, guildBanker = true, voidStorageBanker = true,
+			auctioneer = true, blackMarketAuctioneer = true, mailInfo = true, merchant = true, vendor = true,
+			transmogrifier = true, socketing = true, itemUpgrade = true,
+			crafting = true, tradePartner = true,
+
+			scrappingMachine = true, soulbind = true, itemInteraction = true,
+		},
 
 		glowAlpha = 0.5,
 		glowQuality = true, glowNew = true, glowQuest = true, glowSets = true, glowUnusable = true, glowPoor = true,

@@ -21,23 +21,21 @@ function Frames:Update()
 end
 
 function Frames:Toggle(id, owner)
-	return not self:IsShown(id) and self:Show(id, owner, true) or self:Hide(id, true)
+	return not self:IsShown(id) and self:Show(id, owner) or self:Hide(id)
 end
 
-function Frames:Show(id, owner, manual)
+function Frames:Show(id, owner)
 	local frame = self:New(id)
 	if frame then
-		frame.manualShown = frame.manualShown or manual
 		frame:SetOwner(owner)
 		frame:Show()
 	end
 	return frame
 end
 
-function Frames:Hide(id, manual)
+function Frames:Hide(id)
 	local frame = self:Get(id)
-	if frame[0] and (manual or not frame.manualShown) then
-		frame.manualShown = nil
+	if frame[0] then
 		frame:Hide()
 	end
 	return frame
@@ -70,7 +68,7 @@ function Frames:HideBag(frame, bag)
 end
 
 function Frames:HasBag(frame, bag)
-	return self:IsEnabled(frame) and not (Addon.sets.displayBlizzard and Addon.player[bag].hidden)
+	return not (Addon.sets.displayBlizzard and Addon.player[bag].hidden) and self:IsEnabled(frame)
 end
 
 

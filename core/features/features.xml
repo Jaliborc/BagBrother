@@ -1,5 +1,6 @@
 <Ui>
-	<Script file="autoDisplay.lua"/>
+	<Script file="uiOverrides.lua"/>
+	<Script file="displayEvents.lua"/>
 	<Script file="basicRules.lua"/>
 	<Script file="brokerPlugin.lua"/>
 	<Script file="caching.lua"/>
