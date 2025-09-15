@@ -31,13 +31,13 @@ function Overrides:OnLoad()
 	end
 
 	if BackpackTokenFrame then
-		BackpackTokenFrame:SetWidth(100000)
+		BackpackTokenFrame:SetWidth(Addon.CurrencyLimit * 50)
 	end
 
 	for i = 1, NUM_CONTAINER_FRAMES do
 		hooksecurefunc(_G['ContainerFrame' .. i], 'SetID', function(frame, bag)
 			local disabled = Addon.Frames:HasBag(Location(bag))
-			frame:SetParent(disabled and self.Disabled or ContainerFrameContainer)
+			frame:SetParent(disabled and self.Disabled or ContainerFrameContainer or UIParent)
 		end)
 	end
 
