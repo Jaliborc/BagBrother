@@ -100,9 +100,12 @@ function Settings:Upgrade() -- all code temporary, will be removed eventually
 		end
 		upgradeProfile(Addon.sets.global)
 
+		local OLD_KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
+		local OLD_PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
 		local function clean(data)
 			for key, value in pairs(data) do
-				if type(value) == 'table' then
+				local kind = type(value)
+				if kind == 'table' then
 					if (value.size or value.name or key == 'vault') and not value.items then
 						local items = {}
 
@@ -117,7 +120,14 @@ function Settings:Upgrade() -- all code temporary, will be removed eventually
 							value.items = items
 						end
 					else
+						value.tabNameEditBoxHeader, value.tabCleanupConfirmation = nil
 						clean(value)
+					end
+				elseif kind == 'string' then
+					if value:find(OLD_KEYSTONE_FORMAT) then
+						data[key] = 'keystone:' .. value
+					elseif value:find(OLD_PET_FORMAT) then
+						data[key] = 'battlepet:' .. value
 					end
 				end
 			end

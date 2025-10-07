@@ -177,6 +177,7 @@ end
 
 function Cacher:SaveBank(domain, type)
 	for i, bag in pairs(C.Bank.FetchPurchasedBankTabData(type)) do
+		bag.tabNameEditBoxHeader, bag.tabCleanupConfirmation = nil
 		Mixin(self:PopulateBag(domain, bag.ID), bag)
 	end
 end
@@ -208,23 +209,33 @@ end
 
 function Cacher:ParseItem(link, count)
 	if link then
-		local id = tonumber(link:match('item:(%d+):')) -- check for profession window bug
-		if id == 0 and TradeSkillFrame then
+		local id = link:match('item:(%d+):') -- check for profession window bug
+		if id == '0' and TradeSkillFrame then
 			local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
 			local name = focus:GetName()
 			if name == 'TradeSkillSkillIcon' then
-				link = GetTradeSkillItemLink(TradeSkillFrame.selectedSkill)
+				return self:ParseItem(GetTradeSkillItemLink(TradeSkillFrame.selectedSkill), count)
 			else
 				local i = name:match('TradeSkillReagent(%d+)')
 				if i then
-					link = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i))
+					return self:ParseItem(GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i)), count)
 				end
 			end
 		end
 
-		link = link:match('|H%l+:(%d+)::::::::%d+:%d+:::::::::') or link:match('|H%l+:([%d:]+)')
-		if count and count > 1 then
-			link = link .. ';' .. count
+		if id then
+			local data = link:match('|Hitem:([%d:]+)')
+			local entries = 0
+			for _ in link:gmatch('%d+') do
+				entries = entries + 1
+			end
+
+			link = entries <= 3 and id or data
+			if count and count > 1 then
+				link = link .. ';' .. count
+			end
+		else
+			link = link:match('|H(%l+:[%d:]+)')
 		end
 		return link
 	end
