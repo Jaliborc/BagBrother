@@ -12,33 +12,50 @@ local NONE = Addon.None
 local EQUIP_ICON = '%d|Tinterface/addons/bagbrother/art/garrison_building_salvageyard:12:12:6:0|t'
 local DELIMITER = ' +'
 
-local function aggregate(counts, bag)
-	for slot, data in pairs(bag and bag.items or NONE) do
-		if tonumber(slot) then
-			local singleton = tonumber(data)
-			local count = not singleton and tonumber(data:match(';(%d+)$')) or 1
-			local id = singleton or tonumber(data:match('^(%d+)'))
+local function ExtractCachedItemID(s)
+  -- s can be: "12345", "12345;4", "keystone:180653:...", "battlepet...." or legacy payload
+  local singleton = tonumber(s)
+  if singleton then return singleton end
 
-			counts[id] = (counts[id] or 0) + count
-		end
-	end
+  local pref, rest = s:match('^(%a+):(.+)$')
+  if pref == 'keystone' or pref == 'battlepet' then
+    return tonumber(rest:match('^(%d+)'))
+  else
+    return tonumber(s:match('^(%d+)'))
+  end
 end
+
+
+local function aggregate(counts, bag)
+  for slot, data in pairs(bag and bag.items or NONE) do
+    if tonumber(slot) then
+      local s = tostring(data)
+      local cnt = (tonumber(s) and 1) or (tonumber(s:match(';(%d+)$')) or 1)
+      local id = ExtractCachedItemID(s)
+      if id then
+        counts[id] = (counts[id] or 0) + cnt
+      end
+    end
+  end
+end
+
+
 
 local function find(bag, item)
-	local count = 0
-	
-	for slot, data in pairs(bag and bag.items or NONE) do
-		if tonumber(slot) then
-			local singleton = tonumber(data)
-			local id = singleton or tonumber(data:match('^(%d+)'))
-			if id == item then
-				count = count + (not singleton and tonumber(data:match(';(%d+)$')) or 1)
-			end
-		end
-	end
-	
-	return count
+  local count = 0
+  for slot, data in pairs(bag and bag.items or NONE) do
+    if tonumber(slot) then
+      local s = tostring(data)
+      local id = ExtractCachedItemID(s)
+      if id == item then
+        count = count + ((tonumber(s) and 1) or (tonumber(s:match(';(%d+)$')) or 1))
+      end
+    end
+  end
+  return count
 end
+
+
 
 local function frameIcon(id)
 	return '%d|T' .. Addon.Frames:Get(id).icon .. ':12:12:6:0|t'

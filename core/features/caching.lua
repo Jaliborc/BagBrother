@@ -207,25 +207,38 @@ function Cacher:PopulateBag(data, bag, ignore)
 end
 
 function Cacher:ParseItem(link, count)
-	if link then
-		local id = tonumber(link:match('item:(%d+):')) -- check for profession window bug
-		if id == 0 and TradeSkillFrame then
-			local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
-			local name = focus:GetName()
-			if name == 'TradeSkillSkillIcon' then
-				link = GetTradeSkillItemLink(TradeSkillFrame.selectedSkill)
-			else
-				local i = name:match('TradeSkillReagent(%d+)')
-				if i then
-					link = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i))
-				end
-			end
-		end
+  if not link then return end
 
-		link = link:match('|H%l+:(%d+)::::::::%d+:%d+:::::::::') or link:match('|H%l+:([%d:]+)')
-		if count and count > 1 then
-			link = link .. ';' .. count
-		end
-		return link
-	end
+  -- Fix legacy trade-skill link bug (keep existing behavior)
+  local id = tonumber(link:match('item:(%d+):'))
+  if id == 0 and TradeSkillFrame then
+    local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
+    local name = focus and focus.GetName and focus:GetName()
+    if name == 'TradeSkillSkillIcon' then
+      link = GetTradeSkillItemLink(TradeSkillFrame.selectedSkill)
+    else
+      local i = name and name:match('TradeSkillReagent(%d+)')
+      if i then
+        link = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i))
+      end
+    end
+  end
+
+  -- Preserve non-item prefixes ('keystone:' / 'battlepet:') to avoid ambiguity.
+  -- For 'item:' keep legacy payload only (backward compatible with existing cache).
+  local kind, payload = link:match('|H(%a+):([%d:]+)|h')
+  if not kind then return end
+
+  local out
+  if kind == 'keystone' or kind == 'battlepet' then
+    out = kind .. ':' .. payload
+  else
+    out = payload -- legacy: stored without the 'item:' prefix
+  end
+
+  if count and count > 1 then
+    out = out .. ';' .. count
+  end
+  return out
 end
+

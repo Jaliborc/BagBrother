@@ -17,10 +17,8 @@ Frame.BagGroup = Addon.BagGroup
 Frame.RegisterEvents = nop
 
 local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
-local KEYSTONE_FORMAT_OLD = '^' .. strrep('%d+:', 6) .. '%d+$'
-local KEYSTONE_FORMAT_NEW = '^' .. strrep('%d+:', 7) .. '%d+$'
 local KEYSTONE_ID = 180653
-
+local PREFIX_RE  = '^(%a+):(.*)$' -- 'keystone:...', 'battlepet:...', 'item:...'
 
 --[[ Events ]]--
 
@@ -174,37 +172,56 @@ end
 function Frame:GetItemInfo(bag, slot)
   local bag = self:GetBagInfo(bag)
   local data = bag and bag.items and bag.items[slot]
-  if data then
-    local itemId = tonumber(data:match('^(%d+):'))
-
-    -- 1) Keystones format, have to be changed after the new link format with resilient
-    if itemId == KEYSTONE_ID or data:find(KEYSTONE_FORMAT_NEW) or data:find(KEYSTONE_FORMAT_OLD) then
-      local item = { itemID = itemId }
-      _,_,_,_, item.iconFileID = C.GetItemInfoInstant(item.itemID)
-	  _, _, item.quality = C.GetItemInfo(item.itemID)
-	  item.hyperlink = 'keystone:' .. data
-      return item
-
-    elseif data:find(PET_FORMAT) then
-      local id, _, quality = data:match('(%d+):(%d+):(%d+)')
-      local q = tonumber(quality) or 1
-      if q < 0 or q > 8 then q = 1 end -- garde-fou
-      local item = { itemID = tonumber(id), quality = q }
-      item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
-      item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, C.GetItemQualityColor(item.quality)), data, item.name)
-      return item
-
-    else
-      local link, count = strsplit(';', data)
-      local item = { hyperlink = 'item:' .. link, stackCount = tonumber(count) }
-      item.itemID, _,_,_, item.iconFileID = C.GetItemInfoInstant(item.hyperlink)
-      _, item.hyperlink, item.quality = C.GetItemInfo(item.hyperlink)
-      return item
-    end
+  if not data then
+    return {}
   end
-  return {}
-end
 
+  -- Explicit cache prefixes (Patch futur link format changes)
+  local kind, payload = data:match(PREFIX_RE)  -- 'keystone' or 'battlepet' or 'item' or nil
+  if kind == 'keystone' and payload then
+    local itemId = tonumber(payload:match('^(%d+):'))
+    local item = { itemID = itemId }
+    _,_,_,_, item.iconFileID = C.GetItemInfoInstant(item.itemID)
+    _, _, item.quality = C.GetItemInfo(item.itemID)
+    item.hyperlink = 'keystone:' .. payload
+    return item
+
+  elseif kind == 'battlepet' and payload then
+    local id, _, quality = payload:match('(%d+):(%d+):(%d+)')
+    local q = tonumber(quality) or 1
+    if q < 0 or q > 8 then q = 1 end
+    local item = { itemID = tonumber(id), quality = q }
+    item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
+    item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, C.GetItemQualityColor(item.quality)), payload, item.name)
+    return item
+  end
+
+  -- Backward compatibility: legacy entries without a prefix
+  local itemId = tonumber(data:match('^(%d+):'))
+  if itemId == KEYSTONE_ID then
+    local item = { itemID = itemId }
+    _,_,_,_, item.iconFileID = C.GetItemInfoInstant(item.itemID)
+    _, _, item.quality = C.GetItemInfo(item.itemID)
+    item.hyperlink = 'keystone:' .. data
+    return item
+
+  elseif data:find(PET_FORMAT) then
+    local id, _, quality = data:match('(%d+):(%d+):(%d+)')
+    local q = tonumber(quality) or 1
+    if q < 0 or q > 8 then q = 1 end
+    local item = { itemID = tonumber(id), quality = q }
+    item.name, item.iconFileID = C_PetJournal.GetPetInfoBySpeciesID(item.itemID)
+    item.hyperlink = format('|c%s|Hbattlepet:%sx0|h[%s]|h|r', select(4, C.GetItemQualityColor(item.quality)), data, item.name)
+    return item
+
+  else
+    local link, count = strsplit(';', data)
+    local item = { hyperlink = 'item:' .. link, stackCount = tonumber(count) }
+    item.itemID, _,_,_, item.iconFileID = C.GetItemInfoInstant(item.hyperlink)
+    _, item.hyperlink, item.quality = C.GetItemInfo(item.hyperlink)
+    return item
+  end
+end
 
 function Frame:GetItemQuery(bag, slot, info)
 	return info.hyperlink
