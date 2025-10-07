@@ -36,7 +36,7 @@ function Money:Construct()
 	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f:SetScript('OnEvent', nil)
-	f:SetHeight(24)
+	--f:SetHeight(24)
 
 	local overlay = CreateFrame('Button', nil, f)
 	overlay:SetScript('OnClick', function(_,...) f:OnClick(...) end)
@@ -60,6 +60,7 @@ end
 function Money:Update()
 	local money = self:GetMoney()
 	MoneyFrame_Update(self:GetName(), money, money == 0)
+	self:SetHeight(24)
 end
 
 
