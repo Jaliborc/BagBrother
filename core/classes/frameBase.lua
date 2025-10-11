@@ -16,9 +16,6 @@ Frame.MoneyFrame = Addon.PlayerMoney
 Frame.BagGroup = Addon.BagGroup
 Frame.RegisterEvents = nop
 
-local KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
-local PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
-
 
 --[[ Events ]]--
 
@@ -188,7 +185,7 @@ function Frame:GetItemInfo(bag, slot)
 			return item
 		else
 			local link, count = strsplit(';', data)
-			local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count)}
+			local item = {hyperlink = 'item:' .. link, stackCount = tonumber(count) or 1}
 			item.itemID, _,_,_, item.iconFileID = C.GetItemInfoInstant(item.hyperlink)
 			_, item.hyperlink, item.quality = C.GetItemInfo(item.hyperlink) 
 			return item

@@ -209,8 +209,8 @@ end
 
 function Cacher:ParseItem(link, count)
 	if link then
-		local id = link:match('item:(%d+):') -- check for profession window bug
-		if id == '0' and TradeSkillFrame then
+		local id = link:match('item:(%d+):')
+		if id == '0' and TradeSkillFrame then -- check for profession window bug
 			local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
 			local name = focus:GetName()
 			if name == 'TradeSkillSkillIcon' then
@@ -224,13 +224,13 @@ function Cacher:ParseItem(link, count)
 		end
 
 		if id then
-			local data = link:match('|Hitem:([%d:]+)')
+			local payload = link:match('|Hitem:([%d:]+)')
 			local entries = 0
-			for _ in link:gmatch('%d+') do
+			for _ in payload:gmatch('%d+') do
 				entries = entries + 1
 			end
 
-			link = entries <= 3 and id or data
+			link = entries <= 3 and id or payload
 			if count and count > 1 then
 				link = link .. ';' .. count
 			end
