@@ -31,7 +31,6 @@ function Tab:OnClick(mouse)
 	else
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 		self:GetParent():SetActive(self.rule)
-		self:SendFrameSignal('FILTERS_CHANGED')
 	end
 end
 
