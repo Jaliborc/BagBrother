@@ -163,7 +163,7 @@ function Items:ForBag(bag, method)
 end
 
 function Items:IsStatic()
-	for set, rule in pairs(self.frame.rules) do
+	for set, rule in pairs(self.frame.rules or {}) do
 		if not rule.static and self.frame.profile[set] then
 			return false
 		end
