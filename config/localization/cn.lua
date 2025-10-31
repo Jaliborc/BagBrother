@@ -4,11 +4,21 @@
 --]]
 
 local CONFIG = ...
+local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'zhCN')
 if not L then return end
-local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
--- general
+-- filters
+L.InstalledFilters = '已安装的过滤器'
+L.CustomFilters = '自定义过滤器'
+L.NewFilter = '新建过滤器'
+L.NewSearch = '新建搜索'
+L.NewMacro = '新建宏'
+L.Import = '导入'
+L.SharePopup = '复制此数据并分享：'
+L.ImportPopup = '粘贴要导入的数据：|n|cnERROR_COLOR:(警告 - 仅从可信来源导入过滤器)|r'
+
+-- general options
 L.GeneralOptionsDesc = '这些通用功能可以依据配置切换。'
 L.Locked = '锁定框架'
 L.CountItems = '提示物品数目'
@@ -109,6 +119,29 @@ L.MineColor = '矿石颜色'
 L.TackleColor = '工具箱颜色'
 L.FridgeColor = '烹饪颜色'
 
--- rulesets
-L.RuleOptions = '物品规则'
-L.RuleOptionsDesc = '这项设置允许选择按照类型显示和排列物品的规则。'
+-- info
+L.HelpDescription = '这里提供了最常见问题的解答。如果仍无法解决你的问题，可以在 Discord 上的 %s 用户社区寻求帮助。'
+L.Patrons = '赞助者'
+L.PatronsDescription = '%s 免费发布并通过捐赠支持。非常感谢在 Patreon 和 Paypal 上支持开发的所有人。你也可以在 |cFFF96854patreon.com/jaliborc|r 成为赞助者。'
+L.AskCommunity = '询问社区'
+L.JoinUs = '加入我们'
+
+L.FAQ = {
+  '如何直接将物品存入战团银行？',
+  '按住 Shift 并右键点击物品栏位，物品会被放入战团背包而不是普通背包。',
+
+  '如何离线查看银行、公会或其他角色？',
+  '点击物品栏左上角的“离线查看”按钮，看起来像你当前角色的头像。',
+
+  '如何让 ADDON 忘记已删除或重命名的角色？',
+  '点击左上角的“离线查看”按钮。每个角色名旁边都有一个红色的删除按钮，点击它即可删除对应角色。',
+
+  '出现问题！物品等级未显示。',
+  'ADDON 不会原生显示物品等级。你需要使用第三方插件，例如 |cffffd200Bagnon ItemLevel|r 或 |cffffd200Bagnon ItemInfo|r。请尝试更新插件，最常见的原因是版本过旧。|n|n请注意，插件问题应反馈给其作者，而非 Jaliborc。',
+
+  '我的一些背包没有显示。',
+  '你可能不小心隐藏了它们。点击界面左上角的背包按钮查看背包，然后点击任意背包以切换可见性。',
+
+  '如何在银行、虚空仓库等处启用或禁用 ADDON？',
+  '进入 ADDON -> 框体设置。在面板顶部选择要切换的“框体”，然后点击“启用框体”。'
+}

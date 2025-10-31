@@ -29,8 +29,8 @@ function Frame:OpenMenu(anchor)
 		drop:CreateDivider()
 		
 		local new = drop:CreateButton(format('%s |cnPURE_GREEN_COLOR:%s|r', CreateAtlasMarkup('editmode-new-layout-plus'), L.NewFilter))
-		new:CreateButton(' ' .. SEARCH, function() self:Create {title = 'New Search', search = ''} end)
-		new:CreateButton(' ' .. MACRO, function() self:Create {title = 'New Macro'} end)
+		new:CreateButton(' ' .. SEARCH, function() self:Create {title = L.NewSearch, search = ''} end)
+		new:CreateButton(' ' .. MACRO, function() self:Create {title = L.NewMacro} end)
 		new:CreateButton(' ' .. L.Import, function()
 			LibStub('Sushi-3.2').Popup:New {
 				id = ADDON .. 'ImportFilter',
@@ -106,7 +106,7 @@ function Frame:Display(rule)
 
 	self.rule = rule
 	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', self:GetParent()))
-	self.CodeHeader:SetText(rule.search and 'Enter Search Query:' or ENTER_MACRO_LABEL)
+	self.CodeHeader:SetText(rule.search and L.EnterSearch or ENTER_MACRO_LABEL)
 	self.Code.EditBox:SetText(gsub(rule.macro or rule.search or '', '\t', '  '))
 
 	self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(rule.icon)

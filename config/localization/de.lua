@@ -8,6 +8,16 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'deDE')
 if not L then return end
 local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
+-- German
+L.InstalledFilters = 'Installierte Filter'
+L.CustomFilters = 'Benutzerdefinierte Filter'
+L.NewFilter = 'Neuer Filter'
+L.NewSearch = 'Neue Suche'
+L.NewMacro = 'Neues Makro'
+L.Import = 'Importieren'
+L.SharePopup = 'Diese Daten kopieren und teilen:'
+L.ImportPopup = 'Daten zum Import einfügen:|n|cnERROR_COLOR:(Warnung – importiere nur Filter aus vertrauenswürdigen Quellen)|r'
+
 -- general
 L.GeneralOptionsDesc = 'Allgemeine Einstellungen für %s anpassen'
 L.Locked = 'Fensterpositionen sperren'
@@ -87,3 +97,30 @@ L.TackleColor = 'Anglertasche'
 L.RefrigeColor = 'Küchentasche'
 L.ReagentColor = 'Materiallager'
 L.GlowAlpha = 'Helligkeit der Gegenstandshervorhebung'
+
+-- info
+L.HelpDescription = 'Hier findest du Antworten auf die am häufigsten gestellten Fragen. Wenn keine davon dein Problem löst, kannst du in der %s-Community auf Discord um Hilfe bitten.'
+L.Patrons = 'Unterstützer'
+L.PatronsDescription = '%s wird kostenlos verteilt und durch Spenden unterstützt. Ein großes Dankeschön an alle Unterstützer auf Patreon und Paypal, die die Entwicklung am Leben halten. Du kannst ebenfalls Unterstützer werden unter |cFFF96854patreon.com/jaliborc|r.'
+L.AskCommunity = 'Community fragen'
+L.JoinUs = 'Mach mit'
+
+L.FAQ = {
+  'Wie kann ich Gegenstände direkt in die Kriegsbande-Bank einzahlen?',
+  'Umschalt + Rechtsklick auf das Gegenstandsfeld, und es wird in die Kriegsbande-Taschen gelegt anstatt in die normalen Taschen.',
+
+  'Wie kann ich Bank, Gilde oder andere Charaktere offline ansehen?',
+  'Klicke auf den Button "Offline-Anzeige" oben links im Inventar. Er sieht aus wie das Porträt deines aktuellen Charakters.',
+
+  'Wie kann ich ADDON veranlassen, gelöschte/umbenannte Charaktere zu vergessen?',
+  'Klicke auf den Button "Offline-Anzeige" oben links im Inventar. Neben jedem Charakternamen befindet sich ein rotes Kreuz zum Löschen.',
+
+  'Etwas stimmt nicht! Die Gegenstandsstufen werden nicht angezeigt.',
+  'ADDON zeigt keine Gegenstandsstufen von Haus aus an. Du musst ein Drittanbieter-Plugin wie |cffffd200Bagnon ItemLevel|r oder |cffffd200Bagnon ItemInfo|r verwenden. Aktualisiere deine Plugins – meist liegt es an einer veralteten Version.|n|nProbleme mit Plugins sollten deren Autoren gemeldet werden, nicht Jaliborc.',
+
+  'Einige meiner Taschen werden nicht angezeigt.',
+  'Wahrscheinlich wurden sie versehentlich ausgeblendet. Klicke auf die Taschen-Schaltfläche oben links im Fenster, um sie wieder einzublenden.',
+
+  'Wie aktiviere/deaktiviere ich ADDON für Bank, Leerenlager usw.?',
+  'Gehe zu ADDON -> Fenster-Einstellungen. Wähle den gewünschten "Frame" oben im Panel und klicke auf "Frame aktivieren".'
+}

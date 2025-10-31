@@ -7,7 +7,6 @@
 	<Script file="fr.lua"/>
 	<Script file="it.lua"/>
 	<Script file="ko.lua"/>
-	<Script file="nl.lua"/>
 	<Script file="ru.lua"/>
 	<Script file="tw.lua"/>
 </Ui>

@@ -7,7 +7,17 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'zhTW')
 if not L then return end
 local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
--- general
+-- filters
+L.InstalledFilters = '已安裝的篩選器'
+L.CustomFilters = '自訂篩選器'
+L.NewFilter = '新增篩選器'
+L.NewSearch = '新增搜尋'
+L.NewMacro = '新增巨集'
+L.Import = '匯入'
+L.SharePopup = '複製此資料並分享：'
+L.ImportPopup = '請貼上要匯入的資料：|n|cnERROR_COLOR:(警告 - 僅從您信任的來源匯入篩選器)|r'
+
+-- general options
 L.GeneralOptionsDescription = '這些是一般功能，可以根據您的喜好進行切換。'
 
 L.CountItems = '物品統計提示'
@@ -22,7 +32,7 @@ L.FlashFind = '閃爍尋找'
 L.FlashFindTip = '如果啟用，按住Alt鍵並點擊物品將在所有框架中閃爍具有相同物品的所有欄位。'
 L.Tooltips = '提示資訊'
 
--- frame
+-- frame options
 L.FrameOptions = '框架設定'
 L.FrameOptionsDescription = '這些是針對 %s 框架的特定設定。'
 
@@ -144,13 +154,3 @@ L.FAQ = {
   '如何切換插件的銀行、虛空倉庫等？',
   '前往插件 -> 框架設定。您需要找到面板頂部的兩個選項。選擇您想要切換的"框架"，然後點擊"啟用框架"。'
 }
-
--- filters
-L.InstalledFilters = '已安裝的篩選器'
-L.CustomFilters = '自訂篩選器'
-L.NewFilter = '新增篩選器'
-L.NewSearch = '新增搜尋'
-L.NewMacro = '新增巨集'
-L.Import = '匯入'
-L.SharePopup = '複製此資料並分享：'
-L.ImportPopup = '請貼上要匯入的資料：|n|cnERROR_COLOR:(警告 - 僅從您信任的來源匯入篩選器)|r'

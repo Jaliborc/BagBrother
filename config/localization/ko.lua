@@ -7,8 +7,19 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'koKR')
 if not L then return end
 local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
--- general
+-- import
+L.InstalledFilters = '설치된 필터'
+L.CustomFilters = '사용자 필터'
+L.NewFilter = '새 필터'
+L.NewSearch = '새 검색'
+L.NewMacro = '새 매크로'
+L.Import = '가져오기'
+L.SharePopup = '이 데이터를 복사하여 공유하세요:'
+L.ImportPopup = '가져올 데이터를 붙여넣으세요:|n|cnERROR_COLOR:(경고 - 신뢰할 수 있는 출처의 필터만 가져오세요)|r'
+
+-- general options
 L.GeneralOptionsDesc = '환경 설정에 따라 설정을 전환 할 수 있는 일반적인 기능입니다.'
+
 L.Locked = '창 위치 잠금'
 L.CountItems = '아이템 갯수를 툴팁에 표시'
 L.CountGuild = '길드 금고 포함'
@@ -18,9 +29,10 @@ L.DisplayBlizzardTip = '만약 활성화하면 숨긴 가방 또는 은행 저�
 L.ConfirmGlobals = '이 캐릭터에 대한 개별 설정을 비활성화 하시겠습니까? 모든 개별 설정을 잃게됩니다.'
 L.CharacterSpecific = '캐릭터 개별 설정'
 
--- frame
+-- frame options
 L.FrameOptions = '창 설정'
 L.FrameOptionsDesc = '애드온 창에 특화된 설정'
+
 L.Frame = '창'
 L.Enabled = '애드온 사용'
 L.CharacterSpecific = '캐릭터 개별 설정'
@@ -107,6 +119,29 @@ L.MineColor = '채광 자루 칸 색상'
 L.TackleColor = '낚시상자 칸 색상'
 L.FridgeColor = '요리 칸 색상'
 
--- rulesets
-L.RuleOptions = '아이템 규칙'
-L.RuleOptionsDesc = '이 설정으로 표시할 아이템 정리 규칙과 순서를 선택할 수 있습니다.'
+-- info
+L.HelpDescription = '여기에서는 가장 자주 묻는 질문에 대한 답변을 제공합니다. 해결되지 않으면 Discord의 %s 사용자 커뮤니티에 도움을 요청해 보세요.'
+L.Patrons = '후원자'
+L.PatronsDescription = '%s는 무료로 배포되며, 후원을 통해 유지됩니다. 개발을 지속할 수 있게 도와주신 Patreon과 Paypal 후원자 여러분께 진심으로 감사드립니다. 당신도 |cFFF96854patreon.com/jaliborc|r에서 후원자가 될 수 있습니다.'
+L.AskCommunity = '커뮤니티에 문의'
+L.JoinUs = '함께하기'
+
+L.FAQ = {
+  '전쟁단 은행에 아이템을 직접 예치하려면 어떻게 하나요?',
+  '아이템 칸을 Shift + 오른쪽 클릭하면 일반 가방 대신 전쟁단 가방에 저장됩니다.',
+
+  '은행, 길드 또는 다른 캐릭터를 오프라인 상태에서 보려면?',
+  '인벤토리 왼쪽 상단의 "오프라인 보기" 버튼을 클릭하세요. 현재 플레이 중인 캐릭터의 초상화처럼 보입니다.',
+
+  '삭제되었거나 이름이 변경된 캐릭터를 ADDON이 잊게 하려면?',
+  '"오프라인 보기" 버튼을 클릭하세요. 각 캐릭터 이름 옆에 빨간색 X 버튼이 있으며, 해당 캐릭터를 삭제하려면 그 버튼을 클릭하세요.',
+
+  '문제가 있어요! 아이템 레벨이 표시되지 않습니다.',
+  'ADDON은 기본적으로 아이템 레벨을 표시하지 않습니다. |cffffd200Bagnon ItemLevel|r 또는 |cffffd200Bagnon ItemInfo|r 같은 외부 애드온을 사용해야 합니다. 사용하는 애드온을 업데이트해 보세요 — 대부분의 문제는 구버전 때문입니다.|n|n플러그인 문제는 Jaliborc가 아닌 플러그인 제작자에게 보고해야 합니다.',
+
+  '가방 중 일부가 보이지 않습니다.',
+  '실수로 숨겼을 수 있습니다. 프레임 왼쪽 상단의 가방 버튼을 클릭하여 다시 표시하세요. 개별 가방을 클릭해 표시를 전환할 수 있습니다.',
+
+  '은행, 공허 보관소 등에 대해 ADDON을 켜거나 끄려면?',
+  'ADDON -> 프레임 설정으로 이동하세요. 패널 상단의 두 옵션에서 원하는 "프레임"을 선택하고 "프레임 활성화"를 클릭하세요.'
+}

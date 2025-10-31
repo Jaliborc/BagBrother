@@ -8,6 +8,16 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'esES') or LibStub('AceLoca
 if not L then return end
 local NEW = BATTLENET_FONT_COLOR:WrapTextInColorCode(' ' .. NEW_CAPS)
 
+-- Spanish
+L.InstalledFilters = 'Filtros instalados'
+L.CustomFilters = 'Filtros personalizados'
+L.NewFilter = 'Nuevo filtro'
+L.NewSearch = 'Nueva búsqueda'
+L.NewMacro = 'Nueva macro'
+L.Import = 'Importar'
+L.SharePopup = 'Copia estos datos y compártelos:'
+L.ImportPopup = 'Pega los datos para importar:|n|cnERROR_COLOR:(Advertencia: solo importa filtros de fuentes en las que confíes)|r'
+
 -- general
 L.GeneralOptionsDescription = 'Funciones generales que puedes aplicar según tus preferencias.'
 
