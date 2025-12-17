@@ -13,7 +13,7 @@ local Settings = Addon:NewModule('Settings')
 
 function Settings:OnLoad()
 	BrotherBags = self:SetDefaults(BrotherBags or {}, {account = {}})
-	Addon.sets = self:SetDefaults(_G[VAR] or {}, {
+	Addon.sets = self:SetDefaults(_G[VAR] or {}, Mixin({
 		global = self:SetDefaults({}, self.ProfileDefaults),
 		profiles = {}, customRules = {},
 
@@ -25,14 +25,13 @@ function Settings:OnLoad()
 			auctioneer = true, blackMarketAuctioneer = true, mailInfo = true, merchant = true, vendor = true,
 			transmogrifier = true, socketing = true, itemUpgrade = true,
 			crafting = true, tradePartner = true,
-
 			scrappingMachine = true, soulbind = true, itemInteraction = true,
 		},
 
 		glowAlpha = 0.5,
 		glowQuality = true, glowNew = true, glowQuest = true, glowSets = true, glowUnusable = true, glowPoor = true,
 
-		slotBackground = 2, colorSlots = true,
+		colorSlots = true,
 		color = {
 			normal = {1, 1, 1},
 			account = {0.86, 1, .98},
@@ -50,7 +49,7 @@ function Settings:OnLoad()
 			mine = {0.65, 0.53, 0.25},
 			herb = {.5, 1, .5},
 		}
-	})
+	}, self.GlobalDefaults))
 
 	for realm, owners in pairs(Addon.sets.profiles) do
 		for id, profile in pairs(owners) do

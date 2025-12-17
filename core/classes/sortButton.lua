@@ -58,6 +58,10 @@ function SortButton:OnClick(button)
 					end
 				end)
 
+			drop:CreateCheckbox('Reverse Looting',
+				function() return C.Container.GetInsertItemsLeftToRight() end,
+				function() C.Container.SetInsertItemsLeftToRight(not C.Container.GetInsertItemsLeftToRight()) end)
+
 			drop:CreateButton('|A:legionmission-lock:14:14|a ' .. L.LockItems, function() self:OnLocking() end)
 		end)
 	elseif not self:GetChecked() then
@@ -72,10 +76,15 @@ end
 function SortButton:OnLocking()
 	if not Addon.lockMode then
 		Addon.lockMode = Sushi.HelpTip(self.frame, L.ConfigurationMode, self:IsFarRight() and 'RIGHT' or 'LEFT', self:IsFarRight() and -23 or 23,0)
-							:SetCall('OnClose', function() self:OnLocking() end)
+		                       :SetCall('OnClose', function() self:OnLocking() end)
+
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPEN)
+		PlaySound(54131)
 	else
 		Addon.lockMode:Release()
 		Addon.lockMode = nil
+
+		PlaySound(SOUNDKIT.IG_MAINMENU_CLOSE)
 	end
 
 	self:SendSignal('LOCKING_TOGGLED')
