@@ -6,6 +6,7 @@
 
 
 local ADDON, Addon = ...
+local C = LibStub('C_Everywhere')
 local Search = LibStub('ItemSearch-1.3')
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
 Rules.Registry = {}
@@ -51,7 +52,7 @@ end
 
 function Rules:GetIcon(frame)
 	local icon = self:GetValue('icon', frame) or QUESTION_MARK_ICON
-	return icon, C_Texture.GetAtlasID(icon) ~= 0
+	return icon, C.Texture.GetAtlasExists(icon)
 end
 
 function Rules:Compile()
