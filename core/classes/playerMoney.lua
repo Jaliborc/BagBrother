@@ -36,7 +36,6 @@ function Money:Construct()
 	f:SetScript('OnShow', f.RegisterEvents)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f:SetScript('OnEvent', nil)
-	--f:SetHeight(24)
 
 	local overlay = CreateFrame('Button', nil, f)
 	overlay:SetScript('OnClick', function(_,...) f:OnClick(...) end)
@@ -93,7 +92,7 @@ function Money:OnEnter()
 	local total, overflow = 0, 0
 	for i, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
-		if money and i <= 8 or owner.favorite then
+		if money and i <= 10 or owner.favorite then
 			local coins = GetMoneyString(money, true)
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)
