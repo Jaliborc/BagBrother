@@ -163,13 +163,9 @@ function Items:ForBag(bag, method)
 end
 
 function Items:IsStatic()
-	local profile = self.frame.profile
-	for set, rule in pairs(profile.activeRules) do
-		if profile[set] then
-			rule = Addon.Rules:Get(rule)
-			if rule and not rule.static then
-				return false
-			end
+	for set, rule in pairs(self.frame.rules) do
+		if self.frame.profile[set] and not rule.data.static then
+			return false
 		end
 	end
 	return true

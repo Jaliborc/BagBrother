@@ -6,7 +6,7 @@
 local ADDON, Addon = ...
 local Tab = Addon.Tipped:NewClass('Tab', 'CheckButton', true)
 
-function Tab:SetRule(rule)
+function Tab:SetRule(rule, checked)
 	local icon, isAtlas = rule:GetIcon(self.frame)
 	local border = self.Border
 
@@ -16,7 +16,7 @@ function Tab:SetRule(rule)
 	end
 
 	self:SetScale(.8)
-	self:SetChecked(rule == self:GetParent():GetActive())
+	self:SetChecked(checked)
 	self.Icon[isAtlas and 'SetAtlas' or 'SetTexture'](self.Icon, icon)
 	self.rule = rule
 end
@@ -31,6 +31,7 @@ function Tab:OnClick(mouse)
 	else
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 		self:GetParent():SetActive(self.rule)
+		self:SendFrameSignal('FILTERS_CHANGED')
 	end
 end
 

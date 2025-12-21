@@ -39,10 +39,18 @@ if REAGENTBANK_CONTAINER then
 	tinsert(Addon.BankBags, REAGENTBANK_CONTAINER)
 end
 
-if C.Bank.FetchPurchasedBankTabIDs then
+if C.Bank.AreAnyBankTypesViewable then
 	for i = Addon.LastBankBag + 1, Addon.LastAccountBag do
 		tinsert(Addon.BankBags, i)
 	end
+end
+
+function Addon_SetBankType(type)
+	Addon.BankType = type
+end
+
+function Addon_GetBankType()
+	return Addon.BankType or 0
 end
 
 if not GameFontNormalCenter then

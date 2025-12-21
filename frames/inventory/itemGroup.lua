@@ -1,6 +1,6 @@
 --[[
-	itemGroup.lua
-		A grid of container items
+	A grid specialized for container items.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon =  ...

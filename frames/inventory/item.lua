@@ -42,7 +42,7 @@ if C.Bank.AreAnyBankTypesViewable then
 	function Item:PreClick(button)
 		if C.Bank.AreAnyBankTypesViewable() and self.hasItem then
 			if button == 'RightButton' and Addon.Frames:IsEnabled('bank') then
-				local bankType = C.Bank.CanUseBank(2) and (IsShiftKeyDown() or not C.Bank.CanUseBank(0)) and 2 or 0
+				local bankType = C.Bank.CanUseBank(2) and IsShiftKeyDown() and 2 or Addon_GetBankType()
 				C.Container.UseContainerItem(self:GetBag(), self:GetID(), nil, bankType)
 			end
 		end

@@ -13,11 +13,37 @@ Bank.MoneyFrame = Addon.AccountMoney
 Bank.BagButton = Addon.BankBag
 Bank.Bags = Addon.BankBags
 
+for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'GetBagFamily', 'NumSlots'} do
+	Bank[k] = Addon.Inventory[k]
+end
+
 
 --[[ General API  ]]--
 
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'GetBagFamily', 'NumSlots'} do
-	Bank[k] = Addon.Inventory[k]
+function Bank:OnShow()
+	self:Super(Bank):OnShow()
+	self:RegisterFrameSignal('FILTERS_CHANGED', 'UpdateBankType')
+	self:UpdateBankType()
+end
+
+function Bank:OnHide()
+	self:Super(Bank):OnHide()
+	Sushi.Popup:Cancel(CONFIRM_BUY_BANK_SLOT)
+	Sushi.Popup:Cancel(CONFIRM_BUY_REAGENTBANK_TAB)
+	Sushi.Popup:Cancel(CONFIRM_BUY_ACCOUNT_BANK_TAB)
+
+	if Addon.BankTab then
+		Addon.BankTab.Settings:Hide()
+	end
+	
+	C.Bank.CloseBankFrame()
+end
+
+function Bank:GetExtraButtons()
+	return {
+		self.profile.bagToggle and self:GetWidget('BagToggle'),
+		Addon.DepositButton and self.profile.deposit and self:GetWidget('DepositButton')
+	}
 end
 
 do
@@ -43,28 +69,25 @@ do
 	end
 end
 
-function Bank:OnHide()
-	self:Super(Bank):OnHide()
-	Sushi.Popup:Cancel(CONFIRM_BUY_BANK_SLOT)
-	Sushi.Popup:Cancel(CONFIRM_BUY_REAGENTBANK_TAB)
-	Sushi.Popup:Cancel(CONFIRM_BUY_ACCOUNT_BANK_TAB)
-
-	if Addon.BankTab then
-		Addon.BankTab.Settings:Hide()
-	end
-	
-	C.Bank.CloseBankFrame()
-end
-
-function Bank:GetExtraButtons()
-	return {
-		self.profile.bagToggle and self:GetWidget('BagToggle'),
-		Addon.DepositButton and self.profile.deposit and self:GetWidget('DepositButton')
-	}
-end
-
 
 --[[ Warband Support ]]--
+
+function Bank:UpdateBankType()
+	if not C.Bank.CanUseBank(2) then
+		return Addon_SetBankType(0)
+	elseif not C.Bank.CanUseBank(0) then
+		return Addon_SetBankType(2)
+	end
+
+	for set, rule in pairs(self.rules) do
+		local type = rule.data.bankType
+		if type and self.profile[set] then
+			return Addon_SetBankType(type)
+		end
+	end
+	
+	Addon_SetBankType(0)
+end
 
 function Bank:GetBagInfo(bag)
 	local owner = bag > Addon.LastBankBag and BrotherBags.account or self:GetOwner()

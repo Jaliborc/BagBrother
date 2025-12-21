@@ -26,7 +26,7 @@ Rules:Register {id = 'trade', title = L.TradeBags, icon = 133669, macro = 'retur
 
 if Addon.IsRetail then
 	Rules:Register {id = 'player', title = PLAYER, icon = function(frame) return frame:GetOwner():GetIcon() end, macro = 'return family >= 0', static = true}
-	Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0', static = true}
+	Rules:Register {id = 'account', title = ACCOUNT_QUEST_LABEL, icon = 413577, macro = 'return family < 0', static = true, bankType = 2}
 elseif not Addon.IsModern then
 	local function ammoIcon()
 		local equipped = GetInventoryItemID('player', INVSLOT_AMMO)
