@@ -98,10 +98,10 @@ function Frame:Display(rule)
 	self:Startup()
 	self:Show()
 
-	if self:GetParent():IsFarRight() then
-		self:SetPoint('TOPRIGHT', self:GetParent(), 'TOPLEFT', -38,0)
+	if self:GetParent():GetParent():IsFarRight() then
+		self:SetPoint('TOPRIGHT', self:GetParent():GetParent(), 'TOPLEFT', -38,0)
 	else
-		self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', 38,0)
+		self:SetPoint('TOPLEFT', self:GetParent():GetParent(), 'TOPRIGHT', 38,0)
 	end
 
 	self.rule = rule
