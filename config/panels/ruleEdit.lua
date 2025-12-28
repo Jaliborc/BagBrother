@@ -50,8 +50,8 @@ function Frame:OpenMenu(anchor)
 end
 
 function Frame:CreateCheckboxes(drop, rules)
-	local parent = self:GetParent()
-	local enabled, frame = parent.rules, parent.frame
+	local anchor = self:GetParent()
+	local enabled, frame = anchor.rules, anchor.frame
 
 	local sorted = GetPairsArray(rules)
 	sort(sorted, function(a, b)
@@ -98,14 +98,15 @@ function Frame:Display(rule)
 	self:Startup()
 	self:Show()
 
-	if self:GetParent():GetParent():IsFarRight() then
-		self:SetPoint('TOPRIGHT', self:GetParent():GetParent(), 'TOPLEFT', -38,0)
+	local frame = self:GetParent():GetFrame()
+	if frame:IsFarRight() then
+		self:SetPoint('TOPRIGHT', frame, 'TOPLEFT', -38,0)
 	else
-		self:SetPoint('TOPLEFT', self:GetParent():GetParent(), 'TOPRIGHT', 38,0)
+		self:SetPoint('TOPLEFT', frame, 'TOPRIGHT', 38,0)
 	end
 
 	self.rule = rule
-	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', self:GetParent()))
+	self.BorderBox.IconSelectorEditBox:SetText(rule:GetValue('title', frame))
 	self.CodeHeader:SetText(rule.search and L.EnterSearch or ENTER_MACRO_LABEL)
 	self.Code.EditBox:SetText(gsub(rule.macro or rule.search or '', '\t', '  '))
 
