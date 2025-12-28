@@ -24,10 +24,9 @@ end
 --[[ Slash Commands ]]--
 
 function Slash:OnLoad()
-	for i, command in ipairs {ADDON, 'bgn'}  do
-		SlashCmdList[command] = self.OnSlashCommand
-		_G['SLASH_'..command..'1'] = '/' .. command
-	end
+	SlashCmdList[ADDON] = self.OnSlashCommand
+	_G['SLASH_'..ADDON..'1'] = '/' .. ADDON
+	_G['SLASH_'..ADDON..'2'] = '/bgn'
 end
 
 function Slash.OnSlashCommand(cmd)
