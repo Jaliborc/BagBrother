@@ -24,13 +24,21 @@ end
 function Base:Construct()
 	local f = self:Super(Base):Construct()
 	f:Hide()
-	
-	for i, script in ipairs(self.Scripts) do
-		local func = self[script]
-		if func then
-			f:SetScript(script, func)
+
+	local autoScript = rawget(self, '__autoScript')
+	if not autoScript then
+		local chunks = {}
+		for _, event in ipairs(self.Scripts) do
+			if self[event] then
+				tinsert(chunks, format('f:SetScript(%q, f[%q])', event, event))
+			end
 		end
+
+		autoScript = #chunks > 0 and loadstring('return function(f)\n' .. table.concat(chunks, '\n') .. '\nend')() or nop
+		self.__autoScript = autoScript
 	end
+	
+	autoScript(f)
 	return f
 end
 

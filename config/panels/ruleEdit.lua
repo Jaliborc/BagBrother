@@ -98,7 +98,7 @@ function Frame:Display(rule)
 	self:Startup()
 	self:Show()
 
-	local frame = self:GetParent():GetFrame()
+	local frame = self:GetParent().frame
 	if frame:IsFarRight() then
 		self:SetPoint('TOPRIGHT', frame, 'TOPLEFT', -38,0)
 	else

@@ -18,6 +18,7 @@ function Items:New(parent, bags)
 		f.bags[i] = CreateFrame('Frame', nil, f)
 		f.bags[i]:SetID(tonumber(bag) or 1)
 		f.bags[i].id = bag
+		f.bags[i].frame = f.frame
 	end
 
 	f:SetScript('OnHide', f.UnregisterAll)
@@ -97,12 +98,12 @@ function Items:Layout()
 	local breaks, group = {0}, 0
 
 	for k = reverseBags and #self.bags or 1, reverseBags and 1 or #self.bags, reverseBags and -1 or 1 do
-		local frame = self.bags[k]
-		local bag = frame.id
-		local numSlots = self.frame:NumSlots(bag)
+		local proxy = self.bags[k]
+		local bag = proxy.id
+		local numSlots = self:NumSlots(bag)
 
-		if numSlots > 0 and self.frame:IsShowingBag(bag) then
-			local family = self.frame:GetBagFamily(bag)
+		if numSlots > 0 and self:IsShowingBag(bag) then
+			local family = self:GetBagFamily(bag)
 			local slots = {}
 
 			if (bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
@@ -110,12 +111,12 @@ function Items:Layout()
 			end
 
 			for slot = reverseSlots and numSlots or 1, reverseSlots and 1 or numSlots, reverseSlots and -1 or 1 do
-				local info = self.frame:GetItemInfo(bag, slot)
+				local info = self:GetItemInfo(bag, slot)
 
-				if self.frame:IsShowingItem(bag, slot, info, family) then
-					local button = self.Button(frame, bag, slot, info)
-					slots[slot] = button
+				if self:IsShowingItem(bag, slot, info, family) then
+					local button = self.Button(proxy, bag, slot, info)
 					tinsert(self.buttons, button)
+					slots[slot] = button
 				end
 			end
 

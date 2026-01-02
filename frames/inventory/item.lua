@@ -63,7 +63,7 @@ function Item:Update(...)
 
 	local r,g,b = 1,1,1
 	if not self.hasItem then
-		local family = self.frame:GetBagFamily(self:GetBag())
+		local family = self:GetBagFamily(self:GetBag())
 		local color = Addon.sets.colorSlots and Addon.sets.color[self.BagFamilies[family] or 'normal'] or Addon.None
 
 		r,g,b = color[1] or 1, color[2] or 1, color[3] or 1

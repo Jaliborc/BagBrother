@@ -6,7 +6,7 @@
 local ADDON, Addon = ...
 local Sushi = LibStub('Sushi-3.2')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
-local OfflineSelector = Addon.Tipped:NewClass('OwnerSelector', 'Button', true)
+local OfflineSelector = Addon.Tipped:NewClass('OfflineSelector', 'Button', true)
 
 
 --[[ Construct ]]--

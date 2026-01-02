@@ -7,7 +7,6 @@
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere')
-local Search = LibStub('ItemSearch-1.3')
 local Rules = Addon:NewModule('Rules', 'MutexDelay-1.0')
 Rules.Registry = {}
 
@@ -57,8 +56,8 @@ end
 
 function Rules:Compile()
 	local macro = self.macro and loadstring(format('return function(frame, bag, slot, family, info) %s end', self.macro))
-	local search = self.search and function(_,_,_,_, info)
-		return info.itemID and Search:Matches(info.hyperlink, self.search)
+	local search = self.search and function(frame, bag, slot, _, info)
+		return frame:SearchItem(self.search, bag, slot, info)
 	end
 
 	return macro and macro() or search or self.filter

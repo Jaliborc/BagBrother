@@ -8,30 +8,14 @@ local Parented = Addon.Base:NewClass('Parented')
 
 function Parented:New(parent)
 	local f = self:Super(Parented):New(parent)
-	while parent:GetParent() ~= UIParent do
-		parent = parent:GetParent()
-	end
-
-	f.frame = parent
+	f.frame = parent.frame or parent
 	return f
-end
-
-function Parented:GetOwner()
-	return self.frame:GetOwner()
-end
-
-function Parented:IsCached()
-	return self.frame:IsCached()
-end
-
-function Parented:GetProfile()
-	return self.frame:GetProfile()
 end
 
 function Parented:GetFrameID()
 	return self.frame.id
 end
 
-function Parented:GetFrame()
-	return self.frame
+for _, method in ipairs {'GetOwner', 'GetProfile', 'IsCached', 'GetBagFamily', 'NumSlots', 'IsShowingBag', 'IsShowingItem', 'GetBagInfo', 'GetItemInfo'} do
+	Parented[method] = loadstring(format('return function(self, ...) return self.frame:%s(...) end', method))()
 end
