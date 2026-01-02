@@ -4,10 +4,23 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere')
-local Sushi = LibStub('Sushi-3.2')
-local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local SortButton = Addon.Tipped:NewClass('SortButton', 'CheckButton', true)
+
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local Sushi = LibStub('Sushi-3.2')
+local C = LibStub('C_Everywhere')
+
+local function DelayedToggle(menu, get, set)
+	local start = C.Container[get]()
+
+	C.Container[set](not start)
+	C.Timer.NewTicker(0.1, function(timer)
+		if C.Container[get]() ~= start then
+			pcall(menu.ReinitializeAll, menu)
+			timer:Cancel()
+		end
+	end, 20)
+end
 
 
 --[[ Construct ]]--
@@ -32,17 +45,18 @@ end
 function SortButton:OnClick(button)
 	if button == 'RightButton' then
 		local hasServer = self.frame.ServerSort
-		MenuUtil.CreateContextMenu(self, function(_, drop)
-			drop:SetTag(ADDON .. 'CleanupOptions')
-			drop:CreateTitle(L.CleanupOptions)
+		
+		MenuUtil.CreateContextMenu(self, function(_, menu)
+			menu:SetTag(ADDON .. 'CleanupOptions')
+			menu:CreateTitle(L.CleanupOptions)
 
 			if hasServer then
-				drop:CreateCheckbox(L.ServerSorting,
+				menu:CreateCheckbox(L.ServerSorting,
 					function() return self.frame.profile.serverSort end,
 					function() self.frame.profile.serverSort = not self.frame.profile.serverSort end)
 			end
 
-			drop:CreateCheckbox(L.ReverseSorting,
+			menu:CreateCheckbox(L.ReverseSorting,
 				function()
 					if hasServer and self.frame.profile.serverSort then
 						return not C.Container.GetSortBagsRightToLeft()
@@ -50,19 +64,19 @@ function SortButton:OnClick(button)
 						return self.frame.profile.reverseSort
 					end
 				end,
-				function()
+				function(_,_, menu)
 					if hasServer and self.frame.profile.serverSort then
-						C.Container.SetSortBagsRightToLeft(not C.Container.GetSortBagsRightToLeft())
+						DelayedToggle(menu, 'GetSortBagsRightToLeft', 'SetSortBagsRightToLeft')
 					else
 						self.frame.profile.reverseSort = not self.frame.profile.reverseSort
 					end
 				end)
 
-			drop:CreateCheckbox('Reverse Looting',
+			menu:CreateCheckbox('Reverse Looting',
 				function() return C.Container.GetInsertItemsLeftToRight() end,
-				function() C.Container.SetInsertItemsLeftToRight(not C.Container.GetInsertItemsLeftToRight()) end)
+				function(_,_, menu) DelayedToggle(menu, 'GetInsertItemsLeftToRight', 'SetInsertItemsLeftToRight') end)
 
-			drop:CreateButton('|A:legionmission-lock:14:14|a ' .. L.LockItems, function() self:OnLocking() end)
+			menu:CreateButton('|A:legionmission-lock:14:14|a ' .. L.LockItems, function() self:OnLocking() end)
 		end)
 	elseif not self:GetChecked() then
 		return Addon.Sorting:Stop()
