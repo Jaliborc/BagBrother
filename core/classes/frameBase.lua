@@ -21,16 +21,11 @@ Frame.RegisterEvents = nop
 
 function Frame:OnShow()
 	PlaySound(self.OpenSound)
-	self:RegisterFrameSignal('LAYOUT_FINISHED', 'OnLayout')
 	self:RegisterSignal('SKINS_LOADED', 'UpdateVisuals')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterSignal('HIDE_ALL', 'Hide')
 	self:RegisterEvents()
 	self:Update()
-end
-
-function Frame:OnLayout()
-	self.skin('layout')
 end
 
 function Frame:OnHide()
