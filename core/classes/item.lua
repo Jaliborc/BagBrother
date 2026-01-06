@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local Item = Addon.Tipped:NewClass('Item', 'ItemButton', 'ContainerFrameItemButtonTemplate', Addon.IsClassic)
+local Item = Addon.Tipped:NewClass('Item', 'ItemButton', 'ContainerFrameItemButtonTemplate', true)
 local Search = LibStub('ItemSearch-1.3')
 local C = LibStub('C_Everywhere')
 
@@ -28,8 +28,11 @@ end
 
 function Item:Construct()
 	local b = self:Super(Item):Construct()
-	local name = b:GetName()
-	if name then
+	b:SetScript('OnEvent', nil)
+	b:SetScript('OnShow', nil)
+
+	if Addon.IsClassic then
+		local name = b:GetName()
 		b.Cooldown, b.QuestBang = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
 	else
 		b.QuestBang = b.IconQuestTexture
@@ -68,8 +71,6 @@ function Item:Construct()
 		fade:SetToAlpha(.1)
 	end
 
-	b:SetScript('OnEvent', nil)
-	b:SetScript('OnShow', nil)
 	return b
 end
 
