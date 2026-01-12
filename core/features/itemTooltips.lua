@@ -10,10 +10,15 @@ local C = LibStub('C_Everywhere').Item
 
 local NONE = Addon.None
 local EQUIP_ICON = '%d|Tinterface/addons/bagbrother/art/garrison_building_salvageyard:12:12:6:0|t'
+local MAIL_ICON = '%d|Tinterface/icons/inv_letter_13:12:12:6:0|t'
 local DELIMITER = ' +'
 
+local function iterate(bag)
+	return pairs(bag and (bag.items or bag) or NONE)
+end
+
 local function aggregate(counts, bag)
-	for slot, data in pairs(bag and bag.items or NONE) do
+	for slot, data in iterate(bag) do
 		if tonumber(slot) then
 			local singleton = tonumber(data)
 			local id = singleton or tonumber(data:match('%d+'))
@@ -27,7 +32,7 @@ end
 local function find(bag, item)
 	local count = 0
 	
-	for slot, data in pairs(bag and bag.items or NONE) do
+	for slot, data in iterate(bag) do
 		if tonumber(slot) then
 			local singleton = tonumber(data)
 			local id = singleton or tonumber(data:match('%d+'))
@@ -121,19 +126,21 @@ function TipCounts:AddOwners(tip, link)
 				end
 
 				if not owner.isguild then
-					local equip, bags, bank, vault
+					local equip, mail, bags, bank, vault
+
 					if not owner.offline then
+						mail = find(owner.mail, id)
 						equip = find(owner.equip, id)
 						vault = find(owner.vault, id)
 						bank = C.GetItemCount(id, true, nil, true) - carrying
 						bags = carrying - equip
 					else
-						equip, bags = owner.counts.equip[id], owner.counts.bags[id]
-						bank, vault = owner.counts.bank[id], owner.counts.vault[id]
+						bags, bank, vault = owner.counts.bags[id], owner.counts.bank[id], owner.counts.vault[id]
+						equip, mail = owner.counts.equip[id], owner.counts.mail[id]
 					end
 
-					count, locations = self:Format(color, EQUIP_ICON, equip,
-						frameIcon('inventory'), bags, frameIcon('bank'), bank, frameIcon('vault'), vault)
+					count, locations = self:Format(color, EQUIP_ICON, equip, frameIcon('inventory'), bags, 
+						frameIcon('bank'), bank, frameIcon('vault'), vault, MAIL_ICON, mail)
 
 				elseif Addon.sets.countGuild then
 					if not owner.offline then
@@ -184,7 +191,7 @@ function TipCounts:CountItems(owner)
 			aggregate(owner.counts, owner[tab])
 		end
 	else
-		owner.counts = {bags={}, bank={}, equip={}, vault={}}
+		owner.counts = {bags={}, bank={}, equip={}, mail={}, vault={}}
 
 		for _, bag in ipairs(Addon.InventoryBags) do
 			aggregate(owner.counts.bags, owner[bag])
@@ -194,6 +201,7 @@ function TipCounts:CountItems(owner)
 			aggregate(owner.counts.bank, owner[bag])
 		end
 
+		aggregate(owner.counts.mail, owner.mail)
 		aggregate(owner.counts.equip, owner.equip)
 		aggregate(owner.counts.vault, owner.vault)
 	end

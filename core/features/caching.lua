@@ -19,6 +19,7 @@ local NUM_VAULT_ITEMS = 80 * 2
 function Cacher:OnLoad()
 	self.player = Addon.player.cache
 	self.player.currency = {tracked = {}}
+	self.player.mail = self.player.mail or {}
 	self.player.equip = self.player.equip or {}
 	self.player.faction = UnitFactionGroup('player') == 'Alliance'
 	self.player.race = select(2, UnitRace('player'))
@@ -31,6 +32,7 @@ function Cacher:OnLoad()
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'SaveEquip')
 	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
+	self:RegisterEvent('MAIL_INBOX_UPDATE')
 	self:RegisterSignal('BAGS_UPDATED')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
@@ -106,6 +108,20 @@ function Cacher:CURRENCY_TRACKED_CHANGED()
 		local data = C.CurrencyInfo.GetBackpackCurrencyInfo(i)
 		if data then
 			tinsert(self.player.currency.tracked, data.currencyTypesID)
+		end
+	end
+end
+
+function Cacher:MAIL_INBOX_UPDATE()
+	wipe(self.player.mail)
+
+	for i = 1, GetInboxNumItems() do
+		for j = 1, ATTACHMENTS_MAX_RECEIVE do
+			local index = (i-1) * ATTACHMENTS_MAX_RECEIVE + j
+			local _,_,_, count = GetInboxItem(i,j)
+			local link = GetInboxItemLink(i,j)
+
+			self.player.mail[index] = link and self:ParseItem(link, count)
 		end
 	end
 end
