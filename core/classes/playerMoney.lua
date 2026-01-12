@@ -6,6 +6,7 @@
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local floor = math.floor
 
 local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTemplate', true)
 Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
@@ -19,6 +20,17 @@ Line:SetStartPoint('LEFT', 0, -5)
 Line:SetEndPoint('RIGHT', 0, -5)
 Line:SetColorTexture(.3, .3, .3)
 Line:SetThickness(1)
+
+local function FormatThousands(value)
+	local text = tostring(value)
+	local changed
+
+	repeat
+		text, changed = text:gsub("^(-?%d+)(%d%d%d)", "%1 %2")
+	until changed == 0
+
+	return text
+end
 
 
 --[[ Construct ]]--
@@ -59,6 +71,7 @@ end
 function Money:Update()
 	local money = self:GetMoney()
 	MoneyFrame_Update(self:GetName(), money, money == 0)
+	self:UpdateGoldSeparator(money)
 	self:SetHeight(24)
 end
 
@@ -122,6 +135,21 @@ end
 
 
 --[[ API ]]--
+
+function Money:UpdateGoldSeparator(money)
+	local frameName = self:GetName()
+	if not frameName then
+		return
+	end
+
+	local goldButtonText = _G[frameName .. 'GoldButtonText']
+	if not goldButtonText or not goldButtonText:IsShown() then
+		return
+	end
+
+	local gold = floor((money or 0) / COPPER_PER_GOLD)
+	goldButtonText:SetText(FormatThousands(gold))
+end
 
 function Money:GetMoney()
 	return self:GetOwner():GetMoney() or 0
