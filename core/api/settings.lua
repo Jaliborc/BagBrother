@@ -133,6 +133,18 @@ function Settings:Upgrade() -- all code temporary, will be removed eventually
 		end
 
 		clean(ensureTables(BrotherBags))
+
+		for realm, owners in pairs(BrotherBags) do
+			local toRemove = {}
+			for id, data in pairs(owners) do
+				if type(id) ~= 'string' then
+					tinsert(toRemove, id)
+				end
+			end
+			for _,id in ipairs(toRemove) do
+				owners[id] = nil
+			end
+		end
 	end, function(...)
 		print('|cff33ff99' .. ADDON .. '|r ' .. L.UpgradeError)
 		geterrorhandler()(...)

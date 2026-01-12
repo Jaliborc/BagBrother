@@ -93,7 +93,7 @@ function Money:OnEnter()
 	for i, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
 		if money and i <= 10 or owner.favorite then
-			local coins = GetMoneyString(money, true)
+			local coins = GetMoneyString(money, true, true)
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)
 
@@ -106,12 +106,12 @@ function Money:OnEnter()
 	end
 
 	if overflow > 0 then
-		GameTooltip:AddDoubleLine('|TInterface/Icons/INV_Misc_QuestionMark:0:0|t '..L.Others, GetMoneyString(overflow, true))
+		GameTooltip:AddDoubleLine('|TInterface/Icons/INV_Misc_QuestionMark:0:0|t '..L.Others, GetMoneyString(overflow, true, true))
 	end
 
 	local account = (C.Bank.FetchDepositedMoney or nop)(2) or 0
 	if account > 0 then
-		GameTooltip:AddDoubleLine('|A:questlog-questtypeicon-account:0:0|a '..ACCOUNT_QUEST_LABEL, GetMoneyString(account, true))
+		GameTooltip:AddDoubleLine('|A:questlog-questtypeicon-account:0:0|a '..ACCOUNT_QUEST_LABEL, GetMoneyString(account, true, true))
 	end
 
 	GameTooltip_InsertFrame(GameTooltip, Stroke)

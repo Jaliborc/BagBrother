@@ -21,7 +21,6 @@ function Items:New(parent, bags)
 		f.bags[i].frame = f.frame
 	end
 
-	f:SetScript('OnSizeChanged', f.OnSizeChanged)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f:SetSize(1,1)
 	f:Show()
@@ -31,10 +30,6 @@ end
 function Items:OnShow()
 	self:RegisterEvents()
 	self:Layout()
-end
-
-function Items:OnSizeChanged()
-	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
 

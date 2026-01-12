@@ -39,7 +39,7 @@ function Bag:RegisterEvents()
 	if not self:IsCached() then
 		if NUM_BANKBAGSLOTS and self.slot then
 			self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
-			self:RegisterSignal('BAG_UPDATED')
+			self:RegisterSignal('BAGS_UPDATED')
 		elseif self:GetID() == REAGENTBANK_CONTAINER then
 			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
 		elseif C.FetchPurchasedBankTabData then

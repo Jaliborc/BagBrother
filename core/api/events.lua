@@ -3,13 +3,12 @@
 	All Rights Reserved
 
 	BAG_UPDATED
-	args: bag, changed
-		called whenever a bag's content is modified, second argument tells whether the bag itself has changed
+		deprecated and no longer fired, to avoid triggering the critical issues within CallbackHandler
 
 	BAGS_UPDATED
 	args: bags
-		called after all other BAG_UPDATED events in the current render frame have been fired
-		includes the arguments of those events as [bag, changed] pairs table
+		called whenever bag contents have been modified
+		argument is a key table, where if a given bag id has changed bags[id] will be true, nil otherwise
 
 	BANK_OPEN, BANK_CLOSE, VAULT_OPEN, VAULT_CLOSE, GUILD_OPEN, GUILD_CLOSE
 		called when the player opens or closes the given storage location by interacting with the world
@@ -24,7 +23,7 @@ local C = LibStub('C_Everywhere').Container
 
 function Events:OnLoad()
 	self.neverBanked = true
-	self.sizes, self.types, self.queue = {}, {}, {}
+	self.queue = {}
 
 	if C_PlayerInteractionManager then
 		self:RegisterEvent('PLAYER_INTERACTION_MANAGER_FRAME_SHOW')
@@ -40,12 +39,11 @@ function Events:OnLoad()
 	self:RegisterEvent('BANKFRAME_CLOSED', 'UpdateLocation', 'Bank', false)
 	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED', 'QueueBank')
 	self:RegisterEvent('BAG_UPDATE', 'QueueBag')
+	self:RegisterEvent('BAG_CLOSED', 'QueueBag')
 
 	for _, bag in ipairs(Addon.InventoryBags) do
-		self.queue[bag] = false
+		self.queue[bag] = true
 	end
-
-	self:Delay(0.08, 'UpdateBags')
 end
 
 function Events:BANKFRAME_OPENED()
@@ -56,7 +54,7 @@ function Events:BANKFRAME_OPENED()
 		self:QueueBank()
 
 		if REAGENTBANK_CONTAINER then
-			self.queue[REAGENTBANK_CONTAINER] = false
+			self.queue[REAGENTBANK_CONTAINER] = true
 		end
 	end
 end
@@ -89,27 +87,13 @@ function Events:UpdateLocation(location, state)
 end
 
 function Events:UpdateBags()
-	for bag in pairs(self.queue) do
-		local size = C.GetContainerNumSlots(bag) or 0
-		local _, family = C.GetContainerNumFreeSlots(bag)
-
-		local changed = size ~= self.sizes[bag] or family ~= self.types[bag]
-		if changed then
-			self.queue[bag] = true
-			self.types[bag] = family
-			self.sizes[bag] = size
-		end
-
-		self:SendSignal('BAG_UPDATED', bag, changed)
-	end
-
 	self:SendSignal('BAGS_UPDATED', self.queue)
 	self.queue = {}
 end
 
 function Events:QueueBank()
 	for i = Addon.NumBags + 1, Addon.LastBankBag do
-		self.queue[i] = false
+		self.queue[i] = true
 	end
 
 	if BANK_CONTAINER then
@@ -118,6 +102,6 @@ function Events:QueueBank()
 end
 
 function Events:QueueBag(bag)
-	self.queue[bag] = false
+	self.queue[bag] = true
 	self:Delay(0.08, 'UpdateBags')
 end

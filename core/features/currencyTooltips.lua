@@ -62,34 +62,40 @@ function TipCounts.OnID(tip, id)
 			end
 		end
 
+		local info = C.GetCurrencyInfo(id)
 		local left, right = {}, {}
 		local total = 0
 
 		for i, owner in Addon.Owners:Iterate() do
-			local count = owner.currency and owner.currency[id]
+			local count
+			if owner.offline then
+				count = owner.currency and owner.currency[id]
+			elseif not owner.isguild then
+				count = info.quantity
+			end
+
 			if count and count > 0 then
 				local color = owner:GetColorMarkup()
+				total = total + count
 			
 				tinsert(left, owner:GetIconMarkup(12,0,0) ..' '.. color:format(owner.name))
-				tinsert(right, color:format(count))
-				total = total + count
+				tinsert(right, color:format(FormatLargeNumber(count)))
 			end
 		end
 
-		if C.IsAccountTransferableCurrency(id) and total > 0 then
-			tip:AddLine(format('|n%s: |cffffffff%d|r', TOTAL, total))
+		if info.isAccountTransferable and total > 0 then
+			tip:AddLine(format('|n%s: |cffffffff%s|r', TOTAL, FormatLargeNumber(total)))
 		end
 
 		for i, who in ipairs(left) do
 			tip:AddDoubleLine(who, right[i])
 		end
 
-		local info = C.GetCurrencyInfo(id)
 		if info.maxWeeklyQuantity > 0 then
-			tip:AddDoubleLine(SILVER:format(WEEKLY), SILVER:format(info.maxWeeklyQuantity))
+			tip:AddDoubleLine(SILVER:format(WEEKLY), SILVER:format(FormatLargeNumber(info.maxWeeklyQuantity)))
 		end
 		if info.maxQuantity > 0 then
-			tip:AddDoubleLine(SILVER:format(MAXIMUM), SILVER:format(info.maxQuantity))
+			tip:AddDoubleLine(SILVER:format(MAXIMUM), SILVER:format(FormatLargeNumber(info.maxQuantity)))
 		end
 
 		tip:Show()

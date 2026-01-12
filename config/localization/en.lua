@@ -127,9 +127,9 @@ L.TradePartner = 'Trading'
 L.Transmogrifier = 'Modding Items'
 
 L.CloseInventory = 'Close Inventory'
+L.MapFrame = 'Opening the World Map'
 L.Combat = 'Entering Combat'
 L.Vehicle = 'Entering a Vehicle'
-L.World = 'Opening the World Map'
 
 -- info
 L.HelpDescription = 'Here we provide answers to the most frequently asked questions. If neither solve your problem, you might consider asking for help on the %s user community on discord.'

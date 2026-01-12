@@ -12,7 +12,6 @@ local CurrencyTracker = Addon.Parented:NewClass('CurrencyTracker', 'Frame')
 
 function CurrencyTracker:New(parent, font)
 	local f = self:Super(CurrencyTracker):New(parent)
-	f:SetScript('OnSizeChanged', f.OnSizeChanged)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f.font, f.buttons = font, {}
 
@@ -28,10 +27,6 @@ function CurrencyTracker:OnShow()
 	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE', 'Layout')
 	self:RegisterFrameSignal('OWNER_CHANGED', 'Layout')
 	self:Layout()
-end
-
-function CurrencyTracker:OnSizeChanged()
-	self:SendFrameSignal('ELEMENT_RESIZED')
 end
 
 

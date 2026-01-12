@@ -18,7 +18,7 @@ function Currency:Set(data, index)
 	local iconArgs = HONOR_POINT_TEXTURES and tContains(HONOR_POINT_TEXTURES, data.iconFileID) and ':64:64:0:40:0:40'
 
 	self.data, self.index = data, index
-	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', data.quantity or 0, data.iconFileID or 0, iconArgs or ''))
+	self:SetText(format('%s|T%s:14:14:2:0%s|t  ', FormatLargeNumber(data.quantity or 0), data.iconFileID or 0, iconArgs or ''))
 	self:Show()
 	self:SetWidth(self:GetTextWidth() + 2)
 end

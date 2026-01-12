@@ -31,7 +31,7 @@ function Cacher:OnLoad()
 	self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'SaveEquip')
 	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
-	self:RegisterSignal('BAG_UPDATED')
+	self:RegisterSignal('BAGS_UPDATED')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
 
@@ -74,9 +74,11 @@ end
 
 --[[ Events ]]--
 
-function Cacher:BAG_UPDATED(bag, ...)
-	if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
-  		self:SaveBag(bag)
+function Cacher:BAGS_UPDATED(bags)
+	for bag in pairs(bags) do
+		if bag >= BACKPACK_CONTAINER and bag <= Addon.NumBags and (bag ~= KEYRING_CONTAINER or HasKey and HasKey()) then
+			self:SaveBag(bag)
+		end
 	end
 end
 

@@ -96,16 +96,21 @@ function Bag:RegisterEvents()
 	if not self:IsCached() then
 		if self.slot then
 			self:RegisterEvent('ITEM_LOCK_CHANGED', 'UpdateLock')
-			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'BAG_UPDATED')
-			self:RegisterEvent('BAG_CLOSED', 'BAG_UPDATED')
-			self:RegisterSignal('BAG_UPDATED')
+			self:RegisterEvent('BAG_SLOT_FLAGS_UPDATED')
+			self:RegisterSignal('BAGS_UPDATED')
 		end
 	elseif self.slot then
 		self:RegisterEvent('GET_ITEM_INFO_RECEIVED')
 	end
 end
 
-function Bag:BAG_UPDATED(bag)
+function Bag:BAGS_UPDATED(bags)
+	if bags[self:GetID()] then
+		self:Update()
+	end
+end
+
+function Bag:BAG_SLOT_FLAGS_UPDATED(bag)
 	if bag == self:GetID() then
 		self:Update()
 	end
