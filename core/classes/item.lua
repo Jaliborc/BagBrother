@@ -40,10 +40,12 @@ function Item:Construct()
 
 	b.UpdateTooltip = b.OnEnter
 	b.FlashFind = b:CreateAnimationGroup()
-	b.QuestBang:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-	b.BattlepayItemTexture:Hide()
-	b.NewItemTexture:Hide()
-
+	if b.QuestBang then
+		b.QuestBang:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+	end
+	if b.BattlepayItemTexture then b.BattlepayItemTexture:Hide() end
+	if b.NewItemTexture then b.NewItemTexture:Hide() end
+	
 	b.IconGlow = b:CreateTexture(nil, 'OVERLAY', nil, -1)
 	b.IconGlow:SetTexture('Interface/Buttons/UI-ActionButton-Border')
 	b.IconGlow:SetBlendMode('ADD')
