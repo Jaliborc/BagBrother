@@ -211,7 +211,7 @@ end
 
 function Item:UpdateUpgradeIcon()
 	local isUpgrade = self:IsUpgrade()
-	self.UpgradeIcon:SetShown(isUpgrade)
+	if self.UpgradeIcon then self.UpgradeIcon:SetShown(isUpgrade) end
 
 	if isUpgrade == nil then
 		self:Delay(0.5, 'UpdateUpgradeIcon')
