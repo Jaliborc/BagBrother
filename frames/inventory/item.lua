@@ -31,10 +31,11 @@ Item.BagFamilies = {
 
 
 --[[ Events ]]--
-
 function Item:Construct()
 	local b = self:Super(Item):Construct()
-	b.Cooldown:SetScript('OnCooldownDone', function() SetItemButtonTextureVertexColor(b, 1,1,1) end)
+		if b.Cooldown then
+			b.Cooldown:SetScript('OnCooldownDone', function() SetItemButtonTextureVertexColor(b, 1,1,1) end)
+		end
 	return b
 end
 
@@ -74,6 +75,7 @@ function Item:Update(...)
 end
 
 function Item:UpdateCooldown()
+	if not self.Cooldown then return end
 	if self.hasItem and not self:IsCached() then
 		CooldownFrame_Set(self.Cooldown, C.Container.GetContainerItemCooldown(self:GetBag(), self:GetID()))
 		local fade = self.Cooldown:IsShown() and 0.4 or 1
@@ -93,13 +95,12 @@ end
 
 function Item:UpdateGlow()
 	local new = Addon.sets.glowNew and self.info.isNew
-	self.BattlepayItemTexture:SetShown(new and self.info.isPaid)
-	self.NewItemTexture:SetShown(new)
-
+	if self.BattlepayItemTexture then self.BattlepayItemTexture:SetShown(new and self.info.isPaid) end
+	if self.NewItemTexture then self.NewItemTexture:SetShown(new) end
 	if new then
-		self.NewItemTexture:SetAtlas(self.info.quality and NEW_ITEM_ATLAS_BY_QUALITY[self.info.quality] or 'bags-glow-white')
-		self.newitemglowAnim:Play()
-		self.flashAnim:Play()
+		if self.NewItemTexture then self.NewItemTexture:SetAtlas(self.info.quality and NEW_ITEM_ATLAS_BY_QUALITY[self.info.quality] or 'bags-glow-white') end
+		if self.newitemglowAnim then self.newitemglowAnim:Play() end
+		if self.flashAnim then self.flashAnim:Play() end
 	end
 end
 
