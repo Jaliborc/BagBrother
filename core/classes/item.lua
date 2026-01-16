@@ -186,10 +186,10 @@ function Item:UpdateBorder()
 		end
 	end
 
-	self.IconGlow:SetShown(r)
-	self.IconBorder:SetShown(r)
-	self.QuestBang:SetShown(bang)
-	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
+	if self.IconGlow then self.IconGlow:SetShown(r) end
+	if self.IconBorder then self.IconBorder:SetShown(r) end
+	if self.QuestBang then self.QuestBang:SetShown(bang) end
+	if self.JunkIcon then self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue) end
 end
 
 function Item:UpdateFocus()
