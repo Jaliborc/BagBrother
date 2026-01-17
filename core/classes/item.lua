@@ -31,7 +31,7 @@ function Item:Construct()
 	b:SetScript('OnEvent', nil)
 	b:SetScript('OnShow', nil)
 
-	if Addon.IsModern then
+	if Addon.IsRetail then
 		b.QuestBang = b.IconQuestTexture
 	else
 		local name = b:GetName()
