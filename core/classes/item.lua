@@ -31,11 +31,11 @@ function Item:Construct()
 	b:SetScript('OnEvent', nil)
 	b:SetScript('OnShow', nil)
 
-	if Addon.IsClassic then
+	if Addon.IsModern then
+		b.QuestBang = b.IconQuestTexture
+	else
 		local name = b:GetName()
 		b.Cooldown, b.QuestBang = _G[name .. 'Cooldown'], _G[name .. 'IconQuestTexture']
-	else
-		b.QuestBang = b.IconQuestTexture
 	end
 
 	b.UpdateTooltip = b.OnEnter

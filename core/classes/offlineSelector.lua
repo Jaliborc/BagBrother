@@ -119,7 +119,7 @@ function OfflineSelector:AddLocations(parent)
 end
 
 function OfflineSelector:AddLocation(parent, frame)
-	local size = Addon.IsClassic and 34 or 28
+	local size = Addon.IsModern and 28 or 34
 	local button = Sushi.DropButton(parent, {
 		text = CreateSimpleTextureMarkup(frame.icon, size,size) .. ' '.. frame.name,
 		func = function() Addon.Frames:Show(frame.id) end,

@@ -55,7 +55,7 @@ function Frames:Populate()
 				end
 			end
 
-			if not Addon.IsClassic and self.frame ~= 'guild' then
+			if Addon.IsModern and self.frame ~= 'guild' then
 				self:AddCheck('currency')
 			end
 

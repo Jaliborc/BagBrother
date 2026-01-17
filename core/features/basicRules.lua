@@ -40,9 +40,9 @@ end
 
 do
 	local classes = {
+		['Interface/Addons/BagBrother/art/achievement_quests_completed_06'] = {'Questitem'},
 		[132894] = {'Tradegoods', 'Profession', 'Reagent', 'Recipe'},
 		[133126] = {'Armor', 'Weapon', 'Gem'},
-		[236669] = {'Questitem'},
 		[134414] = {'Miscellaneous'},
 		[134756] = {'Consumable'},
 	}

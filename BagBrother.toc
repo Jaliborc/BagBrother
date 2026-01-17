@@ -7,4 +7,4 @@
 
 ## SavedVariables: BrotherBags
 ## OptionalDeps: WoWUnit
-## Interface: 120001, 110207, 50501, 40402, 30404, 20504, 11507
+## Interface: 120001, 110207, 50501, 40402, 30404, 20505, 11507

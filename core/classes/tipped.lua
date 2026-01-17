@@ -5,6 +5,10 @@
 
 local ADDON, Addon = ...
 local Tipped = Addon.Parented:NewClass('Tipped')
+Tipped.Markup = {
+	['|L'] = '|A:NPE_LeftClick:14:14|a',
+	['|R'] = '|A:NPE_RightClick:14:14|a',
+}
 
 function Tipped:OnLeave()
 	if GameTooltip:IsOwned(self) then
@@ -27,7 +31,7 @@ function Tipped:ShowTooltip(title, ...)
 end
 
 function Tipped.MarkupTooltip(text)
-	return text:gsub('|L', '|A:NPE_LeftClick:14:14|a'):gsub('|R', '|A:NPE_RightClick:14:14|a'), nil
+	return text:gsub('(%|.)', Tipped.Markup), nil
 end
 
 function Tipped:GetTipAnchor()
