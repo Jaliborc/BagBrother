@@ -17,8 +17,10 @@ Frame.MainMenuButtons = {
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
 }
 
-if HasKey then
-	tinsert(Frame.MainMenuButtons, KeyRingButton)
+if KeyRingButton then
+	Frame.MainMenuButtons[KEYRING_CONTAINER] = KeyRingButton
+elseif CharacterReagentBag0Slot then
+	tinsert(Frame.MainMenuButtons, CharacterReagentBag0Slot)
 end
 
 
@@ -26,21 +28,23 @@ end
 
 function Frame:OnShow()
 	self:Super(Frame):OnShow()
-	self:Delay('HighlightMainMenu', true)
+	self:RegisterFrameSignal('FILTERS_CHANGED', 'HighlightMainMenu')
+	self:Delay('HighlightMainMenu')
 end
 
 function Frame:OnHide()
 	self:Super(Frame):OnHide()
-	self:Delay('HighlightMainMenu', false)
+	self:Delay('HighlightMainMenu')
 end
 
-function Frame:HighlightMainMenu(checked)
-	for _, button in pairs(self.MainMenuButtons) do
+function Frame:HighlightMainMenu()
+	for i, button in pairs(self.MainMenuButtons) do
+		local active = self:IsShown() and self:IsShowingBag(i-1)
 		if button.SlotHighlightTexture then
-			button.SlotHighlightTexture:SetShown(checked)
+			button.SlotHighlightTexture:SetShown(active)
 		elseif button.icon then
-			button:SetChecked(checked)
-		elseif checked then
+			button:SetChecked(active)
+		elseif active then
 			button:SetButtonState('PUSHED', 1)
 		else
 			button:SetButtonState('NORMAL')

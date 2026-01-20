@@ -4,7 +4,6 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere').AddOns
 local Frames = Addon:NewModule('Frames')
 Frames.Registry = {
 	{id = 'inventory', name = INVENTORY_TOOLTIP, icon = 130716},
@@ -77,7 +76,7 @@ end
 function Frames:New(id)
 	if self:IsEnabled(id) then
 		local frame, i = self:Get(id)
-		if not frame[0] and (not frame.addon or C.LoadAddOn(frame.addon)) then
+		if not frame[0] and (not frame.addon or AddOnUtil.LoadAddOn(frame.addon)) then
 			frame = Addon[id:gsub('^.', id.upper)]:New(frame)
 	 		self.Registry[i] = frame
 			return frame
@@ -99,7 +98,7 @@ end
 function Frames:IsEnabled(id)
 	local addon = self:Get(id).addon
 	if addon then
-		return C.GetAddOnEnableState(addon, UnitName('player')) == 2
+		return AddOnUtil.IsAddOnEnabledForCurrentCharacter(addon)
 	else
 		return addon ~= false and Addon.player.profile[id].enabled
 	end

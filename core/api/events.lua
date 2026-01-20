@@ -40,6 +40,7 @@ function Events:OnLoad()
 	self:RegisterEvent('PLAYERBANKSLOTS_CHANGED', 'QueueBank')
 	self:RegisterEvent('BAG_UPDATE', 'QueueBag')
 	self:RegisterEvent('BAG_CLOSED', 'QueueBag')
+	self:RegisterEvent('BAG_UPDATE_DELAYED', 'Delay', 0.08, 'UpdateBags')
 
 	for _, bag in ipairs(Addon.InventoryBags) do
 		self.queue[bag] = true

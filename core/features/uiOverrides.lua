@@ -10,6 +10,7 @@ local function Location(bag)
 	return bag > Addon.NumBags and 'bank' or 'inventory', bag
 end
 
+local Parent = ContainerFrameContainer or UIParent
 local Panels = {
 	BankFrame = 'bank',
 	GuildBankFrame = 'guild',
@@ -18,7 +19,8 @@ local Panels = {
 
 function Overrides:OnLoad()
 	self:RegisterEvent('CVAR_UPDATE', self.Delay, 'OnCVar')
-	self.Disabled = CreateFrame('Frame', nil, UIParent)
+	self.Disabled = CreateFrame('Frame', nil, Parent)
+	self.Disabled:SetAllPoints()
 	self.Disabled:Hide()
 
 	if LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG then
@@ -27,7 +29,10 @@ function Overrides:OnLoad()
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_BAG_SLOTS_AUTHENTICATOR, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_MOUNT_EQUIPMENT_SLOT_FRAME, true)
 		C_CVar.SetCVarBitfield('closedInfoFrames', LE_FRAME_TUTORIAL_UPGRADEABLE_ITEM_IN_SLOT, true)
-		C_CVar.SetCVar('combinedBags', nil)
+
+		if Addon.Frames:IsEnabled('inventory') then
+			C_CVar.SetCVar('combinedBags', nil)
+		end
 	end
 
 	if BackpackTokenFrame then
@@ -37,13 +42,13 @@ function Overrides:OnLoad()
 	for i = 1, NUM_CONTAINER_FRAMES do
 		hooksecurefunc(_G['ContainerFrame' .. i], 'SetID', function(frame, bag)
 			local disabled = Addon.Frames:HasBag(Location(bag))
-			frame:SetParent(disabled and self.Disabled or ContainerFrameContainer or UIParent)
+			frame:SetParent(disabled and self.Disabled or Parent)
 		end)
 	end
 
 	hooksecurefunc('ToggleAllBags', function()
 		if not debugstack():find('Manager') then
-			Addon.Frames:ToggleBag('inventory', 0)
+			Addon.Frames:Toggle('inventory')
 		end
 	end)
 
@@ -84,7 +89,7 @@ function Overrides:OnLoad()
 end
 
 function Overrides:OnCVar(var)
-	if var == 'combinedBags' and not InCombatLockdown() then
+	if var == 'combinedBags' and not InCombatLockdown() and Addon.Frames:IsEnabled('inventory') then
 		C_CVar.SetCVar('combinedBags', nil)
 	end
 end
