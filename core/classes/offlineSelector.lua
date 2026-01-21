@@ -132,7 +132,7 @@ function OfflineSelector:AddLocation(parent, frame)
 end
 
 function OfflineSelector:AddOwner(parent, owner)
-	local name = owner:GetIconMarkup(16) .. ' '.. owner:GetColorMarkup():format(owner.name)
+	local name = owner:GetDisplayName(16)
 	local isSelected = function() return owner == self:GetOwner() end
 	local onClick = function()
 		Addon.Frames:Show(owner.isguild and 'guild' or self:GetFrameID(), owner)

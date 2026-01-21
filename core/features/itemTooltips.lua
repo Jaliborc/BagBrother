@@ -156,7 +156,7 @@ function TipCounts:AddOwners(tip, link)
 				end
 
 				if count > 0 then
-					tinsert(left, owner:GetIconMarkup(12) ..' '.. color:format(owner.name))
+					tinsert(left, owner:GetDisplayName(16))
 					tinsert(right, locations)
 					total = total + count
 				end

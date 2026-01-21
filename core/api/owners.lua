@@ -10,6 +10,7 @@ local DEFAULT_COORDS = {0, 1, 0, 1}
 local CLASS_COLOR = '|cff%02x%02x%02x'
 local ALLIANCE_BANNER = 'Interface/Icons/Inv_BannerPvP_02'
 local HORDE_BANNER = 'Interface/Icons/Inv_BannerPvP_01'
+local REALM_TAG = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode(' (%s)')
 local RACE_TEXTURE, RACE_TABLE
 
 if Addon.IsClassic then
@@ -45,7 +46,7 @@ end
 --[[ Static API ]]--
 
 function Owners:OnLoad()
-	self.registry, self.ordered = {}, {}
+	self.registry, self.twins, self.ordered = {}, {}, {}
 	self.realms = {GetNormalizedRealmName(), unpack(GetAutoCompleteRealms())}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 
@@ -111,6 +112,7 @@ function Owners:New(id, realm)
 			cache = cache, isguild = isguild,
 		}, self)
 
+		self.twins[id] = (self.twins[id] or 0) + 1
 		self.registry[cache] = owner
 		tinsert(self.ordered, owner)
 	end
@@ -127,6 +129,11 @@ end
 function Owners:SetProfile(profile)
 	Addon.Settings:SetProfile(self.realm, self.id, profile)
 	self.profile = Addon.Settings:GetProfile(self.realm, self.id)
+end
+
+function Owners:GetDisplayName(iconSize)
+	local name = self:IsTwin() and (self.name .. REALM_TAG:format(self.realm)) or self.name
+	return self:GetIconMarkup(iconSize) .. ' '.. self:GetColorMarkup():format(name)
 end
 
 function Owners:GetIconMarkup(size, x, y)
@@ -172,4 +179,8 @@ function Owners:GetMoney()
 	else
 		return (GetMoney() or 0) - GetCursorMoney() - GetPlayerTradeMoney()
 	end
+end
+
+function Owners:IsTwin()
+	return Owners.twins[self.id] > 1 and self.realm ~= Addon.player.realm
 end
