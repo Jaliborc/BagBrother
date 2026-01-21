@@ -38,6 +38,13 @@ elseif not Addon.IsModern then
 	Rules:Register {id = 'ammo', title = L.AmmoBags, icon = ammoIcon, macro = 'return family == 1 or family == 2', static = true}
 end
 
+if not Addon.IsClassic then
+	for _, equipmentSetID in pairs(C_EquipmentSet.GetEquipmentSetIDs()) do
+		local name, iconFileID, setID, _,_,_,_,_,_ = C_EquipmentSet.GetEquipmentSetInfo(equipmentSetID)
+		Rules:Register {id = 'set' .. setID, title = name, icon = iconFileID, search = 'set:' .. name, static = true}
+	end
+end
+
 do
 	local classes = {
 		['Interface/Addons/BagBrother/art/achievement_quests_completed_06'] = {'Questitem'},
