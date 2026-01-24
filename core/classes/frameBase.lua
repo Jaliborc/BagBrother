@@ -76,24 +76,22 @@ end
 function Frame:SavePosition()
 	local x, y = self:GetCenter()
 	if x and y then
-		local scale = self:GetScale()
-		local h = GetScreenHeight() / scale
-		local w = GetScreenWidth() / scale
+		local left, bottom, width, height = GetUnscaledFrameRect(self:GetParent(), self:GetEffectiveScale())
 		local xPoint, yPoint
 
-		if x > w/2 then
-			x = self:GetRight() - w
+		if x > left + width / 2 then
+			x = self:GetRight() - (left + width)
 			xPoint = 'RIGHT'
 		else
-			x = self:GetLeft()
+			x = self:GetLeft() - left
 			xPoint = 'LEFT'
 		end
 
-		if y > h/2 then
-			y = self:GetTop() - h
+		if y > bottom + height / 2 then
+			y = self:GetTop() - (bottom + height)
 			yPoint = 'TOP'
 		else
-			y = self:GetBottom()
+			y = self:GetBottom() - bottom
 			yPoint = 'BOTTOM'
 		end
 
