@@ -80,7 +80,7 @@ function Rules:RegisterEquipmentSets()
 	-- register sets
 	for _, equipmentSetID in pairs(C_EquipmentSet.GetEquipmentSetIDs()) do
 		local name, iconFileID, setID, _,_,_,_,_,_ = C_EquipmentSet.GetEquipmentSetInfo(equipmentSetID)
-		self:Register {id = 'set__' .. setID, title = 'Set: ' .. name, icon = iconFileID, search = 'set:' .. name, static = true}
+		self:Register {id = 'set__' .. setID, title = 'Set: ' .. name, icon = iconFileID, search = 'set:' .. name, static = true, equipSet = setID}
 	end
 
 	self:Delay('SendSignal', 'FILTERS_CHANGED')
