@@ -28,6 +28,11 @@ function Tab:OnClick(mouse)
 		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
 			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
+	elseif mouse == 'LeftButton' and IsShiftKeyDown() then
+		self:SetChecked(not self:GetChecked())
+		if self.rule.equipSet ~= nil then
+			C_EquipmentSet.UseEquipmentSet(self.rule.equipSet)
+		end
 	else
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 		self:GetParent():SetActive(self.rule)
@@ -36,5 +41,5 @@ function Tab:OnClick(mouse)
 end
 
 function Tab:OnEnter()
-	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS)
+	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS, self.rule.equipSet ~= nil and '|L+Shift Equip' or '')
 end
