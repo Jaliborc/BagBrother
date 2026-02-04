@@ -5,6 +5,7 @@
 
 local ADDON, Addon = ...
 local Tab = Addon.Tipped:NewClass('Tab', 'CheckButton', true)
+local C = LibStub('C_Everywhere')
 
 function Tab:SetRule(rule, checked)
 	local icon, isAtlas = rule:GetIcon(self.frame)
@@ -25,14 +26,12 @@ function Tab:OnClick(mouse)
 	if mouse == 'RightButton' then
 		self:SetChecked(not self:GetChecked())
 
-		if C_AddOns.LoadAddOn(ADDON .. '_Config') then
+		if C.AddOns.LoadAddOn(ADDON .. '_Config') then
 			Addon.RuleEdit:OpenMenu(self:GetParent())
 		end
-	elseif mouse == 'LeftButton' and IsShiftKeyDown() then
+	elseif IsShiftKeyDown() and self.rule.equipSet then
 		self:SetChecked(not self:GetChecked())
-		if self.rule.equipSet ~= nil then
-			C_EquipmentSet.UseEquipmentSet(self.rule.equipSet)
-		end
+		C.EquipmentSet.UseEquipmentSet(self.rule.equipSet)
 	else
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 		self:GetParent():SetActive(self.rule)
@@ -41,5 +40,5 @@ function Tab:OnClick(mouse)
 end
 
 function Tab:OnEnter()
-	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS, self.rule.equipSet ~= nil and '|L+Shift Equip' or '')
+	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS, self.rule.equipSet and ('|L|S ' .. EQUIPSET_EQUIP) or '')
 end

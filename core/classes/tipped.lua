@@ -6,6 +6,7 @@
 local ADDON, Addon = ...
 local Tipped = Addon.Parented:NewClass('Tipped')
 Tipped.Markup = {
+	['|S'] = WHITE_FONT_COLOR:WrapTextInColorCode('+' .. SHIFT_KEY_TEXT:sub(1,1):upper() .. SHIFT_KEY_TEXT:sub(2):lower()), --'|TInterface/AddOns/BagBrother/art/test:14:14|t'
 	['|L'] = '|A:NPE_LeftClick:14:14|a',
 	['|R'] = '|A:NPE_RightClick:14:14|a',
 }

@@ -16,7 +16,7 @@ function Tabs:New(parent, id)
 	f.sets = f.frame.profile.activeRules
 	f.id, f.buttons = id, {}
 
-	f:RegisterSignal('RULES_LOADED', 'Update')
+	f:RegisterSignal('RULES_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
 	f:SetActive(Addon.Rules:Get(f.sets[id]) or Addon.Rules:Get(f.rules[1]))

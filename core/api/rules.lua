@@ -20,8 +20,6 @@ function Rules:OnLoad()
 
 	self.GetValue = GetValueOrCallFunction
 	self.__index = self
-
-	self:RegisterEvent('EQUIPMENT_SETS_CHANGED', 'RegisterEquipmentSets')
 end
 
 function Rules:Register(data)
@@ -31,7 +29,14 @@ function Rules:Register(data)
 	assert(not self.Registry[data.id], 'data.id must be unique, id already registered')
 
 	self.Registry[data.id] = setmetatable(data, self)
-	self:Delay('SendSignal', 'RULES_LOADED')
+	self:Delay('SendSignal', 'RULES_CHANGED')
+end
+
+function Rules:Unregister(id)
+	assert(self.Registry[id], 'id not registered')
+
+	self.Registry[id] = nil
+	self:Delay('SendSignal', 'RULES_CHANGED')
 end
 
 function Rules:Get(id)
@@ -63,25 +68,4 @@ function Rules:Compile()
 	end
 
 	return macro and macro() or search or self.filter
-end
-
-function Rules:RegisterEquipmentSets()
-	if Addon.IsClassic then
-		return
-	end
-
-	-- unregister sets
-	for k, v in self:Iterate() do
-		if string.sub(k, 1, 5) == 'set__' then
-			self.Registry[k] = nil
-		end
-	end
-
-	-- register sets
-	for _, equipmentSetID in pairs(C_EquipmentSet.GetEquipmentSetIDs()) do
-		local name, iconFileID, setID, _,_,_,_,_,_ = C_EquipmentSet.GetEquipmentSetInfo(equipmentSetID)
-		self:Register {id = 'set__' .. setID, title = 'Set: ' .. name, icon = iconFileID, search = 'set:' .. name, static = true, equipSet = setID}
-	end
-
-	self:Delay('SendSignal', 'FILTERS_CHANGED')
 end

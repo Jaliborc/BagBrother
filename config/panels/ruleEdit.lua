@@ -119,7 +119,7 @@ function Frame:Display(rule)
 end
 
 function Frame:Done()
-	Addon:SendSignal('RULES_LOADED')
+	Addon:SendSignal('RULES_CHANGED')
 	self:Hide()
 end
 
