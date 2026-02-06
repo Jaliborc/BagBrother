@@ -40,5 +40,5 @@ function Tab:OnClick(mouse)
 end
 
 function Tab:OnEnter()
-	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS, self.rule.equipSet and ('|L|S ' .. EQUIPSET_EQUIP) or '')
+	self:ShowTooltip(self.rule:GetValue('title', self.frame), '|R ' .. OPTIONS, self.rule.equipSet and ('|LS ' .. EQUIPSET_EQUIP) or '')
 end

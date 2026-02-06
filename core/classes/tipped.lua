@@ -6,7 +6,8 @@
 local ADDON, Addon = ...
 local Tipped = Addon.Parented:NewClass('Tipped')
 Tipped.Markup = {
-	['|S'] = WHITE_FONT_COLOR:WrapTextInColorCode('+' .. SHIFT_KEY_TEXT:sub(1,1):upper() .. SHIFT_KEY_TEXT:sub(2):lower()), --'|TInterface/AddOns/BagBrother/art/test:14:14|t'
+	['|LS'] = '|TInterface/AddOns/BagBrother/art/shift:14:26.6875:0:0:64:64:0:61:0:32|t',
+	['|RS'] = '|TInterface/AddOns/BagBrother/art/shift:14:26.6875:0:0:64:64:0:61:32:64|t',
 	['|L'] = '|A:NPE_LeftClick:14:14|a',
 	['|R'] = '|A:NPE_RightClick:14:14|a',
 }
@@ -32,7 +33,7 @@ function Tipped:ShowTooltip(title, ...)
 end
 
 function Tipped.MarkupTooltip(text)
-	return text:gsub('(%|.)', Tipped.Markup), nil
+	return text:gsub('(%|%u+)', Tipped.Markup), nil
 end
 
 function Tipped:GetTipAnchor()
