@@ -172,11 +172,13 @@ end
 
 function Bag:Toggle()
 	local data = self:GetBagInfo(self:GetID())
-	data.hidden = not data.hidden
+	if data then
+		data.hidden = not data.hidden
 
-	PlaySound(data.hidden and 856 or 857)
-	self:SendFrameSignal('FILTERS_CHANGED')
-	self:SetFocus(true)
+		PlaySound(data.hidden and 856 or 857)
+		self:SendFrameSignal('FILTERS_CHANGED')
+		self:SetFocus(true)
+	end
 end
 
 function Bag:ShowMenu()

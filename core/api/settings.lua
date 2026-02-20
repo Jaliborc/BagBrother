@@ -63,45 +63,10 @@ end
 
 function Settings:Upgrade() -- all code temporary, will be removed eventually
 	xpcall(function()
-		local function ensureTables(table)
-			for _,key in ipairs(GetKeysArray(table)) do
-				if type(table[key]) ~= 'table' then
-					table[key] = nil -- old/corrupted entry? some users had invalid stuff in their saved variables
-				end
-			end
-			return table
-		end
-
-		local function upgradeProfile(profile)
-			for id, sets in pairs(ensureTables(profile)) do
-				if type(sets.bagBreak) ~= 'number' then
-					sets.bagBreak = nil
-				end
-
-				if sets.skin == 'Panel - Flat' then
-					sets.skin = 'Bagnonium'
-				elseif sets.skin == 'Panel - Marble' then
-					sets.skin = 'Combuctor'
-				end
-
-				if sets.filters then
-					sets.rules, sets.filters = {sidebar = sets.filters}
-				end
-
-				sets.hiddenBags, sets.lockedSlots = nil
-			end
-		end
-
-		for realm, owners in pairs(ensureTables(Addon.sets.profiles)) do
-			for id, profile in pairs(ensureTables(owners)) do
-				upgradeProfile(profile)
-			end
-		end
-		upgradeProfile(Addon.sets.global)
-
 		local OLD_KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
 		local OLD_PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
-		local function clean(data)
+
+		local function upgradeItemFormat(data)
 			for key, value in pairs(data) do
 				local kind = type(value)
 				if kind == 'table' then
@@ -120,7 +85,7 @@ function Settings:Upgrade() -- all code temporary, will be removed eventually
 						end
 					else
 						value.tabNameEditBoxHeader, value.tabCleanupConfirmation = nil
-						clean(value)
+						upgradeItemFormat(value)
 					end
 				elseif kind == 'string' then
 					if value:find(OLD_KEYSTONE_FORMAT) then
@@ -132,17 +97,18 @@ function Settings:Upgrade() -- all code temporary, will be removed eventually
 			end
 		end
 
-		clean(ensureTables(BrotherBags))
+		upgradeItemFormat(BrotherBags)
 
-		for realm, owners in pairs(BrotherBags) do
-			local toRemove = {}
-			for id, data in pairs(owners) do
-				if type(id) ~= 'string' then
-					tinsert(toRemove, id)
+		for _,realm in ipairs(GetKeysArray(BrotherBags)) do
+			local owners = BrotherBags[realm]
+			if type(owners) ~= 'table' then
+				BrotherBags[realm] = nil
+			elseif realm ~= 'account' then
+				for _,id in ipairs(GetKeysArray(owners)) do
+					if type(id) ~= 'string' then
+						owners[id] = nil
+					end
 				end
-			end
-			for _,id in ipairs(toRemove) do
-				owners[id] = nil
 			end
 		end
 	end, function(...)

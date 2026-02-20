@@ -50,6 +50,9 @@ function Frame:OpenMenu(anchor)
 end
 
 function Frame:CreateCheckboxes(drop, rules)
+	local isInstalled = function(id)
+		return Addon.Rules:Get(id) and 1 or 0 end
+
 	local anchor = self:GetParent()
 	local enabled, frame = anchor.rules, anchor.frame
 
@@ -69,7 +72,7 @@ function Frame:CreateCheckboxes(drop, rules)
 		end
 
 		local check = drop:CreateCheckbox(icon ..' '.. title, isEnabled, toggle)
-		check:SetCanSelect(function() return #enabled > 1 or not isEnabled() end)
+		check:SetCanSelect(function() return AccumulateOp(enabled, isInstalled) > 1 or not isEnabled() end)
 		check:AddInitializer(function(check, _, menu)
 			local edit = MenuTemplates.AttachAutoHideGearButton(check)
 			edit:SetPoint('RIGHT')

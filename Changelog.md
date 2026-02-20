@@ -1,2 +1,2 @@
-### 12.0.3
+### 12.0.4
 See full [Technical Changelog](https://github.com/Jaliborc/BagBrother/commits/master/) on Github, or read about the general changes on the [Bagnon Changelog](https://github.com/Jaliborc/Bagnon/blob/master/Changelog.md) for the same version number.

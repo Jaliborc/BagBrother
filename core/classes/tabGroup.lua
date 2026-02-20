@@ -13,13 +13,13 @@ Tabs.Button = Addon.Tab
 function Tabs:New(parent, id)
 	local f = self:Super(Tabs):New(parent)
 	f.rules = f.frame.profile.rules[id]
-	f.sets = f.frame.profile.activeRules
+	f.active = f.frame.profile.activeRules
 	f.id, f.buttons = id, {}
 
 	f:RegisterSignal('RULES_CHANGED', 'Update')
 	f:RegisterFrameSignal('OWNER_CHANGED', 'Update')
 	f:RegisterFrameSignal('FILTERS_CHANGED', 'Update')
-	f:SetActive(Addon.Rules:Get(f.sets[id]) or Addon.Rules:Get(f.rules[1]))
+	f:SetActive(Addon.Rules:Get(f.active[id]) or Addon.Rules:Get(f.rules[1]) or Addon.Rules:Get('all'))
 	f:Update()
 
 	return f
@@ -56,7 +56,7 @@ end
 
 function Tabs:SetActive(rule)
 	self.frame.rules[self.id] = {data = rule, compiled = rule:Compile()}
-	self.sets[self.id] = rule.id
+	self.active[self.id] = rule.id
 end
 
 function Tabs:GetActive()
