@@ -41,9 +41,9 @@ L.ShowBag = 'Haz clic para mostrar esta bolsa.'
 L.GuildFunds = 'Fondos de la hermandad'
 L.TipDeposit = '%s para depositar.'
 L.TipWithdraw = '%s para retirar (%s restantes).'
-L.NumWithdraw = 'Retirar %d'
-L.NumDeposit = 'Depositar %d'
-L.NumRemainingWithdrawals = '%d Restantes'
+L.NumWithdraw = 'Retirar %s'
+L.NumDeposit = 'Depositar %s'
+L.NumRemaining = '%s Restantes'
 
 --dropdowns
 L.OfflineViewing = 'Visualización sin conexión'

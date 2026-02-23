@@ -41,9 +41,9 @@ L.HideBag = 'Clique para esconder esta bolsa.'
 L.ShowBag = 'Clique para mostrar esta bolsa.'
 L.GuildFunds = 'Dinheiro da Guilda'
 L.NumAllowed = '%s Permitidos'
-L.NumWithdraw = '%d Retirar'
-L.NumDeposit = '%d Depositar'
-L.NumRemaining = '%d Restantes'
+L.NumWithdraw = '%s Retirar'
+L.NumDeposit = '%s Depositar'
+L.NumRemaining = '%s Restantes'
 
 --dropdowns
 L.OfflineViewing = 'Visualização Offline'
