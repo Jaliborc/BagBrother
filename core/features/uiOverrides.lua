@@ -36,7 +36,10 @@ function Overrides:OnLoad()
 	end
 
 	if BackpackTokenFrame then
-		BackpackTokenFrame:SetWidth(Addon.CurrencyLimit * 50)
+		hooksecurefunc(ContainerFrame1, 'UpdateCurrencyFrames', function()
+			BackpackTokenFrame:ClearAllPoints()
+			BackpackTokenFrame:SetWidth(Addon.CurrencyLimit * 50)
+		end)
 	end
 
 	for i = 1, NUM_CONTAINER_FRAMES do
