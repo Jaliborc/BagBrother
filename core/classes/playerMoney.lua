@@ -13,6 +13,7 @@ Money.Type = 'PLAYER'
 
 local Stroke = CreateFrame('Frame')
 Stroke:SetHeight(5)
+Stroke:SetWidth(0) -- avoid error when parent width issecret
 
 local Line = Stroke:CreateLine()
 Line:SetStartPoint('LEFT', 0, -5)
@@ -117,7 +118,10 @@ function Money:OnEnter()
 	GameTooltip_InsertFrame(GameTooltip, Stroke)
 	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total + account, true)))
 	GameTooltip:Show()
-	Stroke:SetWidth(GameTooltip:GetWidth()-20)
+	local ttWidth = GameTooltip:GetWidth()
+	if ttWidth and not (issecretvalue and issecretvalue(ttWidth)) then
+		Stroke:SetWidth(ttWidth - 20)
+	end
 end
 
 

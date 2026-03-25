@@ -53,7 +53,12 @@ function TipCounts.OnID(tip, id)
 	if Addon.sets.countCurrency and not C.IsAccountWideCurrency(id) then
 		local name = tip:GetName()..'TextLeft'
 		local last = _G[name..tip:NumLines()]
-		if last:GetText():find(TOTAL) then
+		local text = last and last:GetText()
+		
+		-- backwards compatible secret check
+		local isSecret = issecretvalue and issecretvalue(text)
+
+		if text and not isSecret and text:find(TOTAL) then
 			last:SetText('')
 			last = _G[name..tip:NumLines()-1]
 
