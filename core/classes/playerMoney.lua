@@ -115,7 +115,11 @@ function Money:OnEnter()
 		GameTooltip:AddDoubleLine('|A:questlog-questtypeicon-account:0:0|a '..ACCOUNT_QUEST_LABEL, GetMoneyString(account, true, true))
 	end
 
-	GameTooltip_InsertFrame(GameTooltip, Stroke)
+	local initialWidth = GameTooltip:GetWidth()
+	if initialWidth and not (issecretvalue and issecretvalue(initialWidth)) then
+		GameTooltip_InsertFrame(GameTooltip, Stroke)
+	end
+
 	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total + account, true)))
 	GameTooltip:Show()
 	local ttWidth = GameTooltip:GetWidth()
