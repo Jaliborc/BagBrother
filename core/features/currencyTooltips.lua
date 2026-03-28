@@ -9,7 +9,6 @@ local TipCounts = Addon:NewModule('CurrencyTooltipCounts')
 
 local SILVER = '|cffc7c7cf%s|r'
 local WEEKLY = CURRENCY_WEEKLY_CAP:match('[^:]+')
-local MAXIMUM = CURRENCY_TOTAL_CAP:match('[^:]+')
 
 
 --[[ Startup ]]--
@@ -37,48 +36,32 @@ end
 --[[ Events ]]--
 
 function TipCounts.OnCurrency(tip)
-    local data = tip:GetPrimaryTooltipData()
-    local id = data and data.id
+	local data = tip:GetPrimaryTooltipData()
+	local id = data and data.id
 
-    if id then
-        TipCounts.OnID(tip, id)
-    end
+	if id then
+		TipCounts.OnID(tip, id)
+	end
 end
 
 function TipCounts.OnTracked(tip, index)
-    TipCounts.OnID(tip, C.GetBackpackCurrencyInfo(index).currencyTypesID)
-end
-
-local function CleanTotalLine(tip)
-	local data = tip:GetTooltipData()
-	if not data or not data.lines then return end
-
-	for i = #data.lines, 1, -1 do
-		local lineText = data.lines[i].leftText
-		if lineText and lineText:find(TOTAL) then
-			local fontString = _G['GameTooltipTextLeft'..i]
-			if fontString then
-				fontString:SetText('')
-			end
-			if i > 1 then
-				local prevText = data.lines[i-1].leftText
-				if prevText and prevText:match('^%s*$') then
-					local prevFontString = _G['GameTooltipTextLeft'..(i-1)]
-					if prevFontString then
-						prevFontString:SetText('')
-					end
-				end
-			end
-			break
-		end
-	end
+	TipCounts.OnID(tip, C.GetBackpackCurrencyInfo(index).currencyTypesID)
 end
 
 function TipCounts.OnID(tip, id)
 	if Addon.sets.countCurrency and not C.IsAccountWideCurrency(id) then
-		CleanTotalLine(tip)
+		local line, text = TipCounts.GetLine(tip, tip:NumLines())
+		if text:find(TOTAL, 1, true) then
+			line:SetText('')
+			line, text = TipCounts.GetLine(tip, tip:NumLines()-1)
 
+			if text:match('^%s*$') then
+				line:SetText('')
+			end
+		end
+		
 		local info = C.GetCurrencyInfo(id)
+		local denominator = info.maxQuantity > 0 and SILVER:format('/' .. FormatLargeNumber(info.maxQuantity)) or ''
 		local left, right = {}, {}
 		local total = 0
 
@@ -95,7 +78,7 @@ function TipCounts.OnID(tip, id)
 				total = total + count
 			
 				tinsert(left, owner:GetIconMarkup(12,0,0) ..' '.. color:format(owner.name))
-				tinsert(right, color:format(FormatLargeNumber(count)))
+				tinsert(right, color:format(FormatLargeNumber(count)) .. denominator)
 			end
 		end
 
@@ -110,10 +93,20 @@ function TipCounts.OnID(tip, id)
 		if info.maxWeeklyQuantity > 0 then
 			tip:AddDoubleLine(SILVER:format(WEEKLY), SILVER:format(FormatLargeNumber(info.maxWeeklyQuantity)))
 		end
-		if info.maxQuantity > 0 then
-			tip:AddDoubleLine(SILVER:format(MAXIMUM), SILVER:format(FormatLargeNumber(info.maxQuantity)))
-		end
 
 		tip:Show()
+	end
+end
+
+
+--[[ Utils ]]--
+
+function TipCounts.GetLine(tip, index)
+	if tip.GetPrimaryTooltipData then
+		local data = tip:GetPrimaryTooltipData()
+		return tip:GetLeftLine(index), data and data.lines and data.lines[index].leftText or ''
+	else
+		local line = _G[tip:GetName()..'TextLeft'..index]
+		return line, line:GetText()
 	end
 end

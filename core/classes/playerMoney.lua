@@ -11,9 +11,8 @@ local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTem
 Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
 Money.Type = 'PLAYER'
 
-local Stroke = CreateFrame('Frame')
+local Stroke = CreateFrame('Frame', nil, GameTooltip)
 Stroke:SetHeight(5)
-Stroke:SetWidth(0) -- avoid error when parent width issecret
 
 local Line = Stroke:CreateLine()
 Line:SetStartPoint('LEFT', 0, -5)
@@ -115,13 +114,12 @@ function Money:OnEnter()
 		GameTooltip:AddDoubleLine('|A:questlog-questtypeicon-account:0:0|a '..ACCOUNT_QUEST_LABEL, GetMoneyString(account, true, true))
 	end
 
-	GameTooltip_InsertFrame(GameTooltip, Stroke)
+	GameTooltip:AddDoubleLine(' ',' ')
+	Stroke:SetPoint('TOPRIGHT', 'GameTooltipTextRight'.. GameTooltip:NumLines(), 'TOPRIGHT')
+	Stroke:SetPoint('TOPLEFT', 'GameTooltipTextLeft'.. GameTooltip:NumLines(), 'TOPLEFT')
+
 	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total + account, true)))
 	GameTooltip:Show()
-	local ttWidth = GameTooltip:GetWidth()
-	if ttWidth and not (issecretvalue and issecretvalue(ttWidth)) then
-		Stroke:SetWidth(ttWidth - 20)
-	end
 end
 
 
