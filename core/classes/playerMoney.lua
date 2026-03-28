@@ -89,10 +89,21 @@ function Money:OnEnter()
 	GameTooltip:SetOwner(self:GetTipAnchor())
 	GameTooltip:SetText(MONEY, 1,1,1)
 
-	local total, overflow = 0, 0
-	for i, owner in Addon.Owners:Iterate() do
+	local sortedOwners = {}
+	for _, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
-		if money and i <= 10 or owner.favorite then
+		if money and not owner.isguild then
+			tinsert(sortedOwners, owner)
+		end
+	end
+	table.sort(sortedOwners, function(a, b)
+		return a:GetMoney() > b:GetMoney()
+	end)
+
+	local total, overflow = 0, 0
+	for i, owner in ipairs(sortedOwners) do
+		local money = owner:GetMoney()
+		if i <= 10 or owner.favorite then
 			local coins = GetMoneyString(money, true, true)
 			local icon = owner:GetIconMarkup(12,0,0)
 			local color = owner:GetColor(owner)
