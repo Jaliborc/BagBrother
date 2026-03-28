@@ -49,18 +49,34 @@ function TipCounts.OnTracked(tip, index)
     TipCounts.OnID(tip, C.GetBackpackCurrencyInfo(index).currencyTypesID)
 end
 
+local function CleanTotalLine(tip)
+	local data = tip:GetTooltipData()
+	if not data or not data.lines then return end
+
+	for i = #data.lines, 1, -1 do
+		local lineText = data.lines[i].leftText
+		if lineText and lineText:find(TOTAL) then
+			local fontString = _G['GameTooltipTextLeft'..i]
+			if fontString then
+				fontString:SetText('')
+			end
+			if i > 1 then
+				local prevText = data.lines[i-1].leftText
+				if prevText and prevText:match('^%s*$') then
+					local prevFontString = _G['GameTooltipTextLeft'..(i-1)]
+					if prevFontString then
+						prevFontString:SetText('')
+					end
+				end
+			end
+			break
+		end
+	end
+end
+
 function TipCounts.OnID(tip, id)
 	if Addon.sets.countCurrency and not C.IsAccountWideCurrency(id) then
-		local name = tip:GetName()..'TextLeft'
-		local last = _G[name..tip:NumLines()]
-		if last:GetText():find(TOTAL) then
-			last:SetText('')
-			last = _G[name..tip:NumLines()-1]
-
-			if last:GetText():match('^%s*$') then
-				last:SetText('')
-			end
-		end
+		CleanTotalLine(tip)
 
 		local info = C.GetCurrencyInfo(id)
 		local left, right = {}, {}
