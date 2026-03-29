@@ -93,7 +93,7 @@ function Money:OnEnter()
 	for _, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
 		if money and money > 0 then
-			tinsert(liquid, {['owner'] = owner, ['money'] = money})
+			tinsert(liquid, {owner = owner, money = money})
 		end
 	end
 
