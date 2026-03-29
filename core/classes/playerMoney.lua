@@ -93,7 +93,7 @@ function Money:OnEnter()
 	for _, owner in Addon.Owners:Iterate() do
 		local money = not owner.isguild and owner:GetMoney()
 		if money and money > 0 then
-			tinsert(liquid, {owner: owner, money: money})
+			tinsert(liquid, {['owner'] = owner, ['money'] = money})
 		end
 	end
 
@@ -102,8 +102,8 @@ function Money:OnEnter()
 	end)
 
 	local total, overflow = 0, 0
-	for _, entry in ipairs(liquid) do
-		local owner, money = entry.onwer, entry.money
+	for i, entry in ipairs(liquid) do
+		local owner, money = entry.owner, entry.money
 		if i <= 10 or owner.favorite then
 			local coins = GetMoneyString(money, true, true)
 			local icon = owner:GetIconMarkup(12,0,0)
