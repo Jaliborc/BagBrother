@@ -129,9 +129,15 @@ function Money:OnEnter()
 	GameTooltip:AddDoubleLine(' ',' ')
 	Stroke:SetPoint('TOPRIGHT', 'GameTooltipTextRight'.. GameTooltip:NumLines(), 'TOPRIGHT')
 	Stroke:SetPoint('TOPLEFT', 'GameTooltipTextLeft'.. GameTooltip:NumLines(), 'TOPLEFT')
+	Stroke:Show()
 
 	GameTooltip:AddDoubleLine(self.Gray:format(TOTAL), self.Gray:format(GetMoneyString(total + account, true)))
 	GameTooltip:Show()
+end
+
+function Money:OnLeave()
+	self:Super(Money):OnLeave()
+	Stroke:Hide()
 end
 
 
