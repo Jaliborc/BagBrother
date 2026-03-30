@@ -104,7 +104,8 @@ end
 function TipCounts.GetLine(tip, index)
 	if tip.GetPrimaryTooltipData then
 		local data = tip:GetPrimaryTooltipData()
-		return tip:GetLeftLine(index), data and data.lines and data.lines[index].leftText or ''
+		local lines = data and data.lines
+		return tip:GetLeftLine(index), lines[index] and lines[index].leftText or ''
 	else
 		local line = _G[tip:GetName()..'TextLeft'..index]
 		return line, line:GetText() or ''
