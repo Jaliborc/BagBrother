@@ -8,4 +8,4 @@
 
 ## SavedVariables: BrotherBags
 ## OptionalDeps: WoWUnit
-## Interface: 120001, 120000
+## Interface: 120005

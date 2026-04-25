@@ -98,7 +98,7 @@ function Money:OnEnter()
 	end
 
 	sort(liquid, function(a, b)
-		return a.money > b.money
+		return (a.money or 0) > (b.money or 0)
 	end)
 
 	local total, overflow = 0, 0
