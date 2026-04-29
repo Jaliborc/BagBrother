@@ -37,8 +37,10 @@ else
 	RACE_TABLE = {
 		highmountaintauren = 'highmountain',
 		lightforgeddraenei = 'lightforged',
-		scourge = 'undead',
-		zandalaritroll = 'zandalari',
+		scourge            = 'undead',
+		zandalaritroll     = 'zandalari',
+		earthendwarf       = 'earthen',
+		harronir           = 'haranir'
 	}
 end
 

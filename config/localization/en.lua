@@ -139,14 +139,14 @@ L.AskCommunity = 'Ask Community'
 L.JoinUs = 'Join Us'
 
 L.FAQ = {
-  'How to deposit items directly into the warband bank?',
-  'Shift right-click on the item slot and it will be placed in the warband bags instead of the normal ones.',
+  'How to deposit items directly into the Warband Bank?',
+  'You have two options:|n- |cffffd100Right-Click|r an item while the Warband tab is open.|n- |cffffd100Shift + Right-Click|r while viewing any other tab.|n|n|cff9d9d9dExplanation: Shift + Right-Click targets the bank type you are not currently viewing.|r',
 
   'How to see the bank, guild or another character offline?',
-  'Click on the "Offline Viewing" button in the top left of your inventory. It looks like a portrait of the character you are currently playing.',
+  'Click the |cffffd100Offline Viewing|r button in the top left of your inventory.|n|cff9d9d9dIt looks like a portrait of the character you are currently playing.|r',
 
   'How to make ADDON forget a deleted/renamed character?',
-  'Click on the "Offline Viewing" button in the top left of your inventory. Each character name has a delete button next to it, which looks like a red cross. Click on the cross for the character you wish to delete.',
+  '- Click the |cffffd100Offline Viewing|r button in the top left of your inventory.|n- Mouse-over the character name you wish to delete.|n- Click the |cffff0000red symbol|r that appears on the right side.',
 
   'Something is wrong! Item levels aren\'t showing over the slots.',
   'ADDON does not natively display item levels. You must be using a third party plugin, such as |cffffd200Bagnon ItemLevel|r or |cffffd200Bagnon ItemInfo|r. Try to update the plugins you are using, most common cause is being out of date.|n|nPlease note that any issue with plugins should be reported to their authors, not with Jaliborc.',
@@ -154,6 +154,6 @@ L.FAQ = {
   'Some of my bags are not appearing.',
   'You probably hid it accidentally. Click on the Bags button on the top left of the frame to see your bags. You can then click on any bag to toggle their visibility.',
 
-  'How to toggle ADDON for Bank, VoidStorage, etc?',
-  'Go to ADDON -> Frame Settings. You are looking for the two options at the very top of the panel. Choose the "Frame" you wish to toggle and then click "Enable Frame"'
+  'How to toggle ADDON for Inventory, Bank, Vault, etc?',
+  'Go to |cffffd100ADDON -> Frame Settings|r.|nChoose the "Frame" you wish to toggle from the top of the panel, then click |cffffd100Enable Frame|r.'
 }

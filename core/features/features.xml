@@ -6,5 +6,6 @@
 	<Script file="caching.lua"/>
 	<Script file="currencyTooltips.lua"/>
 	<Script file="itemTooltips.lua"/>
+	<Script file="antiMoneyTaint.lua"/>
 	<Script file="slashCommands.lua"/>
 </Ui>

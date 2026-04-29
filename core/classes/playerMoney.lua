@@ -103,7 +103,7 @@ function Money:OnEnter()
 
 	local total, overflow = 0, 0
 	for i, entry in ipairs(liquid) do
-		local owner, money = entry.owner, entry.money
+		local owner, money = entry.owner, entry.money or 0
 		if i <= 10 or owner.favorite then
 			local coins = GetMoneyString(money, true, true)
 			local icon = owner:GetIconMarkup(12,0,0)
