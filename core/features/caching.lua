@@ -33,6 +33,8 @@ function Cacher:OnLoad()
 	self:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
 	self:RegisterEvent('GUILD_ROSTER_UPDATE')
 	self:RegisterEvent('MAIL_INBOX_UPDATE')
+	self:RegisterEvent('MAIL_SEND_SUCCESS')
+	self:RegisterEvent('MAIL_FAILED')
 	self:RegisterSignal('BAGS_UPDATED')
 	self:RegisterSignal('BANK_CLOSE')
 	self:RegisterSignal('VAULT_CLOSE')
@@ -71,6 +73,21 @@ function Cacher:OnLoad()
 	self:CURRENCY_TRACKED_CHANGED()
 	self:GUILD_ROSTER_UPDATE()
 	self:PLAYER_MONEY()
+
+	hooksecurefunc('SendMail', function(recipient)
+		Cacher.pendingMail = nil
+		local items = {}
+		for i = 1, ATTACHMENTS_MAX_RECEIVE do
+			local _, itemID, _, count = GetSendMailItem(i)
+			if itemID and itemID > 0 then
+				local data = count and count > 1 and (tostring(itemID) .. ';' .. count) or tostring(itemID)
+				tinsert(items, data)
+			end
+		end
+		if #items > 0 then
+			Cacher.pendingMail = {recipient = recipient:lower(), items = items}
+		end
+	end)
 end
 
 
@@ -122,6 +139,33 @@ function Cacher:MAIL_INBOX_UPDATE()
 			local link = GetInboxItemLink(i,j)
 
 			self.player.mail[index] = link and self:ParseItem(link, count)
+		end
+	end
+end
+
+function Cacher:MAIL_FAILED()
+	self.pendingMail = nil
+end
+
+function Cacher:MAIL_SEND_SUCCESS()
+	if not self.pendingMail then return end
+	local pending = self.pendingMail
+	self.pendingMail = nil
+
+	for _, owner in Addon.Owners:Iterate() do
+		if not owner.isguild and owner.realm == Addon.player.realm and owner.name:lower() == pending.recipient then
+			owner.cache.mail = owner.cache.mail or {}
+			local idx = 0
+			for k in pairs(owner.cache.mail) do
+				if type(k) == 'number' and k < idx then idx = k end
+			end
+			idx = idx - 1
+			for _, item in ipairs(pending.items) do
+				owner.cache.mail[idx] = item
+				idx = idx - 1
+			end
+			owner.counts = nil
+			break
 		end
 	end
 end
