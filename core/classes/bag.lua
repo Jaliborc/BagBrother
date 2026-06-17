@@ -264,8 +264,8 @@ function Bag:UpdateTooltip()
 		if self.owned then
 			GameTooltip:SetText(BANK_BAG, 1, 1, 1)
 		else
-			GameTooltip:AddLine(BANK_BAG_PURCHASE, 1,1,1)
-			SetTooltipMoney(GameTooltip, self:GetCost())
+			GameTooltip:AddLine(BANK_BAG_PURCHASE, 1,1,1);
+			GameTooltip:AddLine(GetMoneyString(self:GetCost(), true))
 		end
 	elseif id > NUM_BAG_SLOTS then
 		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)

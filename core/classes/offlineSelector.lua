@@ -62,7 +62,6 @@ end
 function OfflineSelector:OnClick(button)
 	if button == 'LeftButton' then
 		MenuUtil.CreateContextMenu(self, function(_, drop)
-			drop:SetScrollMode(500)
 			drop:SetTag(ADDON .. 'OfflineView')
 			drop:CreateTitle(L.Locations)
 
@@ -76,7 +75,9 @@ function OfflineSelector:OnClick(button)
 			drop:CreateDivider()
 			drop:CreateTitle(L.Characters)
 
-			local start, more = 1, false
+			local start, primary = 1, 0
+			local moreButton = false
+
 			for i, owner in Addon.Owners:Iterate() do
 				local overflow
 				if owner.isguild and start == 1 then
@@ -85,13 +86,19 @@ function OfflineSelector:OnClick(button)
 					start, more = i, false
 				else
 					overflow = (i-start) >= 10 and not owner.favorite
-					if overflow and not more then
-						more = drop:CreateButton('    '..FRIENDS_WOW_NAME_COLOR:WrapTextInColorCode(LFG_LIST_MORE))
-						more:SetScrollMode(500)
+					if not overflow then
+						primary = primary + 1
+					elseif overflow and not moreButton then
+						moreButton = drop:CreateButton('    '..FRIENDS_WOW_NAME_COLOR:WrapTextInColorCode(LFG_LIST_MORE))
+						moreButton:SetScrollMode(500)
 					end
 				end
 
-				self:AddOwner(overflow and more or drop, owner)
+				self:AddOwner(overflow and moreButton or drop, owner)
+			end
+
+			if primary > 17 then
+				drop:SetScrollMode(500) -- for some reason, scroll mode was appearing even when not necessary
 			end
 		end)
 	elseif button == 'RightButton' then

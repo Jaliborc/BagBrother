@@ -56,14 +56,15 @@ function Cacher:OnLoad()
 		
 		self.pendingMail = {
 			realm = realm and realm:trim() or Addon.player.realm,
-			recipient = player:trim():lower()
+			recipient = player:trim():lower(),
+			items = {}
 		}
 
 		for i = 1, ATTACHMENTS_MAX_RECEIVE do
 			local link = GetSendMailItemLink(i)
 			local _,_,_, count = GetSendMailItem(i)
 
-			self.pendingMail[i] = link and self:ParseItem(link, count)
+			self.pendingMail.items[i] = link and self:ParseItem(link, count)
 		end
 	end)
 
@@ -150,12 +151,15 @@ function Cacher:MAIL_SEND_SUCCESS()
 
 		for _, owner in Addon.Owners:Iterate() do
 			if not owner.isguild and owner.realm == pending.realm and owner.name:lower() == pending.recipient then
-				local i = math.ceil(#owner.cache.mail / ATTACHMENTS_MAX_RECEIVE) * ATTACHMENTS_MAX_RECEIVE
 				local mail = owner.cache.mail or {}
+				local lastItem = 0
+				for i in pairs(mail) do
+					lastItem = max(lastItem, i)
+				end
 
-				for _, item in ipairs(pending.items) do
-					i = i + 1
-					mail[i] = item
+				local offset = ceil(lastItem / ATTACHMENTS_MAX_RECEIVE) * ATTACHMENTS_MAX_RECEIVE
+				for i, item in pairs(pending.items) do
+					mail[i+offset] = item
 				end
 
 				self.pendingMail = nil
