@@ -7,6 +7,10 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').CurrencyInfo
 local CurrencyTracker = Addon.Parented:NewClass('CurrencyTracker', 'Frame')
 
+CurrencyTracker.Deprecated = { -- some deprecated currencies cannot be untracked by players
+	[3319] = true,
+}
+
 
 --[[ Construct ]]--
 
@@ -39,17 +43,19 @@ function CurrencyTracker:Layout()
 
 	local x,y,w = 0,0,2
 	local function addButton(i, data)
-		local b = self:GetButton(i)
-		b:Set(data, i)
+		if not self.Deprecated[data.currencyTypesID] then
+			local b = self:GetButton(i)
+			b:Set(data, i)
 
-		local width = b:GetWidth()
-		if (x + width) > self:MaxWidth() then
-			w = max(w, x)
-			x,y = 0, y + 20
+			local width = b:GetWidth()
+			if (x + width) > self:MaxWidth() then
+				w = max(w, x)
+				x,y = 0, y + 20
+			end
+
+			b:SetPoint('TOPRIGHT', self, -x,-y)
+			x = x + width
 		end
-
-		b:SetPoint('TOPRIGHT', self, -x,-y)
-		x = x + width
 	end
 
 	if self:IsCached() then
