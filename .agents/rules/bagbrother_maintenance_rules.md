@@ -50,6 +50,10 @@ To maintain codebase consistency and compatibility, all changes must follow thes
 
 ## 3. Testing and Verification
 
+*   **Syntax Check:** Before committing, run `luac -p` on all modified or new Lua files to ensure there are no syntax errors:
+    ```bash
+    luac -p path/to/file.lua
+    ```
 *   **In-Game Verification:** Automated CLI test suites are not supported. All logic and layout changes must be manually verified inside the World of Warcraft client.
 *   **Error Reporting:** Enable script error displays during development:
     ```
