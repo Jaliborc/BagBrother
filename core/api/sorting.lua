@@ -37,6 +37,7 @@ end
 function Sort:Iterate()
 	local spaces = self:GetSpaces()
 	local families = self:GetFamilies(spaces)
+	local isThrottled = self.target.id == 'guild' or self.target.id == 'vault'
 
 	local stackable = function(item)
 		return (item.stackCount or 1) < (item.stackSize or 1)
@@ -50,8 +51,12 @@ function Sort:Iterate()
 				local other = from.item
 
 				if item.itemID == other.itemID and stackable(other) then
-					self:Move(from, target)
-					self:Delay(0.05, 'Run')
+					if self:Move(from, target) then
+						self:Delay(0.05, 'Run')
+						if isThrottled then
+							return
+						end
+					end
 				end
 			end
 		end
@@ -65,12 +70,14 @@ function Sort:Iterate()
 		local order, spaces = self:GetOrder(spaces, family)
 		local n = min(#order, #spaces)
 
+		self:OptimizeOrder(order, spaces, n)
+
 		for index = 1, n do
 			local goal = spaces[index]
 			local item = order[index]
 			item.sorted = true
 
-			if item.space ~= goal then
+			if item.space ~= goal and not (goal.item.itemID == item.itemID and goal.item.stackCount == item.stackCount) then
 				local distance = moveDistance(item, goal)
 
 				for j = index, n do
@@ -84,8 +91,12 @@ function Sort:Iterate()
 					end
 				end
 
-				self:Move(item.space, goal)
-				self:Delay(0.05, 'Run')
+				if self:Move(item.space, goal) then
+					self:Delay(0.05, 'Run')
+					if isThrottled then
+						return
+					end
+				end
 			end
 		end
 	end
@@ -175,6 +186,69 @@ function Sort:GetOrder(spaces, family)
 
 	sort(order, self.Rule)
 	return order, slots
+end
+
+function Sort:OptimizeOrder(order, spaces, n)
+	local groups = {}
+	for i = 1, n do
+		local item = order[i]
+		if item.itemID then
+			local key = item.itemID .. '_' .. (item.stackCount or 1)
+			if not groups[key] then
+				groups[key] = {}
+			end
+			tinsert(groups[key], i)
+		end
+	end
+
+	for key, indices in pairs(groups) do
+		if #indices > 1 then
+			local items = {}
+			local targetSlots = {}
+			for _, idx in ipairs(indices) do
+				items[idx] = order[idx]
+				targetSlots[spaces[idx]] = idx
+			end
+
+			local matchedItems = {}
+			local matchedSlots = {}
+
+			for idx, item in pairs(items) do
+				local targetIdx = targetSlots[item.space]
+				if targetIdx and not matchedSlots[targetIdx] then
+					matchedItems[idx] = targetIdx
+					matchedSlots[targetIdx] = idx
+				end
+			end
+
+			local remainingIdx = {}
+			for _, idx in ipairs(indices) do
+				if not matchedItems[idx] then
+					tinsert(remainingIdx, idx)
+				end
+			end
+
+			local remainingTargets = {}
+			for _, idx in ipairs(indices) do
+				if not matchedSlots[idx] then
+					tinsert(remainingTargets, idx)
+				end
+			end
+
+			for i = 1, #remainingIdx do
+				matchedItems[remainingIdx[i]] = remainingTargets[i]
+			end
+
+			local temp = {}
+			for srcIdx, destIdx in pairs(matchedItems) do
+				temp[destIdx] = items[srcIdx]
+			end
+
+			for _, idx in ipairs(indices) do
+				order[idx] = temp[idx]
+			end
+		end
+	end
 end
 
 
