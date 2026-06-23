@@ -62,9 +62,6 @@ function Sort:Iterate()
 		end
 	end
 
-	local moveDistance = function(item, goal)
-		return math.abs(item.space.index - goal.index)
-	end
 
 	for _, family in ipairs(families) do
 		local order, spaces = self:GetOrder(spaces, family)
@@ -78,19 +75,6 @@ function Sort:Iterate()
 			item.sorted = true
 
 			if item.space ~= goal and not (goal.item.itemID == item.itemID and goal.item.stackCount == item.stackCount) then
-				local distance = moveDistance(item, goal)
-
-				for j = index, n do
-					local other = order[j]
-					if other.itemID == item.itemID and other.stackCount == item.stackCount then
-						local d = moveDistance(other, spaces[j])
-						if d > distance then
-							item = other
-							distance = d
-						end
-					end
-				end
-
 				if self:Move(item.space, goal) then
 					self:Delay(0.05, 'Run')
 					if isThrottled then
