@@ -8,7 +8,7 @@ local Sort = Addon:NewModule('Sorting', 'MutexDelay-1.0')
 local Search = LibStub('ItemSearch-1.3')
 local C = LibStub('C_Everywhere').Item
 
-Sort.Proprieties = {
+Sort.Properties = {
 	'set',
 	'class', 'subclass', 'equip',
 	'quality',
@@ -104,7 +104,7 @@ function Sort:GetSpaces()
 				local item = self.target:GetItemInfo(bag, slot)
 				local id = item.itemID
 				if id then
-					local name, _,_, level, _,_,_, stack, equip, _, _, class, subclass = C.GetItemInfo(id) 
+					local _, _,_, level, _,_,_, stack, equip, _, _, class, subclass = C.GetItemInfo(id) 
 
 					item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
@@ -240,7 +240,7 @@ function Sort:FitsIn(id, family)
 end
 
 function Sort.Rule(a, b)
-	for _,prop in pairs(Sort.Proprieties) do
+	for _,prop in pairs(Sort.Properties) do
 		if a[prop] ~= b[prop] then
 			return a[prop] > b[prop]
 		end
