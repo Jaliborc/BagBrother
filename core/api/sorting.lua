@@ -189,6 +189,7 @@ function Sort:GetOrder(spaces, family)
 end
 
 function Sort:OptimizeOrder(order, spaces, n)
+	-- Group indices of identical items (same ID and stack count)
 	local groups = {}
 	for i = 1, n do
 		local item = order[i]
@@ -201,6 +202,7 @@ function Sort:OptimizeOrder(order, spaces, n)
 		end
 	end
 
+	-- Optimize matching for each group of identical items
 	for key, indices in pairs(groups) do
 		if #indices > 1 then
 			local items = {}
@@ -213,6 +215,7 @@ function Sort:OptimizeOrder(order, spaces, n)
 			local matchedItems = {}
 			local matchedSlots = {}
 
+			-- Match items that are already in one of their target slots in-place
 			for idx, item in pairs(items) do
 				local targetIdx = targetSlots[item.space]
 				if targetIdx and not matchedSlots[targetIdx] then
@@ -221,6 +224,7 @@ function Sort:OptimizeOrder(order, spaces, n)
 				end
 			end
 
+			-- Collect remaining unmatched items and target slots
 			local remainingIdx = {}
 			for _, idx in ipairs(indices) do
 				if not matchedItems[idx] then
@@ -235,10 +239,12 @@ function Sort:OptimizeOrder(order, spaces, n)
 				end
 			end
 
+			-- Pair up remaining items to remaining target slots
 			for i = 1, #remainingIdx do
 				matchedItems[remainingIdx[i]] = remainingTargets[i]
 			end
 
+			-- Apply the optimized mapping back to the order list
 			local temp = {}
 			for srcIdx, destIdx in pairs(matchedItems) do
 				temp[destIdx] = items[srcIdx]
