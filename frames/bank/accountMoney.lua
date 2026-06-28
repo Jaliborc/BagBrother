@@ -8,11 +8,10 @@ if not (C_Bank and C_Bank.FetchDepositedMoney) then
 end
 
 local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
+local Money = Addon.PlayerMoney:NewClass('AccountMoney')
+
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Sushi = LibStub('Sushi-3.2')
-
-local Money = Addon.PlayerMoney:NewClass('AccountMoney')
-Money.Type = 'ACCOUNT'
 
 function Money:RegisterEvents()
 	self:RegisterEvent('ACCOUNT_MONEY', 'Update')

@@ -54,7 +54,7 @@ end
 
 function TipCounts:OnLoad()
 	if Addon.sets.countItems then
-		if TooltipDataProcessor then
+		if C_TooltipInfo and TooltipDataProcessor then
 			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item,  self.OnItem)
 		else
 			for _,frame in pairs {UIParent:GetChildren()} do

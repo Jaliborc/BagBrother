@@ -4,17 +4,15 @@
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
-local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
-
 local TransferButton = Addon.PlayerMoney:NewClass('TransferButton', 'Button')
-TransferButton.Type = 'STATIC'
+local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 
 --[[ Construct ]]--
 
 function TransferButton:Construct()
 	local f = self:Super(TransferButton):Construct()
-	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON .. 'CheckButtonTemplate')
+	local b = CreateFrame('CheckButton', nil, f, ADDON .. 'CheckButtonTemplate')
 	b.Icon:SetTexture('Interface/Icons/ACHIEVEMENT_GUILDPERK_BARTERING')
 	b:SetScript('OnEnter', function() f:OnEnter() end)
 	b:SetScript('OnLeave', function() f:OnLeave() end)

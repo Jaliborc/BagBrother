@@ -5,7 +5,6 @@
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Money = Addon.PlayerMoney:NewClass('GuildMoney')
-Money.Type = 'GUILDBANK'
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Sushi = LibStub('Sushi-3.2')

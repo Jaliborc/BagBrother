@@ -7,9 +7,9 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
-local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button', 'SmallMoneyFrameTemplate', true)
+local Money = Addon.Tipped:NewClass('PlayerMoney', 'Button')
 Money.Gray = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode('%s')
-Money.Type = 'PLAYER'
+Money.moneyType = 'PLAYER'
 
 local Stroke = CreateFrame('Frame', nil, GameTooltip)
 Stroke:SetHeight(5)
@@ -24,30 +24,13 @@ Line:SetThickness(1)
 --[[ Construct ]]--
 
 function Money:New(parent)
-	local f = self:Super(Money):New(parent)
-	f:SetScript('OnShow', f.RegisterEvents)
-	f:SetScript('OnHide', f.UnregisterAll)
-	return f
-end
-
-function Money:Construct()
-	local f = self:Super(Money):Construct()
-	f.trialErrorButton:SetPoint('LEFT', -14, 0)
-	f:SetScript('OnShow', f.RegisterEvents)
-	f:SetScript('OnHide', f.UnregisterAll)
-	f:SetScript('OnEvent', nil)
-
-	local overlay = CreateFrame('Button', nil, f)
-	overlay:SetScript('OnClick', function(_,...) f:OnClick(...) end)
-	overlay:SetScript('OnEnter', function() f:OnEnter() end)
-	overlay:SetScript('OnLeave', function() f:OnLeave() end)
-	overlay:SetFrameLevel(f:GetFrameLevel() + 4)
-	overlay:RegisterForClicks('anyUp')
-	overlay:SetAllPoints()
-
-	MoneyFrame_SetType(f, f.Type)
-	f.overlay = overlay
-	return f
+	local b = self:Super(Money):New(parent)
+	b:SetNormalFontObject(NumberFontNormal)
+	b:SetScript('OnShow', b.RegisterEvents)
+	b:SetScript('OnHide', b.UnregisterAll)
+	b:RegisterForClicks('anyUp')
+	b:SetHeight(24)
+	return b
 end
 
 function Money:RegisterEvents()
@@ -57,9 +40,8 @@ function Money:RegisterEvents()
 end
 
 function Money:Update()
-	local money = self:GetMoney()
-	MoneyFrame_Update(self:GetName(), money, money == 0)
-	self:SetHeight(24)
+	self:SetText(GetMoneyString(self:GetMoney(), true))
+	self:SetWidth(self:GetTextWidth() + 8)
 end
 
 
@@ -70,19 +52,18 @@ function Money:OnClick()
 		return
 	end
 
-	local name = self:GetName()
-	if MouseIsOver(_G[name .. 'GoldButton']) then
-		OpenCoinPickupFrame(COPPER_PER_GOLD, self.info.UpdateFunc(self), self)
-		self.hasPickup = 1
-	elseif MouseIsOver(_G[name .. 'SilverButton']) then
-		OpenCoinPickupFrame(COPPER_PER_SILVER, self.info.UpdateFunc(self), self)
-		self.hasPickup = 1
-	elseif MouseIsOver(_G[name .. 'CopperButton']) then
-		OpenCoinPickupFrame(1, self.info.UpdateFunc(self), self)
-		self.hasPickup = 1
-	end
-
+	self.hasPickup = true
 	self:OnLeave()
+
+	local limit = GetMoneyTypeInfoField(self.moneyType, 'UpdateFunc')(self)
+	local money = self:GetMoney()
+	if money < 100 then
+		OpenCoinPickupFrame(1, limit, self)
+	elseif money < 10000 then
+		OpenCoinPickupFrame(COPPER_PER_SILVER, limit, self)
+	else
+		OpenCoinPickupFrame(COPPER_PER_GOLD, limit, self)
+	end
 end
 
 function Money:OnEnter()
