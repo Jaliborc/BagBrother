@@ -114,19 +114,22 @@ function Sort:GetSpaces()
 					item = {}
 				end
 
-				tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
+				tinsert(spaces, {bag = bag, slot = slot, family = family, item = item})
 				item.space = spaces[#spaces]
 			end
 		end
 	end
 
 	if self.target.profile.reverseSort then
-		local n, k = #spaces
+		local n = #spaces
 		for i = 1, math.floor(n / 2) do
-			k = n - i + 1
+			local k = n - i + 1
 			spaces[i], spaces[k] = spaces[k], spaces[i]
-			spaces[i].index, spaces[k].index = i, k
 		end
+	end
+
+	for i = 1, #spaces do
+		spaces[i].index = i
 	end
 
 	return spaces
