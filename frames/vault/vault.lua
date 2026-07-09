@@ -9,6 +9,7 @@ local Vault = Addon.Frame:NewClass('Vault')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Sushi = LibStub('Sushi-3.2')
 
+Vault.IsThrottled = true
 Vault.Title = L.TitleVault
 Vault.OpenSound = SOUNDKIT.UI_ETHEREAL_WINDOW_OPEN
 Vault.CloseSound = SOUNDKIT.UI_ETHEREAL_WINDOW_CLOSE

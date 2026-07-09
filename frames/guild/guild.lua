@@ -14,6 +14,7 @@ Guild.OpenSound = SOUNDKIT.GUILD_VAULT_OPEN
 Guild.MoneyFrame = Addon.GuildMoney
 Guild.ItemGroup = Addon.GuildItemGroup
 Guild.BagButton = Addon.GuildTab
+Guild.IsThrottled = true
 Guild.Title = '%s'
 Guild.Bags = {}
 

@@ -37,7 +37,6 @@ end
 function Sort:Iterate()
 	local spaces = self:GetSpaces()
 	local families = self:GetFamilies(spaces)
-	local isThrottled = self.target.id == 'guild' or self.target.id == 'vault'
 
 	local stackable = function(item)
 		return (item.stackCount or 1) < (item.stackSize or 1)
@@ -50,18 +49,15 @@ function Sort:Iterate()
 				local from = spaces[j]
 				local other = from.item
 
-				if item.itemID == other.itemID and stackable(other) then
-					if self:Move(from, target) then
-						self:Delay(0.05, 'Run')
-						if isThrottled then
-							return
-						end
+				if item.itemID == other.itemID and stackable(other) and self:Move(from, target) then
+					self:Delay(0.05, 'Run')
+					if self.target.IsThrottled then
+						return
 					end
 				end
 			end
 		end
 	end
-
 
 	for _, family in ipairs(families) do
 		local order, spaces = self:GetOrder(spaces, family)
@@ -74,12 +70,10 @@ function Sort:Iterate()
 			local item = order[index]
 			item.sorted = true
 
-			if item.space ~= goal and not (goal.item.itemID == item.itemID and goal.item.stackCount == item.stackCount) then
-				if self:Move(item.space, goal) then
-					self:Delay(0.05, 'Run')
-					if isThrottled then
-						return
-					end
+			if goal.item ~= item and self:Move(item.space, goal) then
+				self:Delay(0.05, 'Run')
+				if self.target.IsThrottled then
+					return
 				end
 			end
 		end
@@ -173,69 +167,56 @@ function Sort:GetOrder(spaces, family)
 end
 
 function Sort:OptimizeOrder(order, spaces, n)
-	-- Group indices of identical items (same ID and stack count)
 	local groups = {}
 	for i = 1, n do
 		local item = order[i]
 		if item.itemID then
-			local key = item.itemID .. '_' .. (item.stackCount or 1)
-			if not groups[key] then
-				groups[key] = {}
-			end
-			tinsert(groups[key], i)
+			tinsert(GetOrCreateTableEntry(GetOrCreateTableEntry(groups, item.itemID), item.stackCount or 1), i)
 		end
 	end
 
-	-- Optimize matching for each group of identical items
-	for key, indices in pairs(groups) do
-		if #indices > 1 then
-			local items = {}
-			local targetSlots = {}
-			for _, idx in ipairs(indices) do
-				items[idx] = order[idx]
-				targetSlots[spaces[idx]] = idx
-			end
-
-			local matchedItems = {}
-			local matchedSlots = {}
-
-			-- Match items that are already in one of their target slots in-place
-			for idx, item in pairs(items) do
-				local targetIdx = targetSlots[item.space]
-				if targetIdx and not matchedSlots[targetIdx] then
-					matchedItems[idx] = targetIdx
-					matchedSlots[targetIdx] = idx
+	for id, counters in pairs(groups) do
+		for _, indices in pairs(counters) do
+			if #indices > 1 then
+				local targetSlots = {}
+				for _,i in ipairs(indices) do
+					targetSlots[spaces[i]] = i
 				end
-			end
 
-			-- Collect remaining unmatched items and target slots
-			local remainingIdx = {}
-			for _, idx in ipairs(indices) do
-				if not matchedItems[idx] then
-					tinsert(remainingIdx, idx)
+				local matchedItems, matchedSlots = {}, {}
+				for _,i in ipairs(indices) do
+					local item = order[i]
+					local j = targetSlots[item.space]
+					if j and not matchedSlots[j] then
+						matchedItems[i] = j
+						matchedSlots[j] = i
+					end
 				end
-			end
 
-			local remainingTargets = {}
-			for _, idx in ipairs(indices) do
-				if not matchedSlots[idx] then
-					tinsert(remainingTargets, idx)
+				local j = 0
+				for _, i in ipairs(indices) do
+					if not matchedItems[i] then
+						while j < #indices do
+							j = j + 1
+
+							local slot = indices[j]
+							if not matchedSlots[slot] then
+								matchedItems[i] = slot
+								matchedSlots[slot] = i
+								break
+							end
+						end
+					end
 				end
-			end
 
-			-- Pair up remaining items to remaining target slots
-			for i = 1, #remainingIdx do
-				matchedItems[remainingIdx[i]] = remainingTargets[i]
-			end
+				local orderedItems = {}
+				for i, j in ipairs(indices) do
+					orderedItems[i] = order[j]
+				end
 
-			-- Apply the optimized mapping back to the order list
-			local temp = {}
-			for srcIdx, destIdx in pairs(matchedItems) do
-				temp[destIdx] = items[srcIdx]
-			end
-
-			for _, idx in ipairs(indices) do
-				order[idx] = temp[idx]
+				for i, j in ipairs(indices) do
+					order[matchedItems[j]] = orderedItems[i]
+				end
 			end
 		end
 	end
@@ -272,15 +253,16 @@ function Sort.Rule(a, b)
 end
 
 function Sort:Move(from, to)
-	if from.locked or to.locked or (to.item.itemID and not self:FitsIn(to.item.itemID, from.family)) then
-		return
+	local locked = from.item.isLocked or to.item.isLocked
+	if locked or (to.item.itemID and not self:FitsIn(to.item.itemID, from.family)) then
+		return locked
 	end
 
 	ClearCursor()
 	self.target.PickupItem(from.bag, from.slot)
 	self.target.PickupItem(to.bag, to.slot)
 
-	from.locked = true
-	to.locked = true
+	from.item.isLocked = true
+	to.item.isLocked = true
 	return true
 end
