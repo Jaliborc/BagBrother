@@ -37,6 +37,7 @@ end
 function Sort:Iterate()
 	local spaces = self:GetSpaces()
 	local families = self:GetFamilies(spaces)
+	local isThrottled = self.target.id == 'guild' or self.target.id == 'vault'
 
 	local stackable = function(item)
 		return (item.stackCount or 1) < (item.stackSize or 1)
@@ -50,42 +51,36 @@ function Sort:Iterate()
 				local other = from.item
 
 				if item.itemID == other.itemID and stackable(other) then
-					self:Move(from, target)
-					self:Delay(0.05, 'Run')
+					if self:Move(from, target) then
+						self:Delay(0.05, 'Run')
+						if isThrottled then
+							return
+						end
+					end
 				end
 			end
 		end
 	end
 
-	local moveDistance = function(item, goal)
-		return math.abs(item.space.index - goal.index)
-	end
 
 	for _, family in ipairs(families) do
 		local order, spaces = self:GetOrder(spaces, family)
 		local n = min(#order, #spaces)
+
+		self:OptimizeOrder(order, spaces, n)
 
 		for index = 1, n do
 			local goal = spaces[index]
 			local item = order[index]
 			item.sorted = true
 
-			if item.space ~= goal then
-				local distance = moveDistance(item, goal)
-
-				for j = index, n do
-					local other = order[j]
-					if other.itemID == item.itemID and other.stackCount == item.stackCount then
-						local d = moveDistance(other, spaces[j])
-						if d > distance then
-							item = other
-							distance = d
-						end
+			if item.space ~= goal and not (goal.item.itemID == item.itemID and goal.item.stackCount == item.stackCount) then
+				if self:Move(item.space, goal) then
+					self:Delay(0.05, 'Run')
+					if isThrottled then
+						return
 					end
 				end
-
-				self:Move(item.space, goal)
-				self:Delay(0.05, 'Run')
 			end
 		end
 	end
@@ -175,6 +170,75 @@ function Sort:GetOrder(spaces, family)
 
 	sort(order, self.Rule)
 	return order, slots
+end
+
+function Sort:OptimizeOrder(order, spaces, n)
+	-- Group indices of identical items (same ID and stack count)
+	local groups = {}
+	for i = 1, n do
+		local item = order[i]
+		if item.itemID then
+			local key = item.itemID .. '_' .. (item.stackCount or 1)
+			if not groups[key] then
+				groups[key] = {}
+			end
+			tinsert(groups[key], i)
+		end
+	end
+
+	-- Optimize matching for each group of identical items
+	for key, indices in pairs(groups) do
+		if #indices > 1 then
+			local items = {}
+			local targetSlots = {}
+			for _, idx in ipairs(indices) do
+				items[idx] = order[idx]
+				targetSlots[spaces[idx]] = idx
+			end
+
+			local matchedItems = {}
+			local matchedSlots = {}
+
+			-- Match items that are already in one of their target slots in-place
+			for idx, item in pairs(items) do
+				local targetIdx = targetSlots[item.space]
+				if targetIdx and not matchedSlots[targetIdx] then
+					matchedItems[idx] = targetIdx
+					matchedSlots[targetIdx] = idx
+				end
+			end
+
+			-- Collect remaining unmatched items and target slots
+			local remainingIdx = {}
+			for _, idx in ipairs(indices) do
+				if not matchedItems[idx] then
+					tinsert(remainingIdx, idx)
+				end
+			end
+
+			local remainingTargets = {}
+			for _, idx in ipairs(indices) do
+				if not matchedSlots[idx] then
+					tinsert(remainingTargets, idx)
+				end
+			end
+
+			-- Pair up remaining items to remaining target slots
+			for i = 1, #remainingIdx do
+				matchedItems[remainingIdx[i]] = remainingTargets[i]
+			end
+
+			-- Apply the optimized mapping back to the order list
+			local temp = {}
+			for srcIdx, destIdx in pairs(matchedItems) do
+				temp[destIdx] = items[srcIdx]
+			end
+
+			for _, idx in ipairs(indices) do
+				order[idx] = temp[idx]
+			end
+		end
+	end
 end
 
 
