@@ -115,7 +115,7 @@ function Sort:GetSpaces()
 					item = {}
 				end
 
-				tinsert(spaces, {index = #spaces, bag = bag, slot = slot, family = family, item = item})
+				tinsert(spaces, {index = #spaces+1, bag = bag, slot = slot, family = family, item = item})
 				item.space = spaces[#spaces]
 			end
 		end
