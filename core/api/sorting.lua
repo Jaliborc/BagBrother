@@ -85,6 +85,7 @@ function Sort:Iterate()
 end
 
 function Sort:Stop()
+	self.target = nil
 	self:SendSignal('SORTING_STATUS')
 end
 
@@ -229,7 +230,7 @@ end
 --[[ API ]]--
 
 function Sort:CanRun()
-	return not InCombatLockdown() and not UnitIsDead('player') and not self.target:IsCached()
+	return not InCombatLockdown() and not UnitIsDead('player') and self.target and not self.target:IsCached()
 end
 
 function Sort:FitsIn(id, family)
