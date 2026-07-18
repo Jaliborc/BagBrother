@@ -114,11 +114,13 @@ function Vault:GetItemInfo(bag, slot)
 
 		if item.itemID then
 			_, item.hyperlink = GetItemInfo(item.itemID) 
+			return item
 		end
-		return item
+		return Addon.None
 	elseif bag == 1 then
 		return self:Super(Vault):GetItemInfo(bag, slot)
 	end
+	return Addon.None
 end
 
 function Vault:GetBagInfo(bag)

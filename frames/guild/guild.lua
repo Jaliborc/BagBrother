@@ -73,7 +73,7 @@ function Guild:GetItemInfo(bag, slot)
 		_, _, item.quality = GetItemInfo(link) 
 		return item
 	end
-	return {}
+	return Addon.None
 end
 
 function Guild:IsCached()
