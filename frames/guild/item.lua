@@ -1,6 +1,6 @@
 --[[
-	item.lua
-		A guild item slot button
+	A guild item slot button.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

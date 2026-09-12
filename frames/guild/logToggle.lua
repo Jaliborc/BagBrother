@@ -1,6 +1,6 @@
 --[[
-	logToggle.lua
-		A guild log toggle widget
+	A guild log toggle widget.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

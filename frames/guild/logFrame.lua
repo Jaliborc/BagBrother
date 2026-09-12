@@ -1,6 +1,6 @@
 --[[
-	itemGroup.lua
-		A guild bank tab log messages scrollframe
+	A guild bank tab log messages scrollframe.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

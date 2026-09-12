@@ -1,6 +1,6 @@
 --[[
-	guild.lua
-		A specialized version of the window frame for the guild bank
+	A specialized version of the window frame for the guild bank.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

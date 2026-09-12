@@ -1,6 +1,6 @@
 --[[
-	moneyFrame.lua
-		A guild money display
+	A guild money display.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

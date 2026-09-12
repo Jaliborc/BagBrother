@@ -1,6 +1,6 @@
 --[[
-	itemGroup.lua
-		A grid of guild bank items
+	A grid of guild bank items.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]

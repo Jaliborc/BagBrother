@@ -1,6 +1,6 @@
 --[[
 	A guild tab button object. Not to be confused with a rule tab.
-	All Rights Reserved.
+	All Rights Reserved
 --]]
 
 local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
