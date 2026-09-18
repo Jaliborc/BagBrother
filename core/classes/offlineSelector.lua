@@ -69,7 +69,7 @@ function OfflineSelector:OnClick(button)
 			frames:AddResetter(function(f) f.group:Release() end)
 			frames:AddInitializer(function(f)
 				f.group = self:AddLocations(f)
-				return f.group:GetWidth() + (Addon.IsRetail and 0 or 10), f.group:GetHeight()
+				return f.group:GetWidth() + (Addon.IsMainline and 0 or 10), f.group:GetHeight()
 			end)
 
 			drop:CreateDivider()

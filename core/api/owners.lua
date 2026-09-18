@@ -13,7 +13,7 @@ local HORDE_BANNER = 'Interface/Icons/Inv_BannerPvP_01'
 local REALM_TAG = LIGHTGRAY_FONT_COLOR:WrapTextInColorCode(' (%s)')
 local RACE_TEXTURE, RACE_TABLE
 
-if Addon.IsClassic then
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 	RACE_TEXTURE = 'Interface/Glues/CharacterCreate/UI-CharacterCreate-Races'
 	RACE_TABLE = {
 		HUMAN_MALE		= {0, 0.25, 0, 0.25},
@@ -53,7 +53,7 @@ function Owners:OnLoad()
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 
 	Addon.player = self:New(UnitFullName('player'))
-	for i, realm in ipairs(Addon.IsRetail and GetKeysArray(BrotherBags) or self.realms) do
+	for i, realm in ipairs(Addon.IsMainline and GetKeysArray(BrotherBags) or self.realms) do
 		for id, cache in pairs(realm ~= 'account' and BrotherBags[realm] or Addon.None) do
 			self:New(id, realm)
 		end

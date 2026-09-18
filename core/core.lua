@@ -8,9 +8,9 @@ local ADDON, Addon = ...
 local C = LibStub('C_Everywhere')
 local Addon = LibStub('WildAddon-1.1'):NewAddon(ADDON, Addon, 'StaleCheck-1.0')
 
-Addon.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-Addon.IsClassic = LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_CLASSIC
+Addon.IsMainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 Addon.IsModern = LE_EXPANSION_LEVEL_CURRENT >= LE_EXPANSION_CATACLYSM
+Addon.IsRetail = Addon.IsMainline and Addon.IsModern
 
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
 Addon.LastBankBag = Addon.NumBags + (NUM_BANKBAGSLOTS or Constants.InventoryConstants.NumCharacterBankSlots)
