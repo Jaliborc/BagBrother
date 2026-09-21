@@ -41,15 +41,11 @@ end
 function Item:ShowTooltip()
 	self:Super(Item):ShowTooltip()
 	self:MarkSeen()
-
-	if self.BankPreClick then
-		self:SetScript('PreClick', not InCombatLockdown() and self.BankPreClick or nil)
-	end
 end
 
 if C.Bank.AreAnyBankTypesViewable then
-	function Item:BankPreClick(button)
-		if button == 'RightButton' and Addon.Events.AtBank and Addon.Frames:IsEnabled('bank') then
+	function Item:PreClick(button)
+		if not InCombatLockdown() and button == 'RightButton' and Addon.Events.AtBank and Addon.Frames:IsEnabled('bank') then
 			local bankType = Addon_GetBankType()
 			bankType = IsShiftKeyDown() and (2 - bankType) or bankType
 			bankType = not C.Bank.CanUseBank(bankType) and (2 - bankType) or bankType
