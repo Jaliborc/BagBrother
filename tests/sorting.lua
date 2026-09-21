@@ -1,4 +1,3 @@
--- tests/test_sorting.lua
 -- Comprehensive standalone unit test suite for BagBrother client-side sorting algorithm (core/api/sorting.lua)
 -- Run with: lua tests/test_sorting.lua
 
