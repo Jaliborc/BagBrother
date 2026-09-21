@@ -157,11 +157,12 @@ end
 function Item:UpdateBorder()
 	local id, link, quality = self.info.itemID, self.info.hyperlink, self.info.quality
 	local quest, bang = self:GetQuestInfo()
+	local active = self.active
 	local r,g,b
 
 	SetItemButtonQuality(self, quality, link, false, self.info.isBound)
 
-	if id then
+	if id and active then
 		if Addon.sets.glowQuest and quest or bang then
 			r,g,b = 1, .82, .2
 		elseif Addon.sets.glowUnusable and Search:IsUnusable(id) then
@@ -184,10 +185,10 @@ function Item:UpdateBorder()
 		end
 	end
 
-	self.IconGlow:SetShown(r)
+	self.JunkIcon:SetShown(active and Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
+	self.QuestBang:SetShown(active and bang)
 	self.IconBorder:SetShown(r)
-	self.QuestBang:SetShown(bang)
-	self.JunkIcon:SetShown(Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
+	self.IconGlow:SetShown(r)
 end
 
 function Item:UpdateFocus()
@@ -197,9 +198,13 @@ end
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search
 	local matches = self.frame:SearchItem(search, self:GetBag(), self:GetID(), self.info)
-	
-	self:SetAlpha(matches and 1 or 0.3)
-	self:SetDesaturated(not matches or self.info.isLocked)
+
+	if matches ~= self.active then
+		self.active = matches
+		self:SetDesaturated(not matches or self.info.isLocked)
+		self:SetAlpha(matches and 1 or 0.3)
+		self:UpdateBorder()
+	end
 end
 
 function Item:UpdateIgnored()
