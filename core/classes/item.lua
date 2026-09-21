@@ -17,12 +17,10 @@ Item.Backgrounds = {
 
 --[[ Construct ]]--
 
-function Item:New(parent, bag, slot, info)
+function Item:New(parent, bag, slot)
 	local b = self:Super(Item):New(parent)
-	b.bag = bag
+	b.bag, b.active = bag, true
 	b:SetID(slot)
-	b:Update(info)
-	b:Show()
 	return b
 end
 
@@ -127,9 +125,8 @@ function Item:Update(info)
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
 
-	self:UpdateBorder()
 	self:UpdateFocus()
-	self:UpdateSearch()
+	self:UpdateBorder()
 	self:UpdateIgnored()
 	self:UpdateUpgradeIcon()
 	self:UpdateSecondary()
@@ -141,18 +138,6 @@ function Item:Update(info)
 	SetItemButtonTexture(self, self.info.iconFileID or self.Backgrounds[Addon.sets.slotBackground])
 	SetItemButtonCount(self, self.info.stackCount)
 end
-
-function Item:UpdateLocked()
-	self.info = self:GetInfo()
-	self:SetDesaturated(self.info.isLocked)
-end
-
-function Item:SetDesaturated(locked)
-	SetItemButtonDesaturated(self, locked)
-end
-
-
---[[ Secondary Highlights ]]--
 
 function Item:UpdateBorder()
 	local id, link, quality = self.info.itemID, self.info.hyperlink, self.info.quality
@@ -185,24 +170,35 @@ function Item:UpdateBorder()
 		end
 	end
 
+	self:SetAlpha(active and 1 or 0.3)
+	self:SetDesaturated(not active or self.info.isLocked)
 	self.JunkIcon:SetShown(active and Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
 	self.QuestBang:SetShown(active and bang)
 	self.IconBorder:SetShown(r)
 	self.IconGlow:SetShown(r)
 end
 
+function Item:SetDesaturated(gray)
+	SetItemButtonDesaturated(self, gray)
+end
+
+
+--[[ Secondary Highlights ]]--
+
 function Item:UpdateFocus()
 	self:SetHighlightLocked(self:GetBag() == self.frame.focusedBag)
 end
 
+function Item:UpdateLocked()
+	self.info = self:GetInfo()
+	self:UpdateBorder()
+end
+
 function Item:UpdateSearch()
 	local search = Addon.canSearch and Addon.search
-	local matches = self.frame:SearchItem(search, self:GetBag(), self:GetID(), self.info)
-
-	if matches ~= self.active then
-		self.active = matches
-		self:SetDesaturated(not matches or self.info.isLocked)
-		self:SetAlpha(matches and 1 or 0.3)
+	local active = self.frame:SearchItem(search, self:GetBag(), self:GetID(), self.info)
+	if active ~= self.active then
+		self.active = active
 		self:UpdateBorder()
 	end
 end

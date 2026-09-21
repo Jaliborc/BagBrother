@@ -19,6 +19,7 @@ function Items:New(parent, bags)
 		f.bags[i]:SetID(tonumber(bag) or 1)
 		f.bags[i].id = bag
 		f.bags[i].frame = f.frame
+		f.byBag[bag] = {}
 	end
 
 	f:SetScript('OnHide', f.UnregisterAll)
@@ -81,17 +82,16 @@ end
 --[[ Management ]]--
 
 function Items:Update()
-	if self:IsStatic() then
-		self:ForAll('Update')
-	else
+	if self:IsDynamic() then
 		self:Layout()
+	else
+		self:ForAll('Update')
 	end
 end
 
 function Items:Layout()
-	self:ForAll('Release')
+	self:ForAll('Hide')
 	wipe(self.buttons)
-	wipe(self.byBag)
 
 	-- Group slots
 	local profile = self:GetProfile()
@@ -105,7 +105,7 @@ function Items:Layout()
 
 		if numSlots > 0 and self:IsShowingBag(bag) then
 			local family = self:GetBagFamily(bag)
-			local slots = {}
+			local slots = self.byBag[bag]
 
 			if (bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
 				tinsert(breaks, #self.buttons)
@@ -115,14 +115,16 @@ function Items:Layout()
 				local info = self:GetItemInfo(bag, slot)
 
 				if self:IsShowingItem(bag, slot, info, family) then
-					local button = self.Button(proxy, bag, slot, info)
-					tinsert(self.buttons, button)
+					local button = slots[slot] or self.Button(proxy, bag, slot, info)
+					button:Update(info)
+					button:Show()
+
 					slots[slot] = button
+					tinsert(self.buttons, button)
 				end
 			end
 
 			group = family
-			self.byBag[bag] = slots
 		end
 	end
 
@@ -159,15 +161,16 @@ end
 
 function Items:ForBag(bag, method)
 	for slot, button in pairs(self.byBag[bag] or Addon.None) do
-		button[method](button)
+		if button:IsShown() then
+			button[method](button)
+		end
 	end
 end
 
-function Items:IsStatic()
+function Items:IsDynamic()
 	for set, rule in pairs(self.frame.rules) do
 		if self.frame.profile[set] and not rule.data.static then
-			return false
+			return true
 		end
 	end
-	return true
 end

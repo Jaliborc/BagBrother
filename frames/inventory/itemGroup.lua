@@ -24,10 +24,10 @@ function Items:RegisterEvents()
 end
 
 function Items:BAGS_UPDATED(queue)
-	local static = self:IsStatic()
+	local dynamic = self:IsDynamic()
 	for i, bag in ipairs(self.bags) do
 		local updated = queue[bag.id]
-		if updated or not static and updated ~= nil then
+		if updated or dynamic and updated ~= nil then
 			return self:Layout()
 		end
 	end
