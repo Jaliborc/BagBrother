@@ -19,7 +19,7 @@ Item.Backgrounds = {
 
 function Item:New(parent, bag, slot)
 	local b = self:Super(Item):New(parent)
-	b.bag, b.active = bag, true
+	b.bag, b.searched = bag, true
 	b:SetID(slot)
 	return b
 end
@@ -124,7 +124,8 @@ function Item:Update(info)
 	self.info = info or self:GetInfo()
 	self.hasItem = self.info.itemID and true -- for blizzard template
 	self.readable = self.info.isReadable -- for blizzard template
-
+	self.searched = self:IsSearched()
+	
 	self:UpdateFocus()
 	self:UpdateBorder()
 	self:UpdateIgnored()
@@ -142,12 +143,12 @@ end
 function Item:UpdateBorder()
 	local id, link, quality = self.info.itemID, self.info.hyperlink, self.info.quality
 	local quest, bang = self:GetQuestInfo()
-	local active = self.active
+	local searched = self.searched
 	local r,g,b
 
 	SetItemButtonQuality(self, quality, link, false, self.info.isBound)
 
-	if id and active then
+	if id and searched then
 		if Addon.sets.glowQuest and quest or bang then
 			r,g,b = 1, .82, .2
 		elseif Addon.sets.glowUnusable and Search:IsUnusable(id) then
@@ -170,10 +171,10 @@ function Item:UpdateBorder()
 		end
 	end
 
-	self:SetAlpha(active and 1 or 0.3)
-	self:SetDesaturated(not active or self.info.isLocked)
-	self.JunkIcon:SetShown(active and Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
-	self.QuestBang:SetShown(active and bang)
+	self:SetAlpha(searched and 1 or 0.3)
+	self:SetDesaturated(not searched or self.info.isLocked)
+	self.JunkIcon:SetShown(searched and Addon.sets.glowPoor and quality == 0 and not self.info.hasNoValue)
+	self.QuestBang:SetShown(searched and bang)
 	self.IconBorder:SetShown(r)
 	self.IconGlow:SetShown(r)
 end
@@ -195,10 +196,9 @@ function Item:UpdateLocked()
 end
 
 function Item:UpdateSearch()
-	local search = Addon.canSearch and Addon.search
-	local active = self.frame:SearchItem(search, self:GetBag(), self:GetID(), self.info)
-	if active ~= self.active then
-		self.active = active
+	local searched = self:IsSearched()
+	if searched ~= self.searched then
+		self.searched = searched
 		self:UpdateBorder()
 	end
 end
@@ -283,6 +283,10 @@ end
 
 function Item:GetQuestInfo()
 	return self.hasItem and Search:IsQuestItem(self.info.itemID)
+end
+
+function Item:IsSearched()
+	return self.frame:SearchItem(Addon.canSearch and Addon.search, self:GetBag(), self:GetID(), self.info)
 end
 
 function Item:IsUpgrade()
