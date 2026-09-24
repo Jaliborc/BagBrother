@@ -70,6 +70,7 @@ function TipCounts:OnLoad()
 			end
 		end
 		
+		self.Hooked = {}
 		self:UnregisterSignal('UPDATE_ALL')
 	else
 		self:RegisterSignal('UPDATE_ALL', 'OnLoad')
@@ -103,14 +104,14 @@ function TipCounts.OnSetCraftItem(tip, ...)
 end
 
 function TipCounts.OnClear(tip)
-	tip.__hasCounters = false
+	TipCounts.Hooked[tip] = false
 end
 
 
 --[[ API ]]--
 
 function TipCounts:AddOwners(tip, link)
-	if not tip.__hasCounters and Addon.sets.countItems then
+	if not self.Hooked[tip] and Addon.sets.countItems then
 		local id = tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
 		if id and id ~= HEARTHSTONE_ITEM_ID then
 			local carrying = C.GetItemCount(id)
@@ -177,7 +178,7 @@ function TipCounts:AddOwners(tip, link)
 				tip:AddDoubleLine(who, right[i])
 			end
 
-			tip.__hasCounters = not C_TooltipInfo
+			self.Hooked[tip] = not C_TooltipInfo
 			tip:Show()
 		end
 	end

@@ -20,7 +20,10 @@ Frame.RegisterEvents = nop
 --[[ Events ]]--
 
 function Frame:OnShow()
-	PlaySound(self.OpenSound)
+	if Addon.Ready then
+		PlaySound(self.OpenSound)
+	end
+
 	self:RegisterSignal('SKINS_LOADED', 'UpdateVisuals')
 	self:RegisterSignal('UPDATE_ALL', 'Update')
 	self:RegisterSignal('HIDE_ALL', 'Hide')
@@ -29,12 +32,15 @@ function Frame:OnShow()
 end
 
 function Frame:OnHide()
-	PlaySound(self.CloseSound)
-	self:UnregisterAll()
+	if Addon.Ready then
+		PlaySound(self.CloseSound)
+	end
 
 	if Addon.sets.resetPlayer then
 		self.owner = nil
 	end
+
+	self:UnregisterAll()
 end
 
 
