@@ -10,23 +10,24 @@ local C = LibStub('C_Everywhere')
 
 Item.BagFamilies = {
 	[-1] = 'account',
-	[0x00001] = 'quiver',
-	[0x00002] = 'quiver',
-	[0x00003] = 'soul',
-	[0x00004] = 'soul',
-	[0x00006] = 'herb',
-	[0x00007] = 'enchant',
-	[0x00008] = 'leather',
-	[0x00009] = 'key',
-	[0x00010] = 'inscribe',
-	[0x00020] = 'herb',
-	[0x00040] = 'enchant',
-	[0x00080] = 'engineer',
-	[0x00200] = 'gem',
-	[0x00400] = 'mine',
- 	[0x08000] = 'tackle',
- 	[0x10000] = 'fridge',
-	[0x80000] = 'reagent'
+	[0x0000001] = 'quiver',
+	[0x0000002] = 'quiver',
+	[0x0000003] = 'soul',
+	[0x0000004] = 'soul',
+	[0x0000006] = 'herb',
+	[0x0000007] = 'enchant',
+	[0x0000008] = 'leather',
+	[0x0000009] = 'key',
+	[0x0000010] = 'inscribe',
+	[0x0000020] = 'herb',
+	[0x0000040] = 'enchant',
+	[0x0000080] = 'engineer',
+	[0x0000200] = 'gem',
+	[0x0000400] = 'mine',
+ 	[0x0008000] = 'tackle',
+ 	[0x0010000] = 'fridge',
+	[0x0080000] = 'reagent', -- not official number (there is none)
+	[0x2000000] = 'leather',
 }
 
 

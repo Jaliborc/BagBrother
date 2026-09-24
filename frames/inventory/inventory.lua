@@ -78,9 +78,7 @@ end
 
 function Frame:GetBagFamily(bag)
 	local family
-	if bag > NUM_BAG_SLOTS and bag <= Addon.NumBags or bag == REAGENTBANK_CONTAINER then
-		family = 0x80000
-	elseif bag == KEYRING_CONTAINER then
+	if bag == KEYRING_CONTAINER then
 		family = 9
 	elseif bag > Addon.LastBankBag then
 		family = -1
@@ -92,6 +90,10 @@ function Frame:GetBagFamily(bag)
 			end
 		else
 			family = select(2, C.GetContainerNumFreeSlots(bag))
+		end
+
+		if family == 0 and bag > NUM_BAG_SLOTS and bag <= Addon.NumBags then
+			family = 0x80000 -- retail reports reagent bags without a type
 		end
 	end
 	return family or 0
