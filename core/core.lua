@@ -73,7 +73,7 @@ function Addon:OnLoad()
 	self:ContinueOn('PLAYER_ENTERING_WORLD', function()
 		self:CheckForUpdates(ADDON, self.sets, 'interface/addons/bagbrother/art/'..ADDON..'-big')
 
-		local inv = self.Frames:Show('inventory') -- prevent combat block
+		local inv = self.Frames:Show('inventory') -- prevent combat lockdown
 		if inv then
 			RunNextFrame(function()
 				self.Frames:Hide('inventory')

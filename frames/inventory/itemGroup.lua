@@ -5,7 +5,33 @@
 
 local ADDON, Addon =  ...
 local Items = Addon.ItemGroup:NewClass('ContainerItemGroup')
+
 Items.Button = Addon.ContainerItem
+Items.MaxSlots = {
+	[LE_EXPANSION_CLASSIC]                = 18,
+	[LE_EXPANSION_BURNING_CRUSADE]        = 28,
+	[LE_EXPANSION_WRATH_OF_THE_LICH_KING] = 32
+}
+
+function Items:New(parent, bags)
+	local f = self:Super(Items):New(parent, bags)
+
+	 -- prevents combat lockdown
+	local maxSlots = self.MaxSlots[LE_EXPANSION_LEVEL_CURRENT] 
+		or (LE_EXPANSION_LEVEL_CURRENT <= LE_EXPANSION_MISTS_OF_PANDARIA and 36 or 38)
+
+	for _, bag in ipairs(f.bags) do
+		maxSlots = max(maxSlots, f:NumSlots(bag.id)) -- just in case
+	end
+
+	for _, bag in ipairs(f.bags) do
+		for slot = 1, maxSlots do
+			f.byBag[bag.id][slot] = f.Button(bag, bag.id, slot)
+		end
+	end
+
+	return f
+end
 
 function Items:RegisterEvents()
 	self:Super(Items):RegisterEvents()

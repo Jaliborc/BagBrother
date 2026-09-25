@@ -115,7 +115,7 @@ function Items:Layout()
 				local info = self:GetItemInfo(bag, slot)
 
 				if self:IsShowingItem(bag, slot, info, family) then
-					local button = slots[slot] or self.Button(proxy, bag, slot, info)
+					local button = slots[slot] or self.Button(proxy, bag, slot)
 					button:Update(info)
 					button:Show()
 
