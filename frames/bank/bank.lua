@@ -7,15 +7,12 @@ local ADDON, Addon = (...):match('%w+'), _G[(...):match('%w+')]
 local Sushi = LibStub('Sushi-3.2')
 local C = LibStub('C_Everywhere')
 
-local Bank = Addon.Frame:NewClass('Bank')
+local Bank = Addon.ContainerFrame:NewClass('Bank')
 Bank.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBank
+Bank.ItemGroup = Addon.BankItemGroup
 Bank.MoneyFrame = Addon.AccountMoney
 Bank.BagButton = Addon.BankBag
 Bank.Bags = Addon.BankBags
-
-for _,k in ipairs {'ItemGroup', 'PickupItem', 'GetItemInfo', 'GetItemQuery', 'GetBagFamily', 'NumSlots'} do
-	Bank[k] = Addon.Inventory[k]
-end
 
 
 --[[ General API  ]]--

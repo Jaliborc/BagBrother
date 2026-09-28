@@ -6,13 +6,11 @@
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
 
-local Frame = Addon.Frame:NewClass('Inventory')
-Frame.CombatUsed = true -- kinda spaghetti
+local Frame = Addon.ContainerFrame:NewClass('Inventory')
 Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).TitleBags
-Frame.ItemGroup = Addon.ContainerItemGroup
+Frame.ItemGroup = Addon.InventoryItemGroup
 Frame.BagButton = Addon.Bag
 Frame.Bags = Addon.InventoryBags
-Frame.PickupItem = C.PickupContainerItem
 Frame.MainMenuButtons = {
 	MainMenuBarBackpackButton,
 	CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot
@@ -55,69 +53,6 @@ end
 
 
 --[[ API ]]--
-
-function Frame:GetItemInfo(bag, slot)
-	if self:IsCached(bag) then
-		return self:Super(Frame):GetItemInfo(bag, slot)
-	else
-		local item = C.GetContainerItemInfo(bag, slot)
-		if item then
-			item.isNew = C_NewItems.IsNewItem(bag, slot)
-			item.isPaid = C.IsBattlePayItem and C.IsBattlePayItem(bag, slot)
-		end
-		return item or Addon.None
-	end
-end
-
-function Frame:GetItemQuery(bag, slot, info)
-	if self:IsCached() then
-		return info.hyperlink
-	elseif info.itemID then
-		return {bagID = bag, slotIndex = slot}
-	end
-end
-
-function Frame:GetBagFamily(bag)
-	local family
-	if bag == KEYRING_CONTAINER then
-		family = 9
-	elseif bag > Addon.LastBankBag then
-		family = -1
-	elseif bag > BACKPACK_CONTAINER then
-		if self:IsCached(bag) then
-			local data = self:GetBagInfo(bag)
-			if data and data.link then
-				family = GetItemFamily('item:' .. data.link)
-			end
-		else
-			family = select(2, C.GetContainerNumFreeSlots(bag))
-		end
-
-		if family == 0 and bag > NUM_BAG_SLOTS and bag <= Addon.NumBags then
-			family = 0x80000 -- retail reports reagent bags without a type
-		end
-	end
-	return family or 0
-end
-
-function Frame:NumSlots(bag)
-	local size
-	if bag <= BACKPACK_CONTAINER and bag ~= (KEYRING_CONTAINER or REAGENTBANK_CONTAINER) then
-		size = C.GetContainerNumSlots(bag)
-	elseif self:IsCached(bag) then
-		local data = self:GetBagInfo(bag)
-		if data then
-			size = (bag > Addon.LastBankBag or bag == REAGENTBANK_CONTAINER) and 98 or data.size
-		end
-	elseif bag == KEYRING_CONTAINER then
-		size = HasKey and HasKey() and GetKeyRingSize()
-	elseif bag == REAGENTBANK_CONTAINER then
-		size = IsReagentBankUnlocked() and C.GetContainerNumSlots(bag)
-	else
-		size = C.GetContainerNumSlots(bag)
-	end
-	return size or 0
-end
 
 function Frame:GetExtraButtons()
 	return {self.profile.bagToggle and self:GetWidget('BagToggle')}
