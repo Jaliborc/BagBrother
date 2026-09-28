@@ -1,16 +1,12 @@
 --[[
-	Base class for frames that display container (bag) items.
+	API for frames that display container items.
 	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
 local C = LibStub('C_Everywhere').Container
-
 local Frame = Addon.Frame:NewClass('ContainerFrame')
 Frame.PickupItem = C.PickupContainerItem
-
-
---[[ API ]]--
 
 function Frame:GetItemInfo(bag, slot)
 	if self:IsCached(bag) then

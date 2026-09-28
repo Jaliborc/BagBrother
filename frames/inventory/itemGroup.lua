@@ -1,50 +1,41 @@
 --[[
-	A grid specialized for container items.
+	The inventory's item grid, pre-creating buttons so that none are created during combat lockdown.
 	All Rights Reserved
 --]]
 
 local ADDON, Addon = ...
-local Items = Addon.ItemGroup:NewClass('ContainerGroup')
-Items.Button = Addon.ContainerItem
+local Items = Addon.ContainerGroup:NewClass('InventoryItemGroup')
+Items.MaxSlots = {
+	[LE_EXPANSION_CLASSIC]                = 18,
+	[LE_EXPANSION_BURNING_CRUSADE]        = 28,
+	[LE_EXPANSION_WRATH_OF_THE_LICH_KING] = 32
+}
 
-function Items:RegisterEvents()
-	self:Super(Items):RegisterEvents()
-
-	if not self:IsCached() then
-		self:RegisterEvent('ITEM_LOCK_CHANGED')
-		self:RegisterEvent('UNIT_QUEST_LOG_CHANGED')
-		self:RegisterSignal('BAGS_UPDATED')
-
-		self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'ForAll', 'UpdateCooldown')
-		self:RegisterEvent('BAG_NEW_ITEMS_UPDATED', 'ForAll', 'UpdateBorder')
-		self:RegisterEvent('QUEST_ACCEPTED', 'ForAll', 'UpdateBorder')
-	end
+function Items:New(...)
+	local f = self:Super(Items):New(...)
+	f:EnsureButtons()
+	return f
 end
 
-function Items:BAGS_UPDATED(queue)
-	local dynamic = self:IsDynamic()
-	for i, bag in ipairs(self.bags) do
-		local updated = queue[bag.id]
-		if updated or dynamic and updated ~= nil then
-			return self:Layout()
+function Items:EnsureButtons()
+	local maxSlots = self.MaxSlots[LE_EXPANSION_LEVEL_CURRENT]
+		or (LE_EXPANSION_LEVEL_CURRENT <= LE_EXPANSION_MISTS_OF_PANDARIA and 36 or 40)
+
+	for _, bag in ipairs(self.bags) do
+		maxSlots = max(maxSlots, self:NumSlots(bag.id))
+	end
+
+	for _, bag in ipairs(self.bags) do
+		local slots = self.byBag[bag.id]
+		for slot = 1, maxSlots do
+			if not slots[slot] then
+				slots[slot] = self.Button(bag, bag.id, slot)
+			end
 		end
 	end
-
-	for bag in pairs(queue) do
-		self:ForBag(bag, 'Update')
-	end
 end
 
-function Items:ITEM_LOCK_CHANGED(bag, slot)
-	local bag = self.byBag[bag]
-	local slot = bag and bag[slot]
-	if slot then
-		slot:UpdateLocked()
-	end
-end
-
-function Items:UNIT_QUEST_LOG_CHANGED(unit)
-	if unit == 'player' then
-		self:ForAll('UpdateBorder')
-	end
+function Items:UnregisterAll()
+	self:Super(Items):UnregisterAll()
+	self:RegisterEvent('PLAYER_REGEN_DISABLED', 'EnsureButtons')
 end

@@ -5,6 +5,8 @@
 
 	<Script file="item.lua"/>
 	<Script file="itemGroup.lua"/>
+	<Script file="containerItem.lua"/>
+	<Script file="containerGroup.lua"/>
 	<Script file="bag.lua"/>
 	<Script file="bagGroup.lua"/>
 	<Script file="tab.lua"/>
