@@ -8,10 +8,11 @@ local C = LibStub('C_Everywhere').Container
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
+Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
+Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
 Bag.Size = 32
 Bag.TextureSize = 64 * (Bag.Size/36)
-Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
-Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
+Bag.Purchase = nop
 
 Bag.StaticIcons = {
 	[BACKPACK_CONTAINER] = 130716,
@@ -144,7 +145,7 @@ function Bag:OnClick(button)
 end
 
 function Bag:OnDragStart()
-	if self.slot and not self:IsCached() then
+	if self.slot and not self:IsCached() and not InCombatLockdown() then
 		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 		PickupBagFromSlot(self.slot)
 	end
