@@ -48,11 +48,14 @@ end
 --[[ Static API ]]--
 
 function Owners:OnLoad()
+	local realm = Addon.IsForever and 'forever' or GetNormalizedRealmName()
+	local name, surname = UnitFullName('player')
+
 	self.registry, self.twins, self.ordered = {}, {}, {}
-	self.realms = {GetNormalizedRealmName(), unpack(GetAutoCompleteRealms())}
+	self.realms = {realm, unpack(GetAutoCompleteRealms())}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 
-	Addon.player = self:New(UnitFullName('player'))
+	Addon.player = self:New(Addon.IsForever and (name .. ' ' .. surname) or name, realm)
 	for i, realm in ipairs(Addon.IsMainline and GetKeysArray(BrotherBags) or self.realms) do
 		for id, cache in pairs(realm ~= 'account' and BrotherBags[realm] or Addon.None) do
 			self:New(id, realm)

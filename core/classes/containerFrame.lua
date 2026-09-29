@@ -4,18 +4,18 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere').Container
+local C = LibStub('C_Everywhere')
 local Frame = Addon.Frame:NewClass('ContainerFrame')
-Frame.PickupItem = C.PickupContainerItem
+Frame.PickupItem = C.Container.PickupContainerItem
 
 function Frame:GetItemInfo(bag, slot)
 	if self:IsCached(bag) then
 		return self:Super(Frame):GetItemInfo(bag, slot)
 	else
-		local item = C.GetContainerItemInfo(bag, slot)
+		local item = C.Container.GetContainerItemInfo(bag, slot)
 		if item then
 			item.isNew = C_NewItems.IsNewItem(bag, slot)
-			item.isPaid = C.IsBattlePayItem and C.IsBattlePayItem(bag, slot)
+			item.isPaid = C.Container.IsBattlePayItem and C.Container.IsBattlePayItem(bag, slot)
 		end
 		return item or Addon.None
 	end
@@ -39,10 +39,10 @@ function Frame:GetBagFamily(bag)
 		if self:IsCached(bag) then
 			local data = self:GetBagInfo(bag)
 			if data and data.link then
-				family = GetItemFamily('item:' .. data.link)
+				family = C.Item.GetItemFamily('item:' .. data.link)
 			end
 		else
-			family = select(2, C.GetContainerNumFreeSlots(bag))
+			family = select(2, C.Container.GetContainerNumFreeSlots(bag))
 		end
 
 		if family == 0 and bag > NUM_BAG_SLOTS and bag <= Addon.NumBags then
@@ -55,7 +55,7 @@ end
 function Frame:NumSlots(bag)
 	local size
 	if bag <= BACKPACK_CONTAINER and bag ~= (KEYRING_CONTAINER or REAGENTBANK_CONTAINER) then
-		size = C.GetContainerNumSlots(bag)
+		size = C.Container.GetContainerNumSlots(bag)
 	elseif self:IsCached(bag) then
 		local data = self:GetBagInfo(bag)
 		if data then
@@ -64,9 +64,9 @@ function Frame:NumSlots(bag)
 	elseif bag == KEYRING_CONTAINER then
 		size = HasKey and HasKey() and GetKeyRingSize()
 	elseif bag == REAGENTBANK_CONTAINER then
-		size = IsReagentBankUnlocked() and C.GetContainerNumSlots(bag)
+		size = IsReagentBankUnlocked() and C.Container.GetContainerNumSlots(bag)
 	else
-		size = C.GetContainerNumSlots(bag)
+		size = C.Container.GetContainerNumSlots(bag)
 	end
 	return size or 0
 end
