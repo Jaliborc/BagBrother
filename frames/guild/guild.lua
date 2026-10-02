@@ -6,6 +6,7 @@
 local ADDON, Addon = (...):match('[^_]+'), _G[(...):match('[^_]+')]
 local Guild = Addon.Frame:NewClass('Guild')
 local Sushi = LibStub('Sushi-3.2')
+local C = LibStub('C_Everywhere')
 
 Guild.PickupItem = PickupGuildBankItem
 Guild.NoGuild = setmetatable({name=RED_FONT_COLOR:WrapTextInColorCode(ERR_GUILD_PLAYER_NOT_IN_GUILD), address='', isguild=true}, {__index = Addon.player})
@@ -68,9 +69,9 @@ function Guild:GetItemInfo(bag, slot)
 
 	local link = GetGuildBankItemLink(bag, slot)
 	if link then
-		local item = {hyperlink = link, itemID = GetItemInfoInstant(link)}
+		local item = {hyperlink = link, itemID = C.Item.GetItemInfoInstant(link)}
 		item.iconFileID, item.stackCount, item.isLocked = GetGuildBankItemInfo(bag, slot)
-		_, _, item.quality = GetItemInfo(link) 
+		_, _, item.quality = C.Item.GetItemInfo(link)
 		return item
 	end
 	return Addon.None

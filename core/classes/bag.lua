@@ -4,7 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
-local C = LibStub('C_Everywhere').Container
+local C = LibStub('C_Everywhere')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
@@ -66,7 +66,7 @@ function Bag:New(parent, id)
 	checked:SetBlendMode('ADD')
 	checked:SetAllPoints()
 
-	b.slot, b.owned = id > BACKPACK_CONTAINER and C.ContainerIDToInventoryID(id), true
+	b.slot, b.owned = id > BACKPACK_CONTAINER and C.Container.ContainerIDToInventoryID(id), true
 	b.Icon, b.Count, b.FilterIcon = icon, count, filter
 	b.FilterIcon.Icon = filterIcon
 
@@ -198,7 +198,7 @@ function Bag:Update()
 	self:UpdateLock()
 
 	local id, cached = self:GetID(), self:IsCached()
-	local free = not cached and self.owned and C.GetContainerNumFreeSlots(id)
+	local free = not cached and self.owned and C.Container.GetContainerNumFreeSlots(id)
 	self.Count:SetText((free or 0) > 0 and free or '')
 
 	local color = self.owned and 1 or 0.1
@@ -207,7 +207,7 @@ function Bag:Update()
 
 	if not cached then
 		for i, atlas in ipairs(self.FilterIcons) do
-			local active = C_Container and (id > 0 and C.GetBagSlotFlag(id, 2^i)) or
+			local active = C_Container and (id > 0 and C.Container.GetBagSlotFlag(id, 2^i)) or
 						   GetBagSlotFlag and (self:IsBankBag() and GetBankBagSlotFlag(id - NUM_BAG_SLOTS, i) or GetBagSlotFlag(id, i))
 			if active then
 				return self.FilterIcon.Icon:SetAtlas(atlas)
@@ -226,7 +226,7 @@ function Bag:UpdateInfo()
 			local data = self:GetBagInfo(id)
 			if data and data.link then
 				self.link, self.owned = 'item:' .. data.link, true
-				self.itemID, _,_,_, self.icon = GetItemInfoInstant(self.link)
+				self.itemID, _,_,_, self.icon = C.Item.GetItemInfoInstant(self.link)
 			else
 				self.link, self.itemID, self.owned = nil
 			end

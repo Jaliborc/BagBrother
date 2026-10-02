@@ -8,6 +8,7 @@ local Vault = Addon.Frame:NewClass('Vault')
 
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 local Sushi = LibStub('Sushi-3.2')
+local C = LibStub('C_Everywhere')
 
 Vault.IsThrottled = true
 Vault.Title = L.TitleVault
@@ -113,7 +114,7 @@ function Vault:GetItemInfo(bag, slot)
 		end
 
 		if item.itemID then
-			_, item.hyperlink = GetItemInfo(item.itemID) 
+			_, item.hyperlink = C.Item.GetItemInfo(item.itemID)
 			return item
 		end
 		return Addon.None

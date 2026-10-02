@@ -88,7 +88,7 @@ end
 
 function Bank:GetBagInfo(bag)
 	local owner = bag > Addon.LastBankBag and BrotherBags.account or self:GetOwner()
-	return owner[bag]
+	return GetOrCreateTableEntry(owner.cache, bag)
 end
 
 function Bank:IsCached(bag)

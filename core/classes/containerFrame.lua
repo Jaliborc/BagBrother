@@ -14,7 +14,7 @@ function Frame:GetItemInfo(bag, slot)
 	else
 		local item = C.Container.GetContainerItemInfo(bag, slot)
 		if item then
-			item.isNew = C_NewItems.IsNewItem(bag, slot)
+			item.isNew = C.NewItems.IsNewItem(bag, slot)
 			item.isPaid = C.Container.IsBattlePayItem and C.Container.IsBattlePayItem(bag, slot)
 		end
 		return item or Addon.None
