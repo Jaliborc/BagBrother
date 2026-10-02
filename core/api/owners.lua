@@ -182,7 +182,7 @@ function Owners:GetMoney()
 	elseif self.isguild then
 		return GetGuildBankMoney() or 0
 	else
-		return (GetMoney() or 0) - GetCursorMoney() - GetPlayerTradeMoney()
+		return (GetMoney() or 0) - (GetCursorMoney() or 0) - (GetPlayerTradeMoney() or 0)
 	end
 end
 

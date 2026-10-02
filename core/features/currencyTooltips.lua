@@ -45,7 +45,10 @@ function TipCounts.OnCurrency(tip)
 end
 
 function TipCounts.OnTracked(tip, index)
-	TipCounts.OnID(tip, C.GetBackpackCurrencyInfo(index).currencyTypesID)
+	local data = C.GetBackpackCurrencyInfo(index)
+	if data then
+		TipCounts.OnID(tip, data.currencyTypesID)
+	end
 end
 
 function TipCounts.OnID(tip, id)
@@ -61,6 +64,10 @@ function TipCounts.OnID(tip, id)
 		end
 		
 		local info = C.GetCurrencyInfo(id)
+		if not info then
+			return
+		end
+
 		local denominator = info.maxQuantity > 0 and SILVER:format('/' .. FormatLargeNumber(info.maxQuantity)) or ''
 		local left, right = {}, {}
 		local total = 0

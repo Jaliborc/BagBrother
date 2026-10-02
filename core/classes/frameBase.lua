@@ -175,9 +175,10 @@ function Frame:GetItemInfo(bag, slot)
 			local id, quality = data:match(':(%d+):%d+:(%d+)')
 			local id, quality = tonumber(id), tonumber(quality) or 1
 			local name, icon = C_PetJournal.GetPetInfoBySpeciesID(id)
+			local color = ITEM_QUALITY_COLORS[quality] or ITEM_QUALITY_COLORS[1]
 
 			return { itemID = id, iconFileID = icon, quality = quality,
-			         hyperlink = format('%s|H%sx0|h[%s]|h|r', ITEM_QUALITY_COLORS[quality].hex, data, name) }
+			         hyperlink = format('%s|H%sx0|h[%s]|h|r', color.hex, data, name) }
 		elseif prefix == 'keystone:' then
 			local id = tonumber(data:match(':(%d+)'))
 			local _, _, _, _, icon = C.GetItemInfoInstant(id)
@@ -203,7 +204,7 @@ function Frame:GetItemQuery(bag, slot, info)
 end
 
 function Frame:GetBagInfo(bag)
-	return self:GetOwner()[bag]
+	return GetOrCreateTableEntry(self:GetOwner().cache, bag)
 end
 
 function Frame:GetBagFamily()

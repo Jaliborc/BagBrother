@@ -103,7 +103,7 @@ function Bag:UpdateTooltip()
 			GameTooltip:AddLine(BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_LEGACY))
 		end
 
-		local filters = ContainerFrameUtil_ConvertFilterFlagsToList(depositFlags)
+		local filters = ContainerFrameUtil_ConvertFilterFlagsToList(self.flags)
 		if filters then
 			GameTooltip:AddLine(BANK_TAB_DEPOSIT_ASSIGNMENTS:format(filters), true)
 		end
@@ -144,7 +144,8 @@ end
 
 function Bag:GetCost()
 	if self:GetID() ~= REAGENTBANK_CONTAINER then
-		return C.FetchNextPurchasableBankTabData(self:GetType()).tabCost
+		local data = C.FetchNextPurchasableBankTabData(self:GetType())
+		return data and data.tabCost or 0
 	end
 	return GetReagentBankCost()
 end

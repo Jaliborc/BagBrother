@@ -61,8 +61,8 @@ function Cacher:OnLoad()
 		}
 
 		for i = 1, ATTACHMENTS_MAX_RECEIVE do
-			local link = GetSendMailItemLink(i)
-			local _,_,_, count = GetSendMailItem(i)
+			local link = C.Mail.GetSendMailItemLink(i)
+			local _,_,_, count = C.Mail.GetSendMailItem(i)
 
 			self.pendingMail.items[i] = link and self:ParseItem(link, count)
 		end
@@ -134,11 +134,11 @@ end
 function Cacher:MAIL_INBOX_UPDATE()
 	wipe(self.player.mail)
 
-	for i = 1, GetInboxNumItems() do
+	for i = 1, C.Mail.GetInboxNumItems() do
 		for j = 1, ATTACHMENTS_MAX_RECEIVE do
 			local index = (i-1) * ATTACHMENTS_MAX_RECEIVE + j
-			local _,_,_, count = GetInboxItem(i,j)
-			local link = GetInboxItemLink(i,j)
+			local _,_,_, count = C.Mail.GetInboxItem(i,j)
+			local link = C.Mail.GetInboxItemLink(i,j)
 
 			self.player.mail[index] = link and self:ParseItem(link, count)
 		end
@@ -210,7 +210,7 @@ function Cacher:GUILD_ROSTER_UPDATE()
 end
 
 function Cacher:GUILDBANKBAGSLOTS_CHANGED()
-	if Addon.Events.AtGuild then
+	if Addon.Events.AtGuild and Addon.guild then
 		local guild = Addon.guild.cache
 		guild.faction = self.player.faction
 
@@ -279,11 +279,11 @@ function Cacher:ParseItem(link, count)
 		local id = link:match('item:(%d+):')
 		if id == '0' and TradeSkillFrame then -- check for profession window bug
 			local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
-			local name = focus:GetName()
+			local name = focus and focus:GetName()
 			if name == 'TradeSkillSkillIcon' then
 				return self:ParseItem(GetTradeSkillItemLink(TradeSkillFrame.selectedSkill), count)
 			else
-				local i = name:match('TradeSkillReagent(%d+)')
+				local i = name and name:match('TradeSkillReagent(%d+)')
 				if i then
 					return self:ParseItem(GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, tonumber(i)), count)
 				end

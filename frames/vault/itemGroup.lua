@@ -48,7 +48,7 @@ function Items:Layout()
 	self:Super(Items):Layout()
 
 	if self.Title then
-		local anyItems = #self.order > 0
+		local anyItems = #self.buttons > 0
 		self:SetHeight(self:GetHeight() + (anyItems and 20 or 0))
 		self.Title:SetShown(anyItems)
 	end
