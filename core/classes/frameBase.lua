@@ -204,7 +204,7 @@ function Frame:GetItemQuery(bag, slot, info)
 end
 
 function Frame:GetBagInfo(bag)
-	return GetOrCreateTableEntry(self:GetOwner().cache, bag)
+	return self:GetOwner()[bag]
 end
 
 function Frame:GetBagFamily()
