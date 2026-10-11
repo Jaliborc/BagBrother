@@ -97,6 +97,8 @@ function Items:Layout()
 	local profile = self:GetProfile()
 	local reverseBags, reverseSlots, bagBreak = profile.reverseBags, profile.reverseSlots, profile.bagBreak
 	local breaks, group = {0}, 0
+	local previousReagent
+	local separateReagents = self.frame.id == 'inventory' and profile.reagentBagNewRow
 
 	for k = reverseBags and #self.bags or 1, reverseBags and 1 or #self.bags, reverseBags and -1 or 1 do
 		local proxy = self.bags[k]
@@ -107,7 +109,11 @@ function Items:Layout()
 			local family = self:GetBagFamily(bag)
 			local slots = self.byBag[bag]
 
-			if (bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
+			-- Reagent bag is the equipped slot immediately after the regular bag slots.
+			-- Break on either side when bag order is reversed, without duplicating breaks.
+			local isReagent = bag == (NUM_BAG_SLOTS + 1) and bag <= Addon.NumBags
+			local reagentBoundary = separateReagents and previousReagent ~= nil and previousReagent ~= isReagent
+			if (reagentBoundary or bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
 				tinsert(breaks, #self.buttons)
 			end
 
@@ -125,6 +131,7 @@ function Items:Layout()
 			end
 
 			group = family
+			previousReagent = isReagent
 		end
 	end
 
