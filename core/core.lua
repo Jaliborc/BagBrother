@@ -16,7 +16,7 @@ Addon.IsModern = LE_EXPANSION_LEVEL_CURRENT >= LE_EXPANSION_CATACLYSM
 
 Addon.NumBags = NUM_TOTAL_EQUIPPED_BAG_SLOTS or NUM_BAG_SLOTS
 Addon.LastBankBag = Addon.NumBags + (NUM_BANKBAGSLOTS or Constants.InventoryConstants.NumCharacterBankSlots)
-Addon.LastAccountBag = Addon.LastBankBag + (Constants.InventoryConstants.NumAccountBankSlots or 0)
+Addon.LastAccountBag = Addon.LastBankBag + (not Addon.IsForever and Constants.InventoryConstants.NumAccountBankSlots or 0)
 Addon.CurrencyLimit = 30  -- safety tracking limit
 Addon.InventoryBags = {}
 Addon.BankBags = {}
