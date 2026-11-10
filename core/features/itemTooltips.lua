@@ -81,9 +81,9 @@ end
 --[[ Events ]]--
 
 function TipCounts.OnItem(tip)
-	local name, link = (tip.GetItem or TooltipUtil.GetDisplayedItem)(tip)
+	local name, link, id = (tip.GetItem or TooltipUtil.GetDisplayedItem)(tip)
 	if name ~= '' then
-		TipCounts:AddOwners(tip, link)
+		TipCounts:AddOwners(tip, link, id)
 	end
 end
 
@@ -110,9 +110,10 @@ end
 
 --[[ API ]]--
 
-function TipCounts:AddOwners(tip, link)
+function TipCounts:AddOwners(tip, link, id)
 	if not self.Hooked[tip] and Addon.sets.countItems then
-		local id = tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
+		-- the link of a recipe item points to the crafted item, tooltip data id is the item itself
+		id = id or tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
 		if id and id ~= HEARTHSTONE_ITEM_ID then
 			local carrying = C.GetItemCount(id)
 			local left, right = {}, {}
