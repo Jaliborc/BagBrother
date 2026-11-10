@@ -34,7 +34,7 @@ elseif not Addon.IsModern then
 	end
 
 	Rules:Register {id = 'keys', title = KEYRING, icon = 134238, macro = 'return family == 9', static = true}
-	Rules:Register {id = 'souls', title = SOUL_SHARDS, icon = 134075, macro = 'return family == 3 or family == 4', static = true}
+	Rules:Register {id = 'souls', title = SOUL_SHARDS, icon = 134075, macro = 'return family == 3 or family == 4 or info.itemID == 6265', static = true}
 	Rules:Register {id = 'ammo', title = L.AmmoBags, icon = ammoIcon, macro = 'return family == 1 or family == 2', static = true}
 end
 

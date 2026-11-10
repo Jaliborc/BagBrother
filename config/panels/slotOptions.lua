@@ -50,7 +50,11 @@ function Slots:SlotTypes()
 	end
 
 	if not Addon.IsRetail then
-		tAppendAll(ignore, {'account', 'reagent'})
+		tAppendAll(ignore, {'account'})
+	end
+	
+	if not Addon.IsMainline then
+		tAppendAll(ignore, {'reagent'})
 	end
 
 	for name in pairs(Addon.sets.color) do
