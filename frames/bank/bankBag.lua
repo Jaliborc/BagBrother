@@ -65,6 +65,19 @@ function Bag:UpdateInfo()
 		local info = self:GetInfo()
 		self.icon, self.name, self.flags = info.icon, info.name, info.depositFlags
 		self.owned = info.name ~= nil
+
+		if Addon.IsForever and self.slot then -- forever: tabs hold real bags, show them
+			if self:IsCached() then
+				local data = self:GetBagInfo(self:GetID())
+				self.link = data and data.link and ('item:' .. data.link)
+			else
+				self.link = GetInventoryItemLink('player', self.slot)
+			end
+
+			if self.link then
+				self.icon = select(5, C_Item.GetItemInfoInstant(self.link)) or self.icon
+			end
+		end
 	end
 end
 
@@ -91,7 +104,7 @@ function Bag:OnEnter()
 end
 
 function Bag:UpdateTooltip()
-	if not self.name then
+	if not self.name or self.link then
 		self:Super(Bag):UpdateTooltip()
 	else
 		GameTooltip:ClearLines()
