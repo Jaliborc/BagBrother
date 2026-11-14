@@ -130,7 +130,8 @@ end
 
 function Log:AddLine(msg, ...)
 	if msg then
-		self:AddMessage(msg .. MESSAGE_PREFIX .. format(GUILD_BANK_LOG_TIME, RecentTimeDate(...)))
+		local formatDate = TimeUtil and TimeUtil.GetRecentTimeDate or RecentTimeDate
+		self:AddMessage(msg .. MESSAGE_PREFIX .. format(GUILD_BANK_LOG_TIME, formatDate(...)))
 	end
 end
 
