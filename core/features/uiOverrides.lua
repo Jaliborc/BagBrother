@@ -53,7 +53,7 @@ function Overrides:OnLoad()
 
 	if ContainerFrameCombinedBags then
 		hooksecurefunc('ToggleBackpack_Combined', function()
-			ContainerFrameCombinedBags:SetParent(Addon.Frames:Toggle('inventory') and self.Tiny or UIParent)
+			ContainerFrameCombinedBags:SetParent(Addon.Frames:ToggleBag('inventory', 0) and self.Tiny or UIParent)
 		end)
 	end
 
