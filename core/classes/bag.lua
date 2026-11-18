@@ -8,6 +8,7 @@ local C = LibStub('C_Everywhere')
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 local Bag = Addon.Tipped:NewClass('Bag', 'CheckButton')
+Bag.BankContainer = BANK_CONTAINER or C.Bank.ShouldUsePlayerBagsInBank() and (Addon.NumBags+1) or false
 Bag.FilterIcons = {'bags-icon-equipment', 'bags-icon-consumables', 'bags-icon-tradegoods', 'bags-icon-junk', 'bags-icon-questitem'}
 Bag.GetBagID, Bag.GetSlot = Bag.GetID, Bag.GetID
 Bag.Size = 32
@@ -16,16 +17,16 @@ Bag.Purchase = nop
 
 Bag.StaticIcons = {
 	[BACKPACK_CONTAINER] = 130716,
-	[BANK_CONTAINER or false] = 'interface/addons/bagBrother/art/achievement-guildperk-mobilebanking',
 	[KEYRING_CONTAINER or false] = 'interface/containerframe/keyring-bag-icon',
 	[REAGENTBANK_CONTAINER or false] = 'interface/icons/achievement_guildperk_bountifulbags',
+	[Bag.BankContainer] = 'interface/addons/bagBrother/art/achievement-guildperk-mobilebanking',
 }
 
 Bag.StaticNames = {
 	[BACKPACK_CONTAINER] = BACKPACK_TOOLTIP,
-	[BANK_CONTAINER or false] = BANK,
 	[KEYRING_CONTAINER or false] = KEYRING,
 	[REAGENTBANK_CONTAINER or false] = REAGENT_BANK,
+	[Bag.BankContainer] = BANK,
 }
 
 
@@ -231,7 +232,7 @@ function Bag:UpdateInfo()
 				self.link, self.itemID, self.owned = nil
 			end
 		else
-			self.owned = id <= Addon.NumBags or (id - Addon.NumBags) <= GetNumBankSlots()
+			self.owned = id <= Addon.NumBags or (id - Addon.NumBags) <= C.Bank.FetchNumPurchasedBankTabs(0)
 			self.icon = GetInventoryItemTexture('player', self.slot)
 			self.link = GetInventoryItemLink('player', self.slot)
 		end
@@ -256,22 +257,15 @@ function Bag:UpdateTooltip()
 	local name = self.StaticNames[id]
 
 	if name then
-		GameTooltip:SetText(name, 1, 1, 1)
+		GameTooltip:SetText(name, 1,1,1)
 	elseif self.link and self:IsCached() then
 		GameTooltip:SetHyperlink(self.link)
 	elseif self.link then
 		GameTooltip:SetInventoryItem('player', self.slot)
-	elseif self:IsBankBag() then
-		if self.owned then
-			GameTooltip:SetText(BANK_BAG, 1, 1, 1)
-		else
-			GameTooltip:AddLine(BANK_BAG_PURCHASE, 1,1,1);
-			GameTooltip:AddLine(GetMoneyString(self:GetCost(), true))
-		end
-	elseif id > NUM_BAG_SLOTS then
-		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)
+	elseif id <= NUM_BAG_SLOTS or self:IsBankBag() then
+		GameTooltip:SetText(EQUIP_CONTAINER, 1,1,1)
 	else
-		GameTooltip:SetText(EQUIP_CONTAINER, 1, 1, 1)
+		GameTooltip:SetText(EQUIP_CONTAINER_REAGENT, 1, 1, 1)
 	end
 
 	-- instructions

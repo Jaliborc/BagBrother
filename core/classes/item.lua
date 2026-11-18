@@ -10,7 +10,7 @@ local C = LibStub('C_Everywhere')
 
 Item.UpdateSecondary = nop -- backwards support
 Item.Backgrounds = {
-	LAYOUT_STYLE_MODERN and 'item/weapon/1_null',
+	Addon.IsMainline and 'item/weapon/1_null',
 	'interface/paperdoll/ui-backpack-emptyslot'
 }
 
@@ -169,6 +169,10 @@ function Item:UpdateBorder()
 			self.IconOverlay:SetAtlas('CosmeticIconFrame')
 			self.IconOverlay:Show()
 		end
+	end
+
+	if self.ProfessionQualityOverlay then
+		self.ProfessionQualityOverlay:SetAlpha(searched and 1 or 0)
 	end
 
 	self:SetAlpha(searched and 1 or 0.3)

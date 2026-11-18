@@ -19,7 +19,7 @@ function CurrencyTracker:New(parent, font)
 	f:SetScript('OnHide', f.UnregisterAll)
 	f.font, f.buttons = font, {}
 
-	C.hooksecurefunc('SetCurrencyBackpack', function()
+	C.hooksecurefunc('SetCurrencyBackpack', function(...)
 		if f:IsVisible() then
 			f:Layout()
 		end

@@ -34,7 +34,7 @@ function Slots:Populate()
 		end).left = 20
 	end
 
-	self:AddChoice {arg = 'slotBackground', LAYOUT_STYLE_MODERN and {key = 3, text = LAYOUT_STYLE_MODERN} or false, {key = 2, text = EXPANSION_NAME0}, {key = 1, text = NONE}}
+	self:AddChoice {arg = 'slotBackground', Addon.IsMainline and {key = 3, text = LAYOUT_STYLE_MODERN} or false, {key = 2, text = EXPANSION_NAME0}, {key = 1, text = NONE}}
 end
 
 function Slots:SlotTypes()

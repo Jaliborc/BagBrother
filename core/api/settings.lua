@@ -31,6 +31,7 @@ function Settings:OnLoad()
 		glowAlpha = 0.5,
 		glowQuality = true, glowNew = true, glowQuest = true, glowSets = true, glowUnusable = true, glowPoor = true,
 
+		slotBackground = Addon.IsMainline and 3 or 2,
 		colorSlots = true,
 		color = {
 			normal = {1, 1, 1},

@@ -24,10 +24,17 @@ function Currency:Set(data, index)
 end
 
 function Currency:OnClick()
-	if IsModifiedClick('CHATLINK') then
-		HandleModifiedItemClick(C.GetCurrencyLink(self.data.currencyTypesID, self.data.quantity))
-	elseif not self:IsCached() then
-		ToggleCharacter('TokenFrame')
+	if not HandleModifiedItemClick(C.GetCurrencyLink(self.data.currencyTypesID, self.data.quantity)) and not self:IsCached() then
+		if IsShiftKeyDown() then
+			for i = 1, C.GetCurrencyListSize() do
+				local info = C.GetCurrencyListInfo(i)
+				if info and info.currencyID == self.data.currencyTypesID then
+					return C.SetCurrencyBackpack(i, 0)
+				end
+			end
+		else
+			ToggleCharacter('TokenFrame')
+		end
 	end
 end
 

@@ -8,3 +8,8 @@
   BagBrother/libs/Poncho-2.0/Tests.lua
   BagBrother/libs/Sushi-3.2/Tests
   BagBrother/tests
+[checkpoint]
+  git 0d479e1958b873aaa43067741426b8c01de79170
+  changelog_version 12.1.11
+  worktree_sha256 ebb1179a7b7ab7137e3782a64b361a5aefc87d02a077d2271ff48155227cf7fc
+  reviewed_at 2026-11-18T11:42:38Z

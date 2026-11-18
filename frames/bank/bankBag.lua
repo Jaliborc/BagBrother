@@ -37,8 +37,8 @@ function Bag:RegisterEvents()
 	self:RegisterSignal('BANK_OPEN', 'RegisterEvents')
 
 	if not self:IsCached() then
-		if NUM_BANKBAGSLOTS and self.slot then
-			self:RegisterEvent('PLAYERBANKBAGSLOTS_CHANGED', 'Update')
+		if self:IsRealBag() then
+			self:RegisterEvent(NUM_BANKBAGSLOTS and 'PLAYERBANKBAGSLOTS_CHANGED' or 'PLAYERBANKSLOTS_CHANGED', 'Delay', 0.05, 'Update')
 			self:RegisterSignal('BAGS_UPDATED')
 		elseif self:GetID() == REAGENTBANK_CONTAINER then
 			self:RegisterEvent('REAGENTBANK_PURCHASED', 'Update')
@@ -50,21 +50,20 @@ function Bag:RegisterEvents()
 end
 
 function Bag:UpdateInfo()
-	if NUM_BANKBAGSLOTS and self:GetType() == 0 then
+	if self:IsRealBag() then
 		self:Super(Bag):UpdateInfo()
-
-		local id = self:GetID()
-		if id == REAGENTBANK_CONTAINER then
-			if self:IsCached() then
-				self.owned = self:GetBagInfo(id) and true
-			else
-				self.owned = IsReagentBankUnlocked()
-			end
-		end
 	else
+		self.icon, self.owned = nil
+	end
+
+	if C.FetchPurchasedBankTabData then
 		local info = self:GetInfo()
-		self.icon, self.name, self.flags = info.icon, info.name, info.depositFlags
-		self.owned = info.name ~= nil
+		if not self.owned or info.icon ~= 134400 then
+			self.icon = info.icon
+		end
+
+		self.name, self.flags = info.name, info.depositFlags
+		self.owned = self.owned or info.name ~= nil
 	end
 end
 
@@ -91,24 +90,29 @@ function Bag:OnEnter()
 end
 
 function Bag:UpdateTooltip()
-	if not self.name then
-		self:Super(Bag):UpdateTooltip()
+	if self.owned then
+		if self:IsRealBag() then
+			self:Super(Bag):UpdateTooltip()
+		else
+			GameTooltip:SetText((self:IsAccountBag() and '|A:questlog-questtypeicon-account:0:0|a ' or '') .. self.name, 1,1,1)
+
+			if FlagsUtil.IsSet(self.flags, Enum.BagSlotFlags.ExpansionCurrent) then
+				GameTooltip:AddLine(BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_CURRENT))
+			elseif FlagsUtil.IsSet(self.flags, Enum.BagSlotFlags.ExpansionLegacy) then
+				GameTooltip:AddLine(BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_LEGACY))
+			end
+
+			local filters = ContainerFrameUtil_ConvertFilterFlagsToList(self.flags)
+			if filters then
+				GameTooltip:AddLine(BANK_TAB_DEPOSIT_ASSIGNMENTS:format(filters), true)
+			end
+
+			GameTooltip:AddLine(self:GetChecked() and L.HideBag or L.ShowBag)
+			GameTooltip:Show()
+		end
 	else
-		GameTooltip:ClearLines()
-		GameTooltip:SetText((self:IsAccountBag() and '|A:questlog-questtypeicon-account:0:0|a ' or '') .. (self.name or BANK_BAG_PURCHASE), 1, 1, 1)
-
-		if FlagsUtil.IsSet(self.flags, Enum.BagSlotFlags.ExpansionCurrent) then
-			GameTooltip:AddLine(BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_CURRENT))
-		elseif FlagsUtil.IsSet(self.flags, Enum.BagSlotFlags.ExpansionLegacy) then
-			GameTooltip:AddLine(BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_LEGACY))
-		end
-
-		local filters = ContainerFrameUtil_ConvertFilterFlagsToList(self.flags)
-		if filters then
-			GameTooltip:AddLine(BANK_TAB_DEPOSIT_ASSIGNMENTS:format(filters), true)
-		end
-
-		GameTooltip:AddLine(self:GetChecked() and L.HideBag or L.ShowBag)
+		GameTooltip:SetText(BANK_BAG_PURCHASE, 1,1,1);
+		GameTooltip:AddLine(GetMoneyString(self:GetCost(), true))
 		GameTooltip:Show()
 	end
 end
@@ -151,5 +155,6 @@ function Bag:GetCost()
 end
 
 function Bag:GetType() return self:IsAccountBag() and 2 or 0 end
+function Bag:IsRealBag() return C.ShouldUsePlayerBagsInBank() and not self:IsAccountBag() end
 function Bag:IsAccountBag() return self:GetID() > Addon.LastBankBag end
 function Bag:IsBankBag() return true end
