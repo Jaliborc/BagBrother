@@ -80,7 +80,21 @@ function Overrides:OnLoad()
 
 	if ContainerFrameCombinedBags then
 		hooksecurefunc('ToggleBackpack_Combined', function()
-			ContainerFrameCombinedBags:SetParent(Addon.Frames:ToggleBag('inventory', 0) and self.Tiny or UIParent)
+			if Addon.IsForever then
+				-- Forever (controller UI): follow Blizzard's combined bag instead of toggling, so the
+				-- two can't get out of step (a toggle from another hook, Bagnon's own close button)
+				local handled = Addon.Frames:HasBag('inventory', 0)
+				if handled then
+					if ContainerFrameCombinedBags:IsShown() then
+						Addon.Frames:Show('inventory')
+					else
+						Addon.Frames:Hide('inventory')
+					end
+				end
+				ContainerFrameCombinedBags:SetParent(handled and self.Tiny or UIParent)
+			else
+				ContainerFrameCombinedBags:SetParent(Addon.Frames:ToggleBag('inventory', 0) and self.Tiny or UIParent)
+			end
 		end)
 	end
 
@@ -101,6 +115,11 @@ function Overrides:OnLoad()
 	end)
 
 	hooksecurefunc('ToggleBackpack', function()
+		-- Forever: with combined bags ToggleBackpack runs ToggleBackpack_Combined, handled above
+		if Addon.IsForever and ContainerFrameCombinedBags and ContainerFrameSettingsManager
+			and ContainerFrameSettingsManager:IsUsingCombinedBags() then
+			return
+		end
 		local stack = debugstack()
     	if not stack:find('ToggleAllBags') and not stack:find('Manager') then
 			Addon.Frames:ToggleBag('inventory', 0)
@@ -108,6 +127,13 @@ function Overrides:OnLoad()
 	end)
 
 	hooksecurefunc('ToggleBag', function(bag)
+		-- Forever: with combined bags (always on in the controller UI) ToggleBag on a held bag runs
+		-- ToggleBackpack_Combined, whose hook above already toggled Bagnon; toggling here as well
+		-- closed it again in the same click (backpack button / B key in controller mode)
+		if Addon.IsForever and ContainerFrameCombinedBags and ContainerFrameSettingsManager
+			and ContainerFrameSettingsManager:IsUsingCombinedBags(bag) then
+			return
+		end
 		local stack = debugstack()
     	if not stack:find('OpenBackpack') and not stack:find('ToggleBackpack') and not stack:find('Manager') then
 			Addon.Frames:ToggleBag(Location(bag))
