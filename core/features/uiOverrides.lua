@@ -11,6 +11,33 @@ local function Location(bag)
 end
 
 local Parent = ContainerFrameContainer or UIParent
+
+-- Patched for WoW Forever (controller UI): Bagnon took over Blizzard's bank windows by moving them
+-- into a shrunken frame and removing their OnHide script. Forever's controller code touches those
+-- panels whenever another panel opens or closes (Settings, Esc, mouse clicks), and anything an
+-- addon changed on them makes it block SetPreferredGamepadInteractTarget ("taint from Bagnon").
+-- On Forever the bank panels stay where they are with their scripts intact; they are only made
+-- invisible and click-through while Bagnon shows its own window.
+local mouseOff = setmetatable({}, {__mode = 'k'})
+local function Conceal(frame, hidden)
+	frame:SetAlpha(hidden and 0 or 1)
+	if InCombatLockdown() then return end
+	local function mouse(f)
+		if hidden then
+			if f:IsMouseEnabled() then
+				mouseOff[f] = true
+				f:EnableMouse(false)
+			end
+		elseif mouseOff[f] then
+			mouseOff[f] = nil
+			f:EnableMouse(true)
+		end
+		for _, child in ipairs({f:GetChildren()}) do
+			mouse(child)
+		end
+	end
+	mouse(frame)
+end
 local Panels = {
 	BankFrame = 'bank',
 	GuildBankFrame = 'guild',
@@ -89,7 +116,9 @@ function Overrides:OnLoad()
 
 	hooksecurefunc('ShowUIPanel', function(panel)
 		local frame = panel and Panels[panel:GetName()]
-		if frame then
+		if frame and Addon.IsForever then
+			Conceal(panel, Addon.Frames:Show(frame) and true or false)
+		elseif frame then
 			local enabled = Addon.Frames:Show(frame)
 			panel.__onhide = panel.__onhide or panel:GetScript('OnHide')
 			panel:SetScript('OnHide', not enabled and panel.__onhide or nil)
