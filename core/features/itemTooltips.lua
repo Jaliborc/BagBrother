@@ -54,7 +54,7 @@ local function includeOwner(owner)
 		return true
 	end
 
-	return owner.cache.faction ~= nil and Addon.player.cache.faction ~= nil and owner.cache.faction == Addon.player.cache.faction
+	return not Addon.sets.tooltipFaction or (owner.cache.faction ~= nil and Addon.player.cache.faction ~= nil and owner.cache.faction == Addon.player.cache.faction)
 end
 
 
