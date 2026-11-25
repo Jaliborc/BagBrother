@@ -1,5 +1,5 @@
 <Ui>
-	<Frame name="BagBrotherGuildTabEditPopup" inherits="IconSelectorPopupFrameTemplate" parent="UIParent" hidden="true" enableMouse="true" frameLevel="50">
+	<Frame name="BagBrotherGuildTabEditPopup" inherits="IconSelectorPopupFrameTemplate" mixin="BagBrotherGuildTabEditPopupMixin" parent="UIParent" hidden="true" enableMouse="true" frameLevel="50">
 		<Size x="525" y="615"/>
 		<KeyValues>
 			<KeyValue key="editBoxHeaderText" value="GUILDBANK_POPUP_TEXT" type="global"/>

@@ -1,4 +1,5 @@
 <Ui>
+	<Script file="editPopup.lua"/>
 	<Include file="editPopup.xml"/>
 
 	<Script file="item.lua"/>
