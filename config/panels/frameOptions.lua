@@ -41,7 +41,7 @@ function Frames:Populate()
 				if self.frame == 'inventory' or self.frame == 'bank' then
 					self:AddCheck('bagToggle')
 
-					if DepositIntoBank or DepositReagentBank and self.frame == 'bank' then
+					if DepositIntoBank or DepositReagentBank and self.frame ~= 'inventory' then
 						self:AddCheck('deposit')
 					end
 				end
