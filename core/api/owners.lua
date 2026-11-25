@@ -74,6 +74,32 @@ function Owners:OnRoster()
 	end
 end
 
+function Owners:GetRuleset()
+	if not Addon.IsForever then
+		return
+	end
+
+	local gameRule, gameRules = Enum and Enum.GameRule, C_GameRules
+	if not (gameRule and gameRules and gameRules.IsGameRuleActive) then
+		return
+	end
+
+	local function isActive(name)
+		local rule = gameRule[name]
+		return rule and gameRules.IsGameRuleActive(rule)
+	end
+
+	if isActive('HardcoreRuleset') then
+		return 'hardcore'
+	elseif isActive('RPRuleset') then
+		return isActive('PvPRuleset') and 'rp-pvp' or 'rp'
+	elseif isActive('PvPRuleset') then
+		return 'pvp'
+	end
+
+	return 'pve'
+end
+
 function Owners:Sort()
 	for i, owner in ipairs(self.ordered) do
 		owner.offline = owner ~= Addon.player and owner ~= Addon.guild

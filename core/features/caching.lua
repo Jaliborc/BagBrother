@@ -22,6 +22,7 @@ function Cacher:OnLoad()
 	self.player.mail = self.player.mail or {}
 	self.player.equip = self.player.equip or {}
 	self.player.faction = UnitFactionGroup('player') == 'Alliance'
+	self.player.ruleset = Addon.Owners:GetRuleset()
 	self.player.race = select(2, UnitRace('player'))
 	self.player.class = UnitClassBase('player')
 	self.player.level = UnitLevel('player')
