@@ -18,6 +18,9 @@ function General:Populate()
 
 	self:Add('Header', L.Tooltips, 'GameFontHighlight', true)
 	self:AddCheck('countItems')
+	if Addon.IsForever then
+		self:AddCheck('tooltipFaction')
+	end
 
 	if CanGuildBankRepair and self.sets.countItems then
 		self:AddCheck('countGuild'):SetSmall(true).left = 20
