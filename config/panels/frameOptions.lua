@@ -97,6 +97,9 @@ function Frames:Populate()
 			self:AddBreak()
 			self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
+			if self.frame == 'inventory' and Addon.NumBags > NUM_BAG_SLOTS then
+				self:AddCheck('reagentBagNewRow')
+			end
 			self:AddChoice{arg = 'bagBreak', {key = 0, text = NEVER}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
 			if self.sets.bagBreak > 0 then
 				self:AddPercentage('breakSpace', 100, 200):SetSmall(true)
