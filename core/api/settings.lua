@@ -64,53 +64,45 @@ end
 
 function Settings:Upgrade() -- all code temporary, will be removed eventually
 	xpcall(function()
-		local OLD_KEYSTONE_FORMAT = '^' .. strrep('%d+:', 6) .. '%d+$'
-		local OLD_PET_FORMAT = '^' .. strrep('%d+:', 7) .. '%d+$'
+		if BrotherBags.forever and Addon.IsForever then
+			local old = BrotherBags.forever
+			local ruleset = 
+				(C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) and 'RP-' or '') ..
+				(
+					C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) and 'Harcore' or
+					C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset)      and 'PvP' or 'PvE'
+				)
 
-		local function upgradeItemFormat(data)
-			for key, value in pairs(data) do
-				local kind = type(value)
-				if kind == 'table' then
-					if (value.size or value.name or key == 'vault') and not value.items then
-						local items = {}
-
-						for k,v in pairs(value) do
-							if type(k) ~= 'string' then
-								items[k] = v
-								value[k] = nil
-							end
-						end
-
-						if next(items) then
-							value.items = items
-						end
-					else
-						value.tabNameEditBoxHeader, value.tabCleanupConfirmation = nil
-						upgradeItemFormat(value)
-					end
-				elseif kind == 'string' then
-					if value:find(OLD_KEYSTONE_FORMAT) then
-						data[key] = 'keystone:' .. value
-					elseif value:find(OLD_PET_FORMAT) then
-						data[key] = 'battlepet:' .. value
+			local function move(id)
+				if old[id] then
+					local owners = GetOrCreateTableEntry(BrotherBags, ruleset)
+					if not owners[id] then
+						owners[id], old[id] = old[id], nil
 					end
 				end
 			end
-		end
 
-		upgradeItemFormat(BrotherBags)
+			local name, surname = UnitFullName('player')
+			if name and surname then
+				move(name .. ' ' .. surname)
+			end
 
-		for _,realm in ipairs(GetKeysArray(BrotherBags)) do
-			local owners = BrotherBags[realm]
-			if type(owners) ~= 'table' then
-				BrotherBags[realm] = nil
-			elseif realm ~= 'account' then
-				for _,id in ipairs(GetKeysArray(owners)) do
-					if type(id) ~= 'string' then
-						owners[id] = nil
-					end
+			local guild = GetGuildInfo('player')
+			if guild then
+				move(guild .. '*')
+			end
+
+			for realm in pairs(BrotherBags) do
+				if type(realm) == 'string' and realm:match('^CAMWOW') then
+					BrotherBags[realm] = nil
 				end
 			end
+
+			if not next(old) then
+				BrotherBags.forever = nil
+			end	
+
+			print('|cff33ff99' .. ADDON .. '|r ' .. 'Character data converted to optimize for ruleset separation. If any data is lost, please just visit the bank again.')
 		end
 	end, function(...)
 		print('|cff33ff99' .. ADDON .. '|r ' .. L.UpgradeError)

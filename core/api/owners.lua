@@ -4,6 +4,7 @@
 --]]
 
 local ADDON, Addon = ...
+local C = LibStub('C_Everywhere')
 local Owners = Addon:NewModule('Owners')
 
 local DEFAULT_COORDS = {0, 1, 0, 1}
@@ -48,15 +49,21 @@ end
 --[[ Static API ]]--
 
 function Owners:OnLoad()
-	local realm = Addon.IsForever and 'forever' or GetNormalizedRealmName()
 	local name, surname = UnitFullName('player')
+	local realm = Addon.IsForever and (
+			(C.GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) and 'RP-' or '') ..
+			(
+				C.GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) and 'Harcore' or
+				C.GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset)      and 'PvP' or 'PvE'
+			)
+		) or GetNormalizedRealmName()
 
 	self.registry, self.twins, self.ordered = {}, {}, {}
 	self.realms = {realm, unpack(GetAutoCompleteRealms())}
 	self.__index = function(t, k) return t.cache[k] or self[k] end
 
 	Addon.player = self:New(Addon.IsForever and (name .. ' ' .. surname) or name, realm)
-	for i, realm in ipairs(Addon.IsMainline and GetKeysArray(BrotherBags) or self.realms) do
+	for i, realm in ipairs(Addon.IsRetail and GetKeysArray(BrotherBags) or self.realms) do
 		for id, cache in pairs(realm ~= 'account' and BrotherBags[realm] or Addon.None) do
 			self:New(id, realm)
 		end
@@ -69,7 +76,7 @@ end
 function Owners:OnRoster()
 	local name, _,_, realm = GetGuildInfo('player')
 	if (Addon.guild and Addon.guild.name) ~= name or (Addon.guild and Addon.guild.realm) ~= realm then
-		Addon.guild = name and self:New(name..'*', realm or Addon.player.realm)
+		Addon.guild = name and self:New(name..'*', not Addon.IsForever and realm or Addon.player.realm)
 		self:Sort()
 	end
 end
