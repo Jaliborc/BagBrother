@@ -105,12 +105,15 @@ function Sort:GetSpaces()
 				local item = self.target:GetItemInfo(bag, slot)
 				local id = item.itemID
 				if id then
-					local _, _,_, level, _,_,_, stack, equip, _, _, class, subclass = C.GetItemInfo(id) 
+					local _, _,_, level, _,_,_, stack, equip, _, _, class, subclass = C.GetItemInfo(id)
+					local count = item.stackCount or 1
 
 					item.class = Search:IsQuestItem(id) and Enum.ItemClass.Questitem or class or 14
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
-					item.stackOrder = self.target.profile.partialFirst and -(item.stackCount or 1) or item.stackCount
-					item.subclass, item.equip, item.level, item.stackSize = subclass or -1, equip, level, stack
+					item.stackOrder = self.target.profile.partialFirst and -count or count
+					item.subclass, item.equip, item.level, item.stackSize = subclass or -1, equip or '', level or 0, stack
+					item.quality = item.quality or 0
+					item.iconFileID = item.iconFileID or 0
 					item.family = C.GetItemFamily(id) or 0
 				elseif item == Addon.None then
 					item = {}
@@ -134,6 +137,21 @@ function Sort:GetSpaces()
 	return spaces
 end
 
+local function familyRank(family)
+	if family > 0 then
+		return family == 0x80000 and 2 or 3
+	end
+	return family == 0 and 1 or 0
+end
+
+local function compareFamilies(a, b)
+	local ra, rb = familyRank(a), familyRank(b)
+	if ra ~= rb then
+		return ra > rb
+	end
+	return a > b
+end
+
 function Sort:GetFamilies(spaces)
 	local set = {}
 	for _, space in ipairs(spaces) do
@@ -145,7 +163,7 @@ function Sort:GetFamilies(spaces)
 		tinsert(list, family)
 	end
 
-	sort(list, function(a, b) return a > b and (a ~= 0x80000 or b == 0) end)
+	sort(list, compareFamilies)
 	return list
 end
 
@@ -238,13 +256,17 @@ function Sort:FitsIn(id, family)
 		return select(17, C.GetItemInfo(id))
 	end
 	
-	return family <= 0 or (bit.band(C.GetItemFamily(id), family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
+	return family <= 0 or (bit.band(C.GetItemFamily(id) or 0, family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
 end
 
 function Sort.Rule(a, b)
-	for _,prop in pairs(Sort.Properties) do
-		if a[prop] ~= b[prop] then
-			return a[prop] > b[prop]
+	for _,prop in ipairs(Sort.Properties) do
+		local va, vb = a[prop], b[prop]
+		if va ~= vb then
+			if va == nil or vb == nil then
+				return va ~= nil
+			end
+			return va > vb
 		end
 	end
 

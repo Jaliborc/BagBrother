@@ -95,6 +95,8 @@ local itemDatabase = {
 	[19019] = { "Thunderfury", "item:19019", 5, 80, 60, Enum.ItemClass.Weapon, 7, 1, "INVTYPE_WEAPON", false, 0 },
 	[18814] = { "Choker of the Fire Lord", "item:18814", 4, 75, 60, Enum.ItemClass.Armor, 0, 1, "INVTYPE_NECK", false, 0 },
 	[12064] = { "Overlord's Crown", "item:12064", 2, 45, 40, Enum.ItemClass.Armor, 4, 1, "INVTYPE_HEAD", false, 0 },
+	-- Mining Ore (Family 0x0400 = 1024)
+	[171828] = { "Laestrite Ore", "item:171828", 1, 50, 1, Enum.ItemClass.Tradeskill, 7, 200, "", true, 0x0400 },
 	-- Quest Item
 	[33550] = { "Quest Journal", "item:33550", 1, 70, 1, Enum.ItemClass.Questitem, 0, 1, "", false, 0 },
 }
@@ -510,6 +512,183 @@ do
 	local lockedMove = Sort:Move(from, to)
 	assertEqual(lockedMove, true, "Move returns locked status and aborts when item is already locked")
 	assertEqual(#pickupCalls, 2, "No additional PickupItem calls made on locked item")
+end
+
+-- =========================================================================
+-- Test 10: Sort:FitsIn Nil Family Safety (Uncached / Unknown Items)
+-- =========================================================================
+print("\n[Test 10] Sort:FitsIn Nil Family Safety")
+do
+	local origInfo = mockItem.GetItemInfo
+	local origFamily = mockItem.GetItemFamily
+	local uncachedID = 999999999
+
+	mockItem.GetItemInfo = function(id)
+		if id == uncachedID then return nil end
+		return origInfo(id)
+	end
+	mockItem.GetItemFamily = function(id)
+		if id == uncachedID then return nil end
+		return origFamily(id)
+	end
+
+	local ok32, fit32 = pcall(Sort.FitsIn, Sort, uncachedID, 32)
+	local ok1024, fit1024 = pcall(Sort.FitsIn, Sort, uncachedID, 1024)
+	local ok9, fit9 = pcall(Sort.FitsIn, Sort, uncachedID, 9)
+	local okReagent, fitReagent = pcall(Sort.FitsIn, Sort, uncachedID, 0x80000)
+	local ok0, fit0 = pcall(Sort.FitsIn, Sort, uncachedID, 0)
+
+	mockItem.GetItemInfo = origInfo
+	mockItem.GetItemFamily = origFamily
+
+	assertTrue(ok32, "FitsIn does not error on nil family for herb bag (32)")
+	assertFalse(fit32, "Uncached item with nil family does not fit in herb bag (32)")
+	assertTrue(ok1024, "FitsIn does not error on nil family for mining bag (1024)")
+	assertFalse(fit1024, "Uncached item with nil family does not fit in mining bag (1024)")
+	assertTrue(ok9, "FitsIn does not error on nil family for keyring (9)")
+	assertFalse(fit9, "Uncached item with nil family does not fit in keyring (9)")
+	assertTrue(okReagent, "FitsIn does not error on nil info for reagent bag (0x80000)")
+	assertFalse(fitReagent, "Uncached item with nil info does not fit in reagent bag (0x80000)")
+	assertTrue(ok0, "FitsIn does not error on nil family for normal bag (0)")
+	assertTrue(fit0, "Uncached item fits in normal bag (0)")
+end
+
+-- =========================================================================
+-- Test 11: Nullable Sort.Properties Defaults & Sort.Rule Nil Resilience
+-- =========================================================================
+print("\n[Test 11] Nullable Sort.Properties Defaults & Sort.Rule Resilience")
+do
+	local origInfo = mockItem.GetItemInfo
+	local origFamily = mockItem.GetItemFamily
+	local uncachedID = 999999999
+
+	mockItem.GetItemInfo = function(id)
+		if id == uncachedID then return nil end
+		return origInfo(id)
+	end
+	mockItem.GetItemFamily = function(id)
+		if id == uncachedID then return nil end
+		return origFamily(id)
+	end
+
+	for _, partialFirst in ipairs({ false, true }) do
+		local target = {
+			id = "guild",
+			profile = { partialFirst = partialFirst, reverseSort = false },
+			Bags = { 1 },
+			GetBagInfo = function(self, bag) return {} end,
+			GetBagFamily = function(self, bag) return 0 end,
+			NumSlots = function(self, bag) return 3 end,
+			GetItemInfo = function(self, bag, slot)
+				if slot == 1 then
+					return { itemID = uncachedID }
+				elseif slot == 2 then
+					return { itemID = 33470, quality = nil, iconFileID = nil, stackCount = nil }
+				elseif slot == 3 then
+					return { itemID = 19019, quality = 5, iconFileID = 135349, stackCount = 1 }
+				end
+				return Addon.None
+			end,
+		}
+
+		Sort.target = target
+		local spaces = Sort:GetSpaces()
+		local ok, order = pcall(Sort.GetOrder, Sort, spaces, 0)
+
+		assertTrue(ok, "GetOrder succeeds with uncached/nil item fields (partialFirst=" .. tostring(partialFirst) .. ")")
+		assertEqual(#order, 3, "All 3 items included in sorted order (partialFirst=" .. tostring(partialFirst) .. ")")
+
+		local uncachedItem = spaces[1].item
+		assertEqual(uncachedItem.equip, "", "Uncached item equip defaults to empty string")
+		assertEqual(uncachedItem.level, 0, "Uncached item level defaults to 0")
+		assertEqual(uncachedItem.quality, 0, "Uncached item quality defaults to 0")
+		assertEqual(uncachedItem.iconFileID, 0, "Uncached item iconFileID defaults to 0")
+		assertEqual(uncachedItem.stackOrder, partialFirst and -1 or 1, "Missing stackCount defaults stackOrder in both branches")
+	end
+
+	mockItem.GetItemInfo = origInfo
+	mockItem.GetItemFamily = origFamily
+
+	-- Direct Sort.Rule call with partial tables (issue #2229 reproduction)
+	local a = { set = 2, class = 14, subclass = -1, equip = "" }
+	local b = { set = 2, class = 14, subclass = -1 }
+	local okAB, resAB = pcall(Sort.Rule, a, b)
+	local okBA, resBA = pcall(Sort.Rule, b, a)
+	assertTrue(okAB, "Direct Sort.Rule(a, b) does not error when equip is nil on b")
+	assertTrue(resAB, "Direct Sort.Rule(a, b) ranks non-nil equip above nil equip")
+	assertTrue(okBA, "Direct Sort.Rule(b, a) does not error when equip is nil on b")
+	assertFalse(resBA, "Direct Sort.Rule(b, a) is asymmetric when equip is nil on b")
+end
+
+-- =========================================================================
+-- Test 12: Transitive Sort:GetFamilies & Specialty-Before-Reagent Priority
+-- =========================================================================
+print("\n[Test 12] Transitive Sort:GetFamilies & Specialty Priority")
+do
+	local function assertFamilyOrder(input, expected, label)
+		local mockSpaces = {}
+		for _, f in ipairs(input) do
+			tinsert(mockSpaces, { family = f })
+		end
+		local actual = Sort:GetFamilies(mockSpaces)
+		assertEqual(#actual, #expected, label .. " count")
+		for i = 1, #expected do
+			assertEqual(actual[i], expected[i], string.format("%s [%d]", label, i))
+		end
+	end
+
+	assertFamilyOrder({ 0, 1024, 0x80000 }, { 1024, 0x80000, 0 }, "GetFamilies {0, 1024, 0x80000}")
+	assertFamilyOrder({ 0, 32, 1024, 0x80000 }, { 1024, 32, 0x80000, 0 }, "GetFamilies {0, 32, 1024, 0x80000}")
+	assertFamilyOrder({ -1, 0, 1024, 0x80000 }, { 1024, 0x80000, 0, -1 }, "GetFamilies {-1, 0, 1024, 0x80000}")
+	assertFamilyOrder({ -1, 0, 0x80000 }, { 0x80000, 0, -1 }, "GetFamilies {-1, 0, 0x80000}")
+
+	-- End-to-end check: mining & herb bags claim ore/herbs before reagent bag (0x80000)
+	local bagFamilies = {
+		[0] = 0,       -- Backpack
+		[1] = 32,      -- Herb bag
+		[2] = 1024,    -- Mining bag
+		[5] = 0x80000, -- Reagent bag
+	}
+	local target = {
+		id = "inventory",
+		profile = { partialFirst = false, reverseSort = false },
+		Bags = { 0, 1, 2, 5 },
+		GetBagInfo = function(self, bag) return {} end,
+		GetBagFamily = function(self, bag) return bagFamilies[bag] end,
+		NumSlots = function(self, bag) return 1 end,
+		GetItemInfo = function(self, bag, slot)
+			if bag == 0 then
+				return { itemID = 171828, stackCount = 20, quality = 1 } -- Laestrite Ore (1024, reagent)
+			elseif bag == 1 then
+				return { itemID = 33470, stackCount = 20, quality = 1 } -- Frostweave Cloth (0, reagent)
+			elseif bag == 2 then
+				return { itemID = 152510, stackCount = 20, quality = 1 } -- Anchor Weed (32, reagent)
+			end
+			return Addon.None
+		end,
+	}
+
+	Sort.target = target
+	local spaces = Sort:GetSpaces()
+	local families = Sort:GetFamilies(spaces)
+	local assigned = {}
+
+	for _, family in ipairs(families) do
+		local order, slots = Sort:GetOrder(spaces, family)
+		local n = min(#order, #slots)
+		assigned[family] = {}
+		for i = 1, n do
+			order[i].sorted = true
+			tinsert(assigned[family], order[i].itemID)
+		end
+	end
+
+	assertEqual(#assigned[1024], 1, "Mining bag (1024) receives 1 item")
+	assertEqual(assigned[1024][1], 171828, "Mining bag claims Laestrite Ore before reagent bag")
+	assertEqual(#assigned[32], 1, "Herb bag (32) receives 1 item")
+	assertEqual(assigned[32][1], 152510, "Herb bag claims Anchor Weed before reagent bag")
+	assertEqual(#assigned[0x80000], 1, "Reagent bag (0x80000) receives remaining crafting reagent")
+	assertEqual(assigned[0x80000][1], 33470, "Reagent bag receives Frostweave Cloth only")
 end
 
 -- =========================================================================
