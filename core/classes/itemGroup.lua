@@ -107,7 +107,8 @@ function Items:Layout()
 			local family = self:GetBagFamily(bag)
 			local slots = self.byBag[bag]
 
-			if (bagBreak > 1 or bagBreak > 0 and family ~= group and family * group <= 0) and #self.buttons > breaks[#breaks] then
+			local split = bagBreak == 2 or family ~= group and (bagBreak == 1.5 or bagBreak == 1 and family * group <= 0)
+			if split and #self.buttons > breaks[#breaks] then
 				tinsert(breaks, #self.buttons)
 			end
 

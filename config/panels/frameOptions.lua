@@ -97,7 +97,7 @@ function Frames:Populate()
 			self:AddBreak()
 			self:AddCheck('reverseBags')
 			self:AddCheck('reverseSlots')
-			self:AddChoice{arg = 'bagBreak', {key = 0, text = NEVER}, {key = 1, text = L.ByType}, {key = 2, text = ALWAYS}}
+			self:AddChoice{arg = 'bagBreak', {key = 0, text = NEVER}, {key = 1, text = L.BreakNormal}, {key = 1.5, text = L.ByType}, {key = 2, text = ALWAYS}}
 			if self.sets.bagBreak > 0 then
 				self:AddPercentage('breakSpace', 100, 200):SetSmall(true)
 			end
