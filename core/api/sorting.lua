@@ -113,8 +113,7 @@ function Sort:GetSpaces()
 					item.set = (item.class < Enum.ItemClass.Weapon and 0) or Search:BelongsToSet(id) and 1 or 2
 					item.stackOrder = self.target.profile.partialFirst and -count or count
 					item.subclass, item.equip, item.level, item.stackSize = subclass or -1, equip or '', level or 0, stack
-					item.quality = item.quality or 0
-					item.iconFileID = item.iconFileID or 0
+					item.quality, item.iconFileID = item.quality or 0, item.iconFileID or 0
 					item.family = C.GetItemFamily(id) or 0
 				elseif item == Addon.None then
 					item = {}

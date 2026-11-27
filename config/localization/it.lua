@@ -7,37 +7,39 @@ local L = LibStub('AceLocale-3.0'):NewLocale(CONFIG, 'itIT')
 if not L then return end
 
 -- filters
-L.InstalledFilters = 'Filtri installati'
-L.CustomFilters = 'Filtri personalizzati'
-L.NewFilter = 'Nuovo filtro'
-L.NewSearch = 'Nuova ricerca'
-L.NewMacro = 'Nuova macro'
+L.InstalledFilters = 'Filtri Installati'
+L.CustomFilters = 'Filtri Personalizzati'
+L.NewFilter = 'Nuovo Filtro'
+L.NewSearch = 'Nuova Ricerca'
+L.NewMacro = 'Nuova Macro'
 L.Import = 'Importa'
-L.EnterSearch = 'Inserisci stringa di ricerca:'
+L.EnterSearch = 'Inserisci Stringa di Ricerca:'
 L.SharePopup = 'Copia questi dati e condividili:'
 L.ImportPopup = 'Incolla i dati da importare:|n|cnERROR_COLOR:(Avviso - importa solo filtri da fonti affidabili)|r'
 
 -- general options
 L.GeneralOptionsDescription = 'Impostazioni generali di configurazioni per %s.'
 
-L.CountItems = 'Attiva conteggio degli oggetti.'
+L.CountItems = 'Attiva Conteggio degli Oggetti.'
 L.CountGuild = 'Includi Banca di Gilda'
 L.CountCurrency = 'Conteggio Valute nei Tooltip'
+L.CountPerFaction = 'Solo Stessa Fazione'
+L.CountPerFactionTip = 'Se attivato, i tooltip includeranno solo personaggi/gilde della tua fazione attuale.'
 L.ConfirmGlobals = 'Sei sicuro di voler disabilitare le impostazioni specifiche per questo personaggio? Tutte le impostazioni specifiche verranno perse.'
-L.CharacterSpecific = 'Impostazioni specifiche personaggio'
-L.DisplayBlizzard = 'Mostra le finestre di Blizzard per le borse disabilitate.'
+L.CharacterSpecific = 'Impostazioni Specifiche Personaggio'
+L.DisplayBlizzard = 'Mostra le Finestre di Blizzard per le Borse Disabilitate.'
 L.DisplayBlizzardTip = 'Se abilitato, verrà utilizzata l\'interfaccia Blizzard di base per le sacche o gli inventari di banca nascosti.\n\n|cffff1919Richiede un riavvio dell\'UI.|r'
-L.Locked = 'Blocca la posizione della finestra.'
+L.Locked = 'Blocca la Posizione della Finestra.'
 L.FlashFind = 'Attiva Ricerca Veloce.'
 L.FlashFindTip = 'Se abilitato, fare Alt+Clic su un oggetto evidenzierà tutti gli slot con lo stesso oggetto.'
 L.Tooltips = 'Descrizioni Emergenti'
 
 -- frame options
-L.FrameOptions = 'Impostazioni finestre'
+L.FrameOptions = 'Impostazioni Finestre'
 L.FrameOptionsDescription = 'Configurazioni specifiche per le finestre di %s.'
 
 L.Frame = 'Finestra'
-L.Enabled = 'Attiva la finestra'
+L.Enabled = 'Attiva la Finestra'
 L.EnabledTip = 'Se disabilitato, l\'interfaccia Blizzard predefinita non verrà sostituita per questa finestra.\n\n|cffff1919Richiede un riavvio dell\'UI.|r'
 L.ActPanel = 'Considera come Finestra Standard'
 L.ActPanelTip = [[
@@ -75,7 +77,7 @@ L.Alpha = 'Opacità'
 
 -- slot options
 L.SlotOptions = 'Impostazioni del Colore'
-L.SlotOptionsDescription = 'Impostazione dei Colori sui vari Oggetti.'
+L.SlotOptionsDescription = 'Impostazione dei colori sui vari oggetti.'
 
 L.GlowQuality = 'Evidenzia Oggetti per Qualità.'
 L.GlowQuest = 'Evidenzia Oggetti delle Missioni.'
@@ -111,14 +113,14 @@ L.DisplayOptionsDescription = 'Queste opzioni ti permettono di configurare quand
 L.DisplayInventory = 'Mostra l\'Inventario'
 L.Auctioneer = "Quando si visita la Casa d'Aste"
 L.Banker = "Quando si visita la Banca"
-L.Crafting = "Durante la creazione di un\'Oggetto"
+L.Crafting = "Durante la Creazione di un\'Oggetto"
 L.GuildBanker = "Quando si visita la Banca di Gilda"
 L.VoidStorageBanker = 'Presso la Banca Eterea'
-L.MailInfo = "Quando controlli la posta"
+L.MailInfo = "Quando Controlli la Posta"
 L.Merchant = "Quando ti allontani da un Venditore"
 L.Character = 'Quando apri la Finestra del Giocatore'
-L.TradePartner = "Quando scambi degli oggetti"
-L.Transmogrifier = 'Quando modifichi degli oggetti'
+L.TradePartner = "Quando Scambi degli Oggetti"
+L.Transmogrifier = 'Quando Modifichi degli Oggetti'
 
 L.CloseInventory = 'Chiudi l\'Inventario'
 L.MapFrame = 'Quando apri la Mappa del Mondo'
@@ -129,8 +131,8 @@ L.Vehicle = "Quando entri un Veicolo"
 L.HelpDescription = 'Qui troverai le risposte alle domande più frequenti. Se nessuna risolve il tuo problema, puoi chiedere aiuto alla comunità di utenti %s su Discord.'
 L.Patrons = 'Sostenitori'
 L.PatronsDescription = '%s è distribuito gratuitamente e mantenuto grazie alle donazioni. Un enorme grazie a tutti i sostenitori su Patreon e Paypal che tengono vivo lo sviluppo. Puoi diventare anche tu un sostenitore su |cFFF96854patreon.com/jaliborc|r.'
-L.AskCommunity = 'Chiedi alla comunità'
-L.JoinUs = 'Unisciti a noi'
+L.AskCommunity = 'Chiedi alla Comunità'
+L.JoinUs = 'Unisciti a Noi'
 
 L.FAQ = {
   'Come depositare oggetti direttamente nella banca della banda di guerra?',

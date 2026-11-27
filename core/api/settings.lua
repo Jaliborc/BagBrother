@@ -19,7 +19,6 @@ function Settings:OnLoad()
 
 		resetPlayer = true, flashFind = true,
 		countItems = true, countGuild = true, countCurrency = true, 
-		tooltipFaction = false,
 		depositAccount = true, depositReagents = true,
 		display = {
 			banker = true, accountBanker = true, characterBanker = true, guildBanker = true, voidStorageBanker = true,

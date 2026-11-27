@@ -72,7 +72,7 @@ function Money:OnEnter()
 
 	local liquid = {}
 	for _, owner in Addon.Owners:Iterate() do
-		local money = not owner.isguild and owner:GetMoney()
+		local money = not owner.isguild and owner:IsEnabled() and owner:GetMoney()
 		if money and money > 0 then
 			tinsert(liquid, {owner = owner, money = money})
 		end

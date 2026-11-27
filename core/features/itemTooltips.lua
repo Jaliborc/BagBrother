@@ -49,14 +49,6 @@ local function frameIcon(id)
 	return '%d|T' .. Addon.Frames:Get(id).icon .. ':12:12:6:0|t'
 end
 
-local function includeOwner(owner)
-	if not Addon.IsForever or owner.isguild or owner == Addon.player then
-		return true
-	end
-
-	return not Addon.sets.tooltipFaction or (owner.cache.faction ~= nil and Addon.player.cache.faction ~= nil and owner.cache.faction == Addon.player.cache.faction)
-end
-
 
 --[[ Startup ]]--
 
@@ -121,14 +113,14 @@ end
 function TipCounts:AddOwners(tip, link, id)
 	if not self.Hooked[tip] and Addon.sets.countItems then
 		-- the link of a recipe item points to the crafted item, tooltip data id is the item itself
-		id = id or tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)')) -- workaround Blizzard craziness
+		id = id or tonumber(link and C.GetItemInfoInstant(link) and link:match(':(%d+)'))
 		if id and id ~= HEARTHSTONE_ITEM_ID then
 			local carrying = C.GetItemCount(id)
 			local left, right = {}, {}
 			local total = 0
 
 			for i, owner in Addon.Owners:Iterate() do
-				if includeOwner(owner) then
+				if owner:IsEnabled() then
 					local color = owner:GetColorMarkup()
 					local count, locations = 0
 
@@ -150,7 +142,7 @@ function TipCounts:AddOwners(tip, link, id)
 							equip, mail = owner.counts.equip[id], owner.counts.mail[id]
 						end
 
-						count, locations = self:Format(color, EQUIP_ICON, equip, frameIcon('inventory'), bags,
+						count, locations = self:Format(color, EQUIP_ICON, equip, frameIcon('inventory'), bags, 
 							frameIcon('bank'), bank, frameIcon('vault'), vault, MAIL_ICON, mail)
 
 					elseif Addon.sets.countGuild then

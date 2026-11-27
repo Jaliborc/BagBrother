@@ -196,3 +196,7 @@ end
 function Owners:IsTwin()
 	return Owners.twins[self.id] > 1 and self.realm ~= Addon.player.realm
 end
+
+function Owners:IsEnabled()
+	return self.faction == Addon.player.faction or not Addon.sets.countPerFaction
+end

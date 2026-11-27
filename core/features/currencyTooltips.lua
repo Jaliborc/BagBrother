@@ -74,10 +74,12 @@ function TipCounts.OnID(tip, id)
 
 		for i, owner in Addon.Owners:Iterate() do
 			local count
-			if owner.offline then
-				count = owner.currency and owner.currency[id]
-			elseif not owner.isguild then
-				count = info.quantity
+			if not owner.isguild and owner:IsEnabled() then
+				if owner.offline then
+					count = owner.currency and owner.currency[id]
+				else
+					count = info.quantity
+				end
 			end
 
 			if count and count > 0 then
