@@ -298,7 +298,7 @@ do
 end
 
 -- =========================================================================
--- Test 5: Multi-Property Sort Rule Priority (Sort.Rule)
+-- Test 5: Multi-Property Sort Rule Priority (Sort.ItemRule)
 -- =========================================================================
 print("\n[Test 5] Multi-Property Sort Rule Priority")
 do
@@ -554,9 +554,9 @@ do
 end
 
 -- =========================================================================
--- Test 11: Nullable Sort.Properties Defaults & Sort.Rule Nil Resilience
+-- Test 11: Nullable Sort.Properties Defaults & Sort.ItemRule Nil Resilience
 -- =========================================================================
-print("\n[Test 11] Nullable Sort.Properties Defaults & Sort.Rule Resilience")
+print("\n[Test 11] Nullable Sort.Properties Defaults & Sort.ItemRule Resilience")
 do
 	local origInfo = mockItem.GetItemInfo
 	local origFamily = mockItem.GetItemFamily
@@ -609,15 +609,15 @@ do
 	mockItem.GetItemInfo = origInfo
 	mockItem.GetItemFamily = origFamily
 
-	-- Direct Sort.Rule call with partial tables (issue #2229 reproduction)
+	-- Direct Sort.ItemRule call with partial tables (issue #2229 reproduction)
 	local a = { set = 2, class = 14, subclass = -1, equip = "" }
 	local b = { set = 2, class = 14, subclass = -1 }
-	local okAB, resAB = pcall(Sort.Rule, a, b)
-	local okBA, resBA = pcall(Sort.Rule, b, a)
-	assertTrue(okAB, "Direct Sort.Rule(a, b) does not error when equip is nil on b")
-	assertTrue(resAB, "Direct Sort.Rule(a, b) ranks non-nil equip above nil equip")
-	assertTrue(okBA, "Direct Sort.Rule(b, a) does not error when equip is nil on b")
-	assertFalse(resBA, "Direct Sort.Rule(b, a) is asymmetric when equip is nil on b")
+	local okAB, resAB = pcall(Sort.ItemRule, a, b)
+	local okBA, resBA = pcall(Sort.ItemRule, b, a)
+	assertTrue(okAB, "Direct Sort.ItemRule(a, b) does not error when equip is nil on b")
+	assertTrue(resAB, "Direct Sort.ItemRule(a, b) ranks non-nil equip above nil equip")
+	assertTrue(okBA, "Direct Sort.ItemRule(b, a) does not error when equip is nil on b")
+	assertFalse(resBA, "Direct Sort.ItemRule(b, a) is asymmetric when equip is nil on b")
 end
 
 -- =========================================================================

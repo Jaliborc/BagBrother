@@ -13,7 +13,8 @@ Sort.Properties = {
 	'class', 'subclass', 'equip',
 	'quality',
 	'iconFileID', 'level', 'itemID',
-	'stackOrder'
+	'stackOrder',
+	'family'
 }
 
 
@@ -137,21 +138,6 @@ function Sort:GetSpaces()
 	return spaces
 end
 
-local function familyRank(family)
-	if family > 0 then
-		return family == 0x80000 and 2 or 3
-	end
-	return family == 0 and 1 or 0
-end
-
-local function compareFamilies(a, b)
-	local ra, rb = familyRank(a), familyRank(b)
-	if ra ~= rb then
-		return ra > rb
-	end
-	return a > b
-end
-
 function Sort:GetFamilies(spaces)
 	local set = {}
 	for _, space in ipairs(spaces) do
@@ -163,7 +149,7 @@ function Sort:GetFamilies(spaces)
 		tinsert(list, family)
 	end
 
-	sort(list, compareFamilies)
+	sort(list, self.FamilyRule)
 	return list
 end
 
@@ -182,7 +168,7 @@ function Sort:GetOrder(spaces, family)
 		end
 	end
 
-	sort(order, self.Rule)
+	sort(order, self.ItemRule)
 	return order, slots
 end
 
@@ -259,19 +245,21 @@ function Sort:FitsIn(id, family)
 	return family <= 0 or (bit.band(C.GetItemFamily(id) or 0, family) > 0 and select(9, C.GetItemInfo(id)) ~= 'INVTYPE_BAG')
 end
 
-function Sort.Rule(a, b)
-	for _,prop in ipairs(Sort.Properties) do
+function Sort.FamilyRule(a, b)
+	if a == 0x80000 then
+		return b <= 0
+	elseif b == 0x80000 then
+		return a > 0
+	end
+	return a > b
+end
+
+function Sort.ItemRule(a, b)
+	for _, prop in ipairs(Sort.Properties) do
 		local va, vb = a[prop], b[prop]
 		if va ~= vb then
-			if va == nil or vb == nil then
-				return va ~= nil
-			end
-			return va > vb
+			return vb == nil or (va ~= nil and va > vb)
 		end
-	end
-
-	if a.space.family ~= b.space.family then
-		return a.space.family > b.space.family
 	end
 	return a.space.index < b.space.index
 end
