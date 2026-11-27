@@ -103,7 +103,7 @@ function Cacher:BAGS_UPDATED(bags)
 	end
 end
 
-function Cacher:PLAYER_LEVEL_UP(_, level)
+function Cacher:PLAYER_LEVEL_UP(level)
 	self.player.level = level
 end
 
@@ -111,7 +111,7 @@ function Cacher:PLAYER_MONEY()
 	self.player.money = GetMoney()
 end
 
-function Cacher:CURRENCY_DISPLAY_UPDATE(_,id)
+function Cacher:CURRENCY_DISPLAY_UPDATE(id)
 	if id and not C.CurrencyInfo.IsAccountWideCurrency(id) then
 		local info = C.CurrencyInfo.GetCurrencyInfo(id)
 		if info then
